@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "817921237679",
+    "project_id": "atenas-9278b",
+    "storage_bucket": "atenas-9278b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817921237679:android:4d4ff05cd634ee4c95aa5a",
+        "android_client_info": {
+          "package_name": "com.solidtype.atenas_apk_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWQ8z9s8ujw0vcxgM8eQrtkaYxMbyWd7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817921237679:android:4b0565ae677ce0e895aa5a",
+        "android_client_info": {
+          "package_name": "com.solidtype.atenasvendedor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWQ8z9s8ujw0vcxgM8eQrtkaYxMbyWd7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
