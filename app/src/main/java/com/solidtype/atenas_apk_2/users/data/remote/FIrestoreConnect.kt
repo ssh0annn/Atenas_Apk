@@ -13,31 +13,19 @@ import java.util.HashMap
 
 class FIrestoreConnect {
 
-    private val ICCID = "1234567890098765"
-    private val user = modelo("johan","cfsdf","therea;d","wwqwqw","desactivado")
+
     val db = Firebase.firestore
     val dbRef = db.collection("users")
-    init {
-        newUser(this.user,ICCID)
-    }
 
 
     fun newUser(user: modelo,ICCID:String){
 
-
-        try {
             if (iccidInvalited(ICCID)){
-                db.collection("users").document(this.ICCID).set(user)
+                db.collection("users").document(ICCID).set(user)
                 Log.d("HOLAAAaaaa","REGISTROCOMPLETADO")
             } else{
                 Log.d("HOLAAAaaaa","REGISTROCOMPLETADO")
             }
-
-        }catch(){
-
-        }
-
-
 
     }
 
