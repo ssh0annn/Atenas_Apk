@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.users.domain.model
 
-import android.provider.ContactsContract.Data
-
-data class uselogin(
+data class UserModel(
     val nombre : String?,
     val apellido : String?,
     val correo : String?,
@@ -12,6 +10,6 @@ data class uselogin(
     val direccion_negocio : String?,
     val telefono : String?,
     val estado_licencia : Boolean?,
-    val fecha_finalizacion : Data?,
-    val fecha_inicio : Data?
+    val fecha_finalizacion : String?,
+    val fecha_inicio : String?
 )
