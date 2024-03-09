@@ -7,7 +7,7 @@ import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 
 class RepositoryImpl : UserRepository {
     val auth =remoteFirebase()
-    override fun signUp(user: UserModel) : Boolean?{
+    override fun signUp(user: UserModel) : Boolean{
         var confirmacion=false
         var correo : String = user?.correo ?: ""
         var clave : String = user?.clave ?: ""
@@ -18,7 +18,9 @@ class RepositoryImpl : UserRepository {
         return confirmacion
     }
 
-    override fun SignIn(user: UserModel?): Boolean? {
+
+
+    override fun SignIn(user: UserModel): Boolean{
         var confirmacion=false
         var mensaje:String?=""
         var correo : String = user?.correo ?: ""
