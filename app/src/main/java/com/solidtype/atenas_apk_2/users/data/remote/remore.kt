@@ -7,5 +7,4 @@ class remoteFirebase{
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-
 }
