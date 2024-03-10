@@ -398,7 +398,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
         val f = 10
 
         Button(
-            onClick = { validarr.validar(text, ff, apellido, correo, nnegocio, dnegocio, f, password, confirmar, context) },
+            onClick = { validarr.validar(text, sim, apellido, correo, nnegocio, dnegocio,telefono, password, confirmar, context) },
             shape = RoundedCornerShape(25.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF343341),

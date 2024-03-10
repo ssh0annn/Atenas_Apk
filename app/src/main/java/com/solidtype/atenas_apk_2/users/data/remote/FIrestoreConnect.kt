@@ -11,7 +11,7 @@ import com.google.firebase.firestore.firestore
 import com.google.protobuf.Value
 import java.util.HashMap
 
-class FIrestoreConnect {
+class FirestoreConnect {
 
 
     private val db = Firebase.firestore
@@ -20,33 +20,31 @@ class FIrestoreConnect {
 
     fun newUser(user: Modelo,ICCID:String){
 
-            if (iccidInvalited(ICCID)){
-                db.collection("users").document(ICCID).set(user)
+            if (!iccidInvalited(ICCID)){
+               db.collection("users").document(ICCID).set(user)
                 Log.d("HOLAAAaaaa","REGISTROCOMPLETADO")
             } else{
-                Log.d("HOLAAAaaaa","REGISTROCOMPLETADO")
+                Log.d("HOLAAAaaaa","no se puede registrar")
             }
-
     }
 
     private fun iccidInvalited(ICCID:String):Boolean{
 
         val notIccid = dbRef.whereNotEqualTo(ICCID,false)
 
-        if (notIccid.equals(null)){
-            Log.e("HOLAAAaaaa","ESTE ICCID NO ESTA EN LA BASE DE DATOS")
-
-
-        }
-        return false
+        return notIccid.equals(null)
     }
 
 }
 
 data class Modelo(
-    val username:String?,
-    val password:String?,
-    val correo:String?,
-    val direccion:String?,
-    val estado: String?
+    val nombre:String,
+    val apellido:String,
+    val correo: String,
+    val id_licensia:String,
+    val clave:String,
+    val nombre_negocio: String,
+    val direccion_negocio: String,
+    val telefono:String
+
 )
