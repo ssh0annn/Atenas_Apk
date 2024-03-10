@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.users.presentation.register
 
-
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -53,10 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
-import com.solidtype.atenas_apk_2.users.presentation.login.login_medenview
-
-
-
+import androidx.compose.runtime.*
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -152,24 +148,24 @@ fun OutlinedTextFieldExample(context: Context) {
         ){
 
 
-    //nombre
-        Box(
-            modifier = Modifier
-                .padding(top = 0.dp)
-        ) {
-            TextField(
-                value = text,
-                onValueChange = { newText -> text = newText },
-                label = { Text("Nombre usuario",fontSize = 10.sp) },
-
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+            //nombre
+            Box(
                 modifier = Modifier
-                    .width(500.dp)
-                    .height(80.dp)
-                    .padding(15.dp)
-            )
-        }
-    //apellido
+                    .padding(top = 0.dp)
+            ) {
+                TextField(
+                    value = text,
+                    onValueChange = { newText -> text = newText },
+                    label = { Text("Nombre usuario",fontSize = 10.sp) },
+
+                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    modifier = Modifier
+                        .width(500.dp)
+                        .height(80.dp)
+                        .padding(15.dp)
+                )
+            }
+            //apellido
             Box(
                 modifier = Modifier
                     .padding(top = 0.dp)
@@ -203,73 +199,73 @@ fun OutlinedTextFieldExample(context: Context) {
                         .padding(15.dp)
                 )
             }
-        //sim
-        Box(
-            modifier = Modifier
-                .padding(top = 0.dp)
-        ) {
-            TextField(
-                value = sim,
-                onValueChange = {
-                        newInt ->
-                    if (newInt.isEmpty() || newInt.length <= contarsim) {
-                        if (newInt.isEmpty() || newInt.isDigitsOnly()) {
-                            sim = newInt
+            //sim
+            Box(
+                modifier = Modifier
+                    .padding(top = 0.dp)
+            ) {
+                TextField(
+                    value = sim,
+                    onValueChange = {
+                            newInt ->
+                        if (newInt.isEmpty() || newInt.length <= contarsim) {
+                            if (newInt.isEmpty() || newInt.isDigitsOnly()) {
+                                sim = newInt
+                            }
                         }
-                    }
-                },
-                label = { Text("ICCID de la licencia",fontSize = 10.sp) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                modifier = Modifier
-                    .width(500.dp)
-                    .height(80.dp)
-                    .padding(14.dp)
-            )
-            Text(
-                text = "${sim.length}/$contarsim",
+                    },
+                    label = { Text("ICCID de la licencia",fontSize = 10.sp) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    modifier = Modifier
+                        .width(500.dp)
+                        .height(80.dp)
+                        .padding(14.dp)
+                )
+                Text(
+                    text = "${sim.length}/$contarsim",
 
-                modifier = Modifier
-                    .padding(start = 445.dp,top = 75.dp)
+                    modifier = Modifier
+                        .padding(start = 445.dp,top = 75.dp)
 
-            )
-        }
-    //telefono
-        Box(
-            modifier = Modifier
-                .padding(top = 0.dp)
-        ) {
-            TextField(
-                value = telefono,
-                //number
-                onValueChange = {
-                        newText ->
-                    if (newText.isEmpty() || newText.length <= contar) {
-                        if (newText.isEmpty() || newText.isDigitsOnly()) {
-                            telefono = newText
+                )
+            }
+            //telefono
+            Box(
+                modifier = Modifier
+                    .padding(top = 0.dp)
+            ) {
+                TextField(
+                    value = telefono,
+                    //number
+                    onValueChange = {
+                            newText ->
+                        if (newText.isEmpty() || newText.length <= contar) {
+                            if (newText.isEmpty() || newText.isDigitsOnly()) {
+                                telefono = newText
+                            }
                         }
-                    }
-                },
+                    },
 
-                label = { Text("Telefono",fontSize = 10.sp) },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                //cierre
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                modifier = Modifier
-                    .width(500.dp)
-                    .height(80.dp)
-                    .padding(14.dp)
-            )
-            //limite
-            Text(
-                text = "${telefono.length}/$contar",
+                    label = { Text("Telefono",fontSize = 10.sp) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    //cierre
+                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    modifier = Modifier
+                        .width(500.dp)
+                        .height(80.dp)
+                        .padding(14.dp)
+                )
+                //limite
+                Text(
+                    text = "${telefono.length}/$contar",
 
-                modifier = Modifier
-                    .padding(start = 445.dp,top = 75.dp)
+                    modifier = Modifier
+                        .padding(start = 445.dp,top = 75.dp)
 
-            )
-        }
-    //negocio nombre
+                )
+            }
+            //negocio nombre
             Box(
                 modifier = Modifier
                     .padding(top = 0.dp)
@@ -296,7 +292,7 @@ fun OutlinedTextFieldExample(context: Context) {
 
                 )
             }
-    //Direcion negocio
+            //Direcion negocio
             Box(
                 modifier = Modifier
                     .padding(top = 0.dp)
@@ -325,71 +321,71 @@ fun OutlinedTextFieldExample(context: Context) {
                 )
             }
 
-        //clave
-        Box(
-            modifier = Modifier
-                .padding(top = 0.dp)
-        ) {
-            TextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                label = { Text("Contraseña",fontSize = 10.sp) },
-                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+            //clave
+            Box(
                 modifier = Modifier
-                    .width(500.dp)
-                    .height(80.dp)
-                    .padding(16.dp)
-            )
-
-            IconButton(
-                onClick = { isPasswordVisible = !isPasswordVisible },
-                modifier = Modifier
-                    .padding(start = 435.dp, top = 25.dp)
+                    .padding(top = 0.dp)
             ) {
-                Icon(
-                    imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = if (isPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña"
-
+                TextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    label = { Text("Contraseña",fontSize = 10.sp) },
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    modifier = Modifier
+                        .width(500.dp)
+                        .height(80.dp)
+                        .padding(16.dp)
                 )
+
+                IconButton(
+                    onClick = { isPasswordVisible = !isPasswordVisible },
+                    modifier = Modifier
+                        .padding(start = 435.dp, top = 25.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = if (isPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+
+                    )
+                }
+
             }
-
-        }
-    //confirmar clave
-        Box(
-            modifier = Modifier
-                .padding(top = 5.dp)
-        ) {
-            TextField(
-                value = confirmar,
-                onValueChange = { confirmar = it },
-                label = { Text("Confirmar Contraseña",fontSize = 10.sp) },
-
-                visualTransformation = if (isPasswordVisible1) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+            //confirmar clave
+            Box(
                 modifier = Modifier
-                    .width(500.dp)
-                    .height(80.dp)
-                    .padding(16.dp)
-            )
-
-            IconButton(
-                onClick = { isPasswordVisible1 = !isPasswordVisible1 },
-                modifier = Modifier
-                    .padding(start = 435.dp, top = 25.dp)
+                    .padding(top = 5.dp)
             ) {
-                Icon(
-                    imageVector = if (isPasswordVisible1) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = if (isPasswordVisible1) "Ocultar contraseña" else "Mostrar contraseña"
+                TextField(
+                    value = confirmar,
+                    onValueChange = { confirmar = it },
+                    label = { Text("Confirmar Contraseña",fontSize = 10.sp) },
 
+                    visualTransformation = if (isPasswordVisible1) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                    modifier = Modifier
+                        .width(500.dp)
+                        .height(80.dp)
+                        .padding(16.dp)
                 )
-            }
 
-        }
+                IconButton(
+                    onClick = { isPasswordVisible1 = !isPasswordVisible1 },
+                    modifier = Modifier
+                        .padding(start = 435.dp, top = 25.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isPasswordVisible1) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = if (isPasswordVisible1) "Ocultar contraseña" else "Mostrar contraseña"
+
+                    )
+                }
+
+            }
 
 
 

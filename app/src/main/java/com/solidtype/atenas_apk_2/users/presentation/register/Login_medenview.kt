@@ -1,8 +1,12 @@
-package com.solidtype.atenas_apk_2.users.presentation.login
+package com.solidtype.atenas_apk_2.users.presentation.register
 
 import android.content.Context
 import android.widget.Toast
+
 import androidx.lifecycle.ViewModel
+
+
+
 
 class login_medenview : ViewModel(){
     fun validar ( text:String, sim:Int, apellido:String, correo:String, nnegocio:String,dnegocio:String, telefono:Int, password:String, confirmar:String, context: Context){
