@@ -15,10 +15,11 @@ import kotlinx.coroutines.launch
 
 class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewModel(){
 
-    fun validar ( name:String, sim:Int, apellido:String, correo:String,
-                  nnegocio:String,dnegocio:String, telefono:Int, password:String, confirmar:String, context: Context){
+    fun validar ( name:String, sim:String, apellido:String, correo:String,
+                  nnegocio:String,dnegocio:String, telefono:String, password:String, confirmar:String, context: Context){
         if (name.isBlank() || apellido.isBlank() || correo.isBlank() || nnegocio.isBlank() ||
-            dnegocio.isBlank() || telefono == 0 || password.isBlank() || confirmar.isBlank()
+            dnegocio.isBlank() || telefono.isBlank() || password.isBlank() || confirmar.isBlank()
+
         ) {
             // Alguno de los campos está vacío, puedes manejar este caso según tus necesidades
             // Por ejemplo, mostrar un mensaje de error o realizar alguna acción.
@@ -33,10 +34,8 @@ class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewMo
             // Puedes realizar alguna acción aquí, como iniciar sesión.
             //Ejemplo de prueba
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            var phone:String =telefono.toString()
-            var usercase= SignUpUseCase()
-            var id :String = sim.toString()
-            var autenticacion:Boolean=caso_uso(correo, password)
+
+            val autenticacion:Boolean=caso_uso(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
 
             if(autenticacion){
                         Toast.makeText(context, "Inicio de seccion:  $correo, $password.", Toast.LENGTH_LONG).show()
