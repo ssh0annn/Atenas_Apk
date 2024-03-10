@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.users.presentation.register
 
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,22 +53,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import com.solidtype.atenas_apk_2.users.presentation.login.login_medenview
 
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
-            OutlinedTextFieldExample()
-        }
-    }
-}
 
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample() {
+fun OutlinedTextFieldExample(context: Context) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
@@ -82,6 +76,7 @@ fun OutlinedTextFieldExample() {
 
         val gradient = Brush.verticalGradient(0f to Color.Gray, 1000f to Color.White)
 
+        val validarr  = login_medenview()
 
         var text by remember { mutableStateOf("") }
         var sim by remember { mutableStateOf("") }
@@ -91,18 +86,13 @@ fun OutlinedTextFieldExample() {
         val nn = 30
         var dnegocio by remember { mutableStateOf("") }
         val dn = 50
-        var fechainni by remember { mutableStateOf("") }
-        var fechafin by remember { mutableStateOf("") }
-
         //telefono validacion input
         var telefono by remember { mutableStateOf("") }
         val contar = 10
         val contarsim = 20
         //cierre
-
         var password by remember { mutableStateOf("") }
         var isPasswordVisible by remember { mutableStateOf(false) }
-
         var confirmar by remember { mutableStateOf("") }
         var isPasswordVisible1 by remember { mutableStateOf(false) }
 
@@ -133,7 +123,7 @@ fun OutlinedTextFieldExample() {
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 190.dp)
+                        .padding(start = 200.dp)
                 ){
                     Text(
                         text = "Ir a login",
@@ -221,10 +211,10 @@ fun OutlinedTextFieldExample() {
             TextField(
                 value = sim,
                 onValueChange = {
-                        newText ->
-                    if (newText.isEmpty() || newText.length <= contarsim) {
-                        if (newText.isEmpty() || newText.isDigitsOnly()) {
-                            sim = newText
+                        newInt ->
+                    if (newInt.isEmpty() || newInt.length <= contarsim) {
+                        if (newInt.isEmpty() || newInt.isDigitsOnly()) {
+                            sim = newInt
                         }
                     }
                 },
@@ -286,14 +276,13 @@ fun OutlinedTextFieldExample() {
             ) {
                 TextField(
                     value = nnegocio,
-                    //number
                     onValueChange = {
-                        if (it.length <= nn) nnegocio = it
+                        if (it.length <= nn) {
+                            nnegocio = it
+                        }
                     },
-
-                    label = { Text("Nombre negocio",fontSize = 10.sp) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    //cierre
+                    label = { Text("Nombre negocio", fontSize = 10.sp) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text), // Cambiado a Text
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
                         .width(500.dp)
@@ -314,20 +303,20 @@ fun OutlinedTextFieldExample() {
             ) {
                 TextField(
                     value = dnegocio,
-                    //number
                     onValueChange = {
-                        if (it.length <= dn) dnegocio = it
+                        if (it.length <= dn) {
+                            dnegocio = it
+                        }
                     },
-
-                    label = { Text("Nombre negocio",fontSize = 10.sp) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    //cierre
+                    label = { Text("Nombre negocio", fontSize = 10.sp) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text), // Cambiado a Text
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
                         .width(500.dp)
                         .height(80.dp)
                         .padding(14.dp)
                 )
+
                 Text(
                     text = "${dnegocio.length}/$dn",
                     modifier = Modifier
@@ -406,8 +395,12 @@ fun OutlinedTextFieldExample() {
 
         }
 
+
+        val ff = 5
+        val f = 10
+
         Button(
-            onClick = { onClick() },
+            onClick = { validarr.validar(text, ff, apellido, correo, nnegocio, dnegocio, f, password, confirmar, context) },
             shape = RoundedCornerShape(25.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF343341),
@@ -435,12 +428,3 @@ fun OutlinedTextFieldExample() {
 fun onClick() {
     TODO("Not yet implemented")
 }
-
-
-@Preview(showBackground = true, widthDp = 1280, heightDp = 800)
-@Composable
-fun GreetingPreview() {
-
-    OutlinedTextFieldExample()
-}
-
