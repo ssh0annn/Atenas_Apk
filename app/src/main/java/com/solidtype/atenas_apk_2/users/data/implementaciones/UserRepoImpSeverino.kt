@@ -2,18 +2,17 @@ package com.solidtype.atenas_apk_2.users.data.implementaciones
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseUser
-import com.solidtype.atenas_apk_2.users.data.remote.remoteFirebase
+import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.users.domain.model.UserModel
-import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 
-class UserRepoImpSeverino :UserRepository {
-    private val  autenticacion = remoteFirebase()
-    override fun signUp(user: UserModel): Boolean {
+class UserRepoImpSeverino {
+    private val  autenticacion = RemoteFirebase()
+   fun signUp(user: UserModel): Boolean {
         autenticacion.signOut()
         return true
     }
 
-    override fun SignIn(user: UserModel): Boolean {
+   fun SignIn(user: UserModel): Boolean {
         var correo = user.correo ?: ""
         var clave = user.clave ?: ""
         var estado =false
@@ -25,11 +24,11 @@ class UserRepoImpSeverino :UserRepository {
         return estado
     }
 
-    override fun signout() {
+  fun signout() {
         autenticacion.signOut()
     }
 
-    override fun getCurrentUser(): FirebaseUser? {
+    fun getCurrentUser(): FirebaseUser? {
         return autenticacion.getCurrentUser()
     }
 }

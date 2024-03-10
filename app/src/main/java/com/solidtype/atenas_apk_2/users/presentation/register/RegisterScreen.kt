@@ -61,7 +61,7 @@ import com.solidtype.atenas_apk_2.users.presentation.login.login_medenview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(context: Context) {
+fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_medenview()) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
@@ -75,8 +75,6 @@ fun OutlinedTextFieldExample(context: Context) {
     ) {
 
         val gradient = Brush.verticalGradient(0f to Color.Gray, 1000f to Color.White)
-
-        val validarr  = login_medenview()
 
         var text by remember { mutableStateOf("") }
         var sim by remember { mutableStateOf("") }
