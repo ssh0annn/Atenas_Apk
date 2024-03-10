@@ -78,8 +78,10 @@ dependencies {
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 
     //Corrutinas
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6")
+
 }
