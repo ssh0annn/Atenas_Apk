@@ -53,11 +53,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(context: Context) {
+fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_medenview()) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
@@ -72,25 +73,23 @@ fun OutlinedTextFieldExample(context: Context) {
 
         val gradient = Brush.verticalGradient(0f to Color.Gray, 1000f to Color.White)
 
-        val validarr  = login_medenview()
-
-        var text by remember { mutableStateOf("") }
-        var sim by remember { mutableStateOf("") }
-        var apellido by remember { mutableStateOf("") }
-        var correo by remember { mutableStateOf("") }
-        var nnegocio by remember { mutableStateOf("") }
+        var text by rememberSaveable {mutableStateOf("")}
+        var sim by rememberSaveable {mutableStateOf("")}
+        var apellido by rememberSaveable {mutableStateOf("")}
+        var correo by rememberSaveable {mutableStateOf("")}
+        var nnegocio by rememberSaveable {mutableStateOf("")}
         val nn = 30
-        var dnegocio by remember { mutableStateOf("") }
+        var dnegocio by rememberSaveable {mutableStateOf("")}
         val dn = 50
         //telefono validacion input
-        var telefono by remember { mutableStateOf("") }
+        var telefono by rememberSaveable {mutableStateOf("")}
         val contar = 10
         val contarsim = 20
         //cierre
-        var password by remember { mutableStateOf("") }
-        var isPasswordVisible by remember { mutableStateOf(false) }
-        var confirmar by remember { mutableStateOf("") }
-        var isPasswordVisible1 by remember { mutableStateOf(false) }
+        var password by rememberSaveable {mutableStateOf("")}
+        var isPasswordVisible by rememberSaveable {mutableStateOf(false)}
+        var confirmar by rememberSaveable {mutableStateOf("")}
+        var isPasswordVisible1 by rememberSaveable {mutableStateOf(false)}
 
         Box(
             modifier = Modifier
@@ -277,7 +276,7 @@ fun OutlinedTextFieldExample(context: Context) {
                             nnegocio = it
                         }
                     },
-                    label = { Text("Nombre negocio", fontSize = 10.sp) },
+                    label = { Text("Nombre del negocio", fontSize = 10.sp) },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text), // Cambiado a Text
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
@@ -304,7 +303,7 @@ fun OutlinedTextFieldExample(context: Context) {
                             dnegocio = it
                         }
                     },
-                    label = { Text("Nombre negocio", fontSize = 10.sp) },
+                    label = { Text("Direccion del negocio", fontSize = 10.sp) },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text), // Cambiado a Text
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
