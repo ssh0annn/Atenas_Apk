@@ -1,5 +1,6 @@
-package com.solidtype.atenas_apk_2.users.presentation.login
+package com.solidtype.atenas_apk_2.users.presentation.login.component
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.R
+import com.solidtype.atenas_apk_2.users.presentation.login.LoginViewModel
 import com.solidtype.atenas_apk_2.users.presentation.register.onClick
 
 @Composable
@@ -190,7 +192,22 @@ fun Container() {
                 )
             }
             Button(
-                onClick = { onClick() },
+                onClick = {
+                    val validado = LoginViewModel().validarLogin(user, pass)
+                    if (validado) {
+                        Toast.makeText(
+                            null,
+                            "Usuario y contraseña validos",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            null,
+                            "Usuario o contraseña invalidos",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF343341),
@@ -198,7 +215,7 @@ fun Container() {
 
                     ),
                 modifier = Modifier
-                    .width(500.dp)
+                    .width(430.dp)
                     .height(100.dp)
                     .padding(top = 30.dp)
 
@@ -209,27 +226,37 @@ fun Container() {
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            Button(
-                onClick = {
-                    /*state.pass = pass
-                state.user = user
-                loginvm.NavegarMain(state.user!!, state.pass!!, context)*/
-                },
+            Row(
                 modifier = Modifier
                     .width(500.dp)
-                    .height(height = 80.dp)
-                    .padding(start = 60.dp, end = 60.dp, top = 10.dp)
-                    .background(Color(android.graphics.Color.parseColor("#FFFFFFFF"))),
-                colors = ButtonDefaults.buttonColors(Color.Transparent),
-                shape = RoundedCornerShape(25.dp)
-            )
-            {
+                    .padding(start = 20.dp, top = 10.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ){
                 Text(
-                    text = "Registrar",
-                    Modifier.padding(top = 8.dp, bottom = 8.dp),
-                    fontSize = 20.sp,
-                    color = Color(0xFF343341)
+                    text = "¿No tienes cuenta?",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(android.graphics.Color.parseColor("#343341"))
                 )
+                Button(
+                    onClick = {},
+                    shape = RoundedCornerShape(25.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color(0xFF343341),
+                    ),
+                    modifier = Modifier
+                        .width(180.dp)
+                        .height(80.dp)
+                        .padding(start = 10.dp)
+
+                ) {
+                    Text(
+                        "Registrate",
+                        fontSize = 20.sp
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(100.dp))
         }
