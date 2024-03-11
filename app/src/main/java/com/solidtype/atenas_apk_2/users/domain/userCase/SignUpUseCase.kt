@@ -26,7 +26,7 @@ class SignUpUseCase{
                         if(repeatedPasswordValidate.invoke(password,repeatedpassword)){
                             if(businessValidate.invoke(businessName,businessAddres)){
                                 if(phoneValidate.invoke(phone)){
-                                    repository.signUp("user", "")
+                                    //repository.signUp("user", "a")
                                     return ValidateResults(
                                         successful = true,
                                     )

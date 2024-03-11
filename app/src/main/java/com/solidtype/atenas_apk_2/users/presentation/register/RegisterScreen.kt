@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -54,6 +56,11 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +69,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
+
     Column(modifier = Modifier
 
 
@@ -91,6 +99,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
         var confirmar by rememberSaveable {mutableStateOf("")}
         var isPasswordVisible1 by rememberSaveable {mutableStateOf(false)}
 
+
         Box(
             modifier = Modifier
                 .width(470.dp)
@@ -118,7 +127,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 200.dp)
+                        .padding(start = 220.dp)
                 ){
                     Text(
                         text = "Ir a login",
@@ -127,10 +136,6 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                     )
                 }
             }
-
-
-
-
         }
 
 
@@ -188,7 +193,8 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
             ) {
                 TextField(
                     value = correo,
-                    onValueChange = { newText -> correo = newText },
+                    onValueChange = {
+                        correo = it },
                     label = { Text("Correo",fontSize = 10.sp) },
 
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
@@ -197,6 +203,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                         .height(80.dp)
                         .padding(15.dp)
                 )
+
             }
             //sim
             Box(
@@ -223,10 +230,9 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                 )
                 Text(
                     text = "${sim.length}/$contarsim",
-
+                    color = if (sim.length < 20) Color.Red else Color.Unspecified,
                     modifier = Modifier
-                        .padding(start = 445.dp,top = 75.dp)
-
+                        .padding(start = 445.dp, top = 75.dp)
                 )
             }
             //telefono
@@ -258,7 +264,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                 //limite
                 Text(
                     text = "${telefono.length}/$contar",
-
+                    color = if (telefono.length < 10) Color.Red else Color.Unspecified,
                     modifier = Modifier
                         .padding(start = 445.dp,top = 75.dp)
 
@@ -286,6 +292,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                 )
                 Text(
                     text = "${nnegocio.length}/$nn",
+                    color = if (nnegocio.length < 6) Color.Red else Color.Unspecified,
                     modifier = Modifier
                         .padding(start = 445.dp,top = 75.dp)
 
@@ -314,6 +321,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
 
                 Text(
                     text = "${dnegocio.length}/$dn",
+                    color = if (dnegocio.length < 11) Color.Red else Color.Unspecified,
                     modifier = Modifier
                         .padding(start = 445.dp,top = 75.dp)
 
@@ -395,7 +403,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
         val f = 10
 
         Button(
-            onClick = { validarr.validar(text, ff, apellido, correo, nnegocio, dnegocio, f, password, confirmar, context) },
+            onClick = { validarr.validar(text, sim, apellido, correo, nnegocio, dnegocio,telefono, password, confirmar, context) },
             shape = RoundedCornerShape(25.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF343341),

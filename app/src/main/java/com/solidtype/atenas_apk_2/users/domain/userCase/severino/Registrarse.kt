@@ -7,8 +7,10 @@ class Registrarse {
     private val repositorio:UserRepository=RepositoryImpl()
 
 
-    operator fun invoke(email:String, clave:String):Boolean{
-            return repositorio.signUp(email, clave)
+    operator fun invoke(email:String, clave:String,name:String, sim:String,
+                        apellido:String, nnegocio:String,
+                        dnegocio:String, telefono:String):Boolean{
+            return repositorio.signUp(email, clave, name,sim, apellido, nnegocio, dnegocio, telefono)
 
     }
 
