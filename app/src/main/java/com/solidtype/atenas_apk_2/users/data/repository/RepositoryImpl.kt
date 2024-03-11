@@ -15,12 +15,12 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                          apellido:String, nnegocio:String,
                          dnegocio:String, telefono:String) : Boolean{
         var funciona=false
-        val mod=Modelo(name,apellido,sim, email,clave,
+        val mod=Modelo(name,apellido,email,sim,clave,
             nnegocio,dnegocio,
             telefono)
 
         if(!auth.signup(email, clave)){
-            store.newUser(mod,sim)
+            store.newUser(mod)
             funciona=true
         }
 
