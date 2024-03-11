@@ -1,17 +1,9 @@
-package com.solidtype.atenas_apk_2.users.presentation.login
+package com.solidtype.atenas_apk_2.users.presentation.register
 
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.users.data.repository.RepositoryImpl
-import com.solidtype.atenas_apk_2.users.domain.model.UserModel
-import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
-import com.solidtype.atenas_apk_2.users.domain.userCase.SignInUseCase
-import com.solidtype.atenas_apk_2.users.domain.userCase.SignUpUseCase
 import com.solidtype.atenas_apk_2.users.domain.userCase.severino.Registrarse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewModel(){
 
