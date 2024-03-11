@@ -48,10 +48,13 @@ import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.users.presentation.login.LoginViewModel
 import com.solidtype.atenas_apk_2.users.presentation.register.onClick
+//androidx.compose.runtime:runtime-livedata
+//import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
-fun Container() {
-    var user by remember { mutableStateOf("") }
+fun Container(viewModel: LoginViewModel) {
+    //val email : String by viewModel.mail.observeAsState("")
+    var email by remember { mutableStateOf("") }
     var pass by remember { mutableStateOf("") }
     //val loginvm : LoginViewModel = LoginViewModel()
     var checked by remember { mutableStateOf(false) }
@@ -102,8 +105,8 @@ fun Container() {
 
             val containerColor = Color(android.graphics.Color.parseColor("#F0F0F0"))
             TextField(
-                value = user,
-                onValueChange = { user = it },
+                value = email,
+                onValueChange = { email = it },
                 singleLine = true,
                 modifier = Modifier
                     .width(500.dp)
@@ -193,7 +196,7 @@ fun Container() {
             }
             Button(
                 onClick = {
-                    val validado = LoginViewModel().validarLogin(user, pass)
+                    val validado = LoginViewModel().validarLogin(email, pass)
                     if (validado) {
                         Toast.makeText(
                             null,
@@ -266,5 +269,5 @@ fun Container() {
 @Preview(showBackground = true, widthDp = 1280, heightDp = 800)
 @Composable
 fun DefaultPreview() {
-    Container()
+    Container(LoginViewModel())
 }

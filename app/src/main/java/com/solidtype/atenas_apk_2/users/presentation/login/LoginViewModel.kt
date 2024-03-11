@@ -1,9 +1,14 @@
 package com.solidtype.atenas_apk_2.users.presentation.login
 
 import android.util.Patterns
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class LoginViewModel: ViewModel() {
+
+    private val _mail = MutableLiveData<String>()
+    val mail: LiveData<String> = _mail
 
     fun validarLogin(user: String, pass: String): Boolean {
         return validarCamposUser(user) && validarCamposPass(pass) && validateUser(user, pass)
