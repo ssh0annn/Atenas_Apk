@@ -89,4 +89,7 @@ dependencies {
 
     implementation ("androidx.navigation:navigation-compose:2.7.7")
 
+    //LoginViewModel
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.3")
+
 }
