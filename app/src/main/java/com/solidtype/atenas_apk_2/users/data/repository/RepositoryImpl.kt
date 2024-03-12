@@ -15,7 +15,11 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                          apellido:String, nnegocio:String,
                          dnegocio:String, telefono:String) : Boolean{
         var funciona=false
+<<<<<<< HEAD
         val mod=Modelo(name,apellido,sim, email,clave,
+=======
+        val mod=Modelo(name,apellido,email,sim,clave,
+>>>>>>> 2f626763cf0aaf9f0a8115b994bfcc4045ddcfba
             nnegocio,dnegocio,
             telefono)
 
