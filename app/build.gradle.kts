@@ -61,6 +61,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
 
     testImplementation("junit:junit:4.13.2")
@@ -86,5 +88,8 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6")
 
     implementation ("androidx.navigation:navigation-compose:2.7.7")
+
+    //LoginViewModel
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.3")
 
 }

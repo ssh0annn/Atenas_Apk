@@ -7,12 +7,12 @@ import com.solidtype.atenas_apk_2.users.domain.model.UserModel
 
 class UserRepoImpSeverino {
     private val  autenticacion = RemoteFirebase()
-   fun signUp(user: UserModel): Boolean {
+   suspend fun signUp(user: UserModel): Boolean {
         autenticacion.signOut()
         return true
     }
 
-   fun SignIn(user: UserModel): Boolean {
+   suspend fun SignIn(user: UserModel): Boolean {
         var correo = user.correo ?: ""
         var clave = user.clave ?: ""
         var estado =false
@@ -24,11 +24,11 @@ class UserRepoImpSeverino {
         return estado
     }
 
-  fun signout() {
+ suspend fun signout() {
         autenticacion.signOut()
     }
 
-    fun getCurrentUser(): FirebaseUser? {
+   suspend fun getCurrentUser(): FirebaseUser? {
         return autenticacion.getCurrentUser()
     }
 }

@@ -28,8 +28,13 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
             nnegocio, dnegocio,
             telefono
         )
-        actualizarOInsertarModelo(mod)
+
         if (!auth.signup(email, clave)) {//Esta consulta debuelve falso si = sale bien.
+            actualizarOInsertarModelo(mod)
+        val mod=Modelo(name,apellido,sim, email,clave,
+            nnegocio,dnegocio,
+            telefono)
+
 
             funciona = true
         }
@@ -38,11 +43,11 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     }
 
 
-    override suspend fun SignIn(user: UserModel): Boolean {
+    override suspend fun SignIn(email: String, clave: String): Boolean {
         var confirmacion = false
         var mensaje: String? = ""
 
-        auth.signin(user.correo, user.clave)
+        auth.signin(email,clave)
         { success, errormesages ->
             confirmacion = success
             mensaje = errormesages
@@ -61,7 +66,8 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
         return auth.getCurrentUser()
     }
 
-    suspend fun actualizarOInsertarModelo(modelo: Modelo) {
+
+    private suspend fun actualizarOInsertarModelo(modelo: Modelo) {
         // Utiliza una coroutine para manejar la operación de manera asíncrona
         CoroutineScope(Dispatchers.IO).launch {
             val resultado = store.actualizarDocumento(modelo)
@@ -79,3 +85,4 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
         }
     }
 }
+
