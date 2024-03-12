@@ -4,6 +4,10 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.solidtype.atenas_apk_2.users.domain.userCase.severino.Registrarse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewModel(){
@@ -30,18 +34,27 @@ class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewMo
             Toast.makeText(context, "La contraseña no coinciden.", Toast.LENGTH_LONG).show()
         }  else {
             // Todos los campos están completos y las contraseñas coinciden
-            // Puedes realizar alguna acción aquí, como iniciar sesión.
+            // Puedes realizar alguna acción aquí, como iniciar session.
             //Ejemplo de prueba
-            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-            val autenticacion:Boolean=caso_uso(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
-
-            if(autenticacion){
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++s++
+            println("Antes de la corrutina: ${listOf(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)}")
+            CoroutineScope(Dispatchers.IO).launch {
+                println("iniciando la corrutina")
+                val autenticacion:Boolean=caso_uso(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
+                withContext(Dispatchers.Main) {
+                    println("Dentro de withContext")
+                    if(autenticacion){
                         Toast.makeText(context, "Inicio de seccion:  $correo, $password.", Toast.LENGTH_LONG).show()
 
-            }else{
-                Toast.makeText(context, "LA MACATE: $correo, $password", Toast.LENGTH_LONG).show()
+                    }else{
+                        Toast.makeText(context, "LA MACATE: $correo, $password", Toast.LENGTH_LONG).show()
+                    }
+
+                }
             }
+
+            println("Ddatos en registro: ${listOf(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)}")
+            println("Despues de la corrutina")
 
             //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

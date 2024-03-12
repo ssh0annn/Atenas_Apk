@@ -21,13 +21,13 @@ class FirestoreConnect {
     //y luego verifica si el task fue succesfull en al funcion de NewUser para actualizar la informacion 
 
     fun newUser(user: Modelo) {
-        iccidInvalited(user.correo)
+        iccidInvalited(user.id_licensia)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val existeUsuario = task.result
                     if (existeUsuario) {
                         // SI el usuario existe, actualiza los datos
-                        db.collection("users").document(user.correo).update(
+                        db.collection("users").document(user.id_licensia).update(
                             "nombre", user.nombre,
                             "apellido", user.apellido,
                             "id_licensia", user.id_licensia,
