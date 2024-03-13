@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.users.data.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
@@ -14,6 +15,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     override  fun signUp(email:String, clave:String,name:String, sim:String,
                          apellido:String, nnegocio:String,
                          dnegocio:String, telefono:String) : Boolean{
+        Log.e("EMAIL","DATO del EMAIL EN LA FUNCION REPOSITORY es: $email ,EL DATO SIM EN EL REPOSITORY ES: $sim")
         var funciona=false
         val mod=Modelo(name,apellido,email,sim,clave,
             nnegocio,dnegocio,

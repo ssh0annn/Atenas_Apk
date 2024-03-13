@@ -21,13 +21,13 @@ class FirestoreConnect {
     //y luego verifica si el task fue succesfull en al funcion de NewUser para actualizar la informacion 
 
     fun newUser(user: Modelo) {
-        iccidInvalited(user.correo)
+        iccidInvalited(user.id_licensia)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val existeUsuario = task.result
                     if (existeUsuario) {
-                        // SI el usuario existe, actualiza los datos
-                        db.collection("users").document(user.correo).update(
+                        // SI el usuario existe, actual los datos
+                        db.collection("usuarios").document(user.id_licensia).update(
                             "nombre", user.nombre,
                             "apellido", user.apellido,
                             "id_licensia", user.id_licensia,
@@ -52,20 +52,34 @@ class FirestoreConnect {
             }
     }
 
-    private fun iccidInvalited(iCCID: String): Task<Boolean> {
-        val dbRefIccid = db.collection("users").document(iCCID)
+    fun iccidInvalited(iCCID: String): Task<Boolean> {
         val task = TaskCompletionSource<Boolean>()
 
-        dbRefIccid.get().addOnCompleteListener { taskResult ->
-            if (taskResult.isSuccessful) {
-                val usuarioExiste = taskResult.result?.exists() ?: true
-                Log.e("USUARIO ACTUAL", "EL USUARIO CON EL ICCID $iCCID EXISTE: $usuarioExiste")
-                task.setResult(usuarioExiste)
-            } else {
-                Log.e("USUARIO ACTUAL", "Error al obtener el documento: ${taskResult.exception}")
-                task.setResult(false)
+        // Obtiene referencia a la colección "users"
+        val coleccionRef = db.collection("usuarios")
+        Log.d("USUARIO ACTUAL", "valor del ICCID en la funcion invalited : $iCCID")
+
+        // Obtiene todos los documentos de la colección
+        coleccionRef.get()
+            .addOnCompleteListener { taskResult ->
+                if (taskResult.isSuccessful) {
+                    // Itera sobre los documentos
+                    for (document in taskResult.result!!) {
+                        // Compara el ICCID con el ID de cada documento
+                        if (document.id == iCCID) {
+                            // El ICCID existe en la colección
+                            task.setResult(true)
+                            return@addOnCompleteListener
+                        }
+                    }
+
+                    // El ICCID no existe en la colección
+                    task.setResult(false)
+                } else {
+                    // Maneja errores al obtener documentos
+                    task.setException(taskResult.exception!!)
+                }
             }
-        }
 
         return task.task
     }
@@ -74,11 +88,12 @@ class FirestoreConnect {
 
 
 
+
 data class Modelo(
     val nombre:String,
     val apellido:String,
-    val id_licensia:String,
     val correo: String,
+    val id_licensia:String,
     val clave:String,
     val nombre_negocio: String,
     val direccion_negocio: String,
