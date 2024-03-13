@@ -48,44 +48,11 @@ suspend fun newUser2(user:Modelo)= withContext(Dispatchers.IO) {
               }
     }
 
-
-    fun newUser(user: Modelo) {
-        iccidInvalited(user.id_licensia)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val existeUsuario = task.result
-                    if (existeUsuario) {
-                        // SI el usuario existe, actual los datos
-                        db.collection("usuarios").document(user.id_licensia).update(
-                            "nombre", user.nombre,
-                            "apellido", user.apellido,
-                            "id_licensia", user.id_licensia,
-                            "correo", user.correo,
-                            "clave", user.clave,
-                            "nombre_negocio", user.nombre_negocio,
-                            "direccion_negocio", user.direccion_negocio,
-                            "telefono", user.telefono
-                        )
-                            .addOnSuccessListener {
-                                Log.d("USUARIO ACTUAL", "el ICCID existe Datos del usuario registrados: $user")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("USUARIO ACTUAL", "Error al registar los datos del usuario: $e")
-                            }
-                    } else {
-                        Log.d("USUARIO ACTUAL", "el ICCID no existe, no se puede registrar el usuario: $user")
-                    }
-                } else {
-                    Log.e("USUARIO ACTUAL", "Error al verificar el ICCID: ${task.exception}")
-                }
-            }
-    }
    private suspend fun validateIccid(iccid:String)= withContext(Dispatchers.IO){
             try {
-               val query= db.collection("usuarios")
-                val docs= query.get().await()
-                var n =0
-                for (document in docs.documents){
+               val query= db.collection("usuarios").get().await()
+               var n =0
+                for (document in query.documents){
                     n++
                     println("EL iccid es : $iccid")
                     println("los documentos $n = ${document.id}")
@@ -107,38 +74,6 @@ suspend fun newUser2(user:Modelo)= withContext(Dispatchers.IO) {
 
         }
 
-
-    fun iccidInvalited(iCCID: String): Task<Boolean> {
-        val task = TaskCompletionSource<Boolean>()
-
-        // Obtiene referencia a la colección "users"
-        val coleccionRef = db.collection("usuarios")
-        Log.d("USUARIO ACTUAL", "valor del ICCID en la funcion invalited : $iCCID")
-
-        // Obtiene todos los documentos de la colección
-        coleccionRef.get()
-            .addOnCompleteListener { taskResult ->
-                if (taskResult.isSuccessful) {
-                    // Itera sobre los documentos
-                    for (document in taskResult.result!!) {
-                        // Compara el ICCID con el ID de cada documento
-                        if (document.id == iCCID) {
-                            // El ICCID existe en la colección
-                            task.setResult(true)
-                            return@addOnCompleteListener
-                        }
-                    }
-
-                    // El ICCID no existe en la colección
-                    task.setResult(false)
-                } else {
-                    // Maneja errores al obtener documentos
-                    task.setException(taskResult.exception!!)
-                }
-            }
-
-        return task.task
-    }
 }
 
 

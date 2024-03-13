@@ -56,7 +56,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
-    
+
 
     Column(modifier = Modifier
 
