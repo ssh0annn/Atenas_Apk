@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.users.presentation.register
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.users.domain.userCase.severino.Registrarse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,11 +39,11 @@ class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewMo
             //Ejemplo de prueba
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++s++
             println("Antes de la corrutina: ${listOf(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)}")
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch{
                 println("iniciando la corrutina")
-                val autenticacion:Boolean=caso_uso(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
                 withContext(Dispatchers.Main) {
-                    println("Dentro de withContext")
+                val autenticacion:Boolean=caso_uso(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
+                println("Dentro de withContext")
                     if(autenticacion){
                         Toast.makeText(context, "Inicio de seccion:  $correo, $password.", Toast.LENGTH_LONG).show()
 
