@@ -1,15 +1,9 @@
 package com.solidtype.atenas_apk_2.users.data.repository
 
-import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
-import com.solidtype.atenas_apk_2.users.data.remote.FireStore
-import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
-import com.solidtype.atenas_apk_2.users.domain.model.UserModel
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
-import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

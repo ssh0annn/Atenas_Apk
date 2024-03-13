@@ -1,13 +1,20 @@
 package com.solidtype.atenas_apk_2.users.data.remote
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentSnapshot
 
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Date
+import kotlin.system.exitProcess
 
 class FirestoreConnect {
 
@@ -51,6 +58,89 @@ class FirestoreConnect {
                 }
             }
     }
+
+ /*
+    fun obtenerFechaActual(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss z")
+        val fechaActual = Date()
+        return dateFormat.format(fechaActual)
+    }
+
+    fun fechaExpirada(iCCID: String): Task<Boolean>{
+        val task = TaskCompletionSource<Boolean>()
+       val fechaActual = obtenerFechaActual()
+       val  fechaFInal = db.collection("usuarios").document(iCCID).get().addOnSuccessListener { doc->
+                doc.getString("fecha_final")
+       }
+
+
+        if (fechaFInal.isSuccessful){
+            if (fechaFInal.result.toString() >= fechaActual){
+                Log.d("USUARIO ACTUAL","LA FECHA DESDE FIREBASE ES ${fechaFInal.result}")
+                Log.d("USUARIO ACTUAL","ESTA ES LA FECHA DESDE KOTLIN $fechaActual")
+                db.collection("usuarios").document(iCCID).update(
+                    "estado",false
+                )
+                task.setResult(true)
+                Log.d("USUARIO ACTUAL","ESTADO ACTUALIAZADO CORRECTAMENTE ${fechaFInal.result}")
+
+            }
+            task.setResult(false)
+        } else {
+            Log.d("USUARIO ACTUAL","problema al encontrar el dato")
+        }
+       return task.task
+    }
+    */
+
+    fun fechaExpirada(iCCID: String): Task<Boolean> {
+        val task = TaskCompletionSource<Boolean>()
+        val fechaActual = obtenerFechaActual()
+
+        db.collection("usuarios").document(iCCID).get()
+            .addOnSuccessListener { doc ->
+                val fechaFinalString = doc.getString("fecha_final")
+
+                if (fechaFinalString != null) {
+                    val formatter = SimpleDateFormat("yyyy-MM-dd")
+
+                    // Comparar las fechas directamente sin asignar a una variable adicional
+                    if (formatter.parse(fechaFinalString) >= fechaActual) {
+                        Log.d("USUARIO ACTUAL", "La fecha desde Firebase es $fechaFinalString")
+                        Log.d("USUARIO ACTUAL", "Esta es la fecha desde Kotlin $fechaActual")
+
+                        // Actualizar el estado a false en Firestore
+                        db.collection("usuarios").document(iCCID).update("estado", false)
+                            .addOnSuccessListener {
+                                Log.d("USUARIO ACTUAL", "Estado actualizado correctamente")
+                                task.setResult(true)
+                            }
+                            .addOnFailureListener {
+                                Log.e("USUARIO ACTUAL", "Error al actualizar el estado", it)
+                                task.setResult(false)
+                            }
+                    } else {
+                        Log.d("USUARIO ACTUAL", "La fecha en Firestore no es mayor o igual a la fecha actual en Kotlin")
+                        task.setResult(false)
+                    }
+                } else {
+                    Log.d("USUARIO ACTUAL", "El documento no contiene la fecha final")
+                    task.setResult(false)
+                }
+            }
+            .addOnFailureListener {
+                Log.e("USUARIO ACTUAL", "Problema al encontrar el dato", it)
+                task.setResult(false)
+            }
+
+        return task.task
+    }
+
+    private fun obtenerFechaActual(): Date {
+        return Date() // Obtener la fecha actual en formato Date
+    }
+
+
 
     fun iccidInvalited(iCCID: String): Task<Boolean> {
         val task = TaskCompletionSource<Boolean>()

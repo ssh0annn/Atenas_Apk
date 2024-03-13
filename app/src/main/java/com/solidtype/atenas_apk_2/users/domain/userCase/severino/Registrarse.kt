@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.users.domain.userCase.severino
 
-import com.solidtype.atenas_apk_2.users.data.remote.FireStore
 import com.solidtype.atenas_apk_2.users.data.repository.RepositoryImpl
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 
