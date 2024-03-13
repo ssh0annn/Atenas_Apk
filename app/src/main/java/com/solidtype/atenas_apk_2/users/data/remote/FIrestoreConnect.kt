@@ -100,3 +100,6 @@ data class Modelo(
     val telefono:String
 
 )
+
+
+
