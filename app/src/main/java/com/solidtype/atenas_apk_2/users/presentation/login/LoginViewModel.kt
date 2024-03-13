@@ -50,7 +50,6 @@ class LoginViewModel: ViewModel() {
                     Toast.makeText(context,"Login incorrecto!!", Toast.LENGTH_SHORT).show()
                     println("Usuario o contraseña invalidos")
 
-
                 }
             }
             println("loading debe ser false:${ _isLoading.value} ")

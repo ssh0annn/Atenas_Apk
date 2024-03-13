@@ -47,14 +47,16 @@ import androidx.constraintlayout.compose.Visibility
 import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(context: Context,navController:NavController, validarr: login_medenview = login_medenview()) {
+fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login_medenview = login_medenview()) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
+
 
     Column(modifier = Modifier
 
@@ -115,12 +117,19 @@ fun OutlinedTextFieldExample(context: Context,navController:NavController, valid
                     modifier = Modifier
                         .padding(start = 220.dp)
                 ){
+
                     Text(
                         text = "Ir a login",
                         color = Color.Blue,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
+
+
                     )
+
                 }
+
+
+
             }
         }
 
@@ -335,7 +344,7 @@ fun OutlinedTextFieldExample(context: Context,navController:NavController, valid
                 )
 
                 IconButton(
-                    onClick = { isPasswordVisible = !isPasswordVisible },
+                    onClick  = { isPasswordVisible = !isPasswordVisible },
                     modifier = Modifier
                         .padding(start = 435.dp, top = 25.dp)
                 ) {

@@ -5,7 +5,7 @@ import com.solidtype.atenas_apk_2.users.domain.model.UserModel
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 
 class SignUpUseCase{
-    private val repository:UserRepository=RepositoryImpl()
+    private val repository:UserRepository= RepositoryImpl()
     private val fullnameValidate : ValidateFullnameUseCase = ValidateFullnameUseCase()
     private val emailValidate : ValidateEmailUseCase = ValidateEmailUseCase()
     private val idValidate : ValidateIdUseCase = ValidateIdUseCase()
