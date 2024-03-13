@@ -6,6 +6,9 @@ import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 class SignInUseCase{
     private val repositorio:UserRepository=RepositoryImpl()
     suspend operator fun invoke(email:String,password:String) : ValidateResults {
-        return repositorio.SignIn(email,password)
+
+
+        return ValidateResults(successful =  repositorio.SignIn(email,password))
+
     }
 }

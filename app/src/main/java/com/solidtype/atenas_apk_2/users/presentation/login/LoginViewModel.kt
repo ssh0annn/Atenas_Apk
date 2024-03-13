@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.users.domain.userCase.SignInUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -38,12 +37,12 @@ class LoginViewModel: ViewModel() {
        val correo = _mail.value ?: ""
        val passw = _pass.value ?: ""
         viewModelScope.launch {
-
+            println("Entro al viewModelScope")
             withContext(Dispatchers.Main){
                 _isLoading.value = true
-
+                println("Entro al withContext, y esta loading")
                 if (validateUser(correo, passw)) {
-
+                    println("Consulto validacion")
                     Toast.makeText(context,"Login correcto!!", Toast.LENGTH_SHORT).show()
                     println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
 
@@ -51,13 +50,15 @@ class LoginViewModel: ViewModel() {
                     Toast.makeText(context,"Login incorrecto!!", Toast.LENGTH_SHORT).show()
                     println("Usuario o contraseña invalidos")
 
+
                 }
-
             }
-            _isLoading.value = false
-
-
+            println("loading debe ser false:${ _isLoading.value} ")
+            println("voy a salir del viewModelScope")
         }
+        println("sali del  viewModelScope")
+        _isLoading.value = false
+        println("loading debe ser false:${ _isLoading.value} ")
 
     }
    private suspend fun validateUser(user: String, pass: String): Boolean {
@@ -66,17 +67,16 @@ class LoginViewModel: ViewModel() {
        val resultado =casosigin(user,pass)
        if (resultado.successful){
            println("Success en validateUser: ${resultado.successful} ,<---")
-           println("En caso de: ${resultado.errorMessage}")
+           println("En caso de: ${resultado.errorMessage} <---deberia estar bacio")
            return true
        }else{
-           println("error en validateUser: ${resultado.errorMessage}, <---")
+           println("error en validateUser: ${resultado.successful}, <---")
            return false
        }
 
-
     }
 
-    private fun validarCamposEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
 
-    private fun validarCamposPass(pass: String): Boolean = pass.length >= 8
+    private fun validarCamposPass(pass: String) = pass.length >= 8 // -> Boolean
 }

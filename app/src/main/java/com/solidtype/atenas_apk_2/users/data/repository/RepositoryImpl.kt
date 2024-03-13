@@ -31,7 +31,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
             telefono
         )
 
-        if (!auth.signup(email, clave)) {//Esta consulta debuelve falso si = sale bien.
+        if (auth.signup(email, clave)) {
             actualizarOInsertarModelo(mod)
         val mod=Modelo(name,apellido,sim, email,clave,
             nnegocio,dnegocio,
@@ -45,24 +45,11 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     }
 
 
-    override suspend fun SignIn(email: String, clave: String): ValidateResults {
-        var valida:ValidateResults= ValidateResults(false, "")
+    override suspend fun SignIn(email: String, clave: String) = auth.signinCorru(email, clave) // -> Boolean
 
 
-        auth.signin(email,clave){ success, errormesages ->
+    override suspend fun signout() =  auth.signOut() // -> Unit
 
-                valida.successful=success
-                valida.errorMessage=errormesages
-
-            println("Lo que viene del callback: $success, <-- y $errormesages, <--")
-
-        }
-        return valida
-    }
-
-    override suspend fun signout() {
-        auth.signOut()
-    }
 
     override suspend fun getCurrentUser(): FirebaseUser? {
         return auth.getCurrentUser()
