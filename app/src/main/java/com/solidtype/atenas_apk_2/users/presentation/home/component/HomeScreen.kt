@@ -52,7 +52,9 @@ fun HomeScreen(context: Context, nav: NavController, viewModel: HomeViewModel = 
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Button(
-                    onClick = { nav.navigate(Screens.Login.route) },
+                    onClick = {
+                        HomeViewModel().deslogear()
+                    },
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF343341),
