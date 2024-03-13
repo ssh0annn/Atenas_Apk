@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.users.data.remote
 
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.firestoreSettings
@@ -24,20 +25,29 @@ class RemoteFirebase{
         return signup
     }
 
-    suspend fun signin(email: String, clave: String, callback: (Boolean, String?) -> Unit): FirebaseUser? {
-        auth.signInWithEmailAndPassword(email, clave)
-        .addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                callback(true, null)
-            } else {
-                callback(false, task.exception?.message)
-            }
+    suspend fun signin(email: String, clave: String, callback: (Boolean, String?) -> Unit) {
+        try {
+            auth.signInWithEmailAndPassword(email, clave)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        callback(true, "")
+                        println("Repuesta del callback Successful: ${task.isSuccessful}")
+                    } else {
+                        println("Repuesta del callback error: ${task.exception}, <--, ${task.isSuccessful}, <--")
+                        callback(task.isSuccessful, task.exception?.message)
+                    }
+                }
+            println("Aqui debio salir todo bien, alemenos (RemoteFirebase)")
+
+        }catch (e:Exception){
+           println("EN RemoteFirebae Execption: $e, <--------")
+
         }
-        return getCurrentUser()
+
     }
 
     suspend fun getCurrentUser(): FirebaseUser? {
-        return auth.currentUser
+                return auth.currentUser
     }
 
     suspend fun signOut() {

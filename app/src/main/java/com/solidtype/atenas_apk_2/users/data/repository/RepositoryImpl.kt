@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.users.data.repository
 
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.solidtype.atenas_apk_2.users.data.remote.FireStore
 import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
@@ -8,6 +9,7 @@ import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.users.domain.model.UserModel
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,19 +45,19 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     }
 
 
-    override suspend fun SignIn(email: String, clave: String): Boolean {
-        var confirmacion = false
-        var mensaje: String? = ""
+    override suspend fun SignIn(email: String, clave: String): ValidateResults {
+        var valida:ValidateResults= ValidateResults(false, "")
 
-        auth.signin(email,clave)
-        { success, errormesages ->
-            confirmacion = success
-            mensaje = errormesages
+
+        auth.signin(email,clave){ success, errormesages ->
+
+                valida.successful=success
+                valida.errorMessage=errormesages
+
+            println("Lo que viene del callback: $success, <-- y $errormesages, <--")
+
         }
-        if (mensaje != null) {
-            throw Exception("Error de registro $mensaje")
-        }
-        return confirmacion
+        return valida
     }
 
     override suspend fun signout() {

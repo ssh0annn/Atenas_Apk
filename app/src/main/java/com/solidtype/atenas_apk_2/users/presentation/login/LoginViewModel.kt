@@ -35,8 +35,8 @@ class LoginViewModel: ViewModel() {
 
     fun onLoginSelected(context: Context) {
 
-       var correo= _mail.value ?: " "
-       var passw=_pass.value ?: " "
+       val correo = _mail.value ?: ""
+       val passw = _pass.value ?: ""
         viewModelScope.launch {
 
             withContext(Dispatchers.Main){
@@ -59,15 +59,21 @@ class LoginViewModel: ViewModel() {
 
         }
 
-
-
     }
    private suspend fun validateUser(user: String, pass: String): Boolean {
         //Lógica con firebase
-            val casosigin =SignInUseCase()
-            casosigin(user,pass)
+       val casosigin =SignInUseCase()
+       val resultado =casosigin(user,pass)
+       if (resultado.successful){
+           println("Success en validateUser: ${resultado.successful} ,<---")
+           println("En caso de: ${resultado.errorMessage}")
+           return true
+       }else{
+           println("error en validateUser: ${resultado.errorMessage}, <---")
+           return false
+       }
 
-        return false
+
     }
 
     private fun validarCamposEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
