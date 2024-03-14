@@ -1,12 +1,12 @@
 package com.solidtype.atenas_apk_2.users.domain.userCase
 
-import android.util.Patterns
+import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.ValidateResults
 
 class ValidateFullnameUseCase {
     operator fun invoke(name:String,lastname:String):Boolean{
         return name.length in 3.. 20 && lastname.length in 3 .. 40
     }
-    fun execute(name:String,lastname:String):ValidateResults{
+    fun execute(name:String,lastname:String): ValidateResults {
         if(name.isBlank() && lastname.isBlank()){
             return ValidateResults(
                 successful = false,

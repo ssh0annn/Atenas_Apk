@@ -4,14 +4,13 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.users.domain.userCase.severino.Registrarse
-import kotlinx.coroutines.CoroutineScope
+import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.Registrarse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class login_medenview (private val caso_uso: Registrarse= Registrarse()): ViewModel(){
+class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewModel(){
 
     fun validar ( name:String, sim:String, apellido:String, correo:String,
                   nnegocio:String,dnegocio:String, telefono:String, password:String, confirmar:String, context: Context){

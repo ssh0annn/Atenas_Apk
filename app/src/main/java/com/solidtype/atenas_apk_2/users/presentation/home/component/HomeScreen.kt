@@ -14,6 +14,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,10 +28,10 @@ import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
 
 @Composable
 fun HomeScreen(context: Context, nav: NavController, viewModel: HomeViewModel = HomeViewModel()) {
-    val name = viewModel.name.value
-    val logeado = viewModel.logeado.value
+    val name: String by  viewModel.name.observeAsState(initial = "")
+    val logeado:Boolean by viewModel.logeado.observeAsState(initial = true)
 
-    if (logeado == false) {
+    if (!logeado) {
         nav.navigate(Screens.Login.route)
     } else {
         LazyColumn(
