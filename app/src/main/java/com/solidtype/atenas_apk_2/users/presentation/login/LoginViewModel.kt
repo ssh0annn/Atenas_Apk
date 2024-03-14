@@ -65,22 +65,15 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
         viewModelScope.launch {
             println("Entro al viewModelScope")
 
-            if (validateUser(correo, passw)) {
+            if (validateUser(correo, passw)) {//ESTO ESTA MAL LA LOGICA DE NEGOCIO NO DEBE IR EN EL VIEWMODEL
 
                 if(logicaNegocio()) {//logicaNegocio()
-
-
-                    println("Entro al withContext, y esta loading")
-                    _logeado.value=logeado.value.copy(autenticado = true, verificado = true)
-
-                    cambiaEstadosVerificado()
-
-
-                    println("Consulto validacion")
-                    Toast.makeText(context,"Login correcto!!", Toast.LENGTH_SHORT).show()
-                    println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
-
-
+                        println("Entro al withContext, y esta loading")
+                        _logeado.value=logeado.value.copy(autenticado = true, verificado = true)
+                        cambiaEstadosVerificado()
+                        println("Consulto validacion")
+                        Toast.makeText(context,"Login correcto!!", Toast.LENGTH_SHORT).show()
+                        println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
 
             println("loading debe ser false:${ _isLoading.value}")
             println("voy a salir del viewModelScope")
@@ -125,12 +118,9 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                                 return@withContext false
                             }
 
-
-
                     }catch(logica:Exception){
                             casos_uso.logout()
                          return@withContext false
-
                     }
                 }
 

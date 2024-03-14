@@ -2,6 +2,8 @@ package com.solidtype.atenas_apk_2.users.presentation.register
 
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.Registrarse
@@ -11,6 +13,8 @@ import kotlinx.coroutines.withContext
 
 
 class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewModel(){
+    private val _verificado = MutableLiveData<Boolean>()
+    val verificado: LiveData<Boolean> = _verificado
 
     fun validar ( name:String, sim:String, apellido:String, correo:String,
                   nnegocio:String,dnegocio:String, telefono:String, password:String, confirmar:String, context: Context){
@@ -44,6 +48,7 @@ class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewM
                 val autenticacion:Boolean=caso_uso(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
                 println("Dentro de withContext")
                     if(autenticacion){
+                        actualizaEstado()
                         Toast.makeText(context, "Inicio de seccion:  $correo, $password.", Toast.LENGTH_LONG).show()
 
                     }else{
@@ -60,6 +65,11 @@ class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewM
 
         }
     }
+
+    private fun actualizaEstado() {
+        _verificado.value =true
+    }
+
     private fun isValidEmail(email: String): Boolean {
         val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
         return email.matches(emailRegex.toRegex())
