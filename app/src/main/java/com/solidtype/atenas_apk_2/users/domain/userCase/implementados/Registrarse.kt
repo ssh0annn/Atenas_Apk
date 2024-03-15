@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.users.domain.userCase.severino
+package com.solidtype.atenas_apk_2.users.domain.userCase.implementados
 
 
 import com.solidtype.atenas_apk_2.users.data.repository.RepositoryImpl

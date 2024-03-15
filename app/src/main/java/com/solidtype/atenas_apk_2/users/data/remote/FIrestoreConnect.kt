@@ -81,7 +81,7 @@ class FirestoreConnect {
                 }
             } else {
                 false
-            } 
+            }
         } catch (e: Exception) {
             false
         }
@@ -97,11 +97,15 @@ class FirestoreConnect {
 
         // Verifica si el documento existe y si tiene algún campo
         return document.data?.isEmpty() ?: true
+
     }
 
 
 
-        private suspend fun validateIccid(iccid: String) = withContext(Dispatchers.IO) {
+
+
+        suspend fun validateIccid(iccid: String) = withContext(Dispatchers.IO) {
+
             try {
                 val query = db.collection("usuarios").get().await()
                 var n = 0
@@ -128,7 +132,6 @@ class FirestoreConnect {
         }
 
     }
-
 
 
 

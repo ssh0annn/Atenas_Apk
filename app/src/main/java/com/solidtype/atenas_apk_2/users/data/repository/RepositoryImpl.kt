@@ -7,10 +7,7 @@ import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                       private val store: FirestoreConnect =FirestoreConnect()): UserRepository {
@@ -47,18 +44,27 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     override suspend fun SignIn(email: String, clave: String) = auth.signinCorru(email, clave) // -> Boolean
 
 
-    override suspend fun signout() =  auth.signOut() // -> Unit
+    override  fun signout() =  auth.signOut() // -> Unit
 
 
     override suspend fun getCurrentUser(): FirebaseUser? {
         return auth.getCurrentUser()
     }
 
+    override suspend fun validaICCID(iccid: String): Boolean {
+       return store.validateIccid(iccid)
+    }
 
-    private suspend fun actualizarOInsertarModelo(modelo: Modelo) {
-        // Utiliza una coroutine para manejar la operación de manera asíncrona
+    override suspend fun capturaICCID(): String {
+        TODO("Not yet implemented")
+    }
 
-            }
-        }
+
+    override suspend fun estadoDeLicencia(iccid:String): Boolean {
+      return true
+        }///solo para probar
+
+
+}
 
 

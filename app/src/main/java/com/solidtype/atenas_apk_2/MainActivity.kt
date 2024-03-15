@@ -3,16 +3,14 @@ package com.solidtype.atenas_apk_2
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.solidtype.atenas_apk_2.users.presentation.login.component.Container
-import com.solidtype.atenas_apk_2.users.presentation.pantallas.navigation
-import com.solidtype.atenas_apk_2.users.presentation.register.OutlinedTextFieldExample
+import com.solidtype.atenas_apk_2.users.presentation.pantallas.Navigation
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            navigation(context = this)
+            Navigation(context = this)
           //  OutlinedTextFieldExample(this)
 
 
