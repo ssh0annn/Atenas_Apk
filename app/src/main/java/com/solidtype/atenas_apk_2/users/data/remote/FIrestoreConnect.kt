@@ -2,24 +2,28 @@ package com.solidtype.atenas_apk_2.users.data.remote
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.TaskCompletionSource
+
 
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 import kotlinx.coroutines.tasks.await
-import java.text.SimpleDateFormat
-import java.time.LocalDate
+
+
 import java.util.Date
 import kotlin.system.exitProcess
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 class FirestoreConnect {
@@ -57,61 +61,59 @@ class FirestoreConnect {
         }
     }
 
-    private fun obtenerFechaActual(): Date {
-        return Date() // Obtener la fecha actual
-    }
 
-   suspend fun fechaExpirada(iCCID: String): Task<Boolean> {
-        val task = TaskCompletionSource<Boolean>()
 
+
+    suspend fun fechaExpirada(iCCID: String): Boolean {// FUnciona
         val fechaActual = obtenerFechaActual()
 
-        db.collection("usuarios").document(iCCID).get()
-            .addOnSuccessListener { doc ->
-                val fechaFinalString = doc.getString("fecha_final")
+        return try {
+            val doc = db.collection("usuarios").document(iCCID).get().await()
 
-                if (fechaFinalString != null) {
-                    val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val fechaFinalString = doc.getTimestamp("fecha_final")?.toDate()
+            Log.e("contenido fecha","este es el dato que viene de la fehca de firebase: $fechaFinalString")
 
-                    // Comparar las fechas directamente sin asignar a una variable adicional
-                    if (formatter.parse(fechaFinalString)!! >= fechaActual) {
-                        Log.d("USUARIO ACTUAL", "La fecha desde Firebase es $fechaFinalString")
-                        Log.d("USUARIO ACTUAL", "Esta es la fecha desde Kotlin $fechaActual")
+            if (fechaFinalString != null) {
+                if (fechaActual >= fechaFinalString) {
 
-                        // Actualizar el estado a false en Firestore
-                        db.collection("usuarios").document(iCCID).update("estado", false)
-                            .addOnSuccessListener {
-                                Log.d("USUARIO ACTUAL", "Estado actualizado correctamente")
-                                task.setResult(true)
-                            }
-                            .addOnFailureListener {
-                                Log.e("USUARIO ACTUAL", "Error al actualizar el estado", it)
-                                task.setResult(false)
-                            }
-                    } else {
-                        Log.d(
-                            "USUARIO ACTUAL",
-                            "La fecha en Firestore no es mayor o igual a la fecha actual en Kotlin"
-                        )
-                        task.setResult(false)
-                    }
+                    // Actualizar el estado a false en Firestore
+                    db.collection("usuarios").document(iCCID).update("estado", false).await()
+                    true
                 } else {
-                    Log.d("USUARIO ACTUAL", "El documento no contiene la fecha final")
-                    task.setResult(false)
+                    db.collection("usuarios").document(iCCID).update("estado", true).await()
+                    false
                 }
+            } else {
+                true
             }
-            .addOnFailureListener {
-                Log.e("USUARIO ACTUAL", "Problema al encontrar el dato", it)
-                task.setResult(false)
-            }
+        } catch (e: Exception) {
+            println("Una execption en fechaExpirada $e ")
+            true
+        }
+    }
 
-        return task.task
+     fun obtenerFechaActual(): Date {
+        return Date() // para obtener el dia/hora/fecha/ actual
     }
 
 
+    suspend fun documentoEstaVacio( iCCID: String): Boolean {
+        val docRef = db.collection("usuarios").document(iCCID).get().await()
+        val document = docRef.getString("id_licencia")
+
+        return try{
+            // Verifica tiene algún campo
+            document?.isNotBlank() ?: false
+
+        }catch (e: Exception){
+            true
+        }
+
+    }
 
 
         suspend fun validateIccid(iccid: String) = withContext(Dispatchers.IO) {
+
             try {
                 val query = db.collection("usuarios").get().await()
                 var n = 0
@@ -138,7 +140,6 @@ class FirestoreConnect {
         }
 
     }
-
 
 
 

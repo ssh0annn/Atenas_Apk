@@ -1,38 +1,47 @@
 package com.solidtype.atenas_apk_2.users.data.repository
 
 import com.google.firebase.auth.FirebaseUser
+
 import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
+
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
+
 
 class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                       private val store: FirestoreConnect =FirestoreConnect()): UserRepository {
 
 
     override suspend fun signUp(
-                email: String, clave: String, name: String, sim: String,
+                email: String, clave: String, name: String,
                 apellido: String, nnegocio: String,
                 dnegocio: String, telefono: String
             ): Boolean {
-
-                val mod = Modelo(
-                    name, apellido, email, sim, clave,
-                    nnegocio, dnegocio,
-                    telefono
-                )
                 var estado = false
 
-                if (auth.signup(email, clave)) {
-                    val resultado = store.newUser2(mod)
-                    if (resultado) {
-                        estado=true
+                if (auth.signinCorru(email, clave) ) {//Debe ser un usuario existente en firebase.
+                    val licencia= auth.getCurrentUser()!!.uid
+                    if(!usuarioExistente(licencia)){
+                        val mod = Modelo(
+                            name, apellido, email, licencia, clave,
+                            nnegocio, dnegocio,
+                            telefono
+                        )
+                        val resultado = store.newUser2(mod)
+                        if (resultado) {
+                            estado=true
+                            println("se guardaron datos exitosos")
+                        } else {
+                            signout()
 
-                        println("se guardaron datos exitosos")
-                    } else {
+                            println("No se guardaron datos seggun signup")
+                        }
+                    }else{
+                        signout()
 
-                        println("No se guardaron datos seggun signup")
                     }
+
                 }
                 return estado
     }
@@ -53,13 +62,17 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     }
 
     override suspend fun capturaICCID(): String {
-        TODO("Not yet implemented")
+        return getCurrentUser()!!.uid
     }
 
 
-    override suspend fun estadoDeLicencia(iccid:String): Boolean {
-      return true
+    override suspend fun estadoDeLicencia(iccid:String): Boolean {// a la espera de implementacon
+      return store.fechaExpirada(getCurrentUser()!!.uid)
         }///solo para probar
+
+    override suspend fun usuarioExistente(iccid: String): Boolean {
+       return store.documentoEstaVacio(iccid)
+    }
 
 
 }
