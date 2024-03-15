@@ -22,23 +22,21 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
 
                 if (auth.signinCorru(email, clave) ) {//Debe ser un usuario existente en firebase.
                     val licencia= auth.getCurrentUser()!!.uid
-                    if(!usuarioExistente(licencia)){
-                        val mod = Modelo(
-                            name, apellido, email, licencia, clave,
-                            nnegocio, dnegocio,
-                            telefono
-                        )
-                        val resultado = store.newUser2(mod)
-                        if (resultado) {
-                            estado=true
-                            println("se guardaron datos exitosos")
-                        } else {
-                            signout()
 
-                            println("No se guardaron datos seggun signup")
-                        }
-                    }else{
-                        signout()
+                    val mod = Modelo(
+                        name, apellido, email, licencia, clave,
+                        nnegocio, dnegocio,
+                        telefono
+                    )
+                    val resultado = store.newUser2(mod)
+                    if (resultado) {
+                        estado=true
+
+                        println("se guardaron datos exitosos")
+                    } else {
+                        auth.signOut()// si pasa un error en la base de datos, deslogueo al usuario
+
+                        println("No se guardaron datos seggun signup")
 
                     }
 
@@ -50,7 +48,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     override suspend fun SignIn(email: String, clave: String) = auth.signinCorru(email, clave) // -> Boolean
 
 
-    override  fun signout() =  auth.signOut() // -> Unit
+    override suspend fun signout() =  auth.signOut() // -> Unit
 
 
     override suspend fun getCurrentUser(): FirebaseUser? {
@@ -67,14 +65,19 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
 
 
     override suspend fun estadoDeLicencia(iccid:String): Boolean {// a la espera de implementacon
-      return store.fechaExpirada(getCurrentUser()!!.uid)
+      return !store.fechaExpirada(capturaICCID())
         }///solo para probar
 
-    override suspend fun usuarioExistente(iccid: String): Boolean {
-       return store.documentoEstaVacio(iccid)
+    override suspend fun estadoLicencia(): Boolean {
+        return !store.fechaExpirada(capturaICCID())
+
+
+
     }
-
-
+    override suspend fun existeUsuario() : Boolean {
+       return store.usuarioExiste(capturaICCID())
+    }
 }
+
 
 

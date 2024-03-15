@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.users.domain.userCase.All_useCases
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeViewModel (private val casos_usos: All_useCases= All_useCases()): ViewModel() {
 
@@ -18,11 +20,13 @@ class HomeViewModel (private val casos_usos: All_useCases= All_useCases()): View
     val logeado: MutableLiveData<Boolean> = _logeado
 
     init {
-        cambiarLoginState(true)
-        viewModelScope.launch{
+
+         viewModelScope.launch{
             if(casos_usos.current_user() != null){
+
                 setName(casos_usos.current_user()!!.email.toString())
                  println("Este es el UID: ${casos_usos.current_user()!!.uid} <--")
+                cambiarLoginState(true)
             }
         }
     }
@@ -37,9 +41,14 @@ class HomeViewModel (private val casos_usos: All_useCases= All_useCases()): View
 
     fun deslogear() {
         //Aquí la lógica de deslogeo
+        viewModelScope.launch {
+            withContext(Dispatchers.Main){
+                casos_usos.logout()
+                cambiarLoginState(false)
 
-        casos_usos.logout()
-        cambiarLoginState(false)
+            }
+        }
+
 
     }
 

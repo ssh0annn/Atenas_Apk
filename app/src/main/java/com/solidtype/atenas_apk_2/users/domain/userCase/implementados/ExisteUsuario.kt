@@ -3,10 +3,9 @@ package com.solidtype.atenas_apk_2.users.domain.userCase.implementados
 import com.solidtype.atenas_apk_2.users.data.repository.RepositoryImpl
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 
-class SignOutUseCase (private val repositorio: UserRepository = RepositoryImpl()){
+class ExisteUsuario(private val repository: UserRepository=RepositoryImpl()) {
 
-
-     operator suspend fun invoke()=repositorio.signout()
-
-
+    suspend operator fun invoke():Boolean{
+        return repository.existeUsuario()
+    }
 }

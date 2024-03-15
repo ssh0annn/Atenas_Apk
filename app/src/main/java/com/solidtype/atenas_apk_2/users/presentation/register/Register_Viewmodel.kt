@@ -6,13 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.users.domain.userCase.All_useCases
 import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.Registrarse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewModel(){
+class login_medenview (private val caso_uso: All_useCases = All_useCases()): ViewModel(){
     private val _verificado = MutableLiveData<Boolean>()
     val verificado: LiveData<Boolean> = _verificado
 
@@ -40,11 +41,18 @@ class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewM
             viewModelScope.launch{
                 println("iniciando la corrutina")
                 withContext(Dispatchers.Main) {
-                val autenticacion:Boolean=caso_uso(correo, password,name, apellido, nnegocio, dnegocio, telefono)
+
+                val autenticacion:Boolean=caso_uso.register(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
+
                 println("Dentro de withContext")
                     if(autenticacion){
+                        if(caso_uso.estado_licencia(caso_uso.capturaIccid())){
+
                         actualizaEstado()
                         Toast.makeText(context, "Inicio de seccion:  $correo, $password.", Toast.LENGTH_LONG).show()
+                        }else{
+                            caso_uso.logout()
+                        }
 
                     }else{
                         Toast.makeText(context, "Usuario existente o no licencia no valida: $correo, $password", Toast.LENGTH_LONG).show()

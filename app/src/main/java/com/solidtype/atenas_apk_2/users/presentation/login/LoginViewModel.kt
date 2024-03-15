@@ -44,18 +44,21 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
         var usuario:String?
         viewModelScope.launch {
             if(casos_uso.current_user() != null){
-                if(logicaNegocio()){
-                    usuario=casos_uso.current_user()!!.email.toString()
-                    var uid =casos_uso.current_user()!!.uid
-                    print("Este es el uid: $uid")
-                    cambiaEstadosVerificado(true)
-                    println("Usuario existente: $usuario")
-                }else
-                {
-                    cerrarSeccion()
+                if (logicaNegocio()){
+                    if (casos_uso.usuarioExiste()){
+                        usuario=casos_uso.current_user()!!.email.toString()
+                        var uid =casos_uso.current_user()!!.uid
+                        print("Este es el uid: $uid")
+                        cambiaEstadosVerificado()
+                        println("Usuario existente: $usuario")
+
+                    }
+                }else{
+                    casos_uso.logout()
                 }
 
-                }
+            }
+
         }
     }
     fun onLoginChange(email: String, pass: String) {
@@ -76,7 +79,8 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
             if (validateUser(correo, passw)) {//ESTO ESTA MAL LA LOGICA DE NEGOCIO NO DEBE IR EN EL VIEWMODEL
 
                 if(logicaNegocio()) {//logicaNegocio()
-                    withContext(Dispatchers.Main) {
+                    if(casos_uso.usuarioExiste()){
+
                         println("Entro al withContext, y esta loading")
                         _logeado.value = logeado.value.copy(autenticado = true, verificado = true)
                         cambiaEstadosVerificado(true)
@@ -84,25 +88,20 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                         Toast.makeText(context, "Login correcto!!", Toast.LENGTH_SHORT).show()
                         println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
 
-                    }
-                }else{
 
+                        }else
+                    {
+                        casos_uso.logout()
+                        Toast.makeText(context, "Debes registrarte para Acceder", Toast.LENGTH_LONG).show()
 
-                    cambiaEstadosVerificado(true)
-                        Toast.makeText(
-                            context,
-                            "Licencia no valida o Debes registrarte!!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        _isLoading.postValue(false)
                     }
-                }
 
             println("loading debe ser false:${ _isLoading.value}")
             println("voy a salir del viewModelScope")
-
+        }else{
                     casos_uso.logout()
-                    Toast.makeText(context,"Licencia no valida o Debes registrarte!!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "problemas de licencia o no en db", Toast.LENGTH_LONG).show()
+
                     _isLoading.postValue(false)
 
 
