@@ -1,12 +1,12 @@
 package com.solidtype.atenas_apk_2.users.data.remote
 
-import android.annotation.SuppressLint
 import android.util.Log
 
 
 import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
+
+import com.google.firebase.auth.FirebaseAuth
+
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.firestore
@@ -16,20 +16,15 @@ import kotlinx.coroutines.tasks.await
 
 
 import java.util.Date
-import kotlin.system.exitProcess
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.Locale
 
 
-class FirestoreConnect {
-
-
-    private val db = Firebase.firestore
+class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
+                        private val auth: FirebaseAuth= FirebaseAuth.getInstance()
+){
 
     //esta registrando el correo como ICCID arreglen eso, resulta que no funcionaba por que no estaba haciendo la operacion asincrona
     //y devolvia un valor antes de ejecutarse por completo la operacion
@@ -37,26 +32,33 @@ class FirestoreConnect {
     //y luego verifica si el task fue succesfull en al funcion de NewUser para actualizar la informacion 
     suspend fun newUser2(user: Modelo) = withContext(Dispatchers.IO) {
         if (validateIccid(user.id_licensia)) {
-            println("ICCID Valida!! ")
-            try {
-                db.collection("usuarios").document(user.id_licensia).update(
-                    "nombre", user.nombre,
-                    "apellido", user.apellido,
-                    "id_licensia", user.id_licensia,
-                    "correo", user.correo,
-                    "clave", user.clave,
-                    "nombre_negocio", user.nombre_negocio,
-                    "direccion_negocio", user.direccion_negocio,
-                    "telefono", user.telefono
+            if(!fechaExpirada(auth.currentUser!!.uid) && !usuarioExiste(auth.currentUser!!.uid)) {
+                println("ICCID Valida!! ")
+                try {
+                    db.collection("usuarios").document(user.id_licensia).update(
+                        "nombre", user.nombre,
+                        "apellido", user.apellido,
+                        "id_licensia", user.id_licensia,
+                        "correo", user.correo,
+                        "clave", user.clave,
+                        "nombre_negocio", user.nombre_negocio,
+                        "direccion_negocio", user.direccion_negocio,
+                        "telefono", user.telefono
 
-                ).await()
-                println("Datos guardados correctamente")
-                return@withContext true
-            } catch (e: Exception) {
-                println("No se pudo guardar datos en db ex: $e , <--")
-                return@withContext false
+                    ).await()
+                    println("Datos guardados correctamente")
+                    return@withContext true
+
+                } catch (e: Exception) {
+                    println("No se pudo guardar datos en db ex: $e , <--")
+                    return@withContext false //error en base de datos
+                }
+            }else{
+                println("Licencia expirada!! ")
+                return@withContext false ///LIcencia invalida
             }
         } else {
+            println("No existe ese iccid en la base de datos")
             return@withContext false
         }
     }
@@ -64,27 +66,34 @@ class FirestoreConnect {
 
 
 
+
     suspend fun fechaExpirada(iCCID: String): Boolean {
+
         val fechaActual = obtenerFechaActual()
 
         return try {
             val doc = db.collection("usuarios").document(iCCID).get().await()
+
             val fechaFinalString = doc.getTimestamp("fecha_final")?.toDate()
             Log.e("contenido fecha","este es el dato que viene de la fehca de firebase: $fechaFinalString")
 
             if (fechaFinalString != null) {
-                if (fechaFinalString >= fechaActual) {
+
+                if (fechaFinalString <= fechaActual) {
                     // Actualizar el estado a false en Firestore
                     db.collection("usuarios").document(iCCID).update("estado", false).await()
                     true
                 } else {
-                    false
+                    db.collection("usuarios").document(iCCID).update("estado", true).await()
+                    //cambio el estado a true, en caso que aya actualizado su licencia
+                    false //debuelbe false porque to do esta bien
                 }
             } else {
-                false
+                true  //si esta null lel campo, debe debolver true como si estubiera expirada
             }
         } catch (e: Exception) {
-            false
+            true //sipasa una exception debe debolber que la fecha esta expirada, para no dar accceso
+
         }
     }
 
@@ -93,16 +102,18 @@ class FirestoreConnect {
     }
 
 
-    suspend fun documentoEstaVacio( iCCID: String): Boolean {
+
+    suspend fun usuarioExiste(iCCID: String): Boolean {
         val docRef = db.collection("usuarios").document(iCCID).get().await()
-        val document = docRef.getString("id_licencia")
+        val document = docRef.getString("correo")
 
         return try{
             // Verifica tiene algún campo
-            document?.isBlank() ?: false
+            document?.isNotBlank() ?: false
 
         }catch (e: Exception){
-            true
+            false
+
         }
 
     }
@@ -118,9 +129,9 @@ class FirestoreConnect {
                     println("EL iccid es : $iccid")
                     println("los documentos $n = ${document.id}")
 
-                    if (iccid == document.id) {
+                   if (iccid == document.id) {
                         println("Este es el documento encontrado: ${document.id}, <--")
-                        println("este es el iCCID: $iccid")
+
                         return@withContext true
 
                     }

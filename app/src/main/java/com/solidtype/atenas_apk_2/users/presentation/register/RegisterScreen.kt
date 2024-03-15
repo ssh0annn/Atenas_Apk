@@ -1,12 +1,15 @@
 package com.solidtype.atenas_apk_2.users.presentation.register
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+
+
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,12 +27,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +51,9 @@ import androidx.constraintlayout.compose.Visibility
 import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,11 +63,11 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
 
+    Column(
+        modifier = Modifier
 
-    Column(modifier = Modifier
 
-
-        .fillMaxSize(),
+            .fillMaxSize(),
 
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -69,24 +75,29 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
 
         val gradient = Brush.verticalGradient(0f to Color.Gray, 1000f to Color.White)
 
-        var text by rememberSaveable {mutableStateOf("")}
-        var sim by rememberSaveable {mutableStateOf("")}
-        var apellido by rememberSaveable {mutableStateOf("")}
-        var correo by rememberSaveable {mutableStateOf("")}
-        var nnegocio by rememberSaveable {mutableStateOf("")}
+        var text by rememberSaveable { mutableStateOf("") }
+        var apellido by rememberSaveable { mutableStateOf("") }
+        var correo by rememberSaveable { mutableStateOf("") }
+        var nnegocio by rememberSaveable { mutableStateOf("") }
         val nn = 30
-        var dnegocio by rememberSaveable {mutableStateOf("")}
+        var dnegocio by rememberSaveable { mutableStateOf("") }
         val dn = 50
         //telefono validacion input
-        var telefono by rememberSaveable {mutableStateOf("")}
+        var telefono by rememberSaveable { mutableStateOf("") }
         val contar = 10
         val contarsim = 20
         //cierre
-        var password by rememberSaveable {mutableStateOf("")}
-        var isPasswordVisible by rememberSaveable {mutableStateOf(false)}
-        var confirmar by rememberSaveable {mutableStateOf("")}
-        var isPasswordVisible1 by rememberSaveable {mutableStateOf(false)}
+        var password by rememberSaveable { mutableStateOf("") }
+        var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
+        var confirmar by rememberSaveable { mutableStateOf("") }
+        var isPasswordVisible1 by rememberSaveable { mutableStateOf(false) }
+        val verificado:Boolean by validarr.verificado.observeAsState(initial = false)
 
+        //val corroutineScope = rememberCoroutineScope()
+        if (verificado) {
+            Toast.makeText(context, "if: verificado: ${verificado}", Toast.LENGTH_SHORT).show()
+            nav.navigate(Screens.Home.route)
+        } else {
 
         Box(
             modifier = Modifier
@@ -105,8 +116,8 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
             modifier = Modifier
                 .width(470.dp)
         ) {
-            Row(){
-                Box{
+            Row() {
+                Box {
                     Text(
                         text = "Hazlo ya que  esperas!",
                         color = Color(0xFF343341),
@@ -115,19 +126,22 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 220.dp)
+
+                        .padding(start = 190.dp)
                 ){
 
-                    Text(
-                        text = "Ir a login",
-                        color = Color.Blue,
-                        fontSize = 15.sp,
 
+                    TextButton(
+                        onClick = { nav.navigate(Screens.Login.route) },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = Color.Blue
+                        )
+                    ) {
+                        Text("Ir a login")
+                    }
 
-                    )
 
                 }
-
 
 
             }
@@ -144,7 +158,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 .verticalScroll(rememberScrollState())
 
 
-        ){
+        ) {
 
 
             //nombre
@@ -155,7 +169,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 TextField(
                     value = text,
                     onValueChange = { newText -> text = newText },
-                    label = { Text("Nombre usuario",fontSize = 10.sp) },
+                    label = { Text("Nombre usuario", fontSize = 10.sp) },
 
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
@@ -172,7 +186,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 TextField(
                     value = apellido,
                     onValueChange = { newText -> apellido = newText },
-                    label = { Text("Apellido usuario",fontSize = 10.sp) },
+                    label = { Text("Apellido usuario", fontSize = 10.sp) },
 
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
@@ -189,8 +203,9 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 TextField(
                     value = correo,
                     onValueChange = {
-                        correo = it },
-                    label = { Text("Correo",fontSize = 10.sp) },
+                        correo = it
+                    },
+                    label = { Text("Correo", fontSize = 10.sp) },
 
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                     modifier = Modifier
@@ -200,36 +215,8 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 )
 
             }
-            //sim
-            Box(
-                modifier = Modifier
-                    .padding(top = 0.dp)
-            ) {
-                TextField(
-                    value = sim,
-                    onValueChange = {
-                            newInt ->
-                        if (newInt.isEmpty() || newInt.length <= contarsim) {
-                            if (newInt.isEmpty() || newInt.isDigitsOnly()) {
-                                sim = newInt
-                            }
-                        }
-                    },
-                    label = { Text("ICCID de la licencia",fontSize = 10.sp) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                    modifier = Modifier
-                        .width(500.dp)
-                        .height(80.dp)
-                        .padding(14.dp)
-                )
-                Text(
-                    text = "${sim.length}/$contarsim",
-                    color = if (sim.length < 20) Color.Red else Color.Unspecified,
-                    modifier = Modifier
-                        .padding(start = 445.dp, top = 75.dp)
-                )
-            }
+
+
             //telefono
             Box(
                 modifier = Modifier
@@ -238,8 +225,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 TextField(
                     value = telefono,
                     //number
-                    onValueChange = {
-                            newText ->
+                    onValueChange = { newText ->
                         if (newText.isEmpty() || newText.length <= contar) {
                             if (newText.isEmpty() || newText.isDigitsOnly()) {
                                 telefono = newText
@@ -247,7 +233,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                         }
                     },
 
-                    label = { Text("Telefono",fontSize = 10.sp) },
+                    label = { Text("Telefono", fontSize = 10.sp) },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     //cierre
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
@@ -261,7 +247,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                     text = "${telefono.length}/$contar",
                     color = if (telefono.length < 10) Color.Red else Color.Unspecified,
                     modifier = Modifier
-                        .padding(start = 445.dp,top = 75.dp)
+                        .padding(start = 445.dp, top = 75.dp)
 
                 )
             }
@@ -289,7 +275,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                     text = "${nnegocio.length}/$nn",
                     color = if (nnegocio.length < 6) Color.Red else Color.Unspecified,
                     modifier = Modifier
-                        .padding(start = 445.dp,top = 75.dp)
+                        .padding(start = 445.dp, top = 75.dp)
 
                 )
             }
@@ -318,7 +304,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                     text = "${dnegocio.length}/$dn",
                     color = if (dnegocio.length < 11) Color.Red else Color.Unspecified,
                     modifier = Modifier
-                        .padding(start = 445.dp,top = 75.dp)
+                        .padding(start = 445.dp, top = 75.dp)
 
                 )
             }
@@ -333,7 +319,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                     onValueChange = {
                         password = it
                     },
-                    label = { Text("Contraseña",fontSize = 10.sp) },
+                    label = { Text("Contraseña", fontSize = 10.sp) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
@@ -344,7 +330,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 )
 
                 IconButton(
-                    onClick  = { isPasswordVisible = !isPasswordVisible },
+                    onClick = { isPasswordVisible = !isPasswordVisible },
                     modifier = Modifier
                         .padding(start = 435.dp, top = 25.dp)
                 ) {
@@ -364,7 +350,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 TextField(
                     value = confirmar,
                     onValueChange = { confirmar = it },
-                    label = { Text("Confirmar Contraseña",fontSize = 10.sp) },
+                    label = { Text("Confirmar Contraseña", fontSize = 10.sp) },
 
                     visualTransformation = if (isPasswordVisible1) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
@@ -390,7 +376,6 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
             }
 
 
-
         }
 
 
@@ -398,7 +383,19 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
         val f = 10
 
         Button(
-            onClick = { validarr.validar(text, sim, apellido, correo, nnegocio, dnegocio,telefono, password, confirmar, context) },
+            onClick = {
+                validarr.validar(
+                    text,
+                    apellido,
+                    correo,
+                    nnegocio,
+                    dnegocio,
+                    telefono,
+                    password,
+                    confirmar,
+                    context
+                )
+            },
             shape = RoundedCornerShape(25.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF343341),
@@ -412,12 +409,15 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
 
 
         ) {
-            Text("Register",
-                fontSize = 24.sp)
+            Text(
+                "Register",
+                fontSize = 24.sp
+            )
         }
 
 
     }
+}
 
 }
 

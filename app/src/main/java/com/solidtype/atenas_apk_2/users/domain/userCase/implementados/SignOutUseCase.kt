@@ -6,7 +6,7 @@ import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 class SignOutUseCase (private val repositorio: UserRepository = RepositoryImpl()){
 
 
-     operator fun invoke()=repositorio.signout()
+     operator suspend fun invoke()=repositorio.signout()
 
 
 }

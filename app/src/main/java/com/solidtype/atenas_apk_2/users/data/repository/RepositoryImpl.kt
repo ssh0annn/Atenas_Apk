@@ -14,28 +14,32 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
 
 
     override suspend fun signUp(
-                email: String, clave: String, name: String, sim: String,
+                email: String, clave: String, name: String,
                 apellido: String, nnegocio: String,
                 dnegocio: String, telefono: String
             ): Boolean {
-
-                val mod = Modelo(
-                    name, apellido, email, sim, clave,
-                    nnegocio, dnegocio,
-                    telefono
-                )
                 var estado = false
 
-                if (auth.signup(email, clave)) {
+                if (auth.signinCorru(email, clave) ) {//Debe ser un usuario existente en firebase.
+                    val licencia= auth.getCurrentUser()!!.uid
+
+                    val mod = Modelo(
+                        name, apellido, email, licencia, clave,
+                        nnegocio, dnegocio,
+                        telefono
+                    )
                     val resultado = store.newUser2(mod)
                     if (resultado) {
                         estado=true
 
                         println("se guardaron datos exitosos")
                     } else {
+                        auth.signOut()// si pasa un error en la base de datos, deslogueo al usuario
 
                         println("No se guardaron datos seggun signup")
+
                     }
+
                 }
                 return estado
     }
@@ -44,7 +48,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     override suspend fun SignIn(email: String, clave: String) = auth.signinCorru(email, clave) // -> Boolean
 
 
-    override  fun signout() =  auth.signOut() // -> Unit
+    override suspend fun signout() =  auth.signOut() // -> Unit
 
 
     override suspend fun getCurrentUser(): FirebaseUser? {
@@ -56,15 +60,24 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     }
 
     override suspend fun capturaICCID(): String {
-        TODO("Not yet implemented")
+        return getCurrentUser()!!.uid
     }
 
 
-    override suspend fun estadoDeLicencia(iccid:String): Boolean {
-      return true
+    override suspend fun estadoDeLicencia(iccid:String): Boolean {// a la espera de implementacon
+      return !store.fechaExpirada(capturaICCID())
         }///solo para probar
 
+    override suspend fun estadoLicencia(): Boolean {
+        return !store.fechaExpirada(capturaICCID())
 
+
+
+    }
+    override suspend fun existeUsuario() : Boolean {
+       return store.usuarioExiste(capturaICCID())
+    }
 }
+
 
 
