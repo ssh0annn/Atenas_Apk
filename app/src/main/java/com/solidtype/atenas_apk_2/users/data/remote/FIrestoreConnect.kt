@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.DelicateCoroutinesApi
+
 
 import kotlinx.coroutines.tasks.await
 
@@ -19,7 +19,7 @@ import java.util.Date
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.Locale
+
 
 
 class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
