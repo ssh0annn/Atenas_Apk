@@ -92,7 +92,7 @@ class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
                 true  //si esta null lel campo, debe debolver true como si estubiera expirada
             }
         } catch (e: Exception) {
-            true //sipasa una exception debe debolber que la fecha esta expirada, para no dar accceso
+            true //si pasa una exception debe debolber que la fecha esta expirada, para no dar accceso
 
         }
     }
