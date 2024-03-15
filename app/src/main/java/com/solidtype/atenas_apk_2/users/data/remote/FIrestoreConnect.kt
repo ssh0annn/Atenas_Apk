@@ -67,8 +67,8 @@ class FirestoreConnect {
         return try {
             val doc = db.collection("usuarios").document(iCCID).get().await()
 
-            val fechaFinalString = doc.get("fecha_final")
-
+            val fechaFinalString = doc.getString("fecha_final")
+            
             println("fechaFinal: $fechaFinalString")
             println("fechaActual $fechaActual")
 
