@@ -2,25 +2,28 @@ package com.solidtype.atenas_apk_2.users.data.remote
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.TaskCompletionSource
+
 
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 import kotlinx.coroutines.tasks.await
-import java.text.SimpleDateFormat
-import java.time.LocalDate
+
+
 import java.util.Date
 import kotlin.system.exitProcess
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 class FirestoreConnect {
@@ -66,13 +69,11 @@ class FirestoreConnect {
 
         return try {
             val doc = db.collection("usuarios").document(iCCID).get().await()
-            val fechaFinalString = doc.getString("fecha_final")
+            val fechaFinalString = doc.getTimestamp("fecha_final")?.toDate()
+            Log.e("contenido fecha","este es el dato que viene de la fehca de firebase: $fechaFinalString")
 
             if (fechaFinalString != null) {
-                val formatter = SimpleDateFormat("yyyy-MM-dd")
-                val fechaFinal = formatter.parse(fechaFinalString)!!
-
-                if (fechaFinal >= fechaActual) {
+                if (fechaFinalString >= fechaActual) {
                     // Actualizar el estado a false en Firestore
                     db.collection("usuarios").document(iCCID).update("estado", false).await()
                     true
@@ -88,20 +89,23 @@ class FirestoreConnect {
     }
 
      fun obtenerFechaActual(): Date {
-        return Date() // Esta función puede ser más compleja dependiendo de cómo quieras manejar la fecha actual
+        return Date() // para obtener el dia/hora/fecha/ actual
     }
+
 
     suspend fun documentoEstaVacio( iCCID: String): Boolean {
-        val docRef = FirebaseFirestore.getInstance().collection("usuarios").document(iCCID)
-        val document = docRef.get().await()
+        val docRef = db.collection("usuarios").document(iCCID).get().await()
+        val document = docRef.getString("id_licencia")
 
-        // Verifica si el documento existe y si tiene algún campo
-        return document.data?.isEmpty() ?: true
+        return try{
+            // Verifica tiene algún campo
+            document?.isBlank() ?: false
+
+        }catch (e: Exception){
+            true
+        }
 
     }
-
-
-
 
 
         suspend fun validateIccid(iccid: String) = withContext(Dispatchers.IO) {
