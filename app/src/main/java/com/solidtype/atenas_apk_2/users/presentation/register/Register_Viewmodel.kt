@@ -17,7 +17,7 @@ class login_medenview (private val caso_uso: All_useCases = All_useCases()): Vie
     private val _verificado = MutableLiveData<Boolean>()
     val verificado: LiveData<Boolean> = _verificado
 
-    fun validar ( name:String, apellido:String, correo:String,
+    fun validar ( name:String, sim:String, apellido:String, correo:String,
                   nnegocio:String,dnegocio:String, telefono:String, password:String, confirmar:String, context: Context){
         if (name.isBlank() || apellido.isBlank() || correo.isBlank() || nnegocio.isBlank() ||
             dnegocio.isBlank() || telefono.isBlank() || password.isBlank() || confirmar.isBlank()
@@ -36,14 +36,15 @@ class login_medenview (private val caso_uso: All_useCases = All_useCases()): Vie
             // Las contraseñas no coinciden
             Toast.makeText(context, "La contraseña no coinciden.", Toast.LENGTH_LONG).show()
         }  else {
-
-            println("Antes de la corrutina: ${listOf(correo, password,name, apellido, nnegocio, dnegocio, telefono)}")
+            // Todos los campos están completos y las contraseñas coinciden
+            // Puedes realizar alguna acción aquí, como iniciar session.
+            //Ejemplo de prueba
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++s++
+            println("Antes de la corrutina: ${listOf(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)}")
             viewModelScope.launch{
                 println("iniciando la corrutina")
                 withContext(Dispatchers.Main) {
-
                 val autenticacion:Boolean=caso_uso.register(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)
-
                 println("Dentro de withContext")
                     if(autenticacion){
                         if(caso_uso.estado_licencia(caso_uso.capturaIccid())){
@@ -55,14 +56,13 @@ class login_medenview (private val caso_uso: All_useCases = All_useCases()): Vie
                         }
 
                     }else{
-                        Toast.makeText(context, "Usuario existente o no licencia no valida: $correo, $password", Toast.LENGTH_LONG).show()
-
+                        Toast.makeText(context, "LA MACATE: $correo, $password", Toast.LENGTH_LONG).show()
                     }
 
                 }
             }
 
-            println("Ddatos en registro: ${listOf(correo, password,name, apellido, nnegocio, dnegocio, telefono)}")
+            println("Ddatos en registro: ${listOf(correo, password,name, sim, apellido, nnegocio, dnegocio, telefono)}")
             println("Despues de la corrutina")
 
             //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
