@@ -44,12 +44,18 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
         var usuario:String?
         viewModelScope.launch {
             if(casos_uso.current_user() != null){
-                usuario=casos_uso.current_user()!!.email.toString()
-                var uid =casos_uso.current_user()!!.uid
-                print("Este es el uid: $uid")
-                cambiaEstadosVerificado()
-                println("Usuario existente: $usuario")
-            }
+                if(logicaNegocio()){
+                    usuario=casos_uso.current_user()!!.email.toString()
+                    var uid =casos_uso.current_user()!!.uid
+                    print("Este es el uid: $uid")
+                    cambiaEstadosVerificado(true)
+                    println("Usuario existente: $usuario")
+                }else
+                {
+                    cerrarSeccion()
+                }
+
+                }
         }
     }
     fun onLoginChange(email: String, pass: String) {
@@ -70,31 +76,44 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
             if (validateUser(correo, passw)) {//ESTO ESTA MAL LA LOGICA DE NEGOCIO NO DEBE IR EN EL VIEWMODEL
 
                 if(logicaNegocio()) {//logicaNegocio()
+                    withContext(Dispatchers.Main) {
                         println("Entro al withContext, y esta loading")
-                        _logeado.value=logeado.value.copy(autenticado = true, verificado = true)
-                        cambiaEstadosVerificado()
+                        _logeado.value = logeado.value.copy(autenticado = true, verificado = true)
+                        cambiaEstadosVerificado(true)
                         println("Consulto validacion")
-                        Toast.makeText(context,"Login correcto!!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Login correcto!!", Toast.LENGTH_SHORT).show()
                         println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
+
+                    }
+                }else{
+
+
+                    cambiaEstadosVerificado(true)
+                        Toast.makeText(
+                            context,
+                            "Licencia no valida o Debes registrarte!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        _isLoading.postValue(false)
+                    }
+                }
 
             println("loading debe ser false:${ _isLoading.value}")
             println("voy a salir del viewModelScope")
-        }else{
+
+                    casos_uso.logout()
+                    Toast.makeText(context,"Licencia no valida o Debes registrarte!!", Toast.LENGTH_SHORT).show()
                     _isLoading.postValue(false)
-                }
-        } else {
-                Toast.makeText(context,"Login incorrecto!!", Toast.LENGTH_SHORT).show()
-                println("Usuario o contraseña invalidos")
 
-            }
+
+        }
+
         println("sali del  viewModelScope")
-
-            println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
-       }
-
+        println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
         println("valor del login:${ _logeado.value} <--, valor del validated: ${_verificado.value} <---")
 
     }
+
    private suspend fun validateUser(user: String, pass: String): Boolean {
         //Lógica con firebase
        val resultado =casos_uso.login(user,pass)
@@ -116,21 +135,37 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                                 //. validamos en fireStore sus existencia. &&  validamos estado de la licencia
                                 println("Estado de la licencia: ${casos_uso.estado_licencia(getICCID)}")
                                 println("Validar ICCID: ${casos_uso.validarICCID(getICCID)}")
-                                return@withContext casos_uso.validarICCID(getICCID) && casos_uso.estado_licencia(getICCID)
+                                if (casos_uso.validarICCID(getICCID)){
+                                    if(casos_uso.usuarioExistente(getICCID)){
+                                        if(casos_uso.estado_licencia(getICCID)){
+
+
+                                            return@withContext true
+                                        }
+                                    }
+
+                                }
+
+                                return@withContext false
                             }else{
+
                                 return@withContext false
                             }
 
                     }catch(logica:Exception){
-                            casos_uso.logout()
+
                          return@withContext false
                     }
                 }
 
-         private fun cambiaEstadosVerificado(){
-             this._verificado.value =true
+         private fun cambiaEstadosVerificado(estado:Boolean){
+             this._verificado.value =estado
+                 }
+
+         private fun cerrarSeccion()=casos_uso.logout
+
          }
-    }
+
 
     private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
 

@@ -76,7 +76,6 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
         val gradient = Brush.verticalGradient(0f to Color.Gray, 1000f to Color.White)
 
         var text by rememberSaveable { mutableStateOf("") }
-        var sim by rememberSaveable { mutableStateOf("") }
         var apellido by rememberSaveable { mutableStateOf("") }
         var correo by rememberSaveable { mutableStateOf("") }
         var nnegocio by rememberSaveable { mutableStateOf("") }
@@ -387,7 +386,6 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
             onClick = {
                 validarr.validar(
                     text,
-                    sim,
                     apellido,
                     correo,
                     nnegocio,
