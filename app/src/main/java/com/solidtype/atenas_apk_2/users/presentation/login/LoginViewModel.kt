@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
 
-   ): ViewModel() {
+                     ): ViewModel() {
 
     private val _logeado = mutableStateOf(LoginStates(verificado = false, autenticado = false))
     var logeado: State<LoginStates> = _logeado
@@ -71,8 +71,8 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
 
     fun onLoginSelected(context: Context) {
 
-       val correo = _mail.value ?: ""
-       val passw = _pass.value ?: ""
+        val correo = _mail.value ?: ""
+        val passw = _pass.value ?: ""
         viewModelScope.launch {
             println("Entro al viewModelScope")
 
@@ -89,83 +89,83 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                         println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
 
 
-                        }else
+                    }else
                     {
                         casos_uso.logout()
                         Toast.makeText(context, "Debes registrarte para Acceder", Toast.LENGTH_LONG).show()
 
                     }
 
-            println("loading debe ser false:${ _isLoading.value}")
-            println("voy a salir del viewModelScope")
-        }else{
+                    println("loading debe ser false:${ _isLoading.value}")
+                    println("voy a salir del viewModelScope")
+                }else{
                     casos_uso.logout()
                     Toast.makeText(context, "problemas de licencia o no en db", Toast.LENGTH_LONG).show()
 
                     _isLoading.postValue(false)
 
 
-        }
-
-        println("sali del  viewModelScope")
-        println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
-        println("valor del login:${ _logeado.value} <--, valor del validated: ${_verificado.value} <---")
-
-    }
-
-   private suspend fun validateUser(user: String, pass: String): Boolean {
-        //Lógica con firebase
-       val resultado =casos_uso.login(user,pass)
-       if (resultado.successful){
-           println("Success en validateUser: ${resultado.successful} ,<---")
-           println("En caso de: ${resultado.errorMessage} <---deberia estar bacio")
-           return true
-       }else{
-           println("error en validateUser: ${resultado.successful}, <---")
-           return false
-       }
-
-    }
-    private suspend fun  logicaNegocio()= withContext(Dispatchers.Main){
-                try{
-                            //capturamos iccid
-                            val getICCID=casos_uso.capturaIccid()
-                            if(getICCID.isNotBlank()){
-                                //. validamos en fireStore sus existencia. &&  validamos estado de la licencia
-                                println("Estado de la licencia: ${casos_uso.estado_licencia(getICCID)}")
-                                println("Validar ICCID: ${casos_uso.validarICCID(getICCID)}")
-                                if (casos_uso.validarICCID(getICCID)){
-                                    if(casos_uso.usuarioExistente(getICCID)){
-                                        if(casos_uso.estado_licencia(getICCID)){
-
-
-                                            return@withContext true
-                                        }
-                                    }
-
-                                }
-
-                                return@withContext false
-                            }else{
-
-                                return@withContext false
-                            }
-
-                    }catch(logica:Exception){
-
-                         return@withContext false
-                    }
                 }
 
-         private fun cambiaEstadosVerificado(estado:Boolean){
-             this._verificado.value =estado
-                 }
+                println("sali del  viewModelScope")
+                println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
+                println("valor del login:${ _logeado.value} <--, valor del validated: ${_verificado.value} <---")
 
-         private fun cerrarSeccion()=casos_uso.logout
+            }
 
-         }
+            private suspend fun validateUser(user: String, pass: String): Boolean {
+                //Lógica con firebase
+                val resultado =casos_uso.login(user,pass)
+                if (resultado.successful){
+                    println("Success en validateUser: ${resultado.successful} ,<---")
+                    println("En caso de: ${resultado.errorMessage} <---deberia estar bacio")
+                    return true
+                }else{
+                    println("error en validateUser: ${resultado.successful}, <---")
+                    return false
+                }
+
+            }
+            private suspend fun  logicaNegocio()= withContext(Dispatchers.Main){
+                try{
+                    //capturamos iccid
+                    val getICCID=casos_uso.capturaIccid()
+                    if(getICCID.isNotBlank()){
+                        //. validamos en fireStore sus existencia. &&  validamos estado de la licencia
+                        println("Estado de la licencia: ${casos_uso.estado_licencia(getICCID)}")
+                        println("Validar ICCID: ${casos_uso.validarICCID(getICCID)}")
+                        if (casos_uso.validarICCID(getICCID)){
+                            if(casos_uso.usuarioExistente(getICCID)){
+                                if(casos_uso.estado_licencia(getICCID)){
 
 
-    private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
+                                    return@withContext true
+                                }
+                            }
 
-    private fun validarCamposPass(pass: String) = pass.length >= 8 // -> Boolean
+                        }
+
+                        return@withContext false
+                    }else{
+
+                        return@withContext false
+                    }
+
+                }catch(logica:Exception){
+
+                    return@withContext false
+                }
+            }
+
+            private fun cambiaEstadosVerificado(estado:Boolean){
+                this._verificado.value =estado
+            }
+
+            private fun cerrarSeccion()=casos_uso.logout
+
+        }
+
+
+        private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
+
+        private fun validarCamposPass(pass: String) = pass.length >= 8 // -> Boolean
