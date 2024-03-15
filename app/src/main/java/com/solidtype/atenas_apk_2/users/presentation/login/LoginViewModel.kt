@@ -41,19 +41,19 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        var usuario:String?
+        var usuario: String?
         viewModelScope.launch {
-            if(casos_uso.current_user() != null){
-                if (logicaNegocio()){
-                    if (casos_uso.usuarioExiste()){
-                        usuario=casos_uso.current_user()!!.email.toString()
-                        var uid =casos_uso.current_user()!!.uid
+            if (casos_uso.current_user() != null) {
+                if (logicaNegocio()) {
+                    if (casos_uso.usuarioExiste()) {
+                        usuario = casos_uso.current_user()!!.email.toString()
+                        var uid = casos_uso.current_user()!!.uid
                         print("Este es el uid: $uid")
                         cambiaEstadosVerificado()
                         println("Usuario existente: $usuario")
 
                     }
-                }else{
+                } else {
                     casos_uso.logout()
                 }
 
@@ -61,6 +61,7 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
 
         }
     }
+
     fun onLoginChange(email: String, pass: String) {
 
         _mail.value = email
@@ -76,10 +77,14 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
         viewModelScope.launch {
             println("Entro al viewModelScope")
 
-            if (validateUser(correo, passw)) {//ESTO ESTA MAL LA LOGICA DE NEGOCIO NO DEBE IR EN EL VIEWMODEL
+            if (validateUser(
+                    correo,
+                    passw
+                )
+            ) {//ESTO ESTA MAL LA LOGICA DE NEGOCIO NO DEBE IR EN EL VIEWMODEL
 
-                if(logicaNegocio()) {//logicaNegocio()
-                    if(casos_uso.usuarioExiste()){
+                if (logicaNegocio()) {//logicaNegocio()
+                    if (casos_uso.usuarioExiste()) {
 
                         println("Entro al withContext, y esta loading")
                         _logeado.value = logeado.value.copy(autenticado = true, verificado = true)
@@ -89,18 +94,19 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                         println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
 
 
-                    }else
-                    {
+                    } else {
                         casos_uso.logout()
-                        Toast.makeText(context, "Debes registrarte para Acceder", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Debes registrarte para Acceder", Toast.LENGTH_LONG)
+                            .show()
 
                     }
 
-                    println("loading debe ser false:${ _isLoading.value}")
+                    println("loading debe ser false:${_isLoading.value}")
                     println("voy a salir del viewModelScope")
-                }else{
+                } else {
                     casos_uso.logout()
-                    Toast.makeText(context, "problemas de licencia o no en db", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "problemas de licencia o no en db", Toast.LENGTH_LONG)
+                        .show()
 
                     _isLoading.postValue(false)
 
@@ -108,35 +114,36 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                 }
 
                 println("sali del  viewModelScope")
-                println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
-                println("valor del login:${ _logeado.value} <--, valor del validated: ${_verificado.value} <---")
+                println(" al terminar todo (${_verificado.value},${_logeado.value}) <---")
+                println("valor del login:${_logeado.value} <--, valor del validated: ${_verificado.value} <---")
 
             }
 
             private suspend fun validateUser(user: String, pass: String): Boolean {
                 //Lógica con firebase
-                val resultado =casos_uso.login(user,pass)
-                if (resultado.successful){
+                val resultado = casos_uso.login(user, pass)
+                if (resultado.successful) {
                     println("Success en validateUser: ${resultado.successful} ,<---")
                     println("En caso de: ${resultado.errorMessage} <---deberia estar bacio")
                     return true
-                }else{
+                } else {
                     println("error en validateUser: ${resultado.successful}, <---")
                     return false
                 }
 
             }
-            private suspend fun  logicaNegocio()= withContext(Dispatchers.Main){
-                try{
+
+            private suspend fun logicaNegocio() = withContext(Dispatchers.Main) {
+                try {
                     //capturamos iccid
-                    val getICCID=casos_uso.capturaIccid()
-                    if(getICCID.isNotBlank()){
+                    val getICCID = casos_uso.capturaIccid()
+                    if (getICCID.isNotBlank()) {
                         //. validamos en fireStore sus existencia. &&  validamos estado de la licencia
                         println("Estado de la licencia: ${casos_uso.estado_licencia(getICCID)}")
                         println("Validar ICCID: ${casos_uso.validarICCID(getICCID)}")
-                        if (casos_uso.validarICCID(getICCID)){
-                            if(casos_uso.usuarioExistente(getICCID)){
-                                if(casos_uso.estado_licencia(getICCID)){
+                        if (casos_uso.validarICCID(getICCID)) {
+                            if (casos_uso.usuarioExistente(getICCID)) {
+                                if (casos_uso.estado_licencia(getICCID)) {
 
 
                                     return@withContext true
@@ -146,26 +153,29 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                         }
 
                         return@withContext false
-                    }else{
+                    } else {
 
                         return@withContext false
                     }
 
-                }catch(logica:Exception){
+                } catch (logica: Exception) {
 
                     return@withContext false
                 }
             }
 
-            private fun cambiaEstadosVerificado(estado:Boolean){
-                this._verificado.value =estado
+            private fun cambiaEstadosVerificado(estado: Boolean) {
+                this._verificado.value = estado
             }
 
-            private fun cerrarSeccion()=casos_uso.logout
+            private fun cerrarSeccion() = casos_uso.logout
 
         }
 
 
-        private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
+        private fun validarCamposEmail(email: String) =
+            Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
 
         private fun validarCamposPass(pass: String) = pass.length >= 8 // -> Boolean
+    }
+}
