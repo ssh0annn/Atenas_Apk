@@ -58,6 +58,7 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                 }
 
             }
+
         }
     }
     fun onLoginChange(email: String, pass: String) {
@@ -79,12 +80,14 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
 
                 if(logicaNegocio()) {//logicaNegocio()
                     if(casos_uso.usuarioExiste()){
+
                         println("Entro al withContext, y esta loading")
-                        _logeado.value=logeado.value.copy(autenticado = true, verificado = true)
-                        cambiaEstadosVerificado()
+                        _logeado.value = logeado.value.copy(autenticado = true, verificado = true)
+                        cambiaEstadosVerificado(true)
                         println("Consulto validacion")
-                        Toast.makeText(context,"Login correcto!!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Login correcto!!", Toast.LENGTH_SHORT).show()
                         println("Usuario y contraseña validos ${_mail.value!!}, ${_pass.value!!}")
+
 
                         }else
                     {
@@ -98,21 +101,18 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
         }else{
                     casos_uso.logout()
                     Toast.makeText(context, "problemas de licencia o no en db", Toast.LENGTH_LONG).show()
+
                     _isLoading.postValue(false)
-                }
-        } else {
-                Toast.makeText(context,"Login incorrecto!!", Toast.LENGTH_SHORT).show()
-                println("Usuario o contraseña invalidos")
 
-            }
+
+        }
+
         println("sali del  viewModelScope")
-
-            println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
-       }
-
+        println(" al terminar todo (${_verificado.value},${ _logeado.value}) <---")
         println("valor del login:${ _logeado.value} <--, valor del validated: ${_verificado.value} <---")
 
     }
+
    private suspend fun validateUser(user: String, pass: String): Boolean {
         //Lógica con firebase
        val resultado =casos_uso.login(user,pass)
@@ -132,22 +132,39 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                             val getICCID=casos_uso.capturaIccid()
                             if(getICCID.isNotBlank()){
                                 //. validamos en fireStore sus existencia. &&  validamos estado de la licencia
+                                println("Estado de la licencia: ${casos_uso.estado_licencia(getICCID)}")
+                                println("Validar ICCID: ${casos_uso.validarICCID(getICCID)}")
+                                if (casos_uso.validarICCID(getICCID)){
+                                    if(casos_uso.usuarioExistente(getICCID)){
+                                        if(casos_uso.estado_licencia(getICCID)){
 
-                                return@withContext casos_uso.validarICCID(getICCID) && casos_uso.estado_licencia(getICCID)
+
+                                            return@withContext true
+                                        }
+                                    }
+
+                                }
+
+                                return@withContext false
                             }else{
+
                                 return@withContext false
                             }
 
                     }catch(logica:Exception){
-                            casos_uso.logout()
+
                          return@withContext false
                     }
                 }
 
-         private fun cambiaEstadosVerificado(){
-             this._verificado.value =true
+         private fun cambiaEstadosVerificado(estado:Boolean){
+             this._verificado.value =estado
+                 }
+
+         private fun cerrarSeccion()=casos_uso.logout
+
          }
-    }
+
 
     private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
 

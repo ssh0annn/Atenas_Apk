@@ -4,10 +4,13 @@ import android.util.Log
 
 
 import com.google.firebase.Firebase
+
 import com.google.firebase.auth.FirebaseAuth
+
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 import kotlinx.coroutines.tasks.await
 
@@ -16,6 +19,7 @@ import java.util.Date
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 
 class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
@@ -62,15 +66,19 @@ class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
 
 
 
+
     suspend fun fechaExpirada(iCCID: String): Boolean {
+
         val fechaActual = obtenerFechaActual()
 
         return try {
             val doc = db.collection("usuarios").document(iCCID).get().await()
+
             val fechaFinalString = doc.getTimestamp("fecha_final")?.toDate()
             Log.e("contenido fecha","este es el dato que viene de la fehca de firebase: $fechaFinalString")
 
             if (fechaFinalString != null) {
+
                 if (fechaFinalString <= fechaActual) {
                     // Actualizar el estado a false en Firestore
                     db.collection("usuarios").document(iCCID).update("estado", false).await()
@@ -85,12 +93,14 @@ class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
             }
         } catch (e: Exception) {
             true //sipasa una exception debe debolber que la fecha esta expirada, para no dar accceso
+
         }
     }
 
      fun obtenerFechaActual(): Date {
         return Date() // para obtener el dia/hora/fecha/ actual
     }
+
 
 
     suspend fun usuarioExiste(iCCID: String): Boolean {
@@ -103,6 +113,7 @@ class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
 
         }catch (e: Exception){
             false
+
         }
 
     }
