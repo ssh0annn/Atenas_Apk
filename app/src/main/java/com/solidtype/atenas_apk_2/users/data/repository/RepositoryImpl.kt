@@ -1,10 +1,13 @@
 package com.solidtype.atenas_apk_2.users.data.repository
 
 import com.google.firebase.auth.FirebaseUser
+
 import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
+
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
+
 
 class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                       private val store: FirestoreConnect =FirestoreConnect()): UserRepository {

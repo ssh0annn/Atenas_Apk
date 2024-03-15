@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.TaskCompletionSource
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.firestore
 
@@ -57,61 +58,54 @@ class FirestoreConnect {
         }
     }
 
-    private fun obtenerFechaActual(): Date {
-        return Date() // Obtener la fecha actual
-    }
 
-   suspend fun fechaExpirada(iCCID: String): Task<Boolean> {
-        val task = TaskCompletionSource<Boolean>()
 
+
+    suspend fun fechaExpirada(iCCID: String): Boolean {
         val fechaActual = obtenerFechaActual()
 
-        db.collection("usuarios").document(iCCID).get()
-            .addOnSuccessListener { doc ->
-                val fechaFinalString = doc.getString("fecha_final")
+        return try {
+            val doc = db.collection("usuarios").document(iCCID).get().await()
+            val fechaFinalString = doc.getString("fecha_final")
 
-                if (fechaFinalString != null) {
-                    val formatter = SimpleDateFormat("yyyy-MM-dd")
+            if (fechaFinalString != null) {
+                val formatter = SimpleDateFormat("yyyy-MM-dd")
+                val fechaFinal = formatter.parse(fechaFinalString)!!
 
-                    // Comparar las fechas directamente sin asignar a una variable adicional
-                    if (formatter.parse(fechaFinalString)!! >= fechaActual) {
-                        Log.d("USUARIO ACTUAL", "La fecha desde Firebase es $fechaFinalString")
-                        Log.d("USUARIO ACTUAL", "Esta es la fecha desde Kotlin $fechaActual")
-
-                        // Actualizar el estado a false en Firestore
-                        db.collection("usuarios").document(iCCID).update("estado", false)
-                            .addOnSuccessListener {
-                                Log.d("USUARIO ACTUAL", "Estado actualizado correctamente")
-                                task.setResult(true)
-                            }
-                            .addOnFailureListener {
-                                Log.e("USUARIO ACTUAL", "Error al actualizar el estado", it)
-                                task.setResult(false)
-                            }
-                    } else {
-                        Log.d(
-                            "USUARIO ACTUAL",
-                            "La fecha en Firestore no es mayor o igual a la fecha actual en Kotlin"
-                        )
-                        task.setResult(false)
-                    }
+                if (fechaFinal >= fechaActual) {
+                    // Actualizar el estado a false en Firestore
+                    db.collection("usuarios").document(iCCID).update("estado", false).await()
+                    true
                 } else {
-                    Log.d("USUARIO ACTUAL", "El documento no contiene la fecha final")
-                    task.setResult(false)
+                    false
                 }
+            } else {
+                false
             }
-            .addOnFailureListener {
-                Log.e("USUARIO ACTUAL", "Problema al encontrar el dato", it)
-                task.setResult(false)
-            }
-
-        return task.task
+        } catch (e: Exception) {
+            false
+        }
     }
+
+     fun obtenerFechaActual(): Date {
+        return Date() // Esta función puede ser más compleja dependiendo de cómo quieras manejar la fecha actual
+    }
+
+    suspend fun documentoEstaVacio( iCCID: String): Boolean {
+        val docRef = FirebaseFirestore.getInstance().collection("usuarios").document(iCCID)
+        val document = docRef.get().await()
+
+        // Verifica si el documento existe y si tiene algún campo
+        return document.data?.isEmpty() ?: true
+
+    }
+
 
 
 
 
         suspend fun validateIccid(iccid: String) = withContext(Dispatchers.IO) {
+
             try {
                 val query = db.collection("usuarios").get().await()
                 var n = 0
@@ -138,7 +132,6 @@ class FirestoreConnect {
         }
 
     }
-
 
 
 
