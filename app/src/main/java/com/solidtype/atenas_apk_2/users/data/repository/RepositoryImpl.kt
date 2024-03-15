@@ -4,50 +4,60 @@ import com.google.firebase.auth.FirebaseUser
 import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
-import com.solidtype.atenas_apk_2.users.domain.model.UserModel
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateResults
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                       private val store: FirestoreConnect =FirestoreConnect()): UserRepository {
 
 
-    override  fun signUp(email:String, clave:String,name:String, sim:String,
-                         apellido:String, nnegocio:String,
-                         dnegocio:String, telefono:String) : Boolean{
-        var funciona=false
-        val mod=Modelo(name,apellido,sim, email,clave,
-            nnegocio,dnegocio,
-            telefono)
+    override suspend fun signUp(
+                email: String, clave: String, name: String, sim: String,
+                apellido: String, nnegocio: String,
+                dnegocio: String, telefono: String
+            ): Boolean {
 
-        if(!auth.signup(email, clave)){
-            store.newUser(mod,sim)
-            funciona=true
-        }
+                val mod = Modelo(
+                    name, apellido, email, sim, clave,
+                    nnegocio, dnegocio,
+                    telefono
+                )
+                var estado = false
 
-        return funciona
+                if (auth.signup(email, clave)) {
+                    val resultado = store.newUser2(mod)
+                    if (resultado) {
+                        estado=true
+
+                        println("se guardaron datos exitosos")
+                    } else {
+
+                        println("No se guardaron datos seggun signup")
+                    }
+                }
+                return estado
     }
 
 
+    override suspend fun SignIn(email: String, clave: String) = auth.signinCorru(email, clave) // -> Boolean
 
-    override fun SignIn(user: UserModel): Boolean{
-        var confirmacion=false
-        var mensaje:String?=""
 
-        auth.signin(user.correo, user.clave)
-        {success, errormesages ->
-            confirmacion=success
-            mensaje=errormesages}
-        if(mensaje != null){
-            throw Exception("Error de registro $mensaje")
-        }
-        return confirmacion
-    }
+    override suspend fun signout() =  auth.signOut() // -> Unit
 
-    override fun signout(){
-        auth.signOut()
-    }
 
-    override fun getCurrentUser(): FirebaseUser? {
+    override suspend fun getCurrentUser(): FirebaseUser? {
         return auth.getCurrentUser()
     }
-}
+
+
+    private suspend fun actualizarOInsertarModelo(modelo: Modelo) {
+        // Utiliza una coroutine para manejar la operación de manera asíncrona
+
+            }
+        }
+
+

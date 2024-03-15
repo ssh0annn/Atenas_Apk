@@ -3,7 +3,8 @@ package com.solidtype.atenas_apk_2
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
+import com.solidtype.atenas_apk_2.users.presentation.login.component.Container
+import com.solidtype.atenas_apk_2.users.presentation.pantallas.navigation
 import com.solidtype.atenas_apk_2.users.presentation.register.OutlinedTextFieldExample
 
 
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            OutlinedTextFieldExample(this )
+            navigation(context = this)
 
 
         }

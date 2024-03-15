@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 
+
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -44,19 +45,22 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import androidx.core.text.isDigitsOnly
-import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_medenview()) {
+fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login_medenview = login_medenview()) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
+
 
     Column(modifier = Modifier
 
@@ -115,17 +119,24 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 220.dp)
+                        .padding(start = 190.dp)
                 ){
+
                     TextButton(
-                        onClick = {  },
+                        onClick = { nav.navigate(Screens.Login.route) },
                         colors = ButtonDefaults.textButtonColors(
-                            contentColor = Color(0xFFEC407A)
+                            contentColor = Color.Blue
                         )
                     ) {
-                        Text("TEXT BUTTON")
+                        Text("Ir a login")
                     }
+
+
+
                 }
+
+
+
             }
         }
 
@@ -340,7 +351,7 @@ fun OutlinedTextFieldExample(context: Context, validarr:login_medenview=login_me
                 )
 
                 IconButton(
-                    onClick = { isPasswordVisible = !isPasswordVisible },
+                    onClick  = { isPasswordVisible = !isPasswordVisible },
                     modifier = Modifier
                         .padding(start = 435.dp, top = 25.dp)
                 ) {
