@@ -73,7 +73,7 @@ class FirestoreConnect {
             Log.e("contenido fecha","este es el dato que viene de la fehca de firebase: $fechaFinalString")
 
             if (fechaFinalString != null) {
-                if (fechaFinalString >= fechaActual) {
+                if (fechaActual >= fechaFinalString) {
                     // Actualizar el estado a false en Firestore
                     db.collection("usuarios").document(iCCID).update("estado", false).await()
                     true
@@ -91,7 +91,6 @@ class FirestoreConnect {
      fun obtenerFechaActual(): Date {
         return Date() // para obtener el dia/hora/fecha/ actual
     }
-
 
     suspend fun documentoEstaVacio( iCCID: String): Boolean {
         val docRef = db.collection("usuarios").document(iCCID).get().await()
