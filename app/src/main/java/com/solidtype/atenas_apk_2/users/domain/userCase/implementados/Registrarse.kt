@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.users.domain.userCase.implementados
 
-import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
+
 import com.solidtype.atenas_apk_2.users.data.repository.RepositoryImpl
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 
