@@ -35,6 +35,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
 
                         println("se guardaron datos exitosos")
                     } else {
+                        auth.signOut()// si pasa un error en la base de datos, deslogueo al usuario
 
                         println("No se guardaron datos seggun signup")
                     }
@@ -46,7 +47,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     override suspend fun SignIn(email: String, clave: String) = auth.signinCorru(email, clave) // -> Boolean
 
 
-    override  fun signout() =  auth.signOut() // -> Unit
+    override suspend fun signout() =  auth.signOut() // -> Unit
 
 
     override suspend fun getCurrentUser(): FirebaseUser? {
@@ -63,10 +64,18 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
 
 
     override suspend fun estadoDeLicencia(iccid:String): Boolean {// a la espera de implementacon
-      return true
+      return !store.fechaExpirada(capturaICCID())
         }///solo para probar
 
+    override suspend fun estadoLicencia(): Boolean {
+        return !store.fechaExpirada(capturaICCID())
 
+
+    }
+    override suspend fun existeUsuario() : Boolean {
+       return store.usuarioExiste(capturaICCID())
+    }
 }
+
 
 
