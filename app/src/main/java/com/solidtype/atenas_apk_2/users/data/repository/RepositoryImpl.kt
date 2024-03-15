@@ -18,8 +18,6 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                 apellido: String, nnegocio: String,
                 dnegocio: String, telefono: String
             ): Boolean {
-
-
                 var estado = false
 
                 if (auth.signinCorru(email, clave) ) {//Debe ser un usuario existente en firebase.
@@ -63,7 +61,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
 
 
     override suspend fun estadoDeLicencia(iccid:String): Boolean {// a la espera de implementacon
-      return true
+      return store.fechaExpirada(getCurrentUser()!!.uid)
         }///solo para probar
 
 

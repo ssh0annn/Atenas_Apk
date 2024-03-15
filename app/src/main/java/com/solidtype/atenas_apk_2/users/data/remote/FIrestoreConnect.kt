@@ -66,13 +66,19 @@ class FirestoreConnect {
 
         return try {
             val doc = db.collection("usuarios").document(iCCID).get().await()
-            val fechaFinalString = doc.getString("fecha_final")
+
+            val fechaFinalString = doc.get("fecha_final")
+
+            println("fechaFinal: $fechaFinalString")
+            println("fechaActual $fechaActual")
+
 
             if (fechaFinalString != null) {
                 val formatter = SimpleDateFormat("yyyy-MM-dd")
                 val fechaFinal = formatter.parse(fechaFinalString)!!
+                println("Comparar ${fechaActual >= fechaFinal}")
+                if (fechaActual >= fechaFinal) {
 
-                if (fechaFinal >= fechaActual) {
                     // Actualizar el estado a false en Firestore
                     db.collection("usuarios").document(iCCID).update("estado", false).await()
                     true
@@ -83,7 +89,8 @@ class FirestoreConnect {
                 false
             }
         } catch (e: Exception) {
-            false
+            println("Una execption en fechaExpirada $e ")
+            true
         }
     }
 

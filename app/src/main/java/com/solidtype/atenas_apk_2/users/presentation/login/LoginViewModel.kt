@@ -114,7 +114,8 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
                             val getICCID=casos_uso.capturaIccid()
                             if(getICCID.isNotBlank()){
                                 //. validamos en fireStore sus existencia. &&  validamos estado de la licencia
-
+                                println("Estado de la licencia: ${casos_uso.estado_licencia(getICCID)}")
+                                println("Validar ICCID: ${casos_uso.validarICCID(getICCID)}")
                                 return@withContext casos_uso.validarICCID(getICCID) && casos_uso.estado_licencia(getICCID)
                             }else{
                                 return@withContext false
