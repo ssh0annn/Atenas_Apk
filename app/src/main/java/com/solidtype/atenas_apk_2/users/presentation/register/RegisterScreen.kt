@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+
+
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -25,13 +27,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +51,9 @@ import androidx.constraintlayout.compose.Visibility
 import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,16 +127,20 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 }
                 Box(
                     modifier = Modifier
-                        .padding(start = 220.dp)
-                ) {
 
-                    Text(
-                        text = "Ir a login",
-                        color = Color.Blue,
-                        fontSize = 15.sp,
+                        .padding(start = 190.dp)
+                ){
 
 
+                    TextButton(
+                        onClick = { nav.navigate(Screens.Login.route) },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = Color.Blue
                         )
+                    ) {
+                        Text("Ir a login")
+                    }
+
 
                 }
 
@@ -208,35 +216,8 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 )
 
             }
-            //sim
-            Box(
-                modifier = Modifier
-                    .padding(top = 0.dp)
-            ) {
-                TextField(
-                    value = sim,
-                    onValueChange = { newInt ->
-                        if (newInt.isEmpty() || newInt.length <= contarsim) {
-                            if (newInt.isEmpty() || newInt.isDigitsOnly()) {
-                                sim = newInt
-                            }
-                        }
-                    },
-                    label = { Text("ICCID de la licencia", fontSize = 10.sp) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                    modifier = Modifier
-                        .width(500.dp)
-                        .height(80.dp)
-                        .padding(14.dp)
-                )
-                Text(
-                    text = "${sim.length}/$contarsim",
-                    color = if (sim.length < 20) Color.Red else Color.Unspecified,
-                    modifier = Modifier
-                        .padding(start = 445.dp, top = 75.dp)
-                )
-            }
+
+
             //telefono
             Box(
                 modifier = Modifier

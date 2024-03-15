@@ -25,14 +25,12 @@ class login_medenview (private val caso_uso: Registrarse = Registrarse()): ViewM
             // Alguno de los campos está vacío, puedes manejar este caso según tus necesidades
             // Por ejemplo, mostrar un mensaje de error o realizar alguna acción.
             Toast.makeText(context, "Campos Vacios.", Toast.LENGTH_LONG).show()
-        } else if (sim.length < 20){
-            // caracteres
-            android.widget.Toast.makeText(context, "ICCID debe tener 20 caracteres", android.widget.Toast.LENGTH_LONG).show()
+
         } else if (!isValidEmail(correo)) {
             Toast.makeText(context, "Correo electrónico no válido.", Toast.LENGTH_LONG).show()
         } else if (password.length < 7) {
             // caracteres
-            android.widget.Toast.makeText(context, "La contraseña debe tener 8 caracteres", android.widget.Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "La contraseña debe tener 8 caracteres",Toast.LENGTH_LONG).show()
         } else if ( password != confirmar ){
             // Las contraseñas no coinciden
             Toast.makeText(context, "La contraseña no coinciden.", Toast.LENGTH_LONG).show()

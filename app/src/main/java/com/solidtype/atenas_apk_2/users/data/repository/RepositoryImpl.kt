@@ -16,14 +16,16 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
                 dnegocio: String, telefono: String
             ): Boolean {
 
-                val mod = Modelo(
-                    name, apellido, email, sim, clave,
-                    nnegocio, dnegocio,
-                    telefono
-                )
+
                 var estado = false
 
                 if (auth.signinCorru(email, clave) ) {//Debe ser un usuario existente en firebase.
+                    val licencia= auth.getCurrentUser()!!.uid
+                    val mod = Modelo(
+                        name, apellido, email, licencia, clave,
+                        nnegocio, dnegocio,
+                        telefono
+                    )
                     val resultado = store.newUser2(mod)
                     if (resultado) {
                         estado=true
