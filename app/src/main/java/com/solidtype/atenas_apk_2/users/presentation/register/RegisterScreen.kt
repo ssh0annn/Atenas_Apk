@@ -207,36 +207,7 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
                 )
 
             }
-            //sim
-            Box(
-                modifier = Modifier
-                    .padding(top = 0.dp)
-            ) {
-                TextField(
-                    value = sim,
-                    onValueChange = {
-                            newInt ->
-                        if (newInt.isEmpty() || newInt.length <= contarsim) {
-                            if (newInt.isEmpty() || newInt.isDigitsOnly()) {
-                                sim = newInt
-                            }
-                        }
-                    },
-                    label = { Text("ICCID de la licencia",fontSize = 10.sp) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                    modifier = Modifier
-                        .width(500.dp)
-                        .height(80.dp)
-                        .padding(14.dp)
-                )
-                Text(
-                    text = "${sim.length}/$contarsim",
-                    color = if (sim.length < 20) Color.Red else Color.Unspecified,
-                    modifier = Modifier
-                        .padding(start = 445.dp, top = 75.dp)
-                )
-            }
+
             //telefono
             Box(
                 modifier = Modifier

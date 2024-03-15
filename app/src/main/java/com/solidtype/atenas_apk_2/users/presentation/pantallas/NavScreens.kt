@@ -3,19 +3,18 @@ package com.solidtype.atenas_apk_2.users.presentation.pantallas
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.solidtype.atenas_apk_2.users.presentation.home.component.HomeScreen
 import com.solidtype.atenas_apk_2.users.presentation.login.component.Container
 import com.solidtype.atenas_apk_2.users.presentation.register.OutlinedTextFieldExample
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun navigation(context: Context) {
+fun Navigation(context: Context) {
 
     val navController = rememberNavController()
 
@@ -40,6 +39,9 @@ fun navigation(context: Context) {
             )
         ) {
             OutlinedTextFieldExample(context,navController)
+        }
+        composable(route = Screens.Home.route ) {
+            HomeScreen(context,navController)
         }
 
     }
