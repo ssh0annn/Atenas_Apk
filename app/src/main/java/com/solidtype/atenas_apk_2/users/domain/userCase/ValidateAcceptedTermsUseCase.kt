@@ -1,10 +1,12 @@
 package com.solidtype.atenas_apk_2.users.domain.userCase
 
+import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.ValidateResults
+
 class ValidateAcceptedTermsUseCase {
     operator fun invoke(accepted:Boolean):Boolean{
         return accepted
     }
-    fun execute(accepted:Boolean):ValidateResults{
+    fun execute(accepted:Boolean): ValidateResults {
         if(!accepted){
             return ValidateResults(
                 successful = false,

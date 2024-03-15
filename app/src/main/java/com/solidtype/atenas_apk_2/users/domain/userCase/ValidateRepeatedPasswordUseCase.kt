@@ -1,10 +1,12 @@
 package com.solidtype.atenas_apk_2.users.domain.userCase
 
+import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.ValidateResults
+
 class ValidateRepeatedPasswordUseCase {
     operator fun invoke(password:String,repeatedPassword:String):Boolean{
         return password == repeatedPassword
     }
-    fun execute(password:String,repeatedPassword:String):ValidateResults{
+    fun execute(password:String,repeatedPassword:String): ValidateResults {
         if(password != repeatedPassword){
             return ValidateResults(
                 successful = false,

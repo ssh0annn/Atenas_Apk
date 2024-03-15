@@ -1,8 +1,15 @@
-package com.solidtype.atenas_apk_2.users.domain.userCase
+package com.solidtype.atenas_apk_2.users.domain.userCase.implementados
 
 import com.solidtype.atenas_apk_2.users.data.repository.RepositoryImpl
 import com.solidtype.atenas_apk_2.users.domain.model.UserModel
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateBusinessUseCase
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateEmailUseCase
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateFullnameUseCase
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateIdUseCase
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidatePasswordUseCase
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidatePhoneUseCase
+import com.solidtype.atenas_apk_2.users.domain.userCase.ValidateRepeatedPasswordUseCase
 
 class SignUpUseCase{
     private val repository:UserRepository= RepositoryImpl()
