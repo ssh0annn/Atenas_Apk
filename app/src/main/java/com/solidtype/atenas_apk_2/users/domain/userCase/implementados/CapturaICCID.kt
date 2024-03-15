@@ -6,6 +6,6 @@ import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
 class CapturaICCID (private val repository: UserRepository= RepositoryImpl()){
 
     suspend operator fun invoke():String{
-        return "00000000000000000000" //repository.capturaICCID()
+        return repository.capturaICCID()
     }
 }

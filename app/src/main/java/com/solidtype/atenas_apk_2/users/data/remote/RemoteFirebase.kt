@@ -10,6 +10,7 @@ class RemoteFirebase(private val auth: FirebaseAuth = FirebaseAuth.getInstance()
        try {
            val result = auth.createUserWithEmailAndPassword(email, clave).await()
            println("Resultado de withContext ${result} <---")
+           auth.uid
            return@withContext true
 
        } catch (e: Exception) {
@@ -32,7 +33,7 @@ class RemoteFirebase(private val auth: FirebaseAuth = FirebaseAuth.getInstance()
                 }
 
             } // -> Boolean
-    fun getCurrentUser()= auth.currentUser  // -> FirebaseUser?
+    fun getCurrentUser()= auth.currentUser // -> FirebaseUser?
     fun signOut() = auth.signOut()  // -> Unit
 
 
