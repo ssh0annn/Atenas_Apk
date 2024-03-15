@@ -22,6 +22,7 @@ class HomeViewModel (private val casos_usos: All_useCases= All_useCases()): View
         viewModelScope.launch{
             if(casos_usos.current_user() != null){
                 setName(casos_usos.current_user()!!.email.toString())
+                 println("Este es el UID: ${casos_usos.current_user()!!.uid} <--")
             }
         }
     }

@@ -45,6 +45,8 @@ class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
         viewModelScope.launch {
             if(casos_uso.current_user() != null){
                 usuario=casos_uso.current_user()!!.email.toString()
+                var uid =casos_uso.current_user()!!.uid
+                print("Este es el uid: $uid")
                 cambiaEstadosVerificado()
                 println("Usuario existente: $usuario")
             }

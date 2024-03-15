@@ -53,7 +53,7 @@ class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
     }
 
     override suspend fun capturaICCID(): String {
-        TODO("Not yet implemented")
+        return getCurrentUser()!!.uid
     }
 
 
