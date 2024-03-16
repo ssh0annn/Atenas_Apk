@@ -10,11 +10,11 @@ class Registrarse {
 
 
     suspend operator fun invoke(
-        email: String, clave: String, name: String,
+        email: String, clave: String, name: String, sim: String,
         apellido: String, nnegocio: String,
         dnegocio: String, telefono: String
     ): Boolean {
-        return repositorio.signUp(email, clave, name, apellido, nnegocio, dnegocio, telefono)
+        return repositorio.signUp(email, clave, name, sim, apellido, nnegocio, dnegocio, telefono)
 
     }
 
