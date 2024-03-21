@@ -140,7 +140,7 @@ class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
 
 
 
-
+//modelo ed datos
 data class Modelo(
     val nombre:String,
     val apellido:String,
