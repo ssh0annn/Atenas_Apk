@@ -121,7 +121,9 @@ dependencies {
     implementation("com.google.devtools.ksp:symbol-processing-api:1.9.22-1.0.17") // Dependencia de KSP
     implementation("com.google.devtools.ksp:symbol-processing:1.9.22-1.0.17") // Dependencia de KSP
 
-
+    //Room Database
+    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 }
 ksp {
     // Configuración específica de KSP
@@ -131,6 +133,7 @@ ksp {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "17" // La versión de JVM que estás utilizando
-        freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn") // Otras opciones de compilación
+        //freeCompilerArgs += listOf("-Xlint:deprecation")
+        //freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn") // Otras opciones de compilación
     }
 }
