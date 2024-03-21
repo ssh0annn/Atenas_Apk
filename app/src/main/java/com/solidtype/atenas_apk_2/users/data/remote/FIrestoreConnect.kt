@@ -142,7 +142,7 @@ class FirestoreConnect @Inject constructor(private val db:FirebaseFirestore,
 
 
 
-
+//modelo ed datos
 data class Modelo(
     val nombre:String,
     val apellido:String,
