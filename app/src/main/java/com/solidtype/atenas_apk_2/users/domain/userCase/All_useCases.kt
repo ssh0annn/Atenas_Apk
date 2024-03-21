@@ -11,12 +11,12 @@ import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.VerificaIC
 import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.getCurrentUser
 
 data class All_useCases(
-    val login: SignInUseCase = SignInUseCase(),
-    val logout: SignOutUseCase= SignOutUseCase(),
-    val current_user: getCurrentUser=getCurrentUser(),
-    val register: Registrarse =Registrarse(),
-    val capturaIccid:CapturaICCID=CapturaICCID(),
-    val validarICCID: VerificaICCIDUseCase=VerificaICCIDUseCase(),
-    val estado_licencia: EstadoLicencia = EstadoLicencia(),
-    val usuarioExiste: ExisteUsuario =ExisteUsuario()
+    val login: SignInUseCase,
+    val logout: SignOutUseCase,
+    val current_user: getCurrentUser,
+    val register: Registrarse,
+    val capturaIccid:CapturaICCID,
+    val validarICCID: VerificaICCIDUseCase,
+    val estado_licencia: EstadoLicencia,
+    val usuarioExiste: ExisteUsuario
 )

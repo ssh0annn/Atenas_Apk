@@ -16,11 +16,13 @@ import java.util.Date
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 
-class FirestoreConnect ( private val db:FirebaseFirestore = Firebase.firestore,
-                        private val auth: FirebaseAuth= FirebaseAuth.getInstance()
-){
+class FirestoreConnect @Inject constructor(private val db:FirebaseFirestore,
+                                           private val auth: FirebaseAuth){
+
+
 
     //esta registrando el correo como ICCID arreglen eso, resulta que no funcionaba por que no estaba haciendo la operacion asincrona
     //y devolvia un valor antes de ejecutarse por completo la operacion

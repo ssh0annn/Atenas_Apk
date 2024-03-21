@@ -6,11 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.users.domain.userCase.All_useCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class HomeViewModel (private val casos_usos: All_useCases= All_useCases()): ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val casos_usos: All_useCases): ViewModel() {
 
     private val _name = MutableLiveData<String>()
     val name: MutableLiveData<String> = _name

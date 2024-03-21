@@ -4,8 +4,10 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RemoteFirebase(private val auth: FirebaseAuth = FirebaseAuth.getInstance()){
+class RemoteFirebase @Inject constructor(private val auth: FirebaseAuth){
+
    suspend fun signup(email: String, clave: String) = withContext(Dispatchers.IO) {
        try {
            val result = auth.createUserWithEmailAndPassword(email, clave).await()

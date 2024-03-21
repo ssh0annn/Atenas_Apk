@@ -8,12 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.users.domain.userCase.All_useCases
 import com.solidtype.atenas_apk_2.users.domain.userCase.implementados.Registrarse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+@HiltViewModel
+class login_medenview @Inject constructor(private val caso_uso:All_useCases): ViewModel(){
 
 
-class login_medenview (private val caso_uso: All_useCases = All_useCases()): ViewModel(){
     private val _verificado = MutableLiveData<Boolean>()
     val verificado: LiveData<Boolean> = _verificado
 

@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-
+import androidx.hilt.navigation.compose.hiltViewModel
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -58,7 +58,7 @@ import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login_medenview = login_medenview()) {
+fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login_medenview = hiltViewModel()) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }
@@ -380,8 +380,6 @@ fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login
         }
 
 
-        val ff = 5
-        val f = 10
 
         Button(
             onClick = {

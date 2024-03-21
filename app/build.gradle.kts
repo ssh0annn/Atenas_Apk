@@ -3,9 +3,25 @@ plugins {
     id("org.jetbrains.kotlin.android")
     //Firbase
     id("com.google.gms.google-services")
+
+    //Dagger hilt
+
+    id("com.google.dagger.hilt.android")
+
+
+    //kps:
+
+    id("com.google.devtools.ksp") version "1.9.22-1.0.17"
+
+
+}
+repositories {
+    //mavenCentral() // o cualquier otro repositorio que necesites
+    //google()
 }
 
 android {
+
     namespace = "com.solidtype.atenas_apk_2"
     compileSdk = 34
 
@@ -32,18 +48,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -73,8 +93,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation ("androidx.compose.material:material-icons-extended:1.6.2")
-    implementation ("androidx.compose.material:material-icons-core:1.6.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.4")
+    implementation ("androidx.compose.material:material-icons-core:1.6.4")
 
 
 
@@ -85,11 +105,32 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 
     //Corrutinas
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
     implementation ("androidx.navigation:navigation-compose:2.7.7")
 
     //LoginViewModel
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.3")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.4")
 
+    //Dagger hilt
+    implementation("com.google.dagger:hilt-android:2.51")
+    ksp("com.google.dagger:hilt-android-compiler:2.51")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //KSP:
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.22-1.0.17") // Dependencia de KSP
+    implementation("com.google.devtools.ksp:symbol-processing:1.9.22-1.0.17") // Dependencia de KSP
+
+
+}
+ksp {
+    // Configuración específica de KSP
+    arg("output", "$buildDir/generated/ksp")// Argumentos opcionales para KSP
+    // Puedes agregar más configurations según sea necesario
+}
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "17" // La versión de JVM que estás utilizando
+        freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn") // Otras opciones de compilación
+    }
 }

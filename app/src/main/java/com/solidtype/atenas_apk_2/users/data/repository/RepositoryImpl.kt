@@ -7,10 +7,13 @@ import com.solidtype.atenas_apk_2.users.data.remote.FirestoreConnect
 import com.solidtype.atenas_apk_2.users.data.remote.Modelo
 import com.solidtype.atenas_apk_2.users.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.users.domain.repository.UserRepository
+import javax.inject.Inject
 
 
-class RepositoryImpl (private val auth : RemoteFirebase =RemoteFirebase(),
-                      private val store: FirestoreConnect =FirestoreConnect()): UserRepository {
+class RepositoryImpl @Inject constructor(private val auth : RemoteFirebase,
+                                         private val store: FirestoreConnect): UserRepository {
+
+
 
 
     override suspend fun signUp(

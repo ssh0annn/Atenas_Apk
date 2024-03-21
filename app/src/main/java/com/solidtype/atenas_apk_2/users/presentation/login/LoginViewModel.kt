@@ -11,15 +11,17 @@ import com.solidtype.atenas_apk_2.users.domain.userCase.All_useCases
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class LoginViewModel(private val casos_uso:All_useCases= All_useCases(),
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val casos_uso:All_useCases ):ViewModel(){
 
-   ): ViewModel() {
 
     private val _logeado = mutableStateOf(LoginStates(verificado = false, autenticado = false))
     var logeado: State<LoginStates> = _logeado

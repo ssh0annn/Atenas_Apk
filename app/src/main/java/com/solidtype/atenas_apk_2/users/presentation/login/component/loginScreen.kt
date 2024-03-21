@@ -53,6 +53,7 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.users.presentation.login.LoginViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.users.presentation.pantallas.Screens
@@ -60,7 +61,7 @@ import com.solidtype.atenas_apk_2.users.presentation.register.OutlinedTextFieldE
 import kotlinx.coroutines.launch
 
 @Composable
-fun Container(context: Context, nav: NavController,viewModel: LoginViewModel=LoginViewModel()) {
+fun Container(context: Context, nav: NavController,viewModel: LoginViewModel= hiltViewModel()) {
     val email: String by viewModel.mail.observeAsState(initial = "")
     val pass: String by viewModel.pass.observeAsState(initial = "")
     val loginEnabled: Boolean by viewModel.login.observeAsState(initial = false)
