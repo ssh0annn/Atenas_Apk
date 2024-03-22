@@ -91,6 +91,4 @@ object AppModule {
          return db.getProductDao
      }
 
-
-
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.AuthUseCases
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,6 +48,7 @@ class LoginViewModel @Inject constructor(
         var usuario:String?
         viewModelScope.launch {
             if(casos_uso.current_user() != null){
+
                 if (logicaNegocio()){
                     if (casos_uso.usuarioExiste()){
                         usuario=casos_uso.current_user()!!.email.toString()
