@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.AuthUseCases
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +19,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases ):ViewModel(){
+class LoginViewModel @Inject constructor(
+    private val casos_uso:AuthUseCases
+):ViewModel(){
 
 
     private val _logeado = mutableStateOf(LoginStates(verificado = false, autenticado = false))
