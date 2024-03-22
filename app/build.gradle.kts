@@ -122,8 +122,13 @@ dependencies {
     implementation("com.google.devtools.ksp:symbol-processing:1.9.22-1.0.17") // Dependencia de KSP
 
     //Room Database
-    ksp("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+
+    ksp("androidx.room:room-compiler:$room_version")
+
+    implementation("androidx.room:room-ktx:$room_version")
+
 }
 ksp {
     // Configuración específica de KSP
