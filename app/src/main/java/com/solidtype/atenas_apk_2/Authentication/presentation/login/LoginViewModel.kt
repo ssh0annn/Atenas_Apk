@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.Authentication.presentation.login
 
 import android.content.Context
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -10,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.AuthUseCases
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import com.solidtype.atenas_apk_2.products.data.remote.FireStoreQuerysProducts
 import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo

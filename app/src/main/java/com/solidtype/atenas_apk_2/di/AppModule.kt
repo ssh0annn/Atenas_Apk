@@ -88,7 +88,7 @@ object AppModule {
     @Provides
     @Singleton
      fun provideDao(db : ProductDataBase): ProductDao {
-         return db.getProductDao
+         return db.ProductDao
      }
 
 }
