@@ -28,6 +28,8 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.V
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
 import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
+import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -74,7 +76,9 @@ object AppModule {
         getProductosByCodigo= getProductosByCodigo(repository),
         searchProductos= SearchProductosLike(repository),
         updateProducto=UpdateProducto(repository),
-        deleteProductos=DeleteProductos(repository)
+        deleteProductos=DeleteProductos(repository),
+        exportarExcel = ExportarExcel(repository),
+        importarExcelFile = ImportarExcelFile(repository)
     )
 
     @Singleton

@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class XlsManeger @Inject constructor() {
 
-   suspend fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:List<List<String>>):String? =withContext(Dispatchers.IO){
+   suspend fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String?>>):String? =withContext(Dispatchers.IO){
         val wb=XSSFWorkbook()
 
        try {

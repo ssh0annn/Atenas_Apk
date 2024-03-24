@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
+import com.solidtype.atenas_apk_2.products.domain.userCases.getProductosByCodigo
 import kotlinx.coroutines.flow.Flow
 import java.util.Objects
 
@@ -42,6 +43,6 @@ interface ProductDao{
     fun insertProduct(product: ProductEntity)
 
     @Delete
-    fun deleteProduct(id: ProductEntity)
+    fun deleteProduct(codigo: ProductEntity)
 
 }
