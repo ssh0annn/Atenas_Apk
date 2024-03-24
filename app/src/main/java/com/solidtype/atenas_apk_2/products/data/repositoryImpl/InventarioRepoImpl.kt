@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
@@ -12,9 +13,13 @@ import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao,
-    private val excel: XlsManeger
+    private val excel: XlsManeger,
+    private val mediador:MediatorFbPrododucts
 ):InventarioRepo {
-    override fun getProducts(): Flow<List<ProductEntity>> {
+    override suspend fun getProducts(): Flow<List<ProductEntity>> {
+        withContext(Dispatchers.Default){
+            mediador()
+        }
        return daoProductos.getProducts()
     }
 
@@ -33,12 +38,13 @@ class InventarioRepoImpl @Inject constructor(
 
     override suspend fun deleteProduct(codigo: ProductEntity): Boolean {
         daoProductos.deleteProduct(codigo)
-        return true
+        return true//hay que manejarlo
     }
 
     override suspend fun updateProduct(producto: ProductEntity): Boolean {
         daoProductos.updateProduct(producto)
-        return true
+        return true //hay que manejarlo
+
     }
 
     override suspend fun exportarExcel(): String? {
