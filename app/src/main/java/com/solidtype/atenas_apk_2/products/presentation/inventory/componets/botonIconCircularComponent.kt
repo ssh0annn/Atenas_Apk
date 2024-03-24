@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 fun BotonIconCircular(save: Boolean, onClick: () -> Unit) {
     Button(
         modifier = Modifier
-            .width(65.dp)
-            .height(65.dp)
+            .width(70.dp)
+            .height(70.dp)
             .background(Color(0xFF343341)),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFF000000),

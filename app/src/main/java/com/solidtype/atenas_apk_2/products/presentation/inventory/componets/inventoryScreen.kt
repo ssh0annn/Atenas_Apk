@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.graphics.Color.parseColor
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -52,148 +54,155 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Invento
     if (false) {
         //nav.navigate(Screens.Login.route)
     } else {
-        Column {
-            Row {//Título, Buscador, Area de Productos y Detalles
-                Column(
-                    modifier = Modifier.padding(start = 30.dp)
-                ) {//Título, Buscador y Area de Productos
-                    Row(
-                        modifier = Modifier
-                            .padding(20.dp, 50.dp, 0.dp, 20.dp)
-                            .width(500.dp)
-                    ) {//Título y Buscador
-                        Text(
-                            text = "Inventario",
-                            modifier = Modifier.padding(top = 15.dp, end = 0.dp),
-                            style = TextStyle(
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(parseColor("#343341"))
-                            )
-                        ) //Título
-                        Buscador(
-                            busqueda = busqueda,
-                            onBusquedaChange = { viewModel.onBusquedaChange(it) }
-                        )
-                    }
-                    //Area de productos
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 20.dp)
-                            .width(500.dp)
-                            .height(350.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(parseColor("#343341")))
-                    ) {
-                        LazyColumn(
+        LazyColumn(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Row {//Título, Buscador, Area de Productos y Detalles
+                    Column(
+                        //modifier = Modifier.padding(start = 30.dp)
+                    ) {//Título, Buscador y Area de Productos
+                        Row(
                             modifier = Modifier
-                                .padding(10.dp)
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                                .clip(RoundedCornerShape(5.dp))
-                                .background(Color(parseColor("#737A8C")))
-                        ) { //buscar componente para agregar filas de cards
-                            item {
-                                productos.chunked(4).forEach { row ->
-                                    Row {
-                                        row.forEach { (name, price) ->
-                                            CardProduct(name, price)
+                                .padding(0.dp, 50.dp, 0.dp, 20.dp)
+                                .width(500.dp)
+                        ) {//Título y Buscador
+                            Text(
+                                text = "Inventario",
+                                modifier = Modifier.padding(top = 15.dp, end = 0.dp),
+                                style = TextStyle(
+                                    fontSize = 30.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(parseColor("#343341"))
+                                )
+                            ) //Título
+                            Buscador(
+                                busqueda = busqueda,
+                                onBusquedaChange = { viewModel.onBusquedaChange(it) }
+                            )
+                        }
+                        //Area de productos
+                        Box(
+                            modifier = Modifier
+                                //.padding(start = 20.dp)
+                                .width(500.dp)
+                                .height(350.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color(parseColor("#343341")))
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .fillMaxWidth()
+                                    .fillMaxHeight()
+                                    .clip(RoundedCornerShape(5.dp))
+                                    .background(Color(parseColor("#737A8C")))
+                            ) { //buscar componente para agregar filas de cards
+                                item {
+                                    productos.chunked(4).forEach { row ->
+                                        Row {
+                                            row.forEach { (name, price) ->
+                                                CardProduct(name, price)
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
-                Column(
-                    modifier = Modifier.padding(top = 46.dp)
-                ) {//Detalles = Area de detalles y Botones
                     Column(
-                        modifier = Modifier
-                            .padding(start = 30.dp, top = 10.dp)
-                            .width(300.dp)
-                            .height(430.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(parseColor("#343341"))),
-                    ) {
+                        modifier = Modifier.padding(top = 46.dp)
+                    ) {//Detalles = Area de detalles y Botones
                         Column(
                             modifier = Modifier
-                                .padding(10.dp, 10.dp, 10.dp, 5.dp)
-                                .fillMaxWidth()
-                                .height(350.dp)
-                                .clip(RoundedCornerShape(5.dp))
-                                .background(Color(parseColor("#737A8C")))
-                        ) {// Area de detalles = Imagen del producto, Categoría y Nombre
-                            Row(
-                                modifier = Modifier.padding(10.dp)
-                            ) {
-                                //Image(painter = /*viewModel.imagenProducto.value*/, contentDescription = "Imagen del producto")
-                                Box(
-                                    modifier = Modifier.padding(top = 10.dp)
+                                .padding(start = 30.dp, top = 10.dp)
+                                .width(300.dp)
+                                .height(430.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color(parseColor("#343341"))),
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(10.dp, 10.dp, 10.dp, 5.dp)
+                                    .fillMaxWidth()
+                                    .height(350.dp)
+                                    .clip(RoundedCornerShape(5.dp))
+                                    .background(Color(parseColor("#737A8C")))
+                            ) {// Area de detalles = Imagen del producto, Categoría y Nombre
+                                Row(
+                                    modifier = Modifier.padding(10.dp)
                                 ) {
-                                    Carrito(true) //aquí debería ir la imagen del producto
+                                    //Image(painter = /*viewModel.imagenProducto.value*/, contentDescription = "Imagen del producto")
+                                    Box(
+                                        modifier = Modifier.padding(top = 10.dp)
+                                    ) {
+                                        Carrito(true) //aquí debería ir la imagen del producto
+                                    }
+                                    Column {// Categoría y Nombre
+                                        // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
+                                        InputDetalle(
+                                            "Categoria",
+                                            true
+                                        ) { /*viewModel.onCategoriaChange(it)*/ }
+                                        InputDetalle(
+                                            "Nombre",
+                                            true
+                                        ) { /*viewModel.onNombreChange(it)*/ }
+                                    }
                                 }
-                                Column {// Categoría y Nombre
-                                    // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
-                                    InputDetalle(
-                                        "Categoria",
-                                        true
-                                    ) { /*viewModel.onCategoriaChange(it)*/ }
-                                    InputDetalle(
-                                        "Nombre",
-                                        true
-                                    ) { /*viewModel.onNombreChange(it)*/ }
+                                Column {// Codigo, Descripción, Precio y Cantidad
+                                    InputDetalle("Codigo") { /*viewModel.onCodigoChange(it)*/ }
+                                    InputDetalle("Descripción") { /*viewModel.onDescripcionChange(it)*/ }
+                                    InputDetalle("Precio") { /*viewModel.onPrecioChange(it)*/ }
+                                    InputDetalle("Cantidad") { /*viewModel.onCantidadChange(it)*/ }
                                 }
                             }
-                            Column {// Codigo, Descripción, Precio y Cantidad
-                                InputDetalle("Codigo") { /*viewModel.onCodigoChange(it)*/ }
-                                InputDetalle("Descripción") { /*viewModel.onDescripcionChange(it)*/ }
-                                InputDetalle("Precio") { /*viewModel.onPrecioChange(it)*/ }
-                                InputDetalle("Cantidad") { /*viewModel.onCantidadChange(it)*/ }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {//Botones de cerrar y guardar
+                                BotonIconCircular(
+                                    true,
+                                    onClick = {
+                                        /*viewModel.onCerrarDetalles()*/
+                                    })
+                                Spacer(modifier = Modifier.width(60.dp))
+                                BotonIconCircular(
+                                    false,
+                                    onClick = {
+                                        /*viewModel.onGuardarDetalles()*/
+                                    }
+                                )
                             }
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {//Botones de cerrar y guardar
-                            BotonIconCircular(
-                                true,
-                                onClick = {
-                                    /*viewModel.onCerrarDetalles()*/
-                                })
-                            Spacer(modifier = Modifier.width(60.dp))
-                            BotonIconCircular(
-                                false,
-                                onClick = {
-                                    /*viewModel.onGuardarDetalles()*/
-                                }
-                            )
                         }
                     }
                 }
-            }
-            Row(
-                modifier = Modifier.padding(50.dp, 20.dp, 0.dp, 0.dp)
-            ) { //Avatar y Botones
-                //Avatar
-                if (true) { // si no hay imagen de perfil
-                    Avatar()
-                } else {
-                    //Mostrar foto de perfil
-                }
-                Spacer(modifier = Modifier.width(330.dp))
-                Row {
-                    //Botones para Importar, Exportar y Ver
-                    Boton("Importar", onClick = { /*viewModel.onImportar()*/ })
-                    Boton("Exportar", onClick = { /*viewModel.onExportar()*/ })
-                    Boton("Ver", onClick = { /*viewModel.onVer()*/ })
+                Row(
+                    modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
+                ) { //Avatar y Botones
+                    //Avatar
+                    if (true) { // si no hay imagen de perfil
+                        Avatar()
+                    } else {//Mostrar foto de perfil
+                        //Image(painter = , contentDescription = )
+                    }
+                    Spacer(modifier = Modifier.width(330.dp))
+                    Row {
+                        //Botones para Importar, Exportar y Ver
+                        Boton("Importar", onClick = { /*viewModel.onImportar()*/ })
+                        Boton("Exportar", onClick = { /*viewModel.onExportar()*/ })
+                        Boton("Ver", onClick = { /*viewModel.onVer()*/ })
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 920, heightDp = 600)
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 920, heightDp = 600,
+    device = "spec:id=reference_tablet,shape=Normal,width=1280,height=800,unit=dp,dpi=240"
+)
 @Composable
 fun InventoryScreenPreview() {
     InventoryScreen()
