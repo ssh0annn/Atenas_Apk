@@ -1,7 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.graphics.Color.parseColor
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +35,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Invento
     //val logeado:Boolean by LoginViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
     val busqueda: String by viewModel.busqueda.observeAsState(initial = "")
+
     val productos = listOf(
         "Manzana" to "$2.79",
         "Pera" to "$1.99",
@@ -200,7 +200,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Invento
     }
 }
 
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 920, heightDp = 600,
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 700,
     device = "spec:id=reference_tablet,shape=Normal,width=1280,height=800,unit=dp,dpi=240"
 )
 @Composable
