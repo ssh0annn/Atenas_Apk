@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun FireManeger(viewModel: YourViewModel= hiltViewModel()) {
+fun FireManeger() {
     val context = LocalContext.current
 
     Button(onClick = {

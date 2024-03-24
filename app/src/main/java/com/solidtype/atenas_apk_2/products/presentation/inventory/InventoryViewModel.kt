@@ -3,7 +3,11 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-public class InventoryViewModel : ViewModel() {
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class InventoryViewModel @Inject constructor(): ViewModel() {
 
     private val _busqueda = MutableLiveData<String>()
     val busqueda: LiveData<String> = _busqueda

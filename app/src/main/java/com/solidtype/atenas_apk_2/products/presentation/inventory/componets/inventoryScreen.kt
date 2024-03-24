@@ -1,5 +1,8 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color.parseColor
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,11 +34,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryViewModel
+fun showFilePicker(context: Context) {
+
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        type = "*/*"
+        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+    }
+
+    (context as? Activity)?.startActivityForResult(intent, 1)
+
+
+}
 
 @Composable
 fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: InventoryViewModel = hiltViewModel()) {
     //val logeado:Boolean by LoginViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
+    val context = LocalContext.current
     val busqueda: String by viewModel.busqueda.observeAsState(initial = "")
     val productos = listOf(
         "Manzana" to "$2.79",
@@ -190,7 +207,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Invento
                     Spacer(modifier = Modifier.width(330.dp))
                     Row {
                         //Botones para Importar, Exportar y Ver
-                        Boton("Importar", onClick = { /*viewModel.onImportar()*/ })
+                        Boton("Importar", onClick = { showFilePicker(context) })
                         Boton("Exportar", onClick = { /*viewModel.onExportar()*/ })
                         Boton("Ver", onClick = { /*viewModel.onVer()*/ })
                     }
