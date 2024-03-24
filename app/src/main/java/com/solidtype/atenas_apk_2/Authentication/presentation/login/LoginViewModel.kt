@@ -17,7 +17,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases ):ViewModel(){
+class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases,
+
+):ViewModel(){
 
 
     private val _logeado = mutableStateOf(LoginStates(verificado = false, autenticado = false))
@@ -41,8 +43,9 @@ class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases ):Vi
 
     init {
         var usuario:String?
+
         viewModelScope.launch {
-            if(casos_uso.current_user() != null){
+           if(casos_uso.current_user() != null){
                 if (logicaNegocio()){
                     if (casos_uso.usuarioExiste()){
                         usuario=casos_uso.current_user()!!.email.toString()
