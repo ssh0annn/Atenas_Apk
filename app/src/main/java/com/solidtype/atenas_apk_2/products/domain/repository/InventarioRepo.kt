@@ -1,14 +1,17 @@
 package com.solidtype.atenas_apk_2.products.domain.repository
 
-import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
+
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.flow.Flow
 
 interface InventarioRepo {
-    fun getProducts(): Flow<List<DataProductos>>
-    fun getProductByCodigo(codigo:Int): Flow<List<DataProductos>>
-    fun searchProductsLike(datos:Any):Flow<List<DataProductos>>
-    suspend fun createProducts(prodcuto: DataProductos):Boolean
-    suspend fun deleteProduct(codigo:Int):Boolean
-    suspend fun updateProduct(producto:DataProductos): Boolean
+    fun getProducts(): Flow<List<ProductEntity>>
+    fun getProductByCodigo(codigo:Int): Flow<List<ProductEntity>>
+    fun searchProductsLike(datos:String):Flow<List<ProductEntity>>
+    suspend fun createProducts(prodcuto: ProductEntity):Boolean
+    suspend fun deleteProduct(codigo:ProductEntity):Boolean
+    suspend fun updateProduct(producto:ProductEntity): Boolean
+    suspend fun exportarExcel():String?
+    suspend fun importarExcel(path:String):Boolean
 
 }

@@ -1,5 +1,7 @@
 package com.solidtype.atenas_apk_2.di
 
+import android.app.Application
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -24,6 +26,10 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.S
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignOutUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.VerificaICCIDUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
+import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
+import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
+import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,6 +76,23 @@ object AppModule {
         getProductosByCodigo= getProductosByCodigo(repository),
         searchProductos= SearchProductosLike(repository),
         updateProducto=UpdateProducto(repository),
-        deleteProductos=DeleteProductos(repository)
+        deleteProductos=DeleteProductos(repository),
+        exportarExcel = ExportarExcel(repository),
+        importarExcelFile = ImportarExcelFile(repository)
     )
+
+    @Singleton
+    @Provides
+    fun provideUserDatabase(app: Application) = Room.databaseBuilder(
+        app,
+        ProductDataBase::class.java,
+        "tabla_producto"
+    ).build()
+
+    @Provides
+    @Singleton
+     fun provideDao(db : ProductDataBase): ProductDao {
+         return db.ProductDao
+     }
+
 }
