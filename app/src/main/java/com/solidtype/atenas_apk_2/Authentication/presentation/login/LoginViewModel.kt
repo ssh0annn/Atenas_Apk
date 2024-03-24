@@ -163,3 +163,7 @@ class LoginViewModel @Inject constructor(
     private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
 
     private fun validarCamposPass(pass: String) = pass.length >= 8 // -> Boolean
+
+
+
+

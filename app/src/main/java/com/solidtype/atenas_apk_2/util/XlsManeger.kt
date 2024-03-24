@@ -20,14 +20,14 @@ class XlsManeger @Inject constructor() {
 
        try {
              val wbsheet= wb.createSheet()
-             val filaParaNombre=   wbsheet.createRow(0)
+             val filaParaNombre=   wbsheet.createRow(0)// lo mismo de abajo donde dice ojo
                for((column, name) in nombreColumnas.withIndex()){//nombro las columnas principales
                    filaParaNombre.createCell(column).setCellValue(name)
 
             }
 
             for ((fila, dato) in datos.withIndex()){ //relleno el cuerpo con los datos.
-                val filaparaDatos=wbsheet.createRow(fila+1)
+                val filaparaDatos=wbsheet.createRow(fila+1)//OJO: crear el row debe ser fuera del bucle de las celdas
                 for((column, name) in dato.withIndex()){
                     filaparaDatos.createCell(column).setCellValue(name)
 
