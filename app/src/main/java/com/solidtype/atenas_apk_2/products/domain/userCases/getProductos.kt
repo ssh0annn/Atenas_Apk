@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class getProductos @Inject constructor(private val repo: InventarioRepo) {
 
-      operator fun invoke()=repo.getProducts()
+      suspend operator fun invoke()=repo.getProducts()
 }
