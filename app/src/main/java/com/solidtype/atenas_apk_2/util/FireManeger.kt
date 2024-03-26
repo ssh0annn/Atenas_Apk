@@ -11,9 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.solidtype.atenas_apk_2.products.presentation.ejemploPresentacion.NewsViewModel
 
 @Composable
-fun FireManeger() {
+fun FireManeger(viewModel: NewsViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     Button(onClick = {
