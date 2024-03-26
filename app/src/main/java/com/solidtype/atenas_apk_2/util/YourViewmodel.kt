@@ -28,14 +28,13 @@ class YourViewModel @Inject constructor(private val casosInventario: CasosInvent
                 "12091A",
                 89.23,
                 "Samsung",
-                8,
-
-            ))
+                8
+            )
+            )
             withContext(Dispatchers.Default){
-
-            casosInventario.syncProductos()
+                casosInventario.syncProductos()
             }
-            }
+        }
     }
 
     fun fileSelected(filePath: String) {

@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.ejemploPresentacion
+package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.os.Message
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity

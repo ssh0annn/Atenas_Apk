@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.ejemploPresentacion
+package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,13 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 @HiltViewModel
-class NewsViewModel @Inject constructor(private val casosInventario: CasosInventario): ViewModel() {
+class InventarioViewModel @Inject constructor(private val casosInventario: CasosInventario): ViewModel() {
 
     private val _uiState = MutableStateFlow(ProductosViewStates())
     val uiState: StateFlow<ProductosViewStates> = _uiState.asStateFlow()
@@ -23,21 +22,8 @@ class NewsViewModel @Inject constructor(private val casosInventario: CasosInvent
 
             init {
                 mostrarProductos()
-                crearProductos(
-                    "30",
-                    "Mierda",
-                    "klajsdfkljasdkf",
-                    "ajskdfjaksdlfj",
-                    "25.25",
-                    "klajskdlfjasdf",
-                    "25.22",
-                    "lajsdfkljadsf",
-                    "25",
-                    )
-                println("Aqui debe estar la busqueda")
-                buscarProductos("M")
 
-            }
+                }
 
             fun crearProductos(
                 Code_Product : String?,
