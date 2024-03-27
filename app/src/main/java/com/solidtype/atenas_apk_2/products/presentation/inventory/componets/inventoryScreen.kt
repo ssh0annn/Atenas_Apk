@@ -39,7 +39,13 @@ fun showFilePicker(context: Context) {
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "*/*"
-        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+        putExtra(
+            Intent.EXTRA_MIME_TYPES,
+            arrayOf(
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        )
     }
 
     (context as? Activity)?.startActivityForResult(intent, 1)
@@ -48,11 +54,11 @@ fun showFilePicker(context: Context) {
 }
 
 @Composable
-fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: InventarioViewModel = hiltViewModel()) {
+fun InventoryScreen(/*context: Context, nav: NavController, viewModel: InventarioViewModel = hiltViewModel() */) {
     //val logeado:Boolean by LoginViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
     val context = LocalContext.current
-    val busqueda=   ""
+    val busqueda = ""
     val productos = listOf(
         "Manzana" to "$2.79",
         "Pera" to "$1.99",
@@ -72,8 +78,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
         //nav.navigate(Screens.Login.route)
     } else {
         LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
                 Row {//Título, Buscador, Area de Productos y Detalles
@@ -82,7 +91,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                     ) {//Título, Buscador y Area de Productos
                         Row(
                             modifier = Modifier
-                                .padding(0.dp, 50.dp, 0.dp, 20.dp)
+                                .padding(top = 20.dp, bottom = 20.dp)
                                 .width(500.dp)
                         ) {//Título y Buscador
                             Text(
@@ -96,7 +105,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                             ) //Título
                             Buscador(
                                 busqueda = busqueda,
-                                onBusquedaChange = {  }
+                                onBusquedaChange = { }
                             )
                         }
                         //Area de productos
@@ -129,17 +138,17 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                         }
                     }
                     Column(
-                        modifier = Modifier.padding(top = 46.dp)
+                        modifier = Modifier.padding(top = 30.dp)
                     ) {//Detalles = Area de detalles y Botones
                         Column(
                             modifier = Modifier
-                                .padding(start = 30.dp, top = 10.dp)
+                                .padding(start = 30.dp, top = 0.dp)
                                 .width(300.dp)
                                 .height(430.dp)
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(Color(parseColor("#343341"))),
                         ) {
-                            Column(
+                            LazyColumn(
                                 modifier = Modifier
                                     .padding(10.dp, 10.dp, 10.dp, 5.dp)
                                     .fillMaxWidth()
@@ -147,32 +156,37 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                     .clip(RoundedCornerShape(5.dp))
                                     .background(Color(parseColor("#737A8C")))
                             ) {// Area de detalles = Imagen del producto, Categoría y Nombre
-                                Row(
-                                    modifier = Modifier.padding(10.dp)
-                                ) {
-                                    //Image(painter = /*viewModel.imagenProducto.value*/, contentDescription = "Imagen del producto")
-                                    Box(
-                                        modifier = Modifier.padding(top = 10.dp)
+                                item {
+                                    Row(
+                                        modifier = Modifier.padding(10.dp)
                                     ) {
-                                        Carrito(true) //aquí debería ir la imagen del producto
+                                        //Image(painter = /*viewModel.imagenProducto.value*/, contentDescription = "Imagen del producto")
+                                        Box(
+                                            modifier = Modifier.padding(top = 10.dp)
+                                        ) {
+                                            Carrito(true) //aquí debería ir la imagen del producto
+                                        }
+                                        Column {// Categoría y Nombre
+                                            // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
+                                            InputDetalle(
+                                                "Categoria",
+                                                true
+                                            ) { /*viewModel.onCategoriaChange(it)*/ }
+                                            InputDetalle(
+                                                "Nombre",
+                                                true
+                                            ) { /*viewModel.onNombreChange(it)*/ }
+                                        }
                                     }
-                                    Column {// Categoría y Nombre
-                                        // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
-                                        InputDetalle(
-                                            "Categoria",
-                                            true
-                                        ) { /*viewModel.onCategoriaChange(it)*/ }
-                                        InputDetalle(
-                                            "Nombre",
-                                            true
-                                        ) { /*viewModel.onNombreChange(it)*/ }
+                                    Column {// Codigo, Descripción, Precio y Cantidad
+                                        InputDetalle("Código") { /*viewModel.onCodigoChange(it)*/ }
+                                        InputDetalle("Descripción") { /*viewModel.onDescripcionChange(it)*/ }
+                                        InputDetalle("Precio de Importe") { /*viewModel.onPrecioChange(it)*/ }
+                                        InputDetalle("Precio de Venta") { /*viewModel.onPrecioVentaChange(it)*/ }
+                                        InputDetalle("Modelo") { /*viewModel.onModeloChange(it)*/ }
+                                        InputDetalle("Marca") { /*viewModel.onMarcaChange(it)*/ }
+                                        InputDetalle("Cantidad") { /*viewModel.onCantidadChange(it)*/ }
                                     }
-                                }
-                                Column {// Codigo, Descripción, Precio y Cantidad
-                                    InputDetalle("Codigo") { /*viewModel.onCodigoChange(it)*/ }
-                                    InputDetalle("Descripción") { /*viewModel.onDescripcionChange(it)*/ }
-                                    InputDetalle("Precio") { /*viewModel.onPrecioChange(it)*/ }
-                                    InputDetalle("Cantidad") { /*viewModel.onCantidadChange(it)*/ }
                                 }
                             }
                             Row(
@@ -217,9 +231,8 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
     }
 }
 
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 700,
-    device = "spec:id=reference_tablet,shape=Normal,width=1280,height=800,unit=dp,dpi=240"
-)
+//Preview para Vortex T10M (T10MPROPLUS) Horizontal
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
 @Composable
 fun InventoryScreenPreview() {
     InventoryScreen()
