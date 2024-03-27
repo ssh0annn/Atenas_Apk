@@ -30,6 +30,7 @@ import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
+import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -78,7 +79,8 @@ object AppModule {
         updateProducto=UpdateProducto(repository),
         deleteProductos=DeleteProductos(repository),
         exportarExcel = ExportarExcel(repository),
-        importarExcelFile = ImportarExcelFile(repository)
+        importarExcelFile = ImportarExcelFile(repository),
+        syncProductos= SyncProductos(repository)
     )
 
     @Singleton

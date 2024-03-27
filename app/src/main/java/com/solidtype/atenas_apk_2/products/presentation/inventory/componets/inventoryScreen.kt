@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 
 fun showFilePicker(context: Context) {
 
@@ -47,12 +48,11 @@ fun showFilePicker(context: Context) {
 }
 
 @Composable
-fun InventoryScreen(/*context: Context, nav: NavController, viewModel: InventoryViewModel = hiltViewModel()*/) {
+fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: InventarioViewModel = hiltViewModel()) {
     //val logeado:Boolean by LoginViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
     val context = LocalContext.current
-    //val busqueda: String by viewModel.busqueda.observeAsState(initial = "")
-
+    val busqueda=   ""
     val productos = listOf(
         "Manzana" to "$2.79",
         "Pera" to "$1.99",
@@ -95,8 +95,8 @@ fun InventoryScreen(/*context: Context, nav: NavController, viewModel: Inventory
                                 )
                             ) //Título
                             Buscador(
-                                busqueda = "", // = busqueda,
-                                onBusquedaChange = { /*viewModel.onBusquedaChange(it)*/ }
+                                busqueda = busqueda,
+                                onBusquedaChange = {  }
                             )
                         }
                         //Area de productos

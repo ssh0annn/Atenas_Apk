@@ -5,7 +5,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.flow.Flow
 
 interface InventarioRepo {
-    suspend fun getProducts(): Flow<List<ProductEntity>>
+    fun getProducts(): Flow<List<ProductEntity>>
     fun getProductByCodigo(codigo:Int): Flow<List<ProductEntity>>
     fun searchProductsLike(datos:String):Flow<List<ProductEntity>>
     suspend fun createProducts(prodcuto: ProductEntity):Boolean
@@ -13,5 +13,6 @@ interface InventarioRepo {
     suspend fun updateProduct(producto:ProductEntity): Boolean
     suspend fun exportarExcel():String?
     suspend fun importarExcel(path:String):Boolean
+    suspend fun syncronizacionProductos()
 
 }

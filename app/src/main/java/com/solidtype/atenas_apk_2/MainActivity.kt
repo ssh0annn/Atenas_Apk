@@ -21,20 +21,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            InventoryScreen()
+            //FireManeger()
         }
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val viewModel= YourViewModel ()
+
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 val filePath = getFilePathFromUri(uri)
-                if (filePath != null) {
+                if (filePath != "file") {
                     println("Ruta del archivo: $filePath")
-                    viewModel.fileSelected(filePath)
+                    //viewModel.fileSelected(filePath)
                 } else {
                     println("No se pudo obtener la ruta del archivo")
                 }
