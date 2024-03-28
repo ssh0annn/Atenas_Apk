@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color.parseColor
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,17 +12,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Avatar
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boton
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.BotonIconCircular
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
 
 fun showFilePicker(context: Context) {
 
@@ -42,8 +54,7 @@ fun showFilePicker(context: Context) {
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "*/*"
         putExtra(
-            Intent.EXTRA_MIME_TYPES,
-            arrayOf(
+            Intent.EXTRA_MIME_TYPES, arrayOf(
                 "application/vnd.ms-excel",
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
@@ -55,30 +66,65 @@ fun showFilePicker(context: Context) {
 
 }
 
+@OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: InventarioViewModel = hiltViewModel()) {
     //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val busqueda = remember { mutableStateOf("") }
+    var busqueda by remember { mutableStateOf("") }
 
-//    val productos = listOf(
-//        "Manzana" to "$2.79",
-//        "Pera" to "$1.99",
-//        "Naranja" to "$1.49",
-//        "Plátano" to "$0.99",
-//        "Papaya" to "$3.99",
-//        "Sandía" to "$4.99",
-//        "Melón" to "$2.99",
-//        "Piña" to "$1.99",
-//        "Uva" to "$3.49",
-//        "Fresa" to "$2.99",
-//        "Mango" to "$1.99",
-//        "Kiwi" to "$0.99"
-//    )
+    if (busqueda.isNotBlank()) {
+        viewModel.buscarProductos(busqueda)
+    } else {
+        viewModel.mostrarProductos()
+    }
+    if(uiState.pathExcel!!.isNotBlank()){
+        Toast.makeText(context, "Exportado: ${uiState.pathExcel}", Toast.LENGTH_LONG).show()
+    }
+    var codigo by rememberSaveable {
+        mutableStateOf("")
+    }
+    var categoria by rememberSaveable {
+
+        mutableStateOf("")
+    }
+    var nombre by rememberSaveable {
+        mutableStateOf("")
+    }
+    var descripcion by rememberSaveable {
+        mutableStateOf("")
+    }
+    var costo by rememberSaveable {
+        mutableStateOf("")
+    }
+    var precio by rememberSaveable {
+        mutableStateOf("")
+    }
+    var modelo by rememberSaveable {
+        mutableStateOf("")
+    }
+    var marca by rememberSaveable {
+        mutableStateOf("")
+    }
+    var cantidad by rememberSaveable {
+        mutableStateOf("")
+    }
+
+
 
     val productos = uiState.products
+
+    if (uiState.isLoading) {
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    }else{
 
 
     if (false) {
@@ -111,8 +157,8 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                 )
                             ) //Título
                             Buscador(
-                                busqueda = busqueda.value,
-                            ){ busqueda.value = it }
+                                busqueda = busqueda,
+                            ) { busqueda = it }
                         }
                         //Area de productos
                         Box(
@@ -136,12 +182,23 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                         .forEach { row -> //chunked(4) = 4 productos por fila
                                             Row {//productos es una lista de objetos
                                                 row.forEach { product ->
-                                                    if (product.Name_Product != null && product.Price_Product != null) {
-                                                        CardProduct(
-                                                            product.Name_Product,
-                                                            product.Price_Product.toString()
-                                                        )
+                                                    CardProduct(
+                                                        product
+                                                    ) { clicked ->
+                                                        codigo = "${clicked.Code_Product}"
+                                                        nombre = clicked.Name_Product
+                                                        categoria = clicked.Category_Product
+                                                        descripcion = clicked.Description_Product
+                                                        costo = clicked.Price_Product.toString()
+                                                        precio =
+                                                            clicked.Price_Vending_Product.toString()
+                                                        modelo = clicked.Model_Product
+                                                        marca = clicked.Tracemark_Product
+                                                        cantidad = clicked.Count_Product.toString()
+
+
                                                     }
+
                                                 }
                                             }
                                         }
@@ -181,25 +238,30 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                         Column {// Categoría y Nombre
                                             // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
                                             InputDetalle(
-                                                "Categoria",
-                                                true
-                                            ) { /*viewModel.onCategoriaChange(it)*/ }
+                                                "Categoria", true, categoria
+                                            ) { categoria = it }
                                             InputDetalle(
-                                                "Nombre",
-                                                true
-                                            ) { /*viewModel.onNombreChange(it)*/ }
+                                                "Nombre", true, nombre
+                                            ) { nombre = it }
                                         }
                                     }
-                                    Column {// Codigo, Descripción, Precio y Cantidad
-                                        InputDetalle("Código") { /*viewModel.onCodigoChange(it)*/ }
-                                        InputDetalle("Descripción") { /*viewModel.onDescripcionChange(it)*/ }
-                                        InputDetalle("Precio de Importe") { /*viewModel.onPrecioChange(it)*/ }
-                                        InputDetalle("Precio de Venta") { /*viewModel.onPrecioVentaChange(it)*/ }
-                                        InputDetalle("Modelo") { /*viewModel.onModeloChange(it)*/ }
-                                        InputDetalle("Marca") { /*viewModel.onMarcaChange(it)*/ }
-                                        InputDetalle("Cantidad") { /*viewModel.onCantidadChange(it)*/ }
-                                        InputDetalle("ITBIS") { /*viewModel.onItebisChange(it)*/ }
-                                        InputDetalle("Fecha de Inicio") { /*viewModel.onFechaInicioChange(it)*/ }
+                                    Column(
+                                        modifier = Modifier.padding(
+                                            10.dp, vertical = 5.dp
+                                        )
+                                    ) {// Codigo, Descripción, Precio y Cantidad
+                                        InputDetalle("Código", false, codigo) { codigo = it }
+                                        InputDetalle(
+                                            "Descripción", false, descripcion
+                                        ) { descripcion = it }
+                                        InputDetalle("Costo", false, costo) { costo = it }
+                                        InputDetalle("Precio de Venta", false, precio) {
+                                            precio = it
+                                        }
+                                        InputDetalle("Modelo", false, modelo) { modelo = it }
+                                        InputDetalle("Marca", false, marca) { marca = it }
+                                        InputDetalle("Cantidad", false, cantidad) { cantidad = it }
+
                                     }
                                 }
                             }
@@ -207,18 +269,60 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.Center
                             ) {//Botones de cerrar y guardar
-                                BotonIconCircular(
-                                    true,
-                                    onClick = {
-                                        /*viewModel.onCerrarDetalles()*/
-                                    })
-                                Spacer(modifier = Modifier.width(60.dp))
-                                BotonIconCircular(
-                                    false,
-                                    onClick = {
-                                        /*viewModel.onGuardarDetalles()*/
+                                BotonIconCircular(true, onClick = {//Boton X para borrar productos
+                                    try {
+
+                                    viewModel.eliminarProductos(
+                                        ProductEntity(
+                                            codigo.toInt(),
+                                            nombre,
+                                            descripcion,
+                                            categoria,
+                                            costo.toDouble(),
+                                            modelo,
+                                            precio.toDouble(),
+                                            marca,
+                                            cantidad.toInt()
+
+                                        ))
+                                        codigo =""
+                                        categoria=""
+                                        nombre=""
+                                        descripcion=""
+                                        costo=""
+                                        precio=""
+                                        modelo=""
+                                        marca=""
+                                        cantidad=""
+
+                                    }catch(e:Exception){
+                                        Toast.makeText(context, "No se pudo eliminar", Toast.LENGTH_LONG).show()
                                     }
-                                )
+
+                                })
+                                Spacer(modifier = Modifier.width(60.dp))
+                                BotonIconCircular(false, onClick = {
+                                    try {
+
+                                        viewModel.crearProductos(
+
+                                            Code_Product = codigo,
+                                            Name_Product = nombre,
+                                            Description_Product = descripcion,
+                                            Category_Product = categoria,
+                                            Price_Product = costo,
+                                            Model_Product = modelo,
+                                            Price_Vending_Product = precio,
+                                            Tracemark_Product = marca,
+                                            Count_Product = cantidad
+
+
+                                        )
+                                    } catch (e: Exception) {
+                                        Toast.makeText(context, "error: $e", Toast.LENGTH_LONG)
+                                            .show()
+                                    }/*viewModel.onGuardarDetalles()*/
+                                })
                             }
                         }
                     }
@@ -236,7 +340,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                     Row {
                         //Botones para Importar, Exportar y Ver
                         Boton("Importar", onClick = { showFilePicker(context) })
-                        Boton("Exportar", onClick = { /*viewModel.onExportar()*/ })
+                        Boton("Exportar", onClick = {
+                            Toast.makeText(context, "QUe bobo", Toast.LENGTH_SHORT).show()
+                            viewModel.exportarExcel()
+
+                        })
                         Boton("Ver", onClick = { /*viewModel.onVer()*/ })
                     }
                 }
@@ -244,10 +352,12 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
         }
     }
 }
-
+}
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
+
+
 @Composable
 fun InventoryScreenPreview() {
     InventoryScreen()
 }
+

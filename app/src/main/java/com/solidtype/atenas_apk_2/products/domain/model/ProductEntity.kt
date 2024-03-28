@@ -6,15 +6,15 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Product_Table")
 data class ProductEntity(
-    @PrimaryKey val Code_Product : Int? = null,
-    @ColumnInfo(name = "Name_Product") val Name_Product : String?=null,
-    @ColumnInfo(name = "Description_Product") val Description_Product : String?=null,
-    @ColumnInfo(name = "Category_Product") val Category_Product : String?=null,
-    @ColumnInfo(name = "Price_Product") val Price_Product : Double?=null,
-    @ColumnInfo(name = "Model_Product") val Model_Product : String?=null,
-    @ColumnInfo(name = "Price_Vending_Product") val Price_Vending_Product : Double?=null,
-    @ColumnInfo(name = "Tracemark_Product") val Tracemark_Product : String?=null,
-    @ColumnInfo(name = "Count_Product") val Count_Product : Int?=null,
+    @PrimaryKey val Code_Product : Int = 0,
+    @ColumnInfo(name = "Name_Product") val Name_Product : String,
+    @ColumnInfo(name = "Description_Product") val Description_Product : String,
+    @ColumnInfo(name = "Category_Product") val Category_Product : String,
+    @ColumnInfo(name = "Price_Product") val Price_Product : Double,
+    @ColumnInfo(name = "Model_Product") val Model_Product : String,
+    @ColumnInfo(name = "Price_Vending_Product") val Price_Vending_Product : Double,
+    @ColumnInfo(name = "Tracemark_Product") val Tracemark_Product : String,
+    @ColumnInfo(name = "Count_Product") val Count_Product : Int,
 ){
-   // constructor() : this(null, "", "", "", 0.00, "",0.00,"", 0)
+   //constructor() : this(0, "", "", "", 0.00, "",0.00,"", 0)
 }

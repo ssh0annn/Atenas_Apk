@@ -26,11 +26,18 @@ interface ProductDao{
     @Query("select * from Product_Table WHERE Code_Product = :code ")
     fun getAllProductById(code: Int): Flow<List<ProductEntity>>
 
-    @Query("select * from Product_Table where Code_Product like :code or Category_Product like :code " +
-            "or Count_Product like :code or Description_Product like :code " +
-            "or Model_Product like :code or Name_Product like :code " +
-            "or Price_Product like :code or Price_Vending_Product like :code " +
-            "or Tracemark_Product like :code ")
+
+
+    @Query("SELECT * FROM Product_Table WHERE " +
+            "Code_Product LIKE :code " +
+            "OR Category_Product LIKE :code " +
+            "OR Count_Product LIKE :code " +
+            "OR Description_Product LIKE :code " +
+            "OR Model_Product LIKE :code " +
+            "OR Name_Product LIKE :code || '%' " +  // Nombre que comienza con las letras especificadas
+            "OR Price_Product LIKE :code " +
+            "OR Price_Vending_Product LIKE :code " +
+            "OR Tracemark_Product LIKE :code ")
     fun getProductsLike(code: String): Flow<List<ProductEntity>>
 
     @Update(onConflict = OnConflictStrategy.ABORT)
