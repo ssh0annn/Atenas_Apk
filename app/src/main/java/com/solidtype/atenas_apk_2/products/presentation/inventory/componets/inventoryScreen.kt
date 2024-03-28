@@ -137,6 +137,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                         .forEach { row -> //chunked(4) = 4 productos por fila
                                             Row {//productos es una lista de objetos
                                                 row.forEach { product ->
+                                                    if (busqueda.value.isEmpty() || product.Name_Product?.contains(busqueda.value, ignoreCase = true) == true)
                                                     if (product.Name_Product != null && product.Price_Product != null) {
                                                         CardProduct(
                                                             product.Name_Product,
