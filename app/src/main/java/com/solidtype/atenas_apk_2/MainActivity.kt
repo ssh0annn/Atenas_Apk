@@ -6,15 +6,10 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Navigation
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InventoryScreen
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InventoryScreenPreview
-import com.solidtype.atenas_apk_2.util.FireManeger
-import com.solidtype.atenas_apk_2.util.YourViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreenPreview
+
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -22,7 +17,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             InventoryScreenPreview()
+
         }
     }
 

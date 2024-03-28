@@ -6,6 +6,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,56 +22,50 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
 
 
             init {
+                _uiState.update { it.copy(isLoading = true) }
                 mostrarProductos()
+                syncProductos()
+                exportarExcel()
 
                 }
 
             fun crearProductos(
-                Code_Product : String?,
-                Name_Product : String?,
-                Description_Product : String?,
-                Category_Product : String?,
-                Price_Product : String?,
-                Model_Product : String?,
-                Price_Vending_Product : String?,
-                Tracemark_Product : String?,
-                Count_Product : String?
+                Code_Product : String,
+                Name_Product : String,
+                Description_Product : String,
+                Category_Product : String,
+                Price_Product : String,
+                Model_Product : String,
+                Price_Vending_Product : String,
+                Tracemark_Product : String,
+                Count_Product : String
             ){
                 val entidad =   ProductEntity(
-                    Code_Product!!.toInt(),
+                    Code_Product.toInt(),
                     Name_Product,
                     Description_Product,
                     Category_Product,
-                    Price_Product!!.toDouble(),
+                    Price_Product.toDouble(),
                     Model_Product,
-                    Price_Vending_Product!!.toDouble(),
+                    Price_Vending_Product.toDouble(),
                     Tracemark_Product,
-                    Count_Product!!.toInt()
+                    Count_Product.toInt()
 
                 )
                 viewModelScope.launch {
                     casosInventario.createProductos(entidad)
-
                 }
+                syncProductos()
             }
 
-        private fun mostrarProductos(){
+         fun mostrarProductos(){
                 val productos =casosInventario.getProductos()
+                 syncProductos()
                 viewModelScope.launch {
-                    syncProductos()
+
                     _uiState.update { it.copy(isLoading = true) }
                     productos.collect{ product ->
-                        for(i in product){
-                            if(i.Name_Product != null){
-
-                                println(i.Name_Product)
-                            }else{
-                                println("No hay productos palomo! ")
-                            }
-
-
-                        }
-                        _uiState.update {
+                       _uiState.update {
                             it.copy(products = product)
                         }
                     }
@@ -78,6 +73,9 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
                 }
 
                 }
+            fun selecionarUnProducto(){
+                //TODO
+            }
 
             fun importarExcell(path:String){
                 viewModelScope.launch {
@@ -87,14 +85,32 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
             }
 
             fun exportarExcel(){
+                println("Llamaron la funcion que exporta en viewmodel")
                 viewModelScope.launch {
-                   val path = casosInventario.exportarExcel()
+                    println("inicia viewScope en la funcion que exporta en viewmodel")
+
+                        _uiState.update { it.copy(isLoading = true)}
+
+                        println("withContext la funcion que exporta en viewmodel")
+                    _uiState.update { it.copy(isLoading = true) }
+                   val path = async { casosInventario.exportarExcel()}.await()
                     _uiState.update { it.copy(pathExcel = path) }
+                    _uiState.update { it.copy(isLoading = false) }
+                        println("Salgo del withcontext la funcion que exporta en viewmodel")
+
+
+                    println(" fuera del withcontext, en el viewscope")
                 }
+                println("FIn")
             }
             fun eliminarProductos(producto:ProductEntity){
                 viewModelScope.launch {
-                    casosInventario.deleteProductos(producto)
+                    withContext(Dispatchers.IO){
+                        _uiState.update { it.copy(isLoading = true) }
+                        casosInventario.deleteProductos(producto)
+                        _uiState.update { it.copy(isLoading = false) }
+                    }
+
                 }
             }
             fun ActualizarProductos(productos:ProductEntity){

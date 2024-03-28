@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
 @Composable
-fun CardProduct(productName: String, productPrice: String) {
+fun CardProduct(productEntity: ProductEntity, onProductClick:(ProductEntity) -> Unit) {
     Column(
         modifier = Modifier
+            .clickable { onProductClick(productEntity) }
             .padding(10.dp)
             .width(100.dp)
             .height(135.dp)
@@ -30,7 +33,9 @@ fun CardProduct(productName: String, productPrice: String) {
     ) {
         Carrito(false)
         Spacer(modifier = Modifier.height(3.dp))
-        Text(productName)
-        Text(productPrice)
+        Text("Cod: ${productEntity.Code_Product}")
+        Text("Nom: ${productEntity.Name_Product}")
+        Text("Stock: ${productEntity.Count_Product}")
+
     }
 }

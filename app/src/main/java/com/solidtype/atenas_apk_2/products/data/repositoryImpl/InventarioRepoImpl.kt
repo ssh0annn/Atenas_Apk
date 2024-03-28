@@ -45,9 +45,9 @@ class InventarioRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun exportarExcel(): String? {
+    override suspend fun exportarExcel(): String {
         val productos =getProducts()
-        var columnas= listOf(
+        val columnas= listOf(
             "Code_Product",
             "Name_Product",
             "Description_Product",
@@ -58,12 +58,12 @@ class InventarioRepoImpl @Inject constructor(
             "Tracemark_Product",
             "Count_Product"
             )
-         var datos:MutableList<List<String?>> = mutableListOf()
+         val datos:MutableList<List<String>> = mutableListOf()
 
         try {
             productos.collect{value ->
                 for (i in value){
-                    var rowdata = mutableListOf<String?>()
+                    val rowdata = mutableListOf<String>()
                     rowdata.add(i.Code_Product.toString())
                     rowdata.add(i.Name_Product)
                     rowdata.add(i.Description_Product)
@@ -82,8 +82,8 @@ class InventarioRepoImpl @Inject constructor(
                 println("Error en el repositorio recorriendo el flow")
         }
 
-
-        return excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
+        val result=  excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
+        return result
     }
 
     override suspend fun importarExcel(path:String): Boolean {
