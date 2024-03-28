@@ -7,6 +7,7 @@ data class ProductosViewStates(
 
     val isLoading: Boolean = false,
     val products: List<ProductEntity> = listOf(),
+    val getOneProduct:ProductEntity=ProductEntity(),
     val pathExcel: String? = "",
     val userMessages: List<Message> = listOf()
 

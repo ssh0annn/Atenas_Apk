@@ -26,7 +26,7 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
                 }
 
             fun crearProductos(
-                Code_Product : String?,
+                Code_Product : String?, 
                 Name_Product : String?,
                 Description_Product : String?,
                 Category_Product : String?,
@@ -78,6 +78,9 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
                 }
 
                 }
+            fun selecionarUnProducto(){
+                //TODO
+            }
 
             fun importarExcell(path:String){
                 viewModelScope.launch {
