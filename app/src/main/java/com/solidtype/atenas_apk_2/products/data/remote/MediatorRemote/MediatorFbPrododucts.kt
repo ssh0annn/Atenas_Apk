@@ -20,7 +20,7 @@ class MediatorFbPrododucts @Inject constructor(
     private val uidString:String  = authUid.currentUser!!.uid
     */
 
-    suspend operator fun invoke() {
+    suspend  fun sync() {
         try {
             // Observar cambios db local
             allProducts.collect { localProducts ->

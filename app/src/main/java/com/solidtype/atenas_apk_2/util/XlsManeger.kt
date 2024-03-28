@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class XlsManeger @Inject constructor() {
 
-   suspend fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String?>>):String? =withContext(Dispatchers.IO){
+    fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String>>):String {
         val wb=XSSFWorkbook()
 
        try {
@@ -47,13 +47,13 @@ class XlsManeger @Inject constructor() {
 
             wb.write(fileOuput)
             println("Todo parece salir bien")
-           return@withContext path
+           return path
         }catch (e:Exception){
             println("Error en XlsManeger : $e")
         }finally {
             wb.close()
         }
-       return@withContext null
+       return "No se creo nada:::::::"
     }
 
     suspend fun importarXlsx(path:String):List<List<String>> = withContext(Dispatchers.IO){

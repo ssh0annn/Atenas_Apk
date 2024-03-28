@@ -3,17 +3,14 @@ package com.solidtype.atenas_apk_2.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun FireManeger() {
+    //viewModel: InventarioViewModel = hiltViewModel()
     val context = LocalContext.current
 
     Button(onClick = {
