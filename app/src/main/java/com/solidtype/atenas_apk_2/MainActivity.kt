@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InventoryScreenPreview
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreenPreview
 
 import dagger.hilt.android.AndroidEntryPoint
 

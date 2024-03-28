@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.app.Activity
 import android.content.Context
@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
 
 fun showFilePicker(context: Context) {
 
