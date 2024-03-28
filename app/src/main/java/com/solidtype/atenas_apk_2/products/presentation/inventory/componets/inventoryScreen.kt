@@ -186,6 +186,8 @@ fun InventoryScreen(/*context: Context, nav: NavController, viewModel: Inventari
                                         InputDetalle("Modelo") { /*viewModel.onModeloChange(it)*/ }
                                         InputDetalle("Marca") { /*viewModel.onMarcaChange(it)*/ }
                                         InputDetalle("Cantidad") { /*viewModel.onCantidadChange(it)*/ }
+                                        InputDetalle("ITBIS") { /*viewModel.onItebisChange(it)*/ }
+                                        InputDetalle("Fecha de Inicio") { /*viewModel.onFechaInicioChange(it)*/ }
                                     }
                                 }
                             }

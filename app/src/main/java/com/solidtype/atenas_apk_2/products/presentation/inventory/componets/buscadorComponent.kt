@@ -33,7 +33,7 @@ fun Buscador(busqueda: String = "", onBusquedaChange: (String) -> Unit) {
             .padding(start = 25.dp, end = 25.dp, top = 4.dp, bottom = 4.dp)
             .background(Color(parseColor("#FFFFFF"))),
         shape = RoundedCornerShape(50),
-        label = {
+        placeholder = {
             Text(
                 text = "Buscar...",
                 style = TextStyle(
