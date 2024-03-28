@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 
 fun showFilePicker(context: Context) {
@@ -54,25 +57,30 @@ fun showFilePicker(context: Context) {
 }
 
 @Composable
-fun InventoryScreen(/*context: Context, nav: NavController, viewModel: InventarioViewModel = hiltViewModel() */) {
-    //val logeado:Boolean by LoginViewModel.logeado.observeAsState(initial = true)
+fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: InventarioViewModel = hiltViewModel()) {
+    //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
     val context = LocalContext.current
-    val busqueda = ""
-    val productos = listOf(
-        "Manzana" to "$2.79",
-        "Pera" to "$1.99",
-        "Naranja" to "$1.49",
-        "Plátano" to "$0.99",
-        "Papaya" to "$3.99",
-        "Sandía" to "$4.99",
-        "Melón" to "$2.99",
-        "Piña" to "$1.99",
-        "Uva" to "$3.49",
-        "Fresa" to "$2.99",
-        "Mango" to "$1.99",
-        "Kiwi" to "$0.99"
-    )
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val busqueda = remember { mutableStateOf("") }
+
+//    val productos = listOf(
+//        "Manzana" to "$2.79",
+//        "Pera" to "$1.99",
+//        "Naranja" to "$1.49",
+//        "Plátano" to "$0.99",
+//        "Papaya" to "$3.99",
+//        "Sandía" to "$4.99",
+//        "Melón" to "$2.99",
+//        "Piña" to "$1.99",
+//        "Uva" to "$3.49",
+//        "Fresa" to "$2.99",
+//        "Mango" to "$1.99",
+//        "Kiwi" to "$0.99"
+//    )
+
+    val productos = uiState.products
+
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -104,9 +112,8 @@ fun InventoryScreen(/*context: Context, nav: NavController, viewModel: Inventari
                                 )
                             ) //Título
                             Buscador(
-                                busqueda = busqueda,
-                                onBusquedaChange = { }
-                            )
+                                busqueda = busqueda.value,
+                            ){ busqueda.value = it }
                         }
                         //Area de productos
                         Box(
@@ -126,13 +133,19 @@ fun InventoryScreen(/*context: Context, nav: NavController, viewModel: Inventari
                                     .background(Color(parseColor("#737A8C")))
                             ) { //buscar componente para agregar filas de cards
                                 item {
-                                    productos.chunked(4).forEach { row ->
-                                        Row {
-                                            row.forEach { (name, price) ->
-                                                CardProduct(name, price)
+                                    productos.chunked(4)
+                                        .forEach { row -> //chunked(4) = 4 productos por fila
+                                            Row {//productos es una lista de objetos
+                                                row.forEach { product ->
+                                                    if (product.Name_Product != null && product.Price_Product != null) {
+                                                        CardProduct(
+                                                            product.Name_Product,
+                                                            product.Price_Product.toString()
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
-                                    }
                                 }
                             }
                         }

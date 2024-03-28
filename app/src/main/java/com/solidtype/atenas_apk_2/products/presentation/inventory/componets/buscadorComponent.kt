@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Buscador(busqueda: String = "", onBusquedaChange: (String) -> Unit) {
+fun Buscador(busqueda: String, onBusquedaChange: (String) -> Unit) {
     TextField(
         value = busqueda,
         onValueChange = onBusquedaChange,
