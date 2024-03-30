@@ -92,18 +92,19 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
                 viewModelScope.launch {
                     println("inicia viewScope en la funcion que exporta en viewmodel")
 
-                        uiState.update { it.copy(isLoading = true)}
 
                         println("withContext la funcion que exporta en viewmodel")
-                    uiState.update { it.copy(isLoading = true) }
-                   val path = async { casosInventario.exportarExcel()}.await()
-                    uiState.update { it.copy(pathExcel = path) }
-                    uiState.update { it.copy(isLoading = false) }
-                        println("Salgo del withcontext la funcion que exporta en viewmodel")
+                       // uiState.update { it.copy(isLoading = true) }
+                        val path = casosInventario.exportarExcel(uiState.value.products)
 
+                        println("Se guardo el archivo en: ${path}")
+
+                      //  uiState.update { it.copy(isLoading = false) }
+                        println("Salgo del withcontext la funcion que exporta en viewmodel")
+                    }
 
                     println(" fuera del withcontext, en el viewscope")
-                }
+
                 println("FIn")
             }
             fun eliminarProductos(producto:ProductEntity){

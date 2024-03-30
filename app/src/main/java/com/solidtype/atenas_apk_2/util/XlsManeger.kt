@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.poi.ss.usermodel.CellBase
@@ -18,12 +19,13 @@ import javax.inject.Inject
 
 class XlsManeger @Inject constructor(private val context : Context) {
 
-    fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String>>):String {
+    fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String>>):Uri {
         val wb=XSSFWorkbook()
+        println("Entramos en CrearXLS del XLS Maneger")
 
        try {
              val wbsheet= wb.createSheet()
-             val filaParaNombre=   wbsheet.createRow(0)// lo mismo de abajo donde dice ojo
+             val filaParaNombre =   wbsheet.createRow(0)// lo mismo de abajo donde dice ojo
                for((column, name) in nombreColumnas.withIndex()){//nombro las columnas principales
                    filaParaNombre.createCell(column).setCellValue(name)
 
@@ -44,19 +46,19 @@ class XlsManeger @Inject constructor(private val context : Context) {
                 archivo.mkdir()
                 println("Se debe crear el archivo o la direccion")
             }
+            val uri  = path
 
+           val fileou = FileOutputStream(uri)
 
-            val fileOuput= FileOutputStream(path)
-
-            wb.write(fileOuput)
+            wb.write(fileou)
             println("Todo parece salir bien")
-           return path
+           return uri.toUri()
         }catch (e:Exception){
             println("Error en XlsManeger : $e")
         }finally {
             wb.close()
         }
-       return "No se creo nada:::::::"
+       return Uri.EMPTY
     }
 
     suspend fun importarXlsx(path:Uri) = withContext(Dispatchers.IO){

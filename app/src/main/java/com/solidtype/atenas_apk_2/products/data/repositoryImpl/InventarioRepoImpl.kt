@@ -48,8 +48,8 @@ class InventarioRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun exportarExcel(): String {
-        val productos = daoProductos.getProducts()
+    override suspend fun exportarExcel(productos: List<ProductEntity>):Uri = withContext(Dispatchers.Default) {
+
         val columnas= listOf(
             "Code_Product",
             "Name_Product",
@@ -64,8 +64,8 @@ class InventarioRepoImpl @Inject constructor(
          val datos:MutableList<List<String>> = mutableListOf()
 
         try {
-            productos.collect{value ->
-                for (i in value){
+
+                for (i in productos){
                     val rowdata = mutableListOf<String>()
                     rowdata.add(i.Code_Product.toString())
                     rowdata.add(i.Name_Product)
@@ -80,13 +80,15 @@ class InventarioRepoImpl @Inject constructor(
                     datos.add(rowdata)
                 }
 
-            }
+
         }catch (e: Exception){
                 println("Error en el repositorio recorriendo el flow")
         }
 
-        val result=  excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
-        return result
+        val result =  excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
+
+
+        return@withContext result
     }
 
     override suspend fun importarExcel(path: Uri): Boolean {
@@ -113,13 +115,10 @@ class InventarioRepoImpl @Inject constructor(
                 }
                 daoProductos.insertAllProducts(listaProductos)
                 println("Insertando datos !!...$datos")
-
             }catch (e:Exception){
                 println("Error importando excel, ver formato: $e")
             }
         }
-
-
 
         return false
     }
