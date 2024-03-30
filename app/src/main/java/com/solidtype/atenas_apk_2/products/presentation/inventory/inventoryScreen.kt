@@ -61,7 +61,7 @@ fun showFilePicker(context: Context) {
         )
     }
 
-    (context as? Activity)?.startActivityForResult(intent, 1)
+    (context as? Activity)?.startActivityForResult(intent, 2)
 
 
 }
@@ -73,6 +73,8 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
     //val logeado = true;
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
     var busqueda by remember { mutableStateOf("") }
 
     if (busqueda.isNotBlank()) {
@@ -113,10 +115,15 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
     }
 
 
-
     val productos = uiState.products
 
-    if (uiState.isLoading) {
+
+
+
+    if (false) {
+        //nav.navigate(Screens.Login.route)
+    }
+    else if (uiState.isLoading) {
         Box(
             Modifier.fillMaxSize()
         ) {
@@ -124,12 +131,8 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-    }else{
-
-
-    if (false) {
-        //nav.navigate(Screens.Login.route)
-    } else {
+    }
+    else {
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
@@ -352,7 +355,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
         }
     }
 }
-}
+
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
 
 

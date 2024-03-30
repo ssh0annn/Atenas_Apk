@@ -1,6 +1,9 @@
 package com.solidtype.atenas_apk_2.util
 
+import android.content.Context
+import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.poi.ss.usermodel.CellBase
@@ -13,7 +16,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-class XlsManeger @Inject constructor() {
+class XlsManeger @Inject constructor(private val context : Context) {
 
     fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String>>):String {
         val wb=XSSFWorkbook()
@@ -56,11 +59,13 @@ class XlsManeger @Inject constructor() {
        return "No se creo nada:::::::"
     }
 
-    suspend fun importarXlsx(path:String):List<List<String>> = withContext(Dispatchers.IO){
-        val fireinput=FileInputStream(path)
-        val wrb=XSSFWorkbook(fireinput)
+    suspend fun importarXlsx(path:Uri) = withContext(Dispatchers.IO){
+       // val fireinput=FileInputStream(path.toFile())
+        val archivo = context.contentResolver.openInputStream(path)
+
+        val wrb=XSSFWorkbook(archivo)
         val wbs= wrb.getSheetAt(0)
-        var data:MutableList<List<String>> = mutableListOf()
+        val data:MutableList<List<String>> = mutableListOf()
        try {
 
 
@@ -69,15 +74,26 @@ class XlsManeger @Inject constructor() {
             for( cell in row){
                 when(cell.cellType){
                     CellType.STRING -> rowdata.add(cell.stringCellValue)
-                    CellType.NUMERIC -> rowdata.add(cell.numericCellValue.toString())
+                    CellType.NUMERIC ->{
+                        val numericValue = cell.numericCellValue
+                        if (numericValue.isInt()) {
+                            rowdata.add(numericValue.toInt().toString())
+                        } else {
+                            rowdata.add(numericValue.toString())
+                        }
+                    }
                     CellType.BOOLEAN -> rowdata.add(cell.booleanCellValue.toString())
                     CellType.BLANK -> rowdata.add("")
                     else -> rowdata.add("")
                 }
             }
             data.add(rowdata)
-        }
 
+        }
+           for(i in data){
+              println(i)
+               println()
+           }
         return@withContext data
        }catch (e:Exception){
            println("Error en lectura de excell : $e")
@@ -88,7 +104,9 @@ class XlsManeger @Inject constructor() {
         return@withContext data
     }
 
-
+private fun Double.isInt(): Boolean {
+    return this == this.toInt().toDouble()
+}
 
 
 
