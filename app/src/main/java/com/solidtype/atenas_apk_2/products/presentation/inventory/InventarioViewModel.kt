@@ -1,6 +1,8 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
+import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,7 +23,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 @HiltViewModel
-class InventarioViewModel @Inject constructor(private val casosInventario: CasosInventario): ViewModel() {
+class InventarioViewModel @Inject constructor(
+    private val casosInventario: CasosInventario,
+    private val context: Context): ViewModel() {
+
     var fileSelectionListener2: FileSelectionListener2? = null
 
      var uiState = MutableStateFlow(ProductosViewStates())
@@ -91,17 +96,21 @@ class InventarioViewModel @Inject constructor(private val casosInventario: Casos
                 println("Llamaron la funcion que exporta en viewmodel")
                 viewModelScope.launch {
                     println("inicia viewScope en la funcion que exporta en viewmodel")
-
-
+                    withContext(Dispatchers.IO) {
                         println("withContext la funcion que exporta en viewmodel")
-                       // uiState.update { it.copy(isLoading = true) }
+                        uiState.update { it.copy(isLoading = true) }
                         val path = casosInventario.exportarExcel(uiState.value.products)
 
                         println("Se guardo el archivo en: ${path}")
 
-                      //  uiState.update { it.copy(isLoading = false) }
+                         uiState.update { it.copy(isLoading = false) }
                         println("Salgo del withcontext la funcion que exporta en viewmodel")
+                        withContext(Dispatchers.Main){
+
+                        Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
+                        }
                     }
+                }
 
                     println(" fuera del withcontext, en el viewscope")
 
