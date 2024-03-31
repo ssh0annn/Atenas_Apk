@@ -22,14 +22,10 @@ fun FireManeger() {
 }
 
 fun showFilePicker(context: Context) {
-
     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "*/*"
         putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
     }
-
-    (context as? Activity)?.startActivityForResult(intent, 1)
-
-
+    (context as? Activity)?.startActivityForResult(intent, 2)
 }

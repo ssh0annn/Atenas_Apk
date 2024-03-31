@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +35,7 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -42,7 +44,12 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
+    fun contextAplicacion(@ApplicationContext context: Context) =context
+
+    @Singleton
+    @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore
+
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()

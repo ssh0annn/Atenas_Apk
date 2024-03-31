@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,7 +63,7 @@ fun showFilePicker(context: Context) {
         )
     }
 
-    (context as? Activity)?.startActivityForResult(intent, 1)
+    (context as? Activity)?.startActivityForResult(intent, 2)
 
 
 }
@@ -73,8 +75,10 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
     //val logeado = true;
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
     var busqueda by remember { mutableStateOf("") }
-    var mostrar: Boolean = remember { mutableStateOf(false) }.value
+    var mostrar by rememberSaveable { mutableStateOf(false) }
 
     if (busqueda.isNotBlank()) {
         viewModel.buscarProductos(busqueda)
@@ -117,7 +121,12 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
 
     val productos = uiState.products
 
-    if (uiState.isLoading) {
+
+
+
+    if (false) {
+        //nav.navigate(Screens.Login.route)
+    } else if (uiState.isLoading) {
         Box(
             Modifier.fillMaxSize()
         ) {
@@ -126,27 +135,48 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
             )
         }
     } else {
-
-
-        if (false) {
-            //nav.navigate(Screens.Login.route)
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                item {
-                    Row {//Título, Buscador, Area de Productos y Detalles
-                        Column(
-                            //modifier = Modifier.padding(start = 30.dp)
-                        ) {//Título, Buscador y Area de Productos
-                            Row(
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                Row {//Título, Buscador, Area de Productos y Detalles
+                    Column{//Título, Buscador y Area de Productos
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 20.dp, bottom = 20.dp)
+                                .width(500.dp)
+                        ) {//Título y Buscador
+                            Text(
+                                text = "Inventario",
+                                modifier = Modifier.padding(top = 15.dp, end = 0.dp),
+                                style = TextStyle(
+                                    fontSize = 30.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(parseColor("#343341"))
+                                )
+                            ) //Título
+                            Buscador(
+                                busqueda = busqueda,
+                            ) { busqueda = it }
+                        }
+                        //Area de productos
+                        Box(
+                            modifier = Modifier
+                                //.padding(start = 20.dp)
+                                .width(500.dp)
+                                .height(350.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(Color(parseColor("#343341")))
+                        ) {
+                            Column(
                                 modifier = Modifier
                                     .padding(top = 20.dp, bottom = 20.dp)
                                     .width(500.dp)
+                                    .verticalScroll(rememberScrollState())
                             ) {//Título y Buscador
                                 Text(
                                     text = "Inventario",
@@ -356,7 +386,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
 
                             }
                             Boton("Ver") {
-                                mostrar = true //En realidad va un viewModel.verEjemplarExcel() tipo booleano (pienso)
+                                mostrar = true
                             }
                         }
                     }
@@ -368,28 +398,3 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
         }
     }
 }
-
-@Composable
-fun InventoryScreenPreview() {
-    InventoryScreen()
-}
-
-//@Composable
-//fun DefaultPreview() {
-//    var mostrar: Boolean = remember { mutableStateOf(false) }.value
-//    Column {
-//        Text(text = "Hello, World!")
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Text(text = "This is a dialog")
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Boton("Ver") {
-//            mostrar = true
-//        }
-//        Dialogo(
-//            mostrar = mostrar,
-//            onCerrarDialogo = {
-//                mostrar = false
-//            }
-//        )
-//    }
-//}
