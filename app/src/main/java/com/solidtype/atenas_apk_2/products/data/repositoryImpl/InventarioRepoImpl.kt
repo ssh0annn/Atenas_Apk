@@ -1,5 +1,7 @@
 package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
+import android.content.Context
+import android.net.Uri
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
@@ -14,7 +16,8 @@ import javax.inject.Inject
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao,
     private val excel: XlsManeger,
-    private val mediador:MediatorFbPrododucts
+    private val mediador:MediatorFbPrododucts,
+    private val context : Context
 ):InventarioRepo {
     override  fun getProducts(): Flow<List<ProductEntity>> {
 
@@ -45,8 +48,8 @@ class InventarioRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun exportarExcel(): String {
-        val productos =getProducts()
+    override suspend fun exportarExcel(productos: List<ProductEntity>):Uri = withContext(Dispatchers.Default) {
+
         val columnas= listOf(
             "Code_Product",
             "Name_Product",
@@ -61,8 +64,8 @@ class InventarioRepoImpl @Inject constructor(
          val datos:MutableList<List<String>> = mutableListOf()
 
         try {
-            productos.collect{value ->
-                for (i in value){
+
+                for (i in productos){
                     val rowdata = mutableListOf<String>()
                     rowdata.add(i.Code_Product.toString())
                     rowdata.add(i.Name_Product)
@@ -77,41 +80,45 @@ class InventarioRepoImpl @Inject constructor(
                     datos.add(rowdata)
                 }
 
-            }
+
         }catch (e: Exception){
                 println("Error en el repositorio recorriendo el flow")
         }
 
-        val result=  excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
-        return result
+        val result =  excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
+
+
+        return@withContext result
     }
 
-    override suspend fun importarExcel(path:String): Boolean {
+    override suspend fun importarExcel(path: Uri): Boolean {
 
           val datos =excel.importarXlsx(path)
-        if(validarNombresColumnas(datos.get(1))){
+          val listaProductos:MutableList<ProductEntity> = mutableListOf()
+        if(validarNombresColumnas(datos[0])){
             try {
                 for((index, i) in datos.withIndex()){
                     if(index>0){
+                        listaProductos.add(
                         ProductEntity(
-                            Code_Product = i.get(0).toInt(),
-                            Name_Product = i.get(1),
-                            Description_Product = i.get(2),
-                            Category_Product = i.get(3),
-                            Price_Product = i.get(4).toDouble(),
-                            Model_Product = i.get(5),
-                            Price_Vending_Product = i.get(6).toDouble(),
-                            Tracemark_Product = i.get(7),
-                            Count_Product = i.get(8).toInt())
+                            Code_Product = i[0].toInt(),
+                            Name_Product = i[1],
+                            Description_Product = i[2],
+                            Category_Product = i[3],
+                            Price_Product = i[4].toDouble(),
+                            Model_Product = i[5],
+                            Price_Vending_Product = i[6].toDouble(),
+                            Tracemark_Product = i[7],
+                            Count_Product = i[8].toInt())
+                        )
                     }
                 }
-
+                daoProductos.insertAllProducts(listaProductos)
+                println("Insertando datos !!...$datos")
             }catch (e:Exception){
                 println("Error importando excel, ver formato: $e")
             }
         }
-
-
 
         return false
     }
@@ -133,7 +140,7 @@ class InventarioRepoImpl @Inject constructor(
             "Count_Product")
 
         if(columnas.isNotEmpty()){
-            if(nombresOrigin.equals(columnas)){
+            if(nombresOrigin == columnas){
                 return true
             }
         }
