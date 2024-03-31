@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreenPreview
 import com.solidtype.atenas_apk_2.util.FireManeger
 import com.solidtype.atenas_apk_2.util.YourViewModel
 

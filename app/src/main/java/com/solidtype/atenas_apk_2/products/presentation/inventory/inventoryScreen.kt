@@ -390,11 +390,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                             }
                         }
                     }
-                    Dialogo(mostrar = mostrar) {
-                        mostrar = false
-                    }
                 }
             }
+        }
+        Dialogo(mostrar = mostrar) {
+            mostrar = false
         }
     }
 }
