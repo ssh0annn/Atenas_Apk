@@ -78,7 +78,7 @@ fun InventoryScreen() {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var busqueda by remember { mutableStateOf("") }
+    var busqueda by rememberSaveable { mutableStateOf("") }
     var mostrar by rememberSaveable { mutableStateOf(false) }
 
     if (busqueda.isNotBlank()) {
