@@ -15,7 +15,7 @@ class MediatorFbPrododucts @Inject constructor(
     private val allProducts: Flow<List<ProductEntity>> = dbLocal.ProductDao.getProducts()
 
     //debes de replazar esto por el UID DEL USUARIO ACTUAL
-    private val uidpro: String = "1rAN4OBrx9XYoffhkjOlVakMK3c2"
+    private val uidpro: String = "VUxGubuZ1AZy7hXBvP8E"
     /*
     private val uidString:String  = authUid.currentUser!!.uid
     */
