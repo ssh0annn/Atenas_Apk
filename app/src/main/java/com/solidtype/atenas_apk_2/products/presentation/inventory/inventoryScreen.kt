@@ -20,11 +20,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,6 +51,8 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Busc
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun showFilePicker(context: Context) {
 
@@ -65,6 +71,7 @@ fun showFilePicker(context: Context) {
 
 
 }
+
 
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
@@ -339,7 +346,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                     } else {//Mostrar foto de perfil
                         //Image(painter = , contentDescription = )
                     }
-                    Spacer(modifier = Modifier.width(330.dp))
+
                     Row {
                         //Botones para Importar, Exportar y Ver
                         Boton("Importar", onClick = { showFilePicker(context) })
@@ -357,6 +364,14 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
 }
 
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
+
+@Composable
+fun SnackBar(Onclick:(String) -> Unit){
+    Spacer(modifier = Modifier.width(330.dp))
+    val scaffoldState = remember {SnackbarHostState()}
+    val corrutinaScope = rememberCoroutineScope()
+
+}
 
 
 @Composable
