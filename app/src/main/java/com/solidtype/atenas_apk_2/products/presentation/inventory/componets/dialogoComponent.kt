@@ -40,7 +40,7 @@ fun Dialogo(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(320.dp)
+                        .height(245.dp)
                         .background(
                             //Desgradado
                             brush = Brush.verticalGradient(
@@ -97,7 +97,7 @@ fun Dialogo(
     }
 }
 
-@Preview(device = "spec:id=reference_tablet,shape=Normal,width=1280,height=800,unit=dp,dpi=240")
+@Preview()
 @Composable
 fun DialogoPreview() {
     Dialogo(mostrar = true)
