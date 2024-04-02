@@ -373,10 +373,10 @@ fun InventoryScreen() {
                             showFilePicker(context)
                         }
                         Boton("Exportar") {
-                            Toast.makeText(context, "Que bobo", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT).show()
                             viewModel.exportarExcel()
                         }
-                        Boton("Ver") {
+                        Boton("Ejemplar") {
                             mostrar = true
                         }
                     }
