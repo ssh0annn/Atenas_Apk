@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,9 +41,8 @@ fun Dialogo(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(245.dp)
+                        .height(280.dp)
                         .background(
-                            //Desgradado
                             brush = Brush.verticalGradient(
                                 colors = listOf(
                                     Color(0xAACCD2E4),
@@ -97,7 +97,8 @@ fun Dialogo(
     }
 }
 
-@Preview()
+//Preview para Vortex T10M (T10MPROPLUS) Horizontal
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
 @Composable
 fun DialogoPreview() {
     Dialogo(mostrar = true)
