@@ -134,14 +134,14 @@ class InventarioViewModel @Inject constructor(
             }
             fun buscarProductos(any:String){
                 viewModelScope.launch {
-                    uiState.update { it.copy(isLoading = true) }
+
                     val busqueda = casosInventario.searchProductos(any)
                     busqueda.collect{ product ->
                         uiState.update {
                             it.copy(products = product)
                         }
                     }
-                    uiState.update { it.copy(isLoading = false) }
+
                 }
 
             }

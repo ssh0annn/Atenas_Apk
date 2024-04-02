@@ -18,13 +18,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,7 +52,10 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boto
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun showFilePicker(context: Context) {
 
@@ -62,34 +71,37 @@ fun showFilePicker(context: Context) {
     }
 
     (context as? Activity)?.startActivityForResult(intent, 2)
-
-
 }
+
 
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
-fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: InventarioViewModel = hiltViewModel()) {
+fun InventoryScreen() {
     //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
+
+    val viewModel: InventarioViewModel = hiltViewModel()
+
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
-    var busqueda by remember { mutableStateOf("") }
+    var busqueda by rememberSaveable { mutableStateOf("") }
+    var mostrar by rememberSaveable { mutableStateOf(false) }
 
     if (busqueda.isNotBlank()) {
         viewModel.buscarProductos(busqueda)
     } else {
         viewModel.mostrarProductos()
     }
-    if(uiState.pathExcel!!.isNotBlank()){
+
+    if (uiState.pathExcel!!.isNotBlank()) {
         Toast.makeText(context, "Exportado: ${uiState.pathExcel}", Toast.LENGTH_LONG).show()
     }
+
     var codigo by rememberSaveable {
         mutableStateOf("")
     }
     var categoria by rememberSaveable {
-
         mutableStateOf("")
     }
     var nombre by rememberSaveable {
@@ -114,16 +126,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
         mutableStateOf("")
     }
 
-
     val productos = uiState.products
-
-
-
 
     if (false) {
         //nav.navigate(Screens.Login.route)
-    }
-    else if (uiState.isLoading) {
+    } else if (uiState.isLoading) {
         Box(
             Modifier.fillMaxSize()
         ) {
@@ -131,8 +138,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-    }
-    else {
+    } else {
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
@@ -142,13 +148,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
         ) {
             item {
                 Row {//Título, Buscador, Area de Productos y Detalles
-                    Column(
-                        //modifier = Modifier.padding(start = 30.dp)
-                    ) {//Título, Buscador y Area de Productos
+                    Column {//Título, Buscador y Area de Productos
                         Row(
                             modifier = Modifier
                                 .padding(top = 20.dp, bottom = 20.dp)
-                                .width(500.dp)
+                                .width(610.dp)
                         ) {//Título y Buscador
                             Text(
                                 text = "Inventario",
@@ -167,55 +171,85 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                         Box(
                             modifier = Modifier
                                 //.padding(start = 20.dp)
-                                .width(500.dp)
+                                .width(600.dp)
                                 .height(350.dp)
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(Color(parseColor("#343341")))
                         ) {
-                            LazyColumn(
+                            Column(
                                 modifier = Modifier
-                                    .padding(10.dp)
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()
-                                    .clip(RoundedCornerShape(5.dp))
-                                    .background(Color(parseColor("#737A8C")))
-                            ) { //buscar componente para agregar filas de cards
-                                item {
-                                    productos.chunked(4)
-                                        .forEach { row -> //chunked(4) = 4 productos por fila
-                                            Row {//productos es una lista de objetos
-                                                row.forEach { product ->
-                                                    CardProduct(
-                                                        product
-                                                    ) { clicked ->
-                                                        codigo = "${clicked.Code_Product}"
-                                                        nombre = clicked.Name_Product
-                                                        categoria = clicked.Category_Product
-                                                        descripcion = clicked.Description_Product
-                                                        costo = clicked.Price_Product.toString()
-                                                        precio =
-                                                            clicked.Price_Vending_Product.toString()
-                                                        modelo = clicked.Model_Product
-                                                        marca = clicked.Tracemark_Product
-                                                        cantidad = clicked.Count_Product.toString()
-
-
+                                    .padding(top = 20.dp, bottom = 20.dp)
+                                    .width(500.dp)
+                                    .verticalScroll(rememberScrollState())
+                            ) {//Título y Buscador
+                                Text(
+                                    text = "Inventario",
+                                    modifier = Modifier.padding(top = 15.dp, end = 0.dp),
+                                    style = TextStyle(
+                                        fontSize = 30.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(parseColor("#343341"))
+                                    )
+                                ) //Título
+                                Buscador(
+                                    busqueda = busqueda,
+                                ) { busqueda = it }
+                            }
+                            //Area de productos
+                            Box(
+                                modifier = Modifier
+                                    //.padding(start = 20.dp)
+                                    .width(600.dp)
+                                    .height(350.dp)
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(Color(parseColor("#343341")))
+                            ) {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .fillMaxWidth()
+                                        .fillMaxHeight()
+                                        .clip(RoundedCornerShape(5.dp))
+                                        .background(Color(parseColor("#737A8C")))
+                                ) { //buscar componente para agregar filas de cards
+                                    item {
+                                        productos.chunked(4)
+                                            .forEach { row -> //chunked(4) = 4 productos por fila
+                                                Row {//productos es una lista de objetos
+                                                    row.forEach { product ->
+                                                        CardProduct(
+                                                            product
+                                                        ) { clicked ->
+                                                            codigo = "${clicked.Code_Product}"
+                                                            nombre = clicked.Name_Product
+                                                            categoria = clicked.Category_Product
+                                                            descripcion =
+                                                                clicked.Description_Product
+                                                            costo = clicked.Price_Product.toString()
+                                                            precio =
+                                                                clicked.Price_Vending_Product.toString()
+                                                            modelo = clicked.Model_Product
+                                                            marca = clicked.Tracemark_Product
+                                                            cantidad =
+                                                                clicked.Count_Product.toString()
+                                                        }
                                                     }
-
                                                 }
                                             }
-                                        }
+                                    }
                                 }
                             }
                         }
                     }
                     Column(
-                        modifier = Modifier.padding(top = 30.dp)
+                        modifier = Modifier
+                            .padding(top = 25.dp)
+                            .width(350.dp)
                     ) {//Detalles = Area de detalles y Botones
                         Column(
                             modifier = Modifier
-                                .padding(start = 30.dp, top = 0.dp)
-                                .width(300.dp)
+                                .padding(start = 10.dp)
+                                .width(350.dp)
                                 .height(430.dp)
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(Color(parseColor("#343341"))),
@@ -230,11 +264,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                             ) {// Area de detalles = Imagen del producto, Categoría y Nombre
                                 item {
                                     Row(
-                                        modifier = Modifier.padding(10.dp)
+                                        modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 0.dp)
                                     ) {
                                         //Image(painter = /*viewModel.imagenProducto.value*/, contentDescription = "Imagen del producto")
                                         Box(
-                                            modifier = Modifier.padding(top = 10.dp)
+                                            modifier = Modifier.padding(top = 30.dp, end = 10.dp)
                                         ) {
                                             Carrito(true) //aquí debería ir la imagen del producto
                                         }
@@ -249,9 +283,8 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                         }
                                     }
                                     Column(
-                                        modifier = Modifier.padding(
-                                            10.dp, vertical = 5.dp
-                                        )
+                                        modifier = Modifier
+                                            .padding(start = 10.dp)
                                     ) {// Codigo, Descripción, Precio y Cantidad
                                         InputDetalle("Código", false, codigo) { codigo = it }
                                         InputDetalle(
@@ -263,8 +296,9 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                         }
                                         InputDetalle("Modelo", false, modelo) { modelo = it }
                                         InputDetalle("Marca", false, marca) { marca = it }
-                                        InputDetalle("Cantidad", false, cantidad) { cantidad = it }
-
+                                        InputDetalle("Cantidad", false, cantidad) {
+                                            cantidad = it
+                                        }
                                     }
                                 }
                             }
@@ -272,43 +306,45 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.Center
                             ) {//Botones de cerrar y guardar
-                                BotonIconCircular(true, onClick = {//Boton X para borrar productos
-                                    try {
-
-                                    viewModel.eliminarProductos(
-                                        ProductEntity(
-                                            codigo.toInt(),
-                                            nombre,
-                                            descripcion,
-                                            categoria,
-                                            costo.toDouble(),
-                                            modelo,
-                                            precio.toDouble(),
-                                            marca,
-                                            cantidad.toInt()
-
-                                        ))
-                                        codigo =""
-                                        categoria=""
-                                        nombre=""
-                                        descripcion=""
-                                        costo=""
-                                        precio=""
-                                        modelo=""
-                                        marca=""
-                                        cantidad=""
-
-                                    }catch(e:Exception){
-                                        Toast.makeText(context, "No se pudo eliminar", Toast.LENGTH_LONG).show()
+                                BotonIconCircular(
+                                    true,
+                                    onClick = {//Boton X para borrar productos
+                                        try {
+                                            viewModel.eliminarProductos(
+                                                ProductEntity(
+                                                    codigo.toInt(),
+                                                    nombre,
+                                                    descripcion,
+                                                    categoria,
+                                                    costo.toDouble(),
+                                                    modelo,
+                                                    precio.toDouble(),
+                                                    marca,
+                                                    cantidad.toInt()
+                                                )
+                                            )
+                                            codigo = ""
+                                            categoria = ""
+                                            nombre = ""
+                                            descripcion = ""
+                                            costo = ""
+                                            precio = ""
+                                            modelo = ""
+                                            marca = ""
+                                            cantidad = ""
+                                        } catch (e: Exception) {
+                                            Toast.makeText(
+                                                context,
+                                                "No se pudo eliminar",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
                                     }
-
-                                })
+                                )
                                 Spacer(modifier = Modifier.width(60.dp))
                                 BotonIconCircular(false, onClick = {
                                     try {
-
                                         viewModel.crearProductos(
-
                                             Code_Product = codigo,
                                             Name_Product = nombre,
                                             Description_Product = descripcion,
@@ -318,8 +354,6 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                                             Price_Vending_Product = precio,
                                             Tracemark_Product = marca,
                                             Count_Product = cantidad
-
-
                                         )
                                     } catch (e: Exception) {
                                         Toast.makeText(context, "error: $e", Toast.LENGTH_LONG)
@@ -331,7 +365,7 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                     }
                 }
                 Row(
-                    modifier = Modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)
+                    modifier = Modifier.padding(top = 10.dp)
                 ) { //Avatar y Botones
                     //Avatar
                     if (true) { // si no hay imagen de perfil
@@ -339,19 +373,27 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
                     } else {//Mostrar foto de perfil
                         //Image(painter = , contentDescription = )
                     }
-                    Spacer(modifier = Modifier.width(330.dp))
+
+                    Spacer(modifier = Modifier.width(400.dp))
+
                     Row {
                         //Botones para Importar, Exportar y Ver
-                        Boton("Importar", onClick = { showFilePicker(context) })
-                        Boton("Exportar", onClick = {
-                            Toast.makeText(context, "QUe bobo", Toast.LENGTH_SHORT).show()
+                        Boton("Importar") {
+                            showFilePicker(context)
+                        }
+                        Boton("Exportar") {
+                            Toast.makeText(context, "Que bobo", Toast.LENGTH_SHORT).show()
                             viewModel.exportarExcel()
-
-                        })
-                        Boton("Ver", onClick = { /*viewModel.onVer()*/ })
+                        }
+                        Boton("Ver") {
+                            mostrar = true
+                        }
                     }
                 }
             }
+        }
+        Dialogo(mostrar = mostrar) {
+            mostrar = false
         }
     }
 }
@@ -360,7 +402,11 @@ fun InventoryScreen(/*context: Context, nav: NavController,*/ viewModel: Inventa
 
 
 @Composable
-fun InventoryScreenPreview() {
-    InventoryScreen()
+fun SnackBar(Onclick:(String) -> Unit){
+    Spacer(modifier = Modifier.width(330.dp))
+    val scaffoldState = remember {SnackbarHostState()}
+    val corrutinaScope = rememberCoroutineScope()
+
 }
+
 
