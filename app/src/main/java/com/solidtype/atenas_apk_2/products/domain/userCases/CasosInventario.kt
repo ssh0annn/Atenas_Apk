@@ -6,5 +6,8 @@ data class CasosInventario(
     val getProductosByCodigo: getProductosByCodigo,
     val searchProductos: SearchProductosLike,
     val updateProducto: UpdateProducto,
-    val deleteProductos: DeleteProductos
+    val deleteProductos: DeleteProductos,
+    val exportarExcel: ExportarExcel,
+    val importarExcelFile: ImportarExcelFile,
+    val syncProductos: SyncProductos
 )

@@ -5,7 +5,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.auth.User
 import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FireStoreQuerysProducts @Inject constructor(
@@ -16,16 +18,19 @@ class FireStoreQuerysProducts @Inject constructor(
 
 
     suspend fun getDatatProFB(uidPro:String): List<ProductEntity>{
-        return try {
-            firestore.collection("usuarios")
-                .document(uidPro)
-                .collection("productos")
-                .get()
-                .await()
-                .toObjects(ProductEntity::class.java)
-        } catch (e: Exception) {
-            Log.e("Error sincronizacion", "Error al obtener usuarios de Firestore: $e")
-            emptyList()
+        return withContext(Dispatchers.IO){
+            try {
+                firestore.collection("usuarios")
+                    .document(uidPro)
+                    .collection("productos")
+                    .get()
+                    .await()
+                    .toObjects(ProductEntity::class.java)
+
+            } catch (e: Exception) {
+                Log.e("Error sincronizacion", "Error al obtener usuarios de Firestore: $e")
+                return@withContext emptyList()
+            }
         }
     }
     suspend fun insertFromFireBUsersToLocal(users: List<ProductEntity>, dbLocal:ProductDataBase) {

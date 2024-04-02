@@ -83,7 +83,7 @@ fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = 
             }
 
         } else {
-            var checked by remember { mutableStateOf(false) }
+            var checked by rememberSaveable { mutableStateOf(false) }
             var passwordVisible by rememberSaveable { mutableStateOf(false) }
             val icon = if (passwordVisible) painterResource(id = R.drawable.ic_visibility_false)
             else painterResource(id = R.drawable.ic_visibility_true)

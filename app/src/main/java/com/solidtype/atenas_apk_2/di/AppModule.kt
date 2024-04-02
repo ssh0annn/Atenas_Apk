@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,9 +29,13 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.V
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
 import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
+import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
+import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -39,7 +44,12 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
+    fun contextAplicacion(@ApplicationContext context: Context) =context
+
+    @Singleton
+    @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore
+
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
@@ -74,7 +84,10 @@ object AppModule {
         getProductosByCodigo= getProductosByCodigo(repository),
         searchProductos= SearchProductosLike(repository),
         updateProducto=UpdateProducto(repository),
-        deleteProductos=DeleteProductos(repository)
+        deleteProductos=DeleteProductos(repository),
+        exportarExcel = ExportarExcel(repository),
+        importarExcelFile = ImportarExcelFile(repository),
+        syncProductos= SyncProductos(repository)
     )
 
     @Singleton

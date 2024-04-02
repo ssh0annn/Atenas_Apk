@@ -23,7 +23,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 
-class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases,
+
+class LoginViewModel @Inject constructor(
+    private val casos_uso:AuthUseCases
 
 
 ):ViewModel(){
@@ -53,7 +55,9 @@ class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases,
 
         viewModelScope.launch {
 
-           if(casos_uso.current_user() != null){
+            if(casos_uso.current_user() != null){
+
+
 
                 if (logicaNegocio()){
                     if (casos_uso.usuarioExiste()){
@@ -163,3 +167,7 @@ class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases,
     private fun validarCamposEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches() // -> Boolean
 
     private fun validarCamposPass(pass: String) = pass.length >= 8 // -> Boolean
+
+
+
+

@@ -15,12 +15,16 @@ class MediatorFbPrododucts @Inject constructor(
     private val allProducts: Flow<List<ProductEntity>> = dbLocal.ProductDao.getProducts()
 
     //debes de replazar esto por el UID DEL USUARIO ACTUAL
-    private val uidpro: String = "1rAN4OBrx9XYoffhkjOlVakMK3c2"
+    private val uidpro: String = "VUxGubuZ1AZy7hXBvP8E"
     /*
     private val uidString:String  = authUid.currentUser!!.uid
     */
 
+<<<<<<< HEAD
     suspend operator fun invoke() {
+=======
+    suspend  fun sync() {
+>>>>>>> b022607b6242edd04da43cbb96112bc7b8719f64
         try {
             // Observar cambios db local
             allProducts.collect { localProducts ->
