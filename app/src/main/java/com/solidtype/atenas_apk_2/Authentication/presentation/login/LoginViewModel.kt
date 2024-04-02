@@ -22,8 +22,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val casos_uso:AuthUseCases
+
+class LoginViewModel @Inject constructor(private val casos_uso:AuthUseCases,
+
+
 ):ViewModel(){
 
 
@@ -48,8 +50,10 @@ class LoginViewModel @Inject constructor(
 
     init {
         var usuario:String?
+
         viewModelScope.launch {
-            if(casos_uso.current_user() != null){
+
+           if(casos_uso.current_user() != null){
 
                 if (logicaNegocio()){
                     if (casos_uso.usuarioExiste()){

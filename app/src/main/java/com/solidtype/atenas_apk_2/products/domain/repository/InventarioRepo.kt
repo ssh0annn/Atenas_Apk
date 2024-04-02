@@ -11,5 +11,7 @@ interface InventarioRepo {
     suspend fun createProducts(prodcuto: ProductEntity):Boolean
     suspend fun deleteProduct(codigo:Int):Boolean
     suspend fun updateProduct(producto:DataProductos): Boolean
+    suspend fun exportarExcel():String?
+    suspend fun importarExcel():Boolean
 
 }

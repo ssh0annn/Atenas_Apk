@@ -128,8 +128,11 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
 
     implementation("androidx.room:room-ktx:$room_version")
-
+    //Excel maneger
+    implementation("org.apache.poi:poi:5.2.5") // Para trabajar con formatos de archivo de Excel (XLS)
+    implementation ("org.apache.poi:poi-ooxml:5.2.5") // Para trabajar con formatos de archivo de Excel (XLSX)
 }
+
 ksp {
     // Configuración específica de KSP
     arg("output", "$buildDir/generated/ksp")// Argumentos opcionales para KSP

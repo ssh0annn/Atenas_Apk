@@ -34,4 +34,12 @@ class InventarioRepoImpl @Inject constructor(
     override suspend fun updateProduct(producto: DataProductos): Boolean {
         TODO("Not yet implemented")
     }
+
+    override suspend fun exportarExcel(): String? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun importarExcel(): Boolean {
+        TODO("Not yet implemented")
+    }
 }
