@@ -8,4 +8,5 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 @Database(entities = [ProductEntity::class], version = 1, exportSchema = false)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
+
 }

@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
@@ -92,27 +93,30 @@ class InventarioRepoImpl @Inject constructor(
     }
 
     override suspend fun importarExcel(path: Uri): Boolean {
-
+//Manejar excepcion de validacin de datos.
           val datos =excel.importarXlsx(path)
           val listaProductos:MutableList<ProductEntity> = mutableListOf()
         if(validarNombresColumnas(datos[0])){
             try {
-                for((index, i) in datos.withIndex()){
-                    if(index>0){
+                for((index, i) in datos.withIndex()) {
+                    if (index > 0) {
                         listaProductos.add(
-                        ProductEntity(
-                            Code_Product = i[0].toInt(),
-                            Name_Product = i[1],
-                            Description_Product = i[2],
-                            Category_Product = i[3],
-                            Price_Product = i[4].toDouble(),
-                            Model_Product = i[5],
-                            Price_Vending_Product = i[6].toDouble(),
-                            Tracemark_Product = i[7],
-                            Count_Product = i[8].toInt())
+                            ProductEntity(
+                                Code_Product = i[0].toInt(),
+                                Name_Product = i[1],
+                                Description_Product = i[2],
+                                Category_Product = i[3],
+                                Price_Product = i[4].toDouble(),
+                                Model_Product = i[5],
+                                Price_Vending_Product = i[6].toDouble(),
+                                Tracemark_Product = i[7],
+                                Count_Product = i[8].toInt()
+                            )
                         )
                     }
                 }
+
+
                 daoProductos.insertAllProducts(listaProductos)
                 println("Insertando datos !!...$datos")
             }catch (e:Exception){
@@ -130,7 +134,7 @@ class InventarioRepoImpl @Inject constructor(
 
     private fun validarNombresColumnas(columnas:List<String?>):Boolean{
         val nombresOrigin= listOf("Code_Product",
-                "Name_Product",
+            "Name_Product",
             "Description_Product",
             "Category_Product",
             "Price_Product",
@@ -144,6 +148,9 @@ class InventarioRepoImpl @Inject constructor(
                 return true
             }
         }
+       // Toast.makeText(context, "Archivo no funciona", Toast.LENGTH_LONG).show()
+        println("Los datos son incorrectos... verifica")
+
             return false
     }
 }

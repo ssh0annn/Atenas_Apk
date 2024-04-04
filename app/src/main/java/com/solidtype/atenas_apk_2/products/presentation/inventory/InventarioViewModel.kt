@@ -32,9 +32,6 @@ class InventarioViewModel @Inject constructor(
      var uiState = MutableStateFlow(ProductosViewStates())
          private set
 
-    var excel by mutableStateOf("")
-        private set
-
 
             init {
 
@@ -137,8 +134,10 @@ class InventarioViewModel @Inject constructor(
 
                     val busqueda = casosInventario.searchProductos(any)
                     busqueda.collect{ product ->
+
                         uiState.update {
                             it.copy(products = product)
+
                         }
                     }
 
