@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
-    private val context: Context): ViewModel() {
+    ): ViewModel() {
 
     var fileSelectionListener2: FileSelectionListener2? = null
 
@@ -34,11 +34,8 @@ class InventarioViewModel @Inject constructor(
 
 
             init {
-
                 mostrarProductos()
-
-
-                }
+            }
 
 
             fun crearProductos(
@@ -74,7 +71,6 @@ class InventarioViewModel @Inject constructor(
                 val productos =casosInventario.getProductos()
                  syncProductos()
                 viewModelScope.launch {
-
                    // uiState.update { it.copy(isLoading = true) }
                     productos.collect{ product ->
                        uiState.update {
@@ -103,8 +99,10 @@ class InventarioViewModel @Inject constructor(
                          uiState.update { it.copy(isLoading = false) }
                         println("Salgo del withcontext la funcion que exporta en viewmodel")
                         withContext(Dispatchers.Main){
-
-                        Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
+                        uiState.update {
+                            it.copy(uriPath = path.path.toString())
+                        }
+                       // Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -131,7 +129,6 @@ class InventarioViewModel @Inject constructor(
             }
             fun buscarProductos(any:String){
                 viewModelScope.launch {
-
                     val busqueda = casosInventario.searchProductos(any)
                     busqueda.collect{ product ->
 

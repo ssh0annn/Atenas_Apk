@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -23,9 +24,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +58,7 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Card
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -139,6 +144,10 @@ fun InventoryScreen() {
             )
         }
     } else {
+        if(uiState.uriPath.isNotBlank()){
+
+            SnackBar(uiState.uriPath)
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
@@ -382,8 +391,8 @@ fun InventoryScreen() {
                             showFilePicker(context)
                         }
                         Boton("Exportar") {
-                            Toast.makeText(context, "Que bobo", Toast.LENGTH_SHORT).show()
                             viewModel.exportarExcel()
+
                         }
                         Boton("Ver") {
                             mostrar = true
@@ -400,12 +409,16 @@ fun InventoryScreen() {
 
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
 
-
 @Composable
-fun SnackBar(Onclick:(String) -> Unit){
+fun SnackBar(mensaje:String){
     Spacer(modifier = Modifier.width(330.dp))
-    val scaffoldState = remember {SnackbarHostState()}
-    val corrutinaScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+  Snackbar{
+      Text(text = mensaje)
+
+  }
 
 }
 

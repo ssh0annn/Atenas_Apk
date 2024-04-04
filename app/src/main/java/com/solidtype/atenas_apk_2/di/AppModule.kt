@@ -27,6 +27,8 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.S
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignOutUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.VerificaICCIDUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
@@ -100,9 +102,15 @@ object AppModule {
 
     @Provides
     @Singleton
-     fun provideDao(db : ProductDataBase): ProductDao {
-         return db.ProductDao
-     }
+    fun provideProductDao(db : ProductDataBase): ProductDao {
+        return db.ProductDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideHistorialDao(db : ProductDataBase): HistorialVentaDAO {
+        return db.HistorialDao
+    }
 
 
 }
