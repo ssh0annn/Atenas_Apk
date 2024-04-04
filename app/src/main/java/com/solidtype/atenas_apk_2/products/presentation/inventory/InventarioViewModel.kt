@@ -37,11 +37,8 @@ class InventarioViewModel @Inject constructor(
 
 
             init {
-
                 mostrarProductos()
-
-
-                }
+            }
 
 
             fun crearProductos(
@@ -77,7 +74,6 @@ class InventarioViewModel @Inject constructor(
                 val productos =casosInventario.getProductos()
                  syncProductos()
                 viewModelScope.launch {
-
                    // uiState.update { it.copy(isLoading = true) }
                     productos.collect{ product ->
                        uiState.update {
@@ -134,7 +130,6 @@ class InventarioViewModel @Inject constructor(
             }
             fun buscarProductos(any:String){
                 viewModelScope.launch {
-
                     val busqueda = casosInventario.searchProductos(any)
                     busqueda.collect{ product ->
                         uiState.update {
