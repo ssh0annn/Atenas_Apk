@@ -22,7 +22,6 @@ class MediatorFbPrododucts @Inject constructor(
 
 
     suspend  fun sync() {
-
         try {
             // Observar cambios db local
             allProducts.collect { localProducts ->
@@ -35,6 +34,7 @@ class MediatorFbPrododucts @Inject constructor(
                         FireQuery.insertFromFireBUsersToLocal(fireStoreProducts,dbLocal)
                         Log.e("Sincronizacion", "Información recuperada de Firebase")
                     } else {
+                        // Obtener todos los usuarios de Firestore
                         val fireStoreProducts= FireQuery.getDatatProFB(uidpro)
                         Log.e("Sincronizacion","dato uid $uidpro")
                         // Sincronizar los productos locales con Firestore
