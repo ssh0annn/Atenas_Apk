@@ -17,7 +17,7 @@ class MediatorFbPrododucts @Inject constructor(
     //debes de replazar esto por el UID DEL USUARIO ACTUAL
     private val uidpro: String = "VUxGubuZ1AZy7hXBvP8E"
     /*
-    private val uidString:String  = authUid.currentUser!!.uid
+    private val uidpro:String  = authUid.currentUser!!.uid
     */
 
 
@@ -49,6 +49,7 @@ class MediatorFbPrododucts @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+
             // Manejar la excepción relacionada con la obtención de datos locales
             Log.e("Sincronizacion", "Error al obtener datos locales: $e")
         }

@@ -25,15 +25,12 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
-    private val context: Context): ViewModel() {
+    ): ViewModel() {
 
     var fileSelectionListener2: FileSelectionListener2? = null
 
      var uiState = MutableStateFlow(ProductosViewStates())
          private set
-
-    var excel by mutableStateOf("")
-        private set
 
 
             init {
@@ -102,8 +99,10 @@ class InventarioViewModel @Inject constructor(
                          uiState.update { it.copy(isLoading = false) }
                         println("Salgo del withcontext la funcion que exporta en viewmodel")
                         withContext(Dispatchers.Main){
-
-                        Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
+                        uiState.update {
+                            it.copy(uriPath = path.path.toString())
+                        }
+                       // Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -132,8 +131,10 @@ class InventarioViewModel @Inject constructor(
                 viewModelScope.launch {
                     val busqueda = casosInventario.searchProductos(any)
                     busqueda.collect{ product ->
+
                         uiState.update {
                             it.copy(products = product)
+
                         }
                     }
 
