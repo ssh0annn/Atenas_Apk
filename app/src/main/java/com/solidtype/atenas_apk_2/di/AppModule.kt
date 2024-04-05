@@ -27,8 +27,13 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.S
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignOutUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.VerificaICCIDUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
+import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
+import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.BuscarporFechCatego
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.ExportarVentas
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodasVentas
 import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
@@ -62,6 +67,10 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun historialVentasRepository(impl : HistorialRepositoryImp): HistorialRepositoryImp =impl
+
+    @Singleton
+    @Provides
     fun provideAuthCases (repository: UserRepository)= AuthUseCases(
         login = SignInUseCase(repository),
         logout = SignOutUseCase(repository),
@@ -71,12 +80,13 @@ object AppModule {
         validarICCID = VerificaICCIDUseCase(repository),
         estado_licencia = EstadoLicencia(repository),
         usuarioExiste = ExisteUsuario(repository)
-
     )
+
 
     @Singleton
     @Provides
     fun provideInventarioRepo( impl: InventarioRepoImpl): InventarioRepo=impl
+
 
     @Singleton
     @Provides
@@ -90,6 +100,13 @@ object AppModule {
         exportarExcel = ExportarExcel(repository),
         importarExcelFile = ImportarExcelFile(repository),
         syncProductos= SyncProductos(repository)
+    )
+    @Singleton
+    @Provides
+    fun provideCasosHistorial(repo: HistorialRepository)= CasosHistorialReportes(
+        mostrarVentas= MostrarTodasVentas(repo),
+        exportarVentas= ExportarVentas(repo),
+        buscarporFechCatego = BuscarporFechCatego(repo)
     )
 
     @Singleton
@@ -111,5 +128,6 @@ object AppModule {
     fun provideHistorialDao(db : ProductDataBase): HistorialVentaDAO {
         return db.HistorialDao
     }
+
 
 }
