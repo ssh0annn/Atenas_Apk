@@ -15,6 +15,4 @@ data class ProductEntity(
     @ColumnInfo(name = "Price_Vending_Product") val Price_Vending_Product : Double,
     @ColumnInfo(name = "Tracemark_Product") val Tracemark_Product : String,
     @ColumnInfo(name = "Count_Product") val Count_Product : Int,
-){
-   constructor() : this(0, "", "", "", 0.00, "",0.00,"", 0)
-}
+)

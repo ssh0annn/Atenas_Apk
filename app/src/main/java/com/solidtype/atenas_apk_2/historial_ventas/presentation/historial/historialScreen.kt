@@ -47,13 +47,12 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.compon
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistorialScreen() {
 
-    var ventas by rememberSaveable { mutableIntStateOf(1000) }
+    var ventas by rememberSaveable { mutableIntStateOf(10000) }
 
     val datePickerState1: DatePickerState =
         rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())

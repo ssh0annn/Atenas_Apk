@@ -10,7 +10,8 @@ data class ProductosViewStates(
     val products: List<ProductEntity> = listOf(),
     val getOneProduct:Int=0,
     val pathExcel: String? = "",
-    val userMessages: List<Message> = listOf()
+    val userMessages: List<Message> = listOf(),
+    val uriPath:String=""
 
 
 )

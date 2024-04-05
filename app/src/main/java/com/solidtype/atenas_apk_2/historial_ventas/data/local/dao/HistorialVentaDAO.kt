@@ -18,5 +18,4 @@ interface HistorialVentaDAO {
 
     @Query("SELECT * FROM HistorialVenta_Table WHERE ((FechaInicial >= :fechaI) AND (FechaFinal <= :fechaF) AND (Categoria = :cate))")
     fun getHistorialVentaFechaCategoria(fechaF : String, fechaI : String, cate : String): Flow<List<HistorialVentaEntidad>>
-
 }
