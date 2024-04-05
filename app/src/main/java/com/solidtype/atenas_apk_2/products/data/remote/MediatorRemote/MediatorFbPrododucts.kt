@@ -20,11 +20,9 @@ class MediatorFbPrododucts @Inject constructor(
     private val uidString:String  = authUid.currentUser!!.uid
     */
 
-<<<<<<< HEAD
-    suspend operator fun invoke() {
-=======
+
     suspend  fun sync() {
->>>>>>> b022607b6242edd04da43cbb96112bc7b8719f64
+
         try {
             // Observar cambios db local
             allProducts.collect { localProducts ->
@@ -33,15 +31,15 @@ class MediatorFbPrododucts @Inject constructor(
                     if (localProducts.isEmpty()) {
                         // Obtener todos los usuarios de Firestore
                         val fireStoreProducts= FireQuery.getDatatProFB(uidpro)
-                        // Insertar todos los usuarios de Firestore en la tabla de usuarios en la base de datos local
+                        // Insertar todos los productos de Firestore en la tabla de usuarios en la base de datos local
                         FireQuery.insertFromFireBUsersToLocal(fireStoreProducts,dbLocal)
                         Log.e("Sincronizacion", "Información recuperada de Firebase")
                     } else {
                         val fireStoreProducts= FireQuery.getDatatProFB(uidpro)
                         Log.e("Sincronizacion","dato uid $uidpro")
-                        // Sincronizar los usuarios locales con Firestore
+                        // Sincronizar los productos locales con Firestore
                         FireQuery.syncLocalUsersWithFirestore(localProducts, fireStoreProducts,uidpro)
-                        // Eliminar usuarios en Firestore que no existen en la base de datos local
+                        // Eliminar productos en Firestore que no existen en la base de datos local
                         FireQuery.deleteFirestoreUsersNotInLocal(localProducts, fireStoreProducts,uidpro)
                         Log.e("Sincronizacion", "Sincronización exitosa con Firestore")
                     }
@@ -55,67 +53,5 @@ class MediatorFbPrododucts @Inject constructor(
             Log.e("Sincronizacion", "Error al obtener datos locales: $e")
         }
     }
-/*
-    suspend fun syncPro2() {
-        try {
-            // Observar cambios en la base de datos local
-            allProducts.collect { allProducts ->
-                try {
-                    // Verificar si la tabla de usuarios está vacía en la base de datos local
-                    if (allProducts.isEmpty()) {
-                        // Obtener todos los usuarios de Firestore
-                        val firestoreUsers =firestore.collection("usuarios").document(uidUser).collection("productos").get().await().toObjects(ProductEntity::class.java)
-                        Log.e("Sincronizacion", "Error al obtener datos firestore: $firestore")
-                        // Insertar todos los usuarios de Firestore en la tabla de usuarios en la base de datos local
-                        firestoreUsers.forEach { user ->
-                            dbLocal.getProductDao.insertPro(user)
-                        }
 
-                        Log.e("Sincronizacion", "Información recuperada de Firebase")
-                    } else {
-                        // Obtener todos los usuarios de Firestore
-                        val firestoreUsers =firestore.collection("usuarios").document(uidUser).collection("productos").get().await().toObjects(ProductEntity::class.java)
-
-
-                        // Sincronizar los usuarios locales con Firestore
-                        val batch = firestore.batch()
-                        allProducts.forEach { allProducts ->
-                            val remoteUser = firestoreUsers.find { it.Code_Product == allProducts.Code_Product }
-                            if (remoteUser == null || allProducts != remoteUser) {
-                                // El usuario local no existe en Firestore o es diferente, agregarlo o actualizarlo
-                                batch.set(
-                                    firestore.collection("usuarios")
-                                        .document(uidUser)
-                                        .collection("productos")
-                                        .document(allProducts.Code_Product.toString()), allProducts)
-                            }
-                        }
-
-                        // Eliminar usuarios en Firestore que no existen en la base de datos local
-                        val usersToDeleteInFirestore = firestoreUsers.filterNot { firestoreUser ->
-                            allProducts.any { it.Code_Product == firestoreUser.Code_Product }
-                        }
-                        usersToDeleteInFirestore.forEach { pro ->
-                            firestore.collection("usuarios")
-                                .document(uidUser)
-                                .collection("productos")
-                                .document(pro.Code_Product.toString())
-                                .delete().await()
-                        }
-
-                        // Aplicar los cambios en Firestore
-                        batch.commit().await()
-                        Log.e("Sincronizacion", "Sincronización exitosa con Firestore")
-                    }
-                } catch (e: Exception) {
-                    // Manejar la excepción relacionada con la conexión a Internet o la obtención de datos de Firestore
-                    Log.e("Sincronizacion", "Error durante la sincronización con Firestore: $e")
-                }
-            }
-        } catch (e: Exception) {
-            // Manejar la excepción relacionada con la obtención de datos locales
-            Log.e("Sincronizacion", "Error al obtener datos locales: $e")
-        }
-    }
-*/
 }
