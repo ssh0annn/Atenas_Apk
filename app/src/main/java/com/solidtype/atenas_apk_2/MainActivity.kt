@@ -7,10 +7,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.Prueba
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.util.FireManeger
-import com.solidtype.atenas_apk_2.util.YourViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +19,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            InventoryScreen()
+            Prueba()
+           // InventoryScreen()
            // FireManeger()
         }
     }

@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.domain.repositories
+package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

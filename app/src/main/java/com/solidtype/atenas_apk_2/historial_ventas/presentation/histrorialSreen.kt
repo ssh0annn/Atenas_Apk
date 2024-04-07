@@ -1,6 +1,5 @@
-package com.solidtype.atenas_apk_2.historial_ventas.domain.repositories
+package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
-import android.widget.TextView
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,12 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.solidtype.atenas_apk_2.MainActivity
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
-
 
 
 @Composable

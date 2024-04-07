@@ -67,7 +67,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun historialVentasRepository(impl : HistorialRepositoryImp): HistorialRepositoryImp =impl
+    fun historialVentasRepository(impl : HistorialRepositoryImp): HistorialRepository = impl
 
     @Singleton
     @Provides
@@ -108,6 +108,7 @@ object AppModule {
         exportarVentas= ExportarVentas(repo),
         buscarporFechCatego = BuscarporFechCatego(repo)
     )
+
 
     @Singleton
     @Provides
