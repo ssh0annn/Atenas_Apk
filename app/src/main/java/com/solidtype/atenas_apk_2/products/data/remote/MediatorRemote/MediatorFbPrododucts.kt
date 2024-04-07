@@ -1,8 +1,7 @@
 package com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
+import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.remote.FireStoreQuerysProducts
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.flow.Flow
