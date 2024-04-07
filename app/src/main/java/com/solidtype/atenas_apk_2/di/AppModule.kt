@@ -39,6 +39,7 @@ import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,7 +68,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun historialVentasRepository(impl : HistorialRepositoryImp): HistorialRepositoryImp =impl
+    fun historialVentasRepository(impl : HistorialRepositoryImp): HistorialRepository =impl
 
     @Singleton
     @Provides
@@ -103,7 +104,7 @@ object AppModule {
     )
     @Singleton
     @Provides
-    fun provideCasosHistorial(repo: HistorialRepository)= CasosHistorialReportes(
+    fun provideCasosHistorial(repo: HistorialRepository) = CasosHistorialReportes(
         mostrarVentas= MostrarTodasVentas(repo),
         exportarVentas= ExportarVentas(repo),
         buscarporFechCatego = BuscarporFechCatego(repo)
