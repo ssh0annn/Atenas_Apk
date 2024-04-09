@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -27,6 +29,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +68,32 @@ fun HistorialScreen() {
 
     val items = listOf("Ventas", "Ticket")
 
+    val listVentas = listOf(
+        objVenta(1, "01/01/2021", "Cliente 1", 1000.0, "Pagado"),
+        objVenta(2, "02/01/2021", "Cliente 2", 2000.0, "Pendiente"),
+        objVenta(3, "03/01/2021", "Cliente 3", 3000.0, "Pagado"),
+        objVenta(4, "04/01/2021", "Cliente 4", 4000.0, "Pagado"),
+        objVenta(5, "05/01/2021", "Cliente 5", 5000.0, "Pendiente"),
+        objVenta(6, "06/01/2021", "Cliente 6", 6000.0, "Pagado"),
+        objVenta(7, "07/01/2021", "Cliente 7", 7000.0, "Pagado"),
+        objVenta(8, "08/01/2021", "Cliente 8", 8000.0, "Pendiente"),
+        objVenta(9, "09/01/2021", "Cliente 9", 9000.0, "Pagado"),
+        objVenta(10, "10/01/2021", "Cliente 10", 10000.0, "Pagado"),
+    ) // esto debe venir del viewModel
+
+    val listTicket = listOf(
+        objTicket(1, "01/02/2021", "Cliente 1", 1000.0, "Pagado"),
+        objTicket(2, "02/02/2021", "Cliente 2", 2000.0, "Pendiente"),
+        objTicket(3, "03/02/2021", "Cliente 3", 3000.0, "Pagado"),
+        objTicket(4, "04/02/2021", "Cliente 4", 4000.0, "Pagado"),
+        objTicket(5, "05/02/2021", "Cliente 5", 5000.0, "Pendiente"),
+        objTicket(6, "06/02/2021", "Cliente 6", 6000.0, "Pagado"),
+        objTicket(7, "07/02/2021", "Cliente 7", 7000.0, "Pagado"),
+        objTicket(8, "08/02/2021", "Cliente 8", 8000.0, "Pendiente"),
+        objTicket(9, "09/02/2021", "Cliente 9", 9000.0, "Pagado"),
+        objTicket(10, "10/02/2021", "Cliente 10", 10000.0, "Pagado"),
+    ) // esto debe venir del viewModel
+
     var ventasTickerDinero by rememberSaveable { mutableIntStateOf(10000) }
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") }
     var selected by rememberSaveable { mutableStateOf("") }
@@ -80,10 +110,8 @@ fun HistorialScreen() {
         mutableStateOf(false)
     }
 
-
-
     Column(
-        //Todo
+        //To.do
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
@@ -126,6 +154,7 @@ fun HistorialScreen() {
                                     ventasTickerTitulo = "Ventas"
                                     ventasTickerDinero = 10000
                                 }
+
                                 "Ticket" -> {
                                     ventasTickerTitulo = "Cuenta x Cobrar"
                                     ventasTickerDinero = 20000
@@ -152,11 +181,167 @@ fun HistorialScreen() {
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            ListItem(headlineContent = {
-                //Aquí el menú
-            })
+            //Aquí el menú de ventas o ticket
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .background(Color(0xFFFFFFFF), RoundedCornerShape(16.dp))
+            ) {
+                if (true) { //selected == "Ventas"
+                    //Aquí va el menú de ventas
+                    LazyColumn {
+                        item {
+                            Row {
+                                Text(
+                                    "ID",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Fecha",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Cliente",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Total",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Estado",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider()
+                        }
+                        items(listVentas.size) { index ->
+                            Row {
+                                Text(
+                                    listVentas[index].id.toString(),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listVentas[index].fecha,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listVentas[index].cliente,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listVentas[index].total.toString(),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listVentas[index].estado,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider()
+                        }
+                    }
+                } else if (selected == "Ticket") {
+                    //Aquí va el menú de ticket
+                    LazyColumn {
+                        item {
+                            Row {
+                                Text(
+                                    "ID",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Fecha",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Cliente",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Total",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Estado",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider()
+                        }
+                        items(listTicket.size) { index ->
+                            Row {
+                                Text(
+                                    listTicket[index].id.toString(),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listTicket[index].fecha,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listTicket[index].cliente,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listTicket[index].total.toString(),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    listTicket[index].estado,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider()
+                        }
+                    }
+                } else {
+                    Text(text = "Seleccione un tipo de reporte", fontSize = 24.sp)
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
-            Row{//Avatar y Botones
+            Row {//Avatar y Botones
 
             }
         }
@@ -189,3 +374,19 @@ fun HistorialScreen() {
 fun HistorialScreenPreview() {
     HistorialScreen()
 }
+
+data class objVenta(
+    val id: Int,
+    val fecha: String,
+    val cliente: String,
+    val total: Double,
+    val estado: String
+)
+
+data class objTicket(
+    val id: Int,
+    val fecha: String,
+    val cliente: String,
+    val total: Double,
+    val estado: String
+)
