@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.products.domain.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 @Entity(tableName = "Product_Table")
 data class ProductEntity(

@@ -5,10 +5,12 @@ import android.net.Uri
 import android.widget.Toast
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.MediatorProducts
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.util.XlsManeger
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -17,9 +19,11 @@ import javax.inject.Inject
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao,
     private val excel: XlsManeger,
-    private val mediador:MediatorFbPrododucts,
-    private val context : Context
+    private val context : Context,
+    private val mediador2: MediatorProducts
 ):InventarioRepo {
+
+
     override  fun getProducts(): Flow<List<ProductEntity>> {
 
        return daoProductos.getProducts()
@@ -129,7 +133,11 @@ class InventarioRepoImpl @Inject constructor(
 
     override suspend fun syncronizacionProductos() {
 
+        mediador2.ayscPro()
+        /*
         mediador.sync()
+
+         */
     }
 
     private fun validarNombresColumnas(columnas:List<String?>):Boolean{

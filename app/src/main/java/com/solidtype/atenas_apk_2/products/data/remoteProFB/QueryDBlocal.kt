@@ -1,4 +1,121 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
-class QueryDBlocal {
+import android.graphics.ColorSpace.Model
+import androidx.compose.ui.text.font.FontLoadingStrategy.Companion.Async
+import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import org.jetbrains.annotations.Async
+import java.util.jar.Attributes.Name
+import javax.inject.Inject
+
+class QueryDBlocal @Inject constructor(
+    private val dao: ProductDao
+) {
+
+    private fun entityConvert(it: List<String>): ProductEntity {
+
+        if (it.size == 9) {
+            try {
+                val products = ProductEntity(
+                    Code_Product = it[0].toInt(),
+                    Name_Product = it[1],
+                    Description_Product = it[2],
+                    Category_Product = it[3],
+                    Price_Product = it[4].toDouble(),
+                    Model_Product = it[5],
+                    Price_Vending_Product = it[6].toDouble(),
+                    Tracemark_Product = it[7],
+                    Count_Product = it[8].toInt(),
+                )
+
+                return products
+            } catch (e: Exception) {
+                throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
+
+            }
+        }
+        throw Exception ("El tamaño de la lista enregada no es compatible")
+    }
+
+
+    private fun entityToListString(data: List<ProductEntity>): List<List<String>>{
+
+        val mutableListData: MutableList<List<String>> = mutableListOf()
+
+        if (data.isNotEmpty()) {
+                data.forEach {
+                    val mutableList = mutableListOf<String>()
+                    mutableList.add(it.Code_Product.toString())
+                    mutableList.add(it.Description_Product)
+                    mutableList.add(it.Category_Product)
+                    mutableList.add(it.Price_Product.toString())
+                    mutableList.add(it.Model_Product)
+                    mutableList.add(it.Price_Vending_Product.toString())
+                    mutableList.add(it.Tracemark_Product)
+                    mutableList.add(it.Count_Product.toString())
+
+                    mutableListData.add(mutableList)
+                }
+        }
+        return mutableListData
+
+    }
+    suspend fun getAllProducts(): List<List<String>> {
+        var mutableListData: List<List<String>> = emptyList()
+        val allProducts: Flow<List<ProductEntity>> = dao.getProducts()
+        allProducts.collect { lista ->
+            if (lista.isNotEmpty()) {
+                mutableListData = entityToListString(lista)
+            }
+        }
+        println("estos son los datos de la funcion getallproducts $mutableListData")
+        return mutableListData
+    }
+
+    suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>) {
+        val lista: MutableList<ProductEntity> = mutableListOf()
+        dataToInsert.forEach {
+                try {
+                    lista.add( entityConvert(it))
+                } catch (e: Exception) {
+                    throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
+                }
+        }
+        coroutineScope {
+                val response = async { dao.insertAllProducts(lista) }
+                response.await()
+        }
+    }
+
+    suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
+        val listaFirebaseMediatorproducts: MutableList<ProductEntity> = mutableListOf()
+        val local = localDate()
+        listIntrusos.forEach {
+            val intrusosConvetido = entityConvert(it)
+            listaFirebaseMediatorproducts.add(intrusosConvetido)
+        }
+        val productosToDeleteInFirestore = listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
+            local.any { it.Code_Product == firestoreproductos.Code_Product }
+        }
+        return entityToListString(productosToDeleteInFirestore)
+    }
+
+
+
+    private suspend fun localDate(): List<ProductEntity>{
+       var listProduct = emptyList<ProductEntity>()
+       val  dataLocal =  dao.getProducts()
+        dataLocal.collect{
+            listProduct = it
+        }
+        return listProduct
+    }
+
+
 }
+
+
+

@@ -2,8 +2,8 @@ package com.solidtype.atenas_apk_2.products.data.remote
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
+
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -15,17 +15,18 @@ class FireStoreQuerysProducts @Inject constructor(
 ) {
 
 
+/*
 
-
-    suspend fun getDatatProFB(uidPro:String): List<ProductEntity>{
+    suspend fun getDatatProFB(uidPro:String): List<modelFirebaseK>{
         return withContext(Dispatchers.IO){
             try {
-                firestore.collection("usuarios")
+               val f =  firestore.collection("usuarios")
                     .document(uidPro)
                     .collection("productos")
                     .get()
                     .await()
-                    .toObjects(ProductEntity::class.java)
+
+               f.toObjects(modelFirebaseK::class.java)
 
             } catch (e: Exception) {
                 Log.e("Error sincronizacion", "Error al obtener usuarios de Firestore: $e")
@@ -33,16 +34,42 @@ class FireStoreQuerysProducts @Inject constructor(
             }
         }
     }
-    suspend fun insertFromFireBUsersToLocal(users: List<ProductEntity>, dbLocal:ProductDataBase) {
+    suspend fun insertFromFireBUsersToLocal(productsFirebase: List<modelFirebaseK>, dbLocal:ProductDataBase) {
         try {
-            users.forEach {
-                dbLocal.ProductDao.insertProduct(it)
-            }
+
+               val lista:List<ProductEntity> =  convertirListaFirebaseAEntity(productsFirebase)
+                lista.forEach{
+                    dbLocal.ProductDao.insertProduct(it)
+                }
+
         } catch (e: Exception) {
             Log.e("Error sincronizacion", "Error al insertar usuarios en la base de datos local: $e")
         }
     }
+    fun convertirListaFirebaseAEntity(listaFirebase: List<modelFirebaseK>): List<ProductEntity> {
+        val listaEntity = mutableListOf<ProductEntity>()
 
+        for (item in listaFirebase) {
+            val productEntity = ProductEntity(
+                Code_Product = item.code_product,
+                Name_Product = item.Description_Product,
+                Description_Product = item.Description_Product,
+                Category_Product = item.Category_Product,
+                Price_Product = item.Price_Product,
+                Model_Product = item.Model_Product,
+                Price_Vending_Product = item.Price_Vending_Product,
+                Tracemark_Product = item.Tracemark_Product,
+                Count_Product = item.Count_Product
+            )
+            listaEntity.add(productEntity)
+
+        }
+
+        println(listaEntity)
+        return listaEntity
+
+    }
+*/
     suspend fun syncLocalUsersWithFirestore(localUsers: List<ProductEntity>, firestoreUsers: List<ProductEntity>,uidPro:String) {
         try {
             val batch = firestore.batch()
@@ -53,7 +80,7 @@ class FireStoreQuerysProducts @Inject constructor(
                         firestore.collection("usuarios")
                             .document(uidPro)
                             .collection("productos")
-                            .document(localUser.Code_Product.toString()), localUser)
+                            .document(localUser.Code_Product.toString()),localUser)
                 }
             }
             batch.commit().await()
