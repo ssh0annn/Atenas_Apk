@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,15 +17,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -43,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.BotonBlanco
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.SelecionarFecha
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -52,7 +62,10 @@ import java.util.Date
 @Composable
 fun HistorialScreen() {
 
-    var ventas by rememberSaveable { mutableIntStateOf(10000) }
+    val items = listOf("Ventas", "Ticket")
+
+    var ventas_ticker by rememberSaveable { mutableIntStateOf(10000) }
+    var selected by rememberSaveable { mutableStateOf("") }
 
     val datePickerState1: DatePickerState =
         rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
@@ -98,7 +111,17 @@ fun HistorialScreen() {
                     SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
                         showDatePicker2 = true
                     }
-                    BotonBlanco(text = "Ventas v") {} //Aquí va un selector
+                    //Aquí va un selector
+                    Box(
+                        modifier = Modifier.width(200.dp)
+                    ) {
+                        DropdownSelect(
+                            items = items,
+                            selectedItem = items.first(),
+                        ) {
+                            selected = it
+                        }
+                    }
                 }
                 Column(
                     modifier = Modifier.weight(1f),
@@ -108,7 +131,7 @@ fun HistorialScreen() {
                         text = "Ventas", fontSize = 24.sp, fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "$ventas RD$",
+                        text = "$ventas_ticker RD$",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic
