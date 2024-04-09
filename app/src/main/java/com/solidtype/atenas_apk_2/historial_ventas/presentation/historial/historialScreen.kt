@@ -64,7 +64,8 @@ fun HistorialScreen() {
 
     val items = listOf("Ventas", "Ticket")
 
-    var ventas_ticker by rememberSaveable { mutableIntStateOf(10000) }
+    var ventasTickerDinero by rememberSaveable { mutableIntStateOf(10000) }
+    var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") }
     var selected by rememberSaveable { mutableStateOf("") }
 
     val datePickerState1: DatePickerState =
@@ -120,6 +121,16 @@ fun HistorialScreen() {
                             selectedItem = items.first(),
                         ) {
                             selected = it
+                            when (selected) {
+                                "Ventas" -> {
+                                    ventasTickerTitulo = "Ventas"
+                                    ventasTickerDinero = 10000
+                                }
+                                "Ticket" -> {
+                                    ventasTickerTitulo = "Cuenta x Cobrar"
+                                    ventasTickerDinero = 20000
+                                }
+                            }
                         }
                     }
                 }
@@ -128,10 +139,12 @@ fun HistorialScreen() {
                     horizontalAlignment = Alignment.End,
                 ) {//Area de Ventas
                     Text(
-                        text = "Ventas", fontSize = 24.sp, fontWeight = FontWeight.Bold
+                        text = ventasTickerTitulo,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "$ventas_ticker RD$",
+                        text = "$ventasTickerDinero RD$",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic
@@ -142,6 +155,10 @@ fun HistorialScreen() {
             ListItem(headlineContent = {
                 //Aquí el menú
             })
+            Spacer(modifier = Modifier.height(16.dp))
+            Row{//Avatar y Botones
+
+            }
         }
         DatePickerDialogo(
             showDatePicker = showDatePicker1,
