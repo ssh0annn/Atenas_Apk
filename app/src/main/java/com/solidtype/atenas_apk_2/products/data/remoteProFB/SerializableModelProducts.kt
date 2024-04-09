@@ -2,8 +2,6 @@ package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
 import kotlinx.serialization.Serializable
 
-
-
 @Serializable
 data class SerializableModelProducts(
 val code_product: Int ,

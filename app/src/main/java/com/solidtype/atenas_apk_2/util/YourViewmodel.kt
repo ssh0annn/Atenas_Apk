@@ -18,7 +18,7 @@ class YourViewModel @Inject constructor(private val casosInventario: CasosInvent
 
     init {
 
-        casosInventario.getProductos()
+         casosInventario.getProductos()
         viewModelScope.launch {
             casosInventario.createProductos(ProductEntity(
                 9090,

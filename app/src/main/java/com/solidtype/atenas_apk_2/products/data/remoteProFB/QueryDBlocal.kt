@@ -1,18 +1,15 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
-import android.graphics.ColorSpace.Model
-import androidx.compose.ui.text.font.FontLoadingStrategy.Companion.Async
+import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import org.jetbrains.annotations.Async
-import java.util.jar.Attributes.Name
 import javax.inject.Inject
 
 class QueryDBlocal @Inject constructor(
-    private val dao: ProductDao
+    private val dao: ProductDao,
+    private val database: ProductDataBase
 ) {
 
     private fun entityConvert(it: List<String>): ProductEntity {
@@ -65,13 +62,15 @@ class QueryDBlocal @Inject constructor(
     }
     suspend fun getAllProducts(): List<List<String>> {
         var mutableListData: List<List<String>> = emptyList()
-        val allProducts: Flow<List<ProductEntity>> = dao.getProducts()
-        allProducts.collect { lista ->
-            if (lista.isNotEmpty()) {
-                mutableListData = entityToListString(lista)
+        var listaDeEntity = emptyList<ProductEntity>()
+        coroutineScope {
+            val response = async { listaDeEntity= dao.getProductss() }
+            response.await()
+            if (listaDeEntity.isNotEmpty()) {
+                mutableListData = entityToListString(listaDeEntity)
             }
         }
-        println("estos son los datos de la funcion getallproducts $mutableListData")
+
         return mutableListData
     }
 
@@ -85,6 +84,7 @@ class QueryDBlocal @Inject constructor(
                 }
         }
         coroutineScope {
+            println("Aqui veamos la lista: $lista y siez ${lista.size}")
                 val response = async { dao.insertAllProducts(lista) }
                 response.await()
         }
@@ -102,16 +102,34 @@ class QueryDBlocal @Inject constructor(
         }
         return entityToListString(productosToDeleteInFirestore)
     }
+    suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
+        println("La lista que recibo : $listIntrusos y tamamnio : ${listIntrusos[0].size}")
+        val listaFirebaseMediatorproducts: MutableList<ProductEntity> = mutableListOf()
+        val local = localDate()
+        listIntrusos.forEach {
+            val intrusosConvetido = entityConvert(it)
+            listaFirebaseMediatorproducts.add(intrusosConvetido)
+        }
+        val listaNoMutable:List<ProductEntity> = listaFirebaseMediatorproducts
+        val productToAddInFirebase = local.filterNot { firestoreproductos ->
+            listaNoMutable.any { it == firestoreproductos
+            }
+        }
+        return entityToListString(productToAddInFirebase)
+    }
+
+
 
 
 
     private suspend fun localDate(): List<ProductEntity>{
-       var listProduct = emptyList<ProductEntity>()
-       val  dataLocal =  dao.getProducts()
-        dataLocal.collect{
-            listProduct = it
-        }
-        return listProduct
+       return coroutineScope {
+           val listProduct =async { dao.getProductss()}
+           return@coroutineScope listProduct.await()
+
+       }
+
+
     }
 
 
