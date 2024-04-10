@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -58,6 +59,9 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.compon
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.SelecionarFecha
+import com.solidtype.atenas_apk_2.products.presentation.inventory.showFilePicker
+import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
+import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -340,9 +344,24 @@ fun HistorialScreen() {
                     Text(text = "Seleccione un tipo de reporte", fontSize = 24.sp)
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row {//Avatar y Botones
-
+            Spacer(modifier = Modifier.height(12.dp))
+            Row{ //Avatar y Botones
+                //Avatar
+                if (true) { // si no hay imagen de perfil
+                    Avatar()
+                } else {//Mostrar foto de perfil
+                    //Image(painter = , contentDescription = )
+                }
+                Spacer(modifier = Modifier.width(400.dp))
+                Row {
+                    //Botones para Importar, Exportar y Ver
+                    Boton("Cancelar") {
+                        //Aquí lógica para cancelar
+                    }
+                    Boton("Exportar") {
+                        //Aquí lógica para exportar
+                    }
+                }
             }
         }
         DatePickerDialogo(
