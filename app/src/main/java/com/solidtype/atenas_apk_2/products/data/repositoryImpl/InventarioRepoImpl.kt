@@ -12,6 +12,8 @@ import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.util.XlsManeger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,7 +21,7 @@ import javax.inject.Inject
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao,
     private val excel: XlsManeger,
-    private val context : Context,
+
     private val mediador2: MediatorProducts
 ):InventarioRepo {
 
@@ -134,10 +136,8 @@ class InventarioRepoImpl @Inject constructor(
     override suspend fun syncronizacionProductos() {
 
         mediador2.ayscPro()
-        /*
-        mediador.sync()
+        println("llllll")}
 
-         */
     }
 
     private fun validarNombresColumnas(columnas:List<String?>):Boolean{
@@ -160,5 +160,5 @@ class InventarioRepoImpl @Inject constructor(
         println("Los datos son incorrectos... verifica")
 
             return false
-    }
+
 }

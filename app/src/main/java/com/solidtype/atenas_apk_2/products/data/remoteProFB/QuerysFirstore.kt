@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
-import android.annotation.SuppressLint
 import android.util.Log
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -13,109 +11,139 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
+/**
+ * @param:private val fireStore: FirebaseFirestore,
+ *     private val authUser: FirebaseAuth,
+ *  Estos parametros los recibe por medio de la injection de DaggerHilt.
+ *  @Funcionamiento:
+ *  QuerysFirstore se encarga de toda la logica de consulta, insercion, eliminacion y actaulizaciones
+ *  requeridas para firestore. Utiliza escrituras, actualizacion y eliminaciones por lotes. Solo se comunica atravez de listas de maps de string
+ *  y devuelbe en las consulta un QuerySnapshot
+ */
 class QuerysFirstore @Inject constructor(
     private val fireStore: FirebaseFirestore,
-    private val authUser : FirebaseAuth
+    private val authUser: FirebaseAuth
 ) {
+    private val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
 
-    val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
+    /**
+     * @param: String
+     *@return: QuerySnapshot?
+     *@getAllDataFirebase
+     *Captura toda una colecion de fireStore espesificada en el parametro.
+     *
+     */
 
-    suspend fun getAllDataFirebase(collectionName:String) : String {
+    suspend fun getAllDataFirebase(collectionName: String): QuerySnapshot? =
 
-        return withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             try {
-                val allData = fireStore.collection("usuarios")
+                return@withContext fireStore.collection("usuarios")
                     .document(uidUser)
                     .collection(collectionName)
                     .get()
-                    .await()
-                return@withContext snapshotToJson(allData)
-
-
-
-            }catch (e:Exception){
+                    .await<QuerySnapshot?>()
+            } catch (e: Exception) {
                 Log.e("FirebaseError", "Error al obtener datos de Firebase", e)
-                throw Exception ("no se pudo obtener los datos desde firebase")
+                throw Exception("no se pudo obtener los datos desde firebase")
             }
         }
 
-    }
 
-    private fun snapshotToJson(snapshot: QuerySnapshot):String{
-        val products = mutableListOf<SerializableModelProducts>()
 
-        for (document in snapshot.documents){
-            val data = document.data
-            if (data != null){
-                val product = SerializableModelProducts(
-                    data["category_Product"] as Int,
-                    data["Description_Product "] as String,
-                    data["Category_Product"] as String,
-                    data["Price_Product"] as Double,
-                    data["Model_Product"] as String,
-                    data["Price_Vending_Product"] as Double,
-                    data["Tracemark_Product"] as String,
-                    data["Count_Product"] as Int
-
-                )
-                products.add(product)
-            }
-
-        }
-        Log.e("snapshotToJson","los datos del query son ${products.forEach { data->  println(data.code_product) }}")
-        return Json.encodeToString(products)
-    }
-
-    /*
-       //se convierte el snashopt a json por medio de la seralizacion
-    private fun snapshotToJson(snapshot: QuerySnapshot) : String{
-        val queryJson =  mutableListOf<Map<String,Any?>>()
+    //se convierte el snashopt a json por medio de la
+    /**
+     * @param: QuerySnapshot
+     * @return: String, serializado en json.
+     * @Nota: No esta en uso aun.
+     */
+    private fun snapshotToJson(snapshot: QuerySnapshot): String {
+        val queryJson = mutableListOf<Map<String, Any?>>()
         //se recorre el la lista con el documento para la conversicio
-        for (document in snapshot.documents){
-            val  data = document.data
-            if (data != null){
+        for (document in snapshot.documents) {
+            val data = document.data
+            if (data != null) {
+
                 queryJson.add(data)
             }
         }
-           //luego se hace una convercion de json a string
+        //luego se hace una convercion de json a string
         return Json.encodeToString(queryJson)
     }
-*/
-    suspend fun insertToFirebase (collectionName:String, dataToInsert: List<List<String>> ) {
+
+
+    /**
+    @param: String, List<Map<String, String>>, String
+    @return: Unit
+    @insertToFirebase
+    @Pide: Nombre de la collecion, lista del diccionario de datos a insertar y el id del documento donde se insertaran
+    @Funcion:
+
+     */
+    suspend fun insertToFirebase(
+        collectionName: String,
+        dataToInsert: List<Map<String, String>>,
+        idDocumento: String
+    ) {
 
         try {
-            val batch = fireStore.batch()
-            dataToInsert.forEach { data->
-                if (data.isNotEmpty()){
-                    batch.set(
+            withContext(Dispatchers.Default) {
+                val lote = fireStore.batch()
+                for (data in dataToInsert) {
+                    val ref = data[idDocumento]?.let {
                         fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collectionName)
-                            .document(data[0]),data)
+
+                            .document(it)
+                    }
+                    if (ref != null) {
+                        lote.set(ref, data)
+                    }
                 }
+                lote.commit().await()
             }
-            batch.commit().await()
-        }catch (e:Exception){
-            Log.e("error firebase","No se puedo insertar $e")
-            throw Exception ("no se pudo insertar los datos a firebase")
+        } catch (e: Exception) {
+            Log.e("error firebase", "No se puedo insertar $e")
+            throw Exception("no se pudo insertar los datos a firebase $e")
         }
 
     }
 
-    suspend fun deleteDataFirebase (collectionName:String, dataToDelete: List<List<String>>){
+
+    /**
+     * @param: String, List<Map<String, String>>, String
+     * @return: Unit
+     * @throws: Exception si no se pueden eliminar los datos en firebas
+     * @Funcionamiento: Recibe nombre de la colecion, lista de objetos a eliminar y la id del documento en firestore.
+     * EL formato de eliminar es por lote, y se requiere llamar desde una corrutina.
+     */
+    suspend fun deleteDataFirebase(
+        collectionName: String,
+        dataToDelete: List<Map<String, String>>,
+        idDocumento: String
+    ) {
         try {
-            val batch = fireStore.batch()
-            dataToDelete.forEach { data->
-                fireStore.collection("Usuarios")
-                    .document(uidUser)
-                    .collection(collectionName)
-                    .document(data[0])
-                    .delete()
-                    .await()
+            withContext(Dispatchers.IO) {
+                val lote = fireStore.batch()
+                for (i in dataToDelete) {
+                    val allData = i[idDocumento]?.let {
+                        fireStore.collection("usuarios")
+                            .document(uidUser)
+                            .collection(collectionName)
+                            .document(it)
+                    }
+                    if (allData != null) {
+                        lote.delete(allData)
+                    }
+
+                }
+                lote.commit().await()
             }
-            batch.commit().await()
-        }catch (e:Exception){
-            throw Exception ("No se pudo eliminar los datos de firebase")
+
+        } catch (e: Exception) {
+            println("Este es la puta excepcion: $e")
+            throw Exception("No se pudo eliminar los datos de firebase $e")
         }
     }
 }

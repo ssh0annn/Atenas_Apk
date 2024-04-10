@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-private val json = Json
 
 
 @Serializable
