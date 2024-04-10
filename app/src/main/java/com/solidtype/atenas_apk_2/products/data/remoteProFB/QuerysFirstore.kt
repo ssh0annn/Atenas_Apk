@@ -31,6 +31,8 @@ class QuerysFirstore @Inject constructor(
                     .await()
                 return@withContext snapshotToJson(allData)
 
+
+
             }catch (e:Exception){
                 Log.e("FirebaseError", "Error al obtener datos de Firebase", e)
                 throw Exception ("no se pudo obtener los datos desde firebase")
@@ -39,6 +41,32 @@ class QuerysFirstore @Inject constructor(
 
     }
 
+    private fun snapshotToJson(snapshot: QuerySnapshot):String{
+        val products = mutableListOf<SerializableModelProducts>()
+
+        for (document in snapshot.documents){
+            val data = document.data
+            if (data != null){
+                val product = SerializableModelProducts(
+                    data["category_Product"] as Int,
+                    data["Description_Product "] as String,
+                    data["Category_Product"] as String,
+                    data["Price_Product"] as Double,
+                    data["Model_Product"] as String,
+                    data["Price_Vending_Product"] as Double,
+                    data["Tracemark_Product"] as String,
+                    data["Count_Product"] as Int
+
+                )
+                products.add(product)
+            }
+
+        }
+        Log.e("snapshotToJson","los datos del query son ${products.forEach { data->  println(data.code_product) }}")
+        return Json.encodeToString(products)
+    }
+
+    /*
        //se convierte el snashopt a json por medio de la seralizacion
     private fun snapshotToJson(snapshot: QuerySnapshot) : String{
         val queryJson =  mutableListOf<Map<String,Any?>>()
@@ -52,7 +80,7 @@ class QuerysFirstore @Inject constructor(
            //luego se hace una convercion de json a string
         return Json.encodeToString(queryJson)
     }
-
+*/
     suspend fun insertToFirebase (collectionName:String, dataToInsert: List<List<String>> ) {
 
         try {
@@ -63,8 +91,7 @@ class QuerysFirstore @Inject constructor(
                         fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collectionName)
-                            .document(data[0]),data
-                    )
+                            .document(data[0]),data)
                 }
             }
             batch.commit().await()
