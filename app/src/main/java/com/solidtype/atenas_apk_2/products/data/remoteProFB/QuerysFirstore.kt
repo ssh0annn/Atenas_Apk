@@ -11,20 +11,29 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
+/**
+ * @param:private val fireStore: FirebaseFirestore,
+ *     private val authUser: FirebaseAuth,
+ *  Estos parametros los recibe por medio de la injection de DaggerHilt.
+ *  @Funcionamiento:
+ *  QuerysFirstore se encarga de toda la logica de consulta, insercion, eliminacion y actaulizaciones
+ *  requeridas para firestore. Utiliza escrituras, actualizacion y eliminaciones por lotes. Solo se comunica atravez de listas de maps de string
+ *  y devuelbe en las consulta un QuerySnapshot
+ */
 class QuerysFirstore @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val authUser: FirebaseAuth
 ) {
     private val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
 
-
     /**
-    @param: String
-    @return: QuerySnapshot?
-    @getAllDataFirebase
-    Captura toda una colecion de fireStore espesificada en el parametro.
-
+     * @param: String
+     *@return: QuerySnapshot?
+     *@getAllDataFirebase
+     *Captura toda una colecion de fireStore espesificada en el parametro.
+     *
      */
+
     suspend fun getAllDataFirebase(collectionName: String): QuerySnapshot? =
 
         withContext(Dispatchers.IO) {
@@ -42,7 +51,12 @@ class QuerysFirstore @Inject constructor(
         }
 
 
-    //se convierte el snashopt a json por medio de la seralizacion
+    //se convierte el snashopt a json por medio de la
+    /**
+     * @param: QuerySnapshot
+     * @return: String, serializado en json.
+     * @Nota: No esta en uso aun.
+     */
     private fun snapshotToJson(snapshot: QuerySnapshot): String {
         val queryJson = mutableListOf<Map<String, Any?>>()
         //se recorre el la lista con el documento para la conversicio
@@ -94,7 +108,19 @@ class QuerysFirstore @Inject constructor(
 
     }
 
-    suspend fun deleteDataFirebase(collectionName: String, dataToDelete: List<Map<String,String>>, idDocumento:String) {
+
+    /**
+     * @param: String, List<Map<String, String>>, String
+     * @return: Unit
+     * @throws: Exception si no se pueden eliminar los datos en firebas
+     * @Funcionamiento: Recibe nombre de la colecion, lista de objetos a eliminar y la id del documento en firestore.
+     * EL formato de eliminar es por lote, y se requiere llamar desde una corrutina.
+     */
+    suspend fun deleteDataFirebase(
+        collectionName: String,
+        dataToDelete: List<Map<String, String>>,
+        idDocumento: String
+    ) {
         try {
             withContext(Dispatchers.IO) {
                 val lote = fireStore.batch()
@@ -105,7 +131,7 @@ class QuerysFirstore @Inject constructor(
                             .collection(collectionName)
                             .document(it)
                     }
-                    if(allData != null){
+                    if (allData != null) {
                         lote.delete(allData)
                     }
 
