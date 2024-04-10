@@ -70,6 +70,7 @@ object AppModule {
     @Provides
     fun historialVentasRepository(impl: HistorialRepositoryImp): HistorialRepository = impl
 
+
     @Singleton
     @Provides
     fun provideAuthCases(repository: UserRepository) = AuthUseCases(
@@ -110,6 +111,7 @@ object AppModule {
         exportarVentas = ExportarVentas(repo),
         buscarporFechCatego = BuscarporFechCatego(repo)
     )
+
 
     @Singleton
     @Provides

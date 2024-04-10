@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface HistorialRepository {
 
+
+
     fun mostrarTodasVentas() :Flow <List<HistorialVentaEntidad>>
     suspend fun exportarVentas(listaProductos:List<HistorialVentaEntidad>):Uri
     fun buscarPorFechasCategoriasVentas(Fecha_inicio:String, fecha_final:String, categoria:String): Flow<List<HistorialVentaEntidad>>

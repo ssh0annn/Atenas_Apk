@@ -1,5 +1,4 @@
 package com.solidtype.atenas_apk_2
-
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -8,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,10 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.util.FireManeger
-import com.solidtype.atenas_apk_2.util.YourViewModel
-
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -52,11 +48,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             //Demo_ExposedDropdownMenuBox()
             // FireManeger()
             //TestAutocompleteSelect()
            // Demo_SearchableExposedDropdownMenuBox()
             InventoryScreen()
+           // InventoryScreen()
+           // FireManeger()
         }
     }
 

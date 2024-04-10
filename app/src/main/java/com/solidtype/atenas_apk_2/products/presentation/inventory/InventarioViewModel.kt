@@ -1,12 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
-import android.content.Context
 import android.net.Uri
-import android.os.Message
-import android.widget.Toast
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
@@ -162,6 +156,8 @@ class InventarioViewModel @Inject constructor(
                    uiState.update { it.copy(isLoading = false,errorMessages = "Formato invalido") }
 
                 }
+                casosInventario.importarExcelFile(filePath)
+                uiState.update { it.copy(isLoading = false) }
 
             }
 

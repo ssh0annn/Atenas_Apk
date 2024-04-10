@@ -16,6 +16,13 @@ class HistorialRepositoryImp @Inject constructor(
         return dao.getHistorialVenta()
     }
 
+    fun insertalTemporal(
+        ojeto:HistorialVentaEntidad
+    ){
+        dao.setHistorialVenta(ojeto)
+    }
+
+
     override suspend fun exportarVentas(listaProductos:List<HistorialVentaEntidad>): Uri {
         val columnas = listOf(
             "Codigo",
