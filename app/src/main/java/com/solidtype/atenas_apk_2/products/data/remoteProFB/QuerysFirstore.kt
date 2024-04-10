@@ -1,38 +1,39 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
-import android.annotation.SuppressLint
 import android.util.Log
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.lang.reflect.TypeVariable
 import javax.inject.Inject
 
 class QuerysFirstore @Inject constructor(
     private val fireStore: FirebaseFirestore,
     private val authUser: FirebaseAuth
 ) {
-    val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
+    private val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
 
-    suspend fun getAllDataFirebase(collectionName: String) =
+
+    /**
+    @param: String
+    @return: QuerySnapshot?
+    @getAllDataFirebase
+    Captura toda una colecion de fireStore espesificada en el parametro.
+
+     */
+    suspend fun getAllDataFirebase(collectionName: String): QuerySnapshot? =
 
         withContext(Dispatchers.IO) {
             try {
-
-                val allData = fireStore.collection("usuarios")
+                return@withContext fireStore.collection("usuarios")
                     .document(uidUser)
                     .collection(collectionName)
                     .get()
-                    .await()
-                return@withContext allData
+                    .await<QuerySnapshot?>()
 
             } catch (e: Exception) {
                 Log.e("FirebaseError", "Error al obtener datos de Firebase", e)
@@ -56,40 +57,36 @@ class QuerysFirstore @Inject constructor(
         return Json.encodeToString(queryJson)
     }
 
-    suspend fun insertToFirebase(collectionName: String, dataToInsert: List<List<String>>) {
+    /**
+    @param: String, List<Map<String, String>>, String
+    @return: Unit
+    @insertToFirebase
+    @Pide: Nombre de la collecion, lista del diccionario de datos a insertar y el id del documento donde se insertaran
+    @Funcion:
+
+     */
+    suspend fun insertToFirebase(
+        collectionName: String,
+        dataToInsert: List<Map<String, String>>,
+        idDocumento: String
+    ) {
 
         try {
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 for (data in dataToInsert) {
-                    if (data.isNotEmpty() && data.size ==9) {
-
-                      val ref=  fireStore.collection("usuarios")
+                    val ref = data[idDocumento]?.let {
+                        fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collectionName)
-                            .document(data[0])
-                        val dataMapa = mapOf(
-                            "code_Product" to data[0],
-                            "name_Product" to data[1],
-                            "description_Product" to data[2],
-                            "category_Product" to data[3],
-                            "price_Product" to data[4],
-                            "model_Product" to data[5],
-                            "price_Vending_Product" to data[6],
-                            "tracemark_Product" to data[7],
-                            "count_Product" to data[8],
-
-                            )
-                        lote.set(ref, dataMapa)
-                    }else{
-                        println("Problemas con la lista: $data y sieze: ${data.size}")
+                            .document(it)
+                    }
+                    if (ref != null) {
+                        lote.set(ref, data)
                     }
                 }
                 lote.commit().await()
-
             }
-
-
         } catch (e: Exception) {
             Log.e("error firebase", "No se puedo insertar $e")
             throw Exception("no se pudo insertar los datos a firebase $e")
@@ -97,34 +94,24 @@ class QuerysFirstore @Inject constructor(
 
     }
 
-    suspend fun deleteDataFirebase(collectionName: String, dataToDelete: List<List<String>>) {
+    suspend fun deleteDataFirebase(collectionName: String, dataToDelete: List<Map<String,String>>, idDocumento:String) {
         try {
-
             withContext(Dispatchers.IO) {
-                var b = 0
+                val lote = fireStore.batch()
                 for (i in dataToDelete) {
-
-
-                    val allData = fireStore.collection("usuarios")
-                        .document(uidUser)
-                        .collection(collectionName)
-                        .document(dataToDelete[b][0])
-                        .id
-
-                    fireStore.collection("usuarios").document(uidUser).collection(collectionName)
-                        .document(allData).delete()
-
-
-
-
-
-
-                    println("Probando: ${dataToDelete[b][0]}")
-                    b += 1
+                    val allData = i[idDocumento]?.let {
+                        fireStore.collection("usuarios")
+                            .document(uidUser)
+                            .collection(collectionName)
+                            .document(it)
+                    }
+                    if(allData != null){
+                        lote.delete(allData)
+                    }
 
                 }
+                lote.commit().await()
             }
-
 
         } catch (e: Exception) {
             println("Este es la puta excepcion: $e")

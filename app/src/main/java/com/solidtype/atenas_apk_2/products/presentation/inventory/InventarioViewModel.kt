@@ -121,6 +121,7 @@ class InventarioViewModel @Inject constructor(
                        // Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
                         }
                     }
+                    mostrarProductos()
                 }
 
                     println(" fuera del withcontext, en el viewscope")
@@ -186,6 +187,7 @@ class InventarioViewModel @Inject constructor(
 
                 casosInventario.importarExcelFile(filePath)
                 uiState.update { it.copy(isLoading = false) }
+                syncProductos()
             }
 
         }

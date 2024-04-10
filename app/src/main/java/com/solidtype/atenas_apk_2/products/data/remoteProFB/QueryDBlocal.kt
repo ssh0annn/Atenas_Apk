@@ -30,6 +30,7 @@ class QueryDBlocal @Inject constructor(
 
                 return products
             } catch (e: Exception) {
+                println("Este es la razon lista: $it, size ${it.size}")
                 throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
 
             }
@@ -46,6 +47,7 @@ class QueryDBlocal @Inject constructor(
                 data.forEach {
                     val mutableList = mutableListOf<String>()
                     mutableList.add(it.Code_Product.toString())
+                    mutableList.add(it.Name_Product)//Aqui era el problma jajja
                     mutableList.add(it.Description_Product)
                     mutableList.add(it.Category_Product)
                     mutableList.add(it.Price_Product.toString())
@@ -78,7 +80,7 @@ class QueryDBlocal @Inject constructor(
         val lista: MutableList<ProductEntity> = mutableListOf()
         dataToInsert.forEach {
                 try {
-                    lista.add( entityConvert(it))
+                    lista.add(entityConvert(it))
                 } catch (e: Exception) {
                     throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
                 }
@@ -103,7 +105,6 @@ class QueryDBlocal @Inject constructor(
         return entityToListString(productosToDeleteInFirestore)
     }
     suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
-        println("La lista que recibo : $listIntrusos y tamamnio : ${listIntrusos[0].size}")
         val listaFirebaseMediatorproducts: MutableList<ProductEntity> = mutableListOf()
         val local = localDate()
         listIntrusos.forEach {
