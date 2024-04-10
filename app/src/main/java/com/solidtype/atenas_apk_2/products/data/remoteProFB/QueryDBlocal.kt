@@ -13,7 +13,6 @@ import javax.inject.Inject
  */
 class QueryDBlocal @Inject constructor(
     private val dao: ProductDao
-
 ) {
     /**
      * @param: List<String>

@@ -32,10 +32,7 @@ class InventarioViewModel @Inject constructor(
 
     init {
         mostrarProductos()
-
-
-
-    }
+       }
 
 
     fun crearProductos(
@@ -74,14 +71,15 @@ class InventarioViewModel @Inject constructor(
         val productos = casosInventario.getProductos()
 
         viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                syncProductos()
+            }
             productos.collect { product ->
                 uiState.update {
                     it.copy(products = product)
                 }
             }
-            withContext(Dispatchers.Default) {
-                syncProductos()
-            }
+
 
         }
 
