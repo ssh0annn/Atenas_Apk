@@ -44,7 +44,7 @@ class QueryDBlocal @Inject constructor(
 
             }
         }
-        throw Exception("El tamaño de la lista enregada no es compatible")
+        throw Exception("El tamaño de la lista entregada no es compatible")
     }
 
     /**
@@ -170,11 +170,7 @@ class QueryDBlocal @Inject constructor(
             return@coroutineScope listProduct.await()
 
         }
-
-
     }
-
-
 }
 
 

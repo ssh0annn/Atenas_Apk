@@ -40,8 +40,6 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.Codigo.toString())
                 temp.add(productos.Nombre)
                 temp.add(productos.TipoVenta)
-                temp.add(productos.NombreCliente!!)
-                temp.add(productos.Imei.toString())
                 temp.add(productos.Descripcion)
                 temp.add(productos.Cantidad.toString())
                 temp.add(productos.Categoria)

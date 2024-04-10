@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
-import com.solidtype.atenas_apk_2.products.data.remote.MediatorRemote.MediatorFbPrododucts
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.MediatorProducts
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
