@@ -109,6 +109,7 @@ fun InventoryScreen() {
         viewModel.mostrarProductos()
     }
 
+
     if (uiState.pathExcel!!.isNotBlank()) {
         Toast.makeText(context, "Exportado: ${uiState.pathExcel}", Toast.LENGTH_LONG).show()
     }
@@ -379,7 +380,7 @@ fun InventoryScreen() {
                                             Count_Product = cantidad
                                         )
                                     } catch (e: Exception) {
-                                        Toast.makeText(context, "error: $e", Toast.LENGTH_LONG)
+                                        Toast.makeText(context, "error: campos invalidos", Toast.LENGTH_LONG)
                                             .show()
                                     }/*viewModel.onGuardarDetalles()*/
                                 })
@@ -403,10 +404,10 @@ fun InventoryScreen() {
                         //Botones para Importar, Exportar y Ver
                         Boton("Importar") {
                             showFilePicker(context)
+
                         }
                         Boton("Exportar") {
                             viewModel.exportarExcel()
-
                         }
                         Boton("Ver") {
                             mostrar = true
