@@ -213,19 +213,24 @@ fun InventoryScreen() {
                                     .clip(RoundedCornerShape(20.dp))
                                     .background(Color(parseColor("#343341")))
                             ) {
-                                Row {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(5.dp))
+                                        .background(Color(parseColor("#737A8C")))
+
+                                ) {
                                     Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
                                     Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
                                     Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
                                     Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
                                     Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
                                 }
-                                Divider(color = Color(0xFF000000), thickness = 1.dp)
                                 LazyColumn(
                                     modifier = Modifier
-                                        .padding(10.dp)
-                                        .fillMaxWidth()
-                                        .fillMaxHeight()
+                                        .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                                        .fillMaxSize()
                                         .clip(RoundedCornerShape(5.dp))
                                         .background(Color(parseColor("#737A8C")))
                                 ) { //buscar componente para agregar filas de cards
@@ -262,7 +267,11 @@ fun InventoryScreen() {
                                                 .background(Color(0xFFD9D9D9)),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Carrito(false) // Aquí debería ir la imagen del producto
+                                            Box(
+                                                modifier = Modifier.padding(10.dp)
+                                            ){
+                                                Carrito(false)
+                                            }// Aquí debería ir la imagen del producto
                                             Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
                                             Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
                                             Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
