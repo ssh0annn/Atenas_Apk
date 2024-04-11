@@ -5,4 +5,17 @@ package com.solidtype.atenas_apk_2.Authentication.presentation.pantallas
         object Register: Screens("register")
         object Home: Screens("home")
 
+        //administrador
+        object GestionUsuario: Screens("gestion_usuario")
+        object GestionProducto: Screens("gestion_producto")
+        object Inventario: Screens("invenario")
+        object Factura: Screens("factura")
+
+
+        //vendedor
+        object Ticket: Screens("ticket")
+        object Venta: Screens("venta")
+        object Servicio: Screens("servicio")
+
+
     }
