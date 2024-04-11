@@ -1,13 +1,10 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color.parseColor
-import android.widget.Button
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -22,55 +19,42 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Avatar
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boton
+import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
+import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.BotonIconCircular
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
+import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 fun showFilePicker(context: Context) {
 
@@ -154,13 +138,15 @@ fun InventoryScreen() {
             )
         }
     } else {
-        if(uiState.uriPath.isNotBlank()){
+        if (uiState.uriPath.isNotBlank()) {
 
             SnackBar(uiState.uriPath,
                 onShareClick = {
-                               Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
-            },
-                onViewClick = {  Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()})
+                    Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
+                },
+                onViewClick = {
+                    Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()
+                })
         }
         LazyColumn(
             modifier = Modifier
@@ -219,7 +205,7 @@ fun InventoryScreen() {
                                 ) { busqueda = it }
                             }
                             //Area de productos
-                            Box(
+                            Column(
                                 modifier = Modifier
                                     //.padding(start = 20.dp)
                                     .width(600.dp)
@@ -227,6 +213,14 @@ fun InventoryScreen() {
                                     .clip(RoundedCornerShape(20.dp))
                                     .background(Color(parseColor("#343341")))
                             ) {
+                                Row {
+                                    Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
+                                    Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                }
+                                Divider(color = Color(0xFF000000), thickness = 1.dp)
                                 LazyColumn(
                                     modifier = Modifier
                                         .padding(10.dp)
@@ -236,7 +230,7 @@ fun InventoryScreen() {
                                         .background(Color(parseColor("#737A8C")))
                                 ) { //buscar componente para agregar filas de cards
                                     item {
-                                        productos.chunked(4)
+                                        /*productos.chunked(4)
                                             .forEach { row -> //chunked(4) = 4 productos por fila
                                                 Row {//productos es una lista de objetos
                                                     row.forEach { product ->
@@ -257,8 +251,23 @@ fun InventoryScreen() {
                                                                 clicked.Count_Product.toString()
                                                         }
                                                     }
-                                                }
-                                            }
+                                            }*/
+
+                                    }
+                                    items(productos) {
+                                        Row(
+                                            modifier = Modifier
+                                                .padding(10.dp)
+                                                .clip(RoundedCornerShape(10.dp))
+                                                .background(Color(0xFFD9D9D9)),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Carrito(false) // Aquí debería ir la imagen del producto
+                                            Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                        }
                                     }
                                 }
                             }
@@ -405,10 +414,11 @@ fun InventoryScreen() {
                             showFilePicker(context)
                         }
                         Boton("Exportar") {
+                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
+                                .show()
                             viewModel.exportarExcel()
-
                         }
-                        Boton("Ver") {
+                        Boton("Ejemplar") {
                             mostrar = true
                         }
                     }
@@ -422,6 +432,11 @@ fun InventoryScreen() {
 }
 
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
+@Composable
+fun InventoryScreenPreview() {
+    InventoryScreen()
+}
 
 @Composable
 fun SnackBar(
@@ -469,7 +484,7 @@ fun SnackBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text =message,
+                        text = message,
                         color = Color(0xFF343341),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold

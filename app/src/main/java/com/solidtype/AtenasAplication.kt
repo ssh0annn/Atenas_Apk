@@ -9,10 +9,4 @@ import javax.inject.Inject
 
 
 @HiltAndroidApp
-class AtenasAplication : Application (){
-    override fun onCreate() {
-        super.onCreate()
-
-
-    }
-}
+class AtenasAplication : Application ()
