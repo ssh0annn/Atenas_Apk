@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -204,7 +205,7 @@ fun InventoryScreen() {
                                 ) { busqueda = it }
                             }
                             //Area de productos
-                            Box(
+                            Column(
                                 modifier = Modifier
                                     //.padding(start = 20.dp)
                                     .width(600.dp)
@@ -212,6 +213,14 @@ fun InventoryScreen() {
                                     .clip(RoundedCornerShape(20.dp))
                                     .background(Color(parseColor("#343341")))
                             ) {
+                                Row {
+                                    Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
+                                    Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                }
+                                Divider(color = Color(0xFF000000), thickness = 1.dp)
                                 LazyColumn(
                                     modifier = Modifier
                                         .padding(10.dp)
@@ -243,24 +252,22 @@ fun InventoryScreen() {
                                                         }
                                                     }
                                             }*/
-                                        Row {
-                                            Text(text = "imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF)) // Aquí debería ir la imagen del producto
-                                            Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
-                                            Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
-                                            Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
-                                            Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
-                                        }
-                                        Divider()
+
                                     }
                                     items(productos) {
-                                        Row {
+                                        Row(
+                                            modifier = Modifier
+                                                .padding(10.dp)
+                                                .clip(RoundedCornerShape(10.dp))
+                                                .background(Color(0xFFD9D9D9)),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
                                             Carrito(false) // Aquí debería ir la imagen del producto
-                                            Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f))
-                                            Text(text = it.Name_Product, modifier = Modifier.weight(1f))
-                                            Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f))
-                                            Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f))
+                                            Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
                                         }
-                                        Divider()
                                     }
                                 }
                             }
