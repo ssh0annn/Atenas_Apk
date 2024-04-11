@@ -196,7 +196,12 @@ fun HistorialScreen() {
                     //Aquí va el menú de ventas
                     LazyColumn {
                         item {
-                            Row {
+                            Row(
+                                modifier = Modifier
+                                    .clickable {
+                                        // Aquí lógica para ordenar por ID
+                                    }
+                            ) {
                                 Text(
                                     "ID",
                                     fontSize = 24.sp,

@@ -19,10 +19,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -48,8 +51,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.BotonIconCircular
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
+import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
 
@@ -135,13 +137,15 @@ fun InventoryScreen() {
             )
         }
     } else {
-        if(uiState.uriPath.isNotBlank()){
+        if (uiState.uriPath.isNotBlank()) {
 
             SnackBar(uiState.uriPath,
                 onShareClick = {
-                               Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
-            },
-                onViewClick = {  Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()})
+                    Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
+                },
+                onViewClick = {
+                    Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()
+                })
         }
         LazyColumn(
             modifier = Modifier
@@ -217,7 +221,7 @@ fun InventoryScreen() {
                                         .background(Color(parseColor("#737A8C")))
                                 ) { //buscar componente para agregar filas de cards
                                     item {
-                                        productos.chunked(4)
+                                        /*productos.chunked(4)
                                             .forEach { row -> //chunked(4) = 4 productos por fila
                                                 Row {//productos es una lista de objetos
                                                     row.forEach { product ->
@@ -238,8 +242,25 @@ fun InventoryScreen() {
                                                                 clicked.Count_Product.toString()
                                                         }
                                                     }
-                                                }
-                                            }
+                                            }*/
+                                        Row {
+                                            Text(text = "imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF)) // Aquí debería ir la imagen del producto
+                                            Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
+                                            Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
+                                            Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
+                                            Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF))
+                                        }
+                                        Divider()
+                                    }
+                                    items(productos) {
+                                        Row {
+                                            Carrito(false) // Aquí debería ir la imagen del producto
+                                            Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f))
+                                            Text(text = it.Name_Product, modifier = Modifier.weight(1f))
+                                            Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f))
+                                            Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f))
+                                        }
+                                        Divider()
                                     }
                                 }
                             }
@@ -386,7 +407,8 @@ fun InventoryScreen() {
                             showFilePicker(context)
                         }
                         Boton("Exportar") {
-                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
+                                .show()
                             viewModel.exportarExcel()
                         }
                         Boton("Ejemplar") {
@@ -403,6 +425,11 @@ fun InventoryScreen() {
 }
 
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
+@Composable
+fun InventoryScreenPreview() {
+    InventoryScreen()
+}
 
 @Composable
 fun SnackBar(
@@ -450,7 +477,7 @@ fun SnackBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text =message,
+                        text = message,
                         color = Color(0xFF343341),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
