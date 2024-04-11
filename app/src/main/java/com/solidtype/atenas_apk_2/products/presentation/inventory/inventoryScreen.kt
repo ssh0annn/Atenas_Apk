@@ -205,7 +205,7 @@ fun InventoryScreen() {
                                 ) { busqueda = it }
                             }
                             //Area de productos
-                            Column(
+                            Box(
                                 modifier = Modifier
                                     //.padding(start = 20.dp)
                                     .width(600.dp)
@@ -213,69 +213,76 @@ fun InventoryScreen() {
                                     .clip(RoundedCornerShape(20.dp))
                                     .background(Color(parseColor("#343341")))
                             ) {
-                                Row(
+                                Column(
                                     modifier = Modifier
-                                        .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(5.dp))
-                                        .background(Color(parseColor("#737A8C")))
-
-                                ) {
-                                    Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
-                                    Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                    Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                    Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                    Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                }
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
                                         .fillMaxSize()
                                         .clip(RoundedCornerShape(5.dp))
                                         .background(Color(parseColor("#737A8C")))
-                                ) { //buscar componente para agregar filas de cards
-                                    item {
-                                        /*productos.chunked(4)
-                                            .forEach { row -> //chunked(4) = 4 productos por fila
-                                                Row {//productos es una lista de objetos
-                                                    row.forEach { product ->
-                                                        CardProduct(
-                                                            product
-                                                        ) { clicked ->
-                                                            codigo = "${clicked.Code_Product}"
-                                                            nombre = clicked.Name_Product
-                                                            categoria = clicked.Category_Product
-                                                            descripcion =
-                                                                clicked.Description_Product
-                                                            costo = clicked.Price_Product.toString()
-                                                            precio =
-                                                                clicked.Price_Vending_Product.toString()
-                                                            modelo = clicked.Model_Product
-                                                            marca = clicked.Tracemark_Product
-                                                            cantidad =
-                                                                clicked.Count_Product.toString()
-                                                        }
-                                                    }
-                                            }*/
+                                ){
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(5.dp))
+                                            .background(Color(parseColor("#737A8C")))
 
+                                    ) {
+                                        Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
+                                        Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
                                     }
-                                    items(productos) {
-                                        Row(
-                                            modifier = Modifier
-                                                .padding(10.dp)
-                                                .clip(RoundedCornerShape(10.dp))
-                                                .background(Color(0xFFD9D9D9)),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            Box(
-                                                modifier = Modifier.padding(10.dp)
-                                            ){
-                                                Carrito(false)
-                                            }// Aquí debería ir la imagen del producto
-                                            Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                                            Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                                            Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                                            Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(5.dp))
+                                            .background(Color(parseColor("#737A8C")))
+                                    ) { //buscar componente para agregar filas de cards
+                                        item {
+                                            /*productos.chunked(4)
+                                                .forEach { row -> //chunked(4) = 4 productos por fila
+                                                    Row {//productos es una lista de objetos
+                                                        row.forEach { product ->
+                                                            CardProduct(
+                                                                product
+                                                            ) { clicked ->
+                                                                codigo = "${clicked.Code_Product}"
+                                                                nombre = clicked.Name_Product
+                                                                categoria = clicked.Category_Product
+                                                                descripcion =
+                                                                    clicked.Description_Product
+                                                                costo = clicked.Price_Product.toString()
+                                                                precio =
+                                                                    clicked.Price_Vending_Product.toString()
+                                                                modelo = clicked.Model_Product
+                                                                marca = clicked.Tracemark_Product
+                                                                cantidad =
+                                                                    clicked.Count_Product.toString()
+                                                            }
+                                                        }
+                                                }*/
+
+                                        }
+                                        items(productos) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .padding(10.dp)
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .background(Color(0xFFD9D9D9)),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Box(
+                                                    modifier = Modifier.padding(10.dp)
+                                                ){
+                                                    Carrito(false)
+                                                }// Aquí debería ir la imagen del producto
+                                                Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            }
                                         }
                                     }
                                 }
