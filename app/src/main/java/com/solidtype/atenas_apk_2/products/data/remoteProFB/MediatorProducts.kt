@@ -95,7 +95,6 @@ class MediatorProducts @Inject constructor(
             )
         }
         return confirmar
-
     }
 
     /**
@@ -145,7 +144,6 @@ class MediatorProducts @Inject constructor(
             println("Se estan insertando en Firebase...")
 
         } else {
-            //si no se cumplen los demas esenarios es porque ambas tienen datos entonces.
             // analizamos datos para
             if (listosParaSubirAFirestore(baseLocal, listaDeFireStore)) {
                 println("Sincronizando desde local a FireStore")
@@ -154,7 +152,8 @@ class MediatorProducts @Inject constructor(
                 //si no hay datos para subir, eliminamos intrusos.
                 logicadeIntrusos(listaDeFireStore)
                 println("Analizando comportamiento de intrusos")
-            }
+            }  //si no se cumplen los demas esenarios es porque ambas tienen datos entonces.
+
 
         }
     }
@@ -254,8 +253,7 @@ class MediatorProducts @Inject constructor(
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() =
-        queryFireStore.getAllDataFirebase("productos")
+    private suspend fun caputarDatosFirebaseEnSnapshot() = queryFireStore.getAllDataFirebase("productos")
 
 
 }

@@ -21,8 +21,7 @@ import javax.inject.Inject
  *  y devuelbe en las consulta un QuerySnapshot
  */
 class QuerysFirstore @Inject constructor(
-    private val fireStore: FirebaseFirestore,
-    private val authUser: FirebaseAuth
+    private val fireStore: FirebaseFirestore
 ) {
     private val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
 
@@ -85,6 +84,7 @@ class QuerysFirstore @Inject constructor(
         dataToInsert: List<Map<String, String>>,
         idDocumento: String
     ) {
+        println("idDocument: $idDocumento")
 
         try {
             withContext(Dispatchers.Default) {

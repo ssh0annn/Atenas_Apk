@@ -70,4 +70,6 @@ class HistorialRepositoryImp @Inject constructor(
     ): Flow<List<HistorialVentaEntidad>> {
        return dao.getHistorialVentaFechaCategoria(fecha_final, fecha_inicio, categoria)
     }
+
+
 }

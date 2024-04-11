@@ -130,6 +130,7 @@ class QueryDBlocal @Inject constructor(
             val intrusosConvetido = entityConvert(it)
             listaFirebaseMediatorproducts.add(intrusosConvetido)
         }
+
         val productosToDeleteInFirestore =
             listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
                 local.any { it.Code_Product == firestoreproductos.Code_Product }

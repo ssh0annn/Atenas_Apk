@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,9 +21,11 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
+    private val mediado: MediatorHistorialVentas
     ): ViewModel() {
 
     var fileSelectionListener2: FileSelectionListener2? = null
+
 
      var uiState = MutableStateFlow(ProductosViewStates())
          private set
@@ -32,7 +35,7 @@ class InventarioViewModel @Inject constructor(
                 mostrarProductos()
                 viewModelScope.launch {
                     withContext(Dispatchers.Default){
-
+                        mediado.aysncHistorial()
                         syncProductos()
 
                     }

@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.MediatorProducts
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao,
     private val excel: XlsManeger,
-
+    private val mediadorHistorrial: MediatorHistorialVentas,
     private val mediador2: MediatorProducts
 ):InventarioRepo {
 
@@ -133,7 +134,6 @@ class InventarioRepoImpl @Inject constructor(
     }
 
     override suspend fun syncronizacionProductos() {
-
         mediador2.ayscPro()
         println("llllll")}
 
