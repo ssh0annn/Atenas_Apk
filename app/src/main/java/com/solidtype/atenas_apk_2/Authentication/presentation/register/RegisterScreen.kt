@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
 
@@ -56,7 +57,8 @@ import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(context: Context,nav:NavController, validarr: login_medenview = hiltViewModel()) {
+fun OutlinedTextFieldExample(nav:NavController, validarr: login_medenview = hiltViewModel()) {
+    val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
     val screenHeightPx = with(LocalDensity.current) { screenHeightDp.toPx() }

@@ -108,9 +108,6 @@ class InventarioViewModel @Inject constructor(
                 uiState.update { it.copy(isLoading = true) }
                 casosInventario.deleteProductos(producto)
                 uiState.update { it.copy(isLoading = false) }
-                withContext(Dispatchers.Default) {
-                    syncProductos()
-                }
 
             }
 

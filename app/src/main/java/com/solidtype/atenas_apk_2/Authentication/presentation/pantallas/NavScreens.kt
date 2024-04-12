@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.Authentication.presentation.pantallas
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,7 +15,8 @@ import com.solidtype.atenas_apk_2.Authentication.presentation.register.OutlinedT
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(context: Context) {
+fun Navigation() {
+    val context = LocalContext.current
 
     val navController = rememberNavController()
 
@@ -38,10 +40,10 @@ fun Navigation(context: Context) {
                 }
             )
         ) {
-            OutlinedTextFieldExample(context,navController)
+            OutlinedTextFieldExample(navController)
         }
         composable(route = Screens.Home.route ) {
-            HomeScreen(context,navController)
+            HomeScreen(navController)
         }
 
     }
