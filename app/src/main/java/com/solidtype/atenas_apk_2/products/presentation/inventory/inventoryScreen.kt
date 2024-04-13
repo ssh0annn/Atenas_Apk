@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
@@ -72,11 +73,9 @@ fun showFilePicker(context: Context) {
 
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
-fun InventoryScreen() {
+fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel= hiltViewModel()) {
     //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
-
-    val viewModel: InventarioViewModel = hiltViewModel()
 
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

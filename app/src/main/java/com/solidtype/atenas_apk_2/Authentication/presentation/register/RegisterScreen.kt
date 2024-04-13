@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.Authentication.presentation.register
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

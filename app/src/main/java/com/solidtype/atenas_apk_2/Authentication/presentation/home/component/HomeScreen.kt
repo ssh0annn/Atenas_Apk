@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.Authentication.presentation.home.component
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +29,7 @@ import com.solidtype.atenas_apk_2.Authentication.presentation.home.HomeViewModel
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 @Composable
-fun HomeScreen(nav: NavController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HmeScreen(nav: NavController, viewModel: HomeViewModel = hiltViewModel()) {
     val name: String by  viewModel.name.observeAsState(initial = "")
     val logeado:Boolean by viewModel.logeado.observeAsState(initial = true)
     val context = LocalContext.current
