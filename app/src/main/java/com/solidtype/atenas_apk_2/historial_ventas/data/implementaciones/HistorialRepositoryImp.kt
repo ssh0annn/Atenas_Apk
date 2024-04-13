@@ -1,7 +1,9 @@
 package com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones
 
 import android.net.Uri
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.util.XlsManeger
@@ -10,7 +12,8 @@ import javax.inject.Inject
 
 class HistorialRepositoryImp @Inject constructor(
     private val dao: HistorialVentaDAO,
-    private val excel: XlsManeger
+    private val excel: XlsManeger,
+    private val daoTickets:HistorialTicketDAO
 ) : HistorialRepository {
     override fun mostrarTodasVentas(): Flow<List<HistorialVentaEntidad>> {
         return dao.getHistorialVenta()
@@ -78,5 +81,16 @@ class HistorialRepositoryImp @Inject constructor(
         categoria: String
     ): Flow<List<HistorialVentaEntidad>> {
        return dao.getHistorialVentaFechaCategoria(fecha_final, fecha_inicio, categoria)
+    }
+
+    override fun mostrarTickets(): Flow<List<HistorialTicketEntidad>> {
+        return daoTickets.getHistorialTicket()
+    }
+
+    override fun mostrarTicketsPorFecha(
+        fecha: String,
+        dias: Int
+    ): Flow<List<HistorialTicketEntidad>> {
+       return daoTickets.getHistorialTicketFechaDias(fecha, dias)
     }
 }

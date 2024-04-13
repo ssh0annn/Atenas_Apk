@@ -54,7 +54,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 @Composable
 fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {

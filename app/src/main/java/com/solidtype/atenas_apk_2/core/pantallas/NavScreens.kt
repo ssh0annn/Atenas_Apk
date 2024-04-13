@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.Authentication.presentation.pantallas
+package com.solidtype.atenas_apk_2.core.pantallas
 
 import android.content.Context
 import androidx.compose.material3.ExperimentalMaterial3Api

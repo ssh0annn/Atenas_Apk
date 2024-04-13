@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.Authentication.presentation.home.HomeViewModel
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 @Composable
 fun HomeScreen(nav: NavController, viewModel: HomeViewModel = hiltViewModel()) {

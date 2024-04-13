@@ -36,6 +36,8 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodas
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
@@ -109,7 +111,9 @@ object AppModule {
     fun provideCasosHistorial(repo: HistorialRepository) = CasosHistorialReportes(
         mostrarVentas = MostrarTodasVentas(repo),
         exportarVentas = ExportarVentas(repo),
-        buscarporFechCatego = BuscarporFechCatego(repo)
+        buscarporFechCatego = BuscarporFechCatego(repo), 
+        verTicketsPorFechas = VerTicketsPorFechas(repo),
+        verTodosTickets = VerTodosTickets(repo)
     )
 
 

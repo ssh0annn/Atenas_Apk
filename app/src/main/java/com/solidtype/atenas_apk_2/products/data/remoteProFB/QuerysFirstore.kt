@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 /**
- * @param:private val fireStore: FirebaseFirestore,
+ * @constructor:private val fireStore: FirebaseFirestore,
  *     private val authUser: FirebaseAuth,
  *  Estos parametros los recibe por medio de la injection de DaggerHilt.
  *  @Funcionamiento:
@@ -46,7 +46,7 @@ class QuerysFirstore @Inject constructor(
 
             } catch (e: Exception) {
                 Log.e("FirebaseError", "Error al obtener datos de Firebase", e)
-                throw Exception("no se pudo obtener los datos desde firebase")
+                throw Exception("no se pudo obtener los datos desde firebase $e")
             }
         }
 
@@ -89,15 +89,17 @@ class QuerysFirstore @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 for (data in dataToInsert) {
-                    val ref = data[idDocumento]?.let {
+                    val ref = data[idDocumento]?.let {idMapa ->
                         fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collectionName)
-                            .document(it)
+                            .document(idMapa)
                     }
+
                     if (ref != null) {
                         lote.set(ref, data)
                     }
+
                 }
                 lote.commit().await()
             }

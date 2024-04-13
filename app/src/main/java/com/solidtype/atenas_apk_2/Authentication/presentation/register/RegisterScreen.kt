@@ -51,7 +51,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 
 

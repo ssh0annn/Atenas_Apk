@@ -38,7 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Navigation
+import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,13 +50,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Navigation()
+            //Navigation()
             //Demo_ExposedDropdownMenuBox()
             // FireManeger()
             //TestAutocompleteSelect()
             // Demo_SearchableExposedDropdownMenuBox()
             //HistorialScreen()
-            //InventoryScreen()
+            InventoryScreen()
 
            // FireManeger()
         }

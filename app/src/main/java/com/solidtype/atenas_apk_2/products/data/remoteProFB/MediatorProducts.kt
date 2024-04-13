@@ -130,7 +130,7 @@ class MediatorProducts @Inject constructor(
      * @funcion: Es donde sucede toda la logica del proceso de sincronizacion. En esta funcion se manejan muchos algoritmos
      * con corrutinas, favor manajar en el hilo Default para evitar bloqueos del hilo main.
      */
-    suspend fun ayscPro() {
+    suspend operator fun invoke() {
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
         val baseLocal = capturarDatosDB()
@@ -146,7 +146,7 @@ class MediatorProducts @Inject constructor(
 
         } else {
             //si no se cumplen los demas esenarios es porque ambas tienen datos entonces.
-            // analizamos datos para
+            // analizamos datos
             if (listosParaSubirAFirestore(baseLocal, listaDeFireStore)) {
                 println("Sincronizando desde local a FireStore")
 
