@@ -93,9 +93,13 @@ class MediatorProducts @Inject constructor(
             confirmar = true
 
             println("Listos para subir $listosParaSubir")
-            queryFireStore.insertToFirebase(
-                ColletionName, convierteAObjetoMap(listosParaSubir), codigoProductos
-            )
+            try{
+                queryFireStore.insertToFirebase(
+                    "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
+                )
+            }catch (e: Exception){
+                return false
+            }
         }
         return confirmar
     }
@@ -132,9 +136,7 @@ class MediatorProducts @Inject constructor(
      * @funcion: Es donde sucede toda la logica del proceso de sincronizacion. En esta funcion se manejan muchos algoritmos
      * con corrutinas, favor manajar en el hilo Default para evitar bloqueos del hilo main.
      */
-    suspend fun ayscPro() {
-        Log.e("Entre","Entre a la funcion producto" +
-                " async")
+    suspend operator fun invoke() {
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
         println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
@@ -151,7 +153,8 @@ class MediatorProducts @Inject constructor(
             println("Se estan insertando en Firebase...")
 
         } else {
-            // analizamos datos para
+            //si no se cumplen los demas esenarios es porque ambas tienen datos entonces.
+            // analizamos datos
             if (listosParaSubirAFirestore(baseLocal, listaDeFireStore)) {
                 println("Sincronizando desde local a FireStore")
 

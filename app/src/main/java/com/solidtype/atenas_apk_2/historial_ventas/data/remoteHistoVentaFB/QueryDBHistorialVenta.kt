@@ -3,8 +3,6 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB
 import android.util.Log
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -22,22 +20,24 @@ class QueryDBHistorialVenta @Inject constructor(
      * Los elementos deben ser igual a 12.
      */
     private fun entityConvert(it: List<String>): HistorialVentaEntidad {
-        if (it.size == 12) {
+        if (it.size == 14) {
             try {
 
                 return HistorialVentaEntidad(
                     Codigo = it[0].toInt(),
                     Nombre = it[1],
-                    Descripcion = it[2],
-                    Cantidad = it[3].toInt(),
-                    Categoria = it[4],
-                    Modelo = it[5],
-                    Marca = it[6],
-                    Precio = it[7].toDouble(),
-                    TipoVenta = it[8],
-                    Total = it[9].toDouble(),
-                    FechaIni = it[10],
-                    FechaFin = it[11]
+                    NombreCliente = it[2],
+                    Descripcion = it[3],
+                    Imei = it[4],
+                    Cantidad = it[5].toInt(),
+                    Categoria = it[6],
+                    Modelo = it[7],
+                    Marca = it[8],
+                    Precio = it[9].toDouble(),
+                    TipoVenta = it[10],
+                    Total = it[11].toDouble(),
+                    FechaIni = it[12],
+                    FechaFin = it[13]
 
                 )
             } catch (e: Exception) {

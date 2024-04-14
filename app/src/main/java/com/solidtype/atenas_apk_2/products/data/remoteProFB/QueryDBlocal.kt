@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.products.data.remoteProFB
 import android.util.Log
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -14,7 +15,6 @@ import javax.inject.Inject
  */
 class QueryDBlocal @Inject constructor(
     private val dao: ProductDao
-
 ) {
     /**
      * @param: List<String>
@@ -75,6 +75,7 @@ class QueryDBlocal @Inject constructor(
                 mutableList.add(it.Count_Product.toString())
                 mutableListData.add(mutableList)
             }
+
         }
         return mutableListData
 
@@ -96,7 +97,6 @@ class QueryDBlocal @Inject constructor(
                 mutableListData = entityToListString(listaDeEntity)
             }
         }
-
         return mutableListData
     }
 

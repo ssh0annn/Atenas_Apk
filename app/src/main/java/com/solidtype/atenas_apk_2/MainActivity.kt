@@ -38,13 +38,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.util.FireManeger
-import com.solidtype.atenas_apk_2.util.YourViewModel
-
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -52,11 +48,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            //Navigation()
             //Demo_ExposedDropdownMenuBox()
             // FireManeger()
             //TestAutocompleteSelect()
-           // Demo_SearchableExposedDropdownMenuBox()
-            InventoryScreen()
+            // Demo_SearchableExposedDropdownMenuBox()
+            //HistorialScreen()
+           // InventoryScreen()
+            Navigation()
+           // FireManeger()
         }
     }
 

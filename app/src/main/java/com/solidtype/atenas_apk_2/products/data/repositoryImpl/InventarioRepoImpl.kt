@@ -1,34 +1,25 @@
 package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
-import android.content.Context
 import android.net.Uri
-import android.widget.Toast
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.MediatorProducts
-import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.util.XlsManeger
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
-    private val daoProductos: ProductDao,
-    private val excel: XlsManeger,
-    private val mediadorHistorrial: MediatorHistorialVentas,
+    private val daoProductos: ProductDao, private val excel: XlsManeger,
     private val mediador2: MediatorProducts
-):InventarioRepo {
+) : InventarioRepo {
 
 
-    override  fun getProducts(): Flow<List<ProductEntity>> {
+    override fun getProducts(): Flow<List<ProductEntity>> {
 
-       return daoProductos.getProducts()
+        return daoProductos.getProducts()
     }
 
     override fun getProductByCodigo(codigo: Int): Flow<List<ProductEntity>> {
@@ -36,7 +27,7 @@ class InventarioRepoImpl @Inject constructor(
     }
 
     override fun searchProductsLike(datos: String): Flow<List<ProductEntity>> {
-         return daoProductos.getProductsLike(datos)
+        return daoProductos.getProductsLike(datos)
     }
 
     override suspend fun createProducts(prodcuto: ProductEntity): Boolean {
@@ -55,24 +46,25 @@ class InventarioRepoImpl @Inject constructor(
 
     }
 
-    override suspend fun exportarExcel(productos: List<ProductEntity>):Uri = withContext(Dispatchers.Default) {
+    override suspend fun exportarExcel(productos: List<ProductEntity>): Uri =
+        withContext(Dispatchers.Default) {
 
-        val columnas= listOf(
-            "Code_Product",
-            "Name_Product",
-            "Description_Product",
-            "Category_Product",
-            "Price_Product",
-            "Model_Product",
-            "Price_Vending_Product",
-            "Tracemark_Product",
-            "Count_Product"
+            val columnas = listOf(
+                "Code_Product",
+                "Name_Product",
+                "Description_Product",
+                "Category_Product",
+                "Price_Product",
+                "Model_Product",
+                "Price_Vending_Product",
+                "Tracemark_Product",
+                "Count_Product"
             )
-         val datos:MutableList<List<String>> = mutableListOf()
+            val datos: MutableList<List<String>> = mutableListOf()
 
-        try {
+            try {
 
-                for (i in productos){
+                for (i in productos) {
                     val rowdata = mutableListOf<String>()
                     rowdata.add(i.Code_Product.toString())
                     rowdata.add(i.Name_Product)
@@ -88,23 +80,25 @@ class InventarioRepoImpl @Inject constructor(
                 }
 
 
-        }catch (e: Exception){
+            } catch (e: Exception) {
                 println("Error en el repositorio recorriendo el flow")
+            }
+
+
+            return@withContext excel.crearXls(
+                "AtenasProductos${System.currentTimeMillis()}",
+                columnas,
+                datos
+            )
         }
-
-        val result =  excel.crearXls("AtenasProductos${System.currentTimeMillis()}",columnas,datos)
-
-
-        return@withContext result
-    }
 
     override suspend fun importarExcel(path: Uri): Boolean {
 //Manejar excepcion de validacin de datos.
-          val datos =excel.importarXlsx(path)
-          val listaProductos:MutableList<ProductEntity> = mutableListOf()
-        if(validarNombresColumnas(datos[0])){
+        val datos = excel.importarXlsx(path)
+        val listaProductos: MutableList<ProductEntity> = mutableListOf()
+        if (validarNombresColumnas(datos[0])) {
             try {
-                for((index, i) in datos.withIndex()) {
+                for ((index, i) in datos.withIndex()) {
                     if (index > 0) {
                         listaProductos.add(
                             ProductEntity(
@@ -125,7 +119,7 @@ class InventarioRepoImpl @Inject constructor(
 
                 daoProductos.insertAllProducts(listaProductos)
                 println("Insertando datos !!...$datos")
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 println("Error importando excel, ver formato: $e")
             }
         }
@@ -134,30 +128,32 @@ class InventarioRepoImpl @Inject constructor(
     }
 
     override suspend fun syncronizacionProductos() {
-        mediador2.ayscPro()
-        println("llllll")}
+        mediador2()
 
     }
 
-    private fun validarNombresColumnas(columnas:List<String?>):Boolean{
-        val nombresOrigin= listOf("Code_Product",
-            "Name_Product",
-            "Description_Product",
-            "Category_Product",
-            "Price_Product",
-            "Model_Product",
-            "Price_Vending_Product",
-            "Tracemark_Product",
-            "Count_Product")
+}
 
-        if(columnas.isNotEmpty()){
-            if(nombresOrigin == columnas){
-                return true
-            }
+private fun validarNombresColumnas(columnas: List<String?>): Boolean {
+    val nombresOrigin = listOf(
+        "Code_Product",
+        "Name_Product",
+        "Description_Product",
+        "Category_Product",
+        "Price_Product",
+        "Model_Product",
+        "Price_Vending_Product",
+        "Tracemark_Product",
+        "Count_Product"
+    )
+
+    if (columnas.isNotEmpty()) {
+        if (nombresOrigin == columnas) {
+            return true
         }
-       // Toast.makeText(context, "Archivo no funciona", Toast.LENGTH_LONG).show()
-        println("Los datos son incorrectos... verifica")
+    }
+    println("Los datos son incorrectos... verifica")
 
-            return false
+    return false
 
 }

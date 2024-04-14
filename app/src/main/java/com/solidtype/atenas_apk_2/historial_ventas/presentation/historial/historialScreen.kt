@@ -55,6 +55,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.BotonBlanco
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
@@ -68,7 +71,7 @@ import java.util.Date
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistorialScreen() {
+fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= hiltViewModel()) {
 
     val items = listOf("Ventas", "Ticket")
 
@@ -396,7 +399,7 @@ fun HistorialScreen() {
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
 @Composable
 fun HistorialScreenPreview() {
-    HistorialScreen()
+
 }
 
 data class objVenta(
