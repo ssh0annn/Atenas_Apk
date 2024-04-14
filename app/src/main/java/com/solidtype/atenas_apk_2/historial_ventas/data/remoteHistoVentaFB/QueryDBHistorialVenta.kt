@@ -63,7 +63,9 @@ class QueryDBHistorialVenta @Inject constructor(
                 val mutableList = mutableListOf<String>()
                 mutableList.add(it.Codigo.toString())
                 mutableList.add(it.Nombre)
+                mutableList.add(it.NombreCliente)
                 mutableList.add(it.Descripcion)
+                mutableList.add(it.Imei)
                 mutableList.add(it.Cantidad.toString())
                 mutableList.add(it.Categoria)
                 mutableList.add(it.Modelo)
@@ -180,6 +182,7 @@ class QueryDBHistorialVenta @Inject constructor(
     private suspend fun datosLocales(): List<HistorialVentaEntidad> {
         return coroutineScope {
             val listProduct = async { dao.getHistorialNormal() }
+            Log.d("DatosAsyncHistoral","Estos son los datos de historial local: $listProduct <--")
             return@coroutineScope listProduct.await()
 
         }

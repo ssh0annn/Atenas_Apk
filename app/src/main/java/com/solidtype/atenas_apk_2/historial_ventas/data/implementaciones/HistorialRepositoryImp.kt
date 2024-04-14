@@ -26,6 +26,8 @@ class HistorialRepositoryImp @Inject constructor(
     }
 
 
+
+
     override suspend fun exportarVentas(listaProductos:List<HistorialVentaEntidad>): Uri {
         val columnas = listOf(
             "Codigo",

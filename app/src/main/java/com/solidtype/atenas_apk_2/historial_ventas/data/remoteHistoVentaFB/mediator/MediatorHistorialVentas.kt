@@ -17,7 +17,7 @@ class MediatorHistorialVentas @Inject constructor(
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
 
-    suspend fun ayscHistorial() {
+    suspend operator fun invoke() {
         Log.e("Entre","Entre a la funcion Historial asyc" +
                 " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
@@ -175,20 +175,22 @@ class MediatorHistorialVentas @Inject constructor(
     private fun convierteAObjetoMap(lista: List<List<String>>): MutableList<Map<String, String>> {
         val listaMapa: MutableList<Map<String, String>> = mutableListOf()
         for (data in lista) {
-            if (data.isNotEmpty() && data.size == 12) {
+            if (data.isNotEmpty() && data.size == 14) {
                 val dataMapa = linkedMapOf<String,String>(
                     "Codigo" to data[0],
                     "Nombre" to data[1],
-                    "Descripcion" to data[2],
-                    "Cantidad" to data[3],
-                    "Categoria" to data[4],
-                    "Modelo" to data[5],
-                    "Marca" to data[6],
-                    "Precio" to data[7],
-                    "TipoVenta" to data[8],
-                    "Total" to data[9],
-                    "FechaFin" to data[10],
-                    "FechaIni" to data[11]
+                    "NombreCliente" to data[2],
+                    "Descripcion" to data[3],
+                    "Imei" to data[4],
+                    "Cantidad" to data[5],
+                    "Categoria" to data[6],
+                    "Modelo" to data[7],
+                    "Marca" to data[8],
+                    "Precio" to data[9],
+                    "TipoVenta" to data[10],
+                    "Total" to data[11],
+                    "FechaFin" to data[12],
+                    "FechaIni" to data[13]
                 )
                 listaMapa.add(dataMapa)
             }
@@ -208,7 +210,9 @@ class MediatorHistorialVentas @Inject constructor(
             val documentos = mutableListOf<String>()
             documentos.add(it["Codigo"].toString())
             documentos.add(it["Nombre"].toString())
+            documentos.add(it["NombreCliente"].toString())
             documentos.add(it["Descripcion"].toString())
+            documentos.add(it["Imei"].toString())
             documentos.add(it["Cantidad"].toString())
             documentos.add(it["Categoria"].toString())
             documentos.add(it["Marca"].toString())
