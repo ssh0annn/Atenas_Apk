@@ -57,20 +57,18 @@ class HistorailViewModel @Inject constructor(
     }
 
 
-    fun buscarProductos(
+    fun buscarProductosventa(
         fecha_inicio: String = "02/02/24",
         fecha_final: String = "05/05/24",
         categoria: String = "venta"
     ) {
-
         viewModelScope.launch {
-            val productosRango =
+            val productosRangoventa =
                 casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
-            productosRango.collect { product ->
+            productosRangoventa.collect { product ->
                 uiState.update {
                     it.copy(Historial = product)
                 }
-
                 for (i in product) {
                     println("nombre" + i.Nombre)
                     println(i.NombreCliente)
@@ -89,6 +87,36 @@ class HistorailViewModel @Inject constructor(
         }
     }
 
+
+    fun buscarProductosTicket(
+        fecha_inicio: String = "02/02/24",
+        fecha_final: String = "05/05/24",
+        categoria: String = "Ticket"
+    ) {
+        viewModelScope.launch {
+            val productosRangoticket =
+                casosHistorialReportes.verTicketsPorFechas(fecha_inicio, fecha_final, categoria)
+            productosRangoticket.collect { product ->
+                uiState.update {
+                    it.copy(Ticket = product)
+                }
+                for (i in product) {
+                    println("nombre" + i.Codigo)
+                    println(i.NombreCliente)
+                    println(i.Abono)
+                    println(i.Marca)
+                    println(i.Dias)
+                    println(i.Precio)
+                    println(i.Servicio)
+                    println(i.Modelo)
+                    println(i.Telefono)
+                }
+
+            }
+        }
+    }
+
+
     fun MostrarHistoriar() {
         val mostrarHistory = casosHistorialReportes.mostrarVentas()
 
@@ -97,13 +125,9 @@ class HistorailViewModel @Inject constructor(
                 uiState.update {
                     it.copy(Historial = product)
                 }
-
-
-
             }
         }
     }
-
 
 }
 
