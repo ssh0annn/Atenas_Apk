@@ -33,7 +33,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,10 +52,10 @@ import com.solidtype.atenas_apk_2.Authentication.presentation.login.LoginViewMod
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 @Composable
-fun Container(context: Context, nav: NavController,viewModel: LoginViewModel= hiltViewModel()) {
+fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
     val email: String by viewModel.mail.observeAsState(initial = "")
     val pass: String by viewModel.pass.observeAsState(initial = "")
     val loginEnabled: Boolean by viewModel.login.observeAsState(initial = false)

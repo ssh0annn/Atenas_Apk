@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.Authentication.presentation.home.component
 
-import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,18 +19,20 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.Authentication.presentation.home.HomeViewModel
-import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 @Composable
-fun HomeScreen(context: Context, nav: NavController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HmeScreen(nav: NavController, viewModel: HomeViewModel = hiltViewModel()) {
     val name: String by  viewModel.name.observeAsState(initial = "")
     val logeado:Boolean by viewModel.logeado.observeAsState(initial = true)
+    val context = LocalContext.current
 
     if (!logeado) {
         nav.navigate(Screens.Login.route)
@@ -57,6 +59,7 @@ fun HomeScreen(context: Context, nav: NavController, viewModel: HomeViewModel = 
                 Button(
                     onClick = {
                         viewModel.deslogear()
+                        Toast.makeText(context, "Te has deslogueado con exito!", Toast.LENGTH_LONG).show()
                     },
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
