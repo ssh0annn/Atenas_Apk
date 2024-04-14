@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
+import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,6 +20,7 @@ class MediatorProducts @Inject constructor(
     private val queryDblocal: QueryDBlocal, private val queryFireStore: QuerysFirstore
 ) {
     private val codigoProductos = "code_Product"
+    private val ColletionName = "productos"
 
     /**
      * @param: List<List<String>>, MutableList<List<String>>
@@ -36,13 +38,13 @@ class MediatorProducts @Inject constructor(
                 val response = async {
                     try {
                         insertaInDbLocal(listaDeFireStore)
+                        confirmar = true
                     } catch (e: Exception) {
                         println("Mediador asyscPro:No se inserto en db local: $e <--")
                     }
                 }
                 response.await()
             }
-            confirmar = true
         }
         return confirmar
     }
@@ -60,12 +62,12 @@ class MediatorProducts @Inject constructor(
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
                 queryFireStore.insertToFirebase(
-                    "productos", convierteAObjetoMap(baseLocal), codigoProductos
+                    ColletionName, convierteAObjetoMap(baseLocal), codigoProductos
                 )
+                confirmar = true
             } catch (e: Exception) {
                 println("Problemas de insercion a Firestor: $e")
             }
-            confirmar = true
         }
         return confirmar
     }
@@ -89,9 +91,10 @@ class MediatorProducts @Inject constructor(
         //Evaluamos los cambios producidos en base local para reflejarlos enla firestore.
         if (listosParaSubir.isNotEmpty()) {
             confirmar = true
+
             println("Listos para subir $listosParaSubir")
             queryFireStore.insertToFirebase(
-                "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
+                ColletionName, convierteAObjetoMap(listosParaSubir), codigoProductos
             )
         }
         return confirmar
@@ -130,8 +133,12 @@ class MediatorProducts @Inject constructor(
      * con corrutinas, favor manajar en el hilo Default para evitar bloqueos del hilo main.
      */
     suspend fun ayscPro() {
+        Log.e("Entre","Entre a la funcion producto" +
+                " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
+        println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
+
         val baseLocal = capturarDatosDB()
 
         //Verificamos que la base de datos local este vacia, y que la de firebase no este vacia
@@ -234,7 +241,7 @@ class MediatorProducts @Inject constructor(
         val intrusos = queryDblocal.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
             queryFireStore.deleteDataFirebase(
-                "productos", convierteAObjetoMap(intrusos), codigoProductos
+                ColletionName, convierteAObjetoMap(intrusos), codigoProductos
             )
             println("estos son los intrusos --> $intrusos <--")
         }

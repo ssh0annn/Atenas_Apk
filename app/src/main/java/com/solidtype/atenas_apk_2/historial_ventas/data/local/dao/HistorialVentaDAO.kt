@@ -21,7 +21,7 @@ interface HistorialVentaDAO {
 
     //funciones usadas para las operacions aysnc de firebase
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllHistorialVenta(historialVentaEntidad: List<HistorialVentaEntidad>)
+    fun insertAllHistorialVenta(historal: List<HistorialVentaEntidad>)
 
     @Query("Select * from HistorialVenta_Table")
     fun getHistorialNormal():List<HistorialVentaEntidad>

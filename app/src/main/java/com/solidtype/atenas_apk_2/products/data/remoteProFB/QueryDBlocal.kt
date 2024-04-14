@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
+import android.util.Log
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.async
@@ -23,6 +24,11 @@ class QueryDBlocal @Inject constructor(
      * Favor verificar el formato de este objeto antes de someter la lista.
      * Los elementos deben ser igual a 9.
      */
+
+
+
+
+
     private fun entityConvert(it: List<String>): ProductEntity {
         if (it.size == 9) {
             try {

@@ -35,9 +35,8 @@ class InventarioViewModel @Inject constructor(
                 mostrarProductos()
                 viewModelScope.launch {
                     withContext(Dispatchers.Default){
-                        mediado.aysncHistorial()
                         syncProductos()
-
+                        mediado.ayscHistorial()
                     }
 
                 }
