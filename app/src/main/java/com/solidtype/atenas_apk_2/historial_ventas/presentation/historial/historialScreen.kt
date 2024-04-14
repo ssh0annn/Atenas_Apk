@@ -100,7 +100,7 @@ fun HistorialScreen() {
 
     var ventasTickerDinero by rememberSaveable { mutableIntStateOf(10000) }
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") }
-    var selected by rememberSaveable { mutableStateOf("") }
+    var selected by rememberSaveable { mutableStateOf("Ventas") }
 
     val datePickerState1: DatePickerState =
         rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
@@ -150,7 +150,7 @@ fun HistorialScreen() {
                     ) {
                         DropdownSelect(
                             items = items,
-                            selectedItem = items.first(),
+                            selectedItem = selected,
                         ) {
                             selected = it
                             when (selected) {
