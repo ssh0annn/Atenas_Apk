@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
     private val casosHistorialReportes: CasosHistorialReportes,
-    private val historialRepositoryImp: HistorialRepositoryImp
 ) : ViewModel() {
 
 
@@ -29,6 +28,7 @@ class HistorailViewModel @Inject constructor(
 
     init {
             MostrarHistoriar()
+
         }
 
 
@@ -65,7 +65,8 @@ class HistorailViewModel @Inject constructor(
         viewModelScope.launch {
             val productosRangoventa =
                 casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
-            productosRangoventa.collect { product ->
+            productosRangoventa.collect {
+                product ->
                 uiState.update {
                     it.copy(Historial = product)
                 }
@@ -89,13 +90,14 @@ class HistorailViewModel @Inject constructor(
 
 
     fun buscarProductosTicket(
-        fecha_inicio: String = "02/02/24",
-        fecha_final: String = "05/05/24",
-        categoria: String = "Ticket"
+        fechaIni: String = "02/02/24",
+        fechaFinal: String = "05/05/24",
+        catego: String = "Ticket"
+
     ) {
         viewModelScope.launch {
             val productosRangoticket =
-                casosHistorialReportes.verTicketsPorFechas(fecha_inicio, fecha_final, categoria)
+                casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
             productosRangoticket.collect { product ->
                 uiState.update {
                     it.copy(Ticket = product)
@@ -105,7 +107,6 @@ class HistorailViewModel @Inject constructor(
                     println(i.NombreCliente)
                     println(i.Abono)
                     println(i.Marca)
-                    println(i.Dias)
                     println(i.Precio)
                     println(i.Servicio)
                     println(i.Modelo)
@@ -124,6 +125,20 @@ class HistorailViewModel @Inject constructor(
             mostrarHistory.collect { product ->
                 uiState.update {
                     it.copy(Historial = product)
+                }
+                for (i in product) {
+                    println("-----------------")
+                    println("nombre" + i.Nombre)
+                    println(i.NombreCliente)
+                    println(i.Cantidad)
+                    println(i.Codigo)
+                    println(i.Categoria)
+                    println(i.Imei)
+                    println(i.Marca)
+                    println(i.Modelo)
+                    println(i.Descripcion)
+                    println(i.FechaIni)
+                    println(i.FechaFin)
                 }
             }
         }

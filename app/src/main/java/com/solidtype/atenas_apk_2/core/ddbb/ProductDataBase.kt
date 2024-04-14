@@ -11,9 +11,9 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
 
 @Database(entities = [ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class], version = 2, exportSchema = false)
+
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
     abstract val HistorialVentaDao :HistorialVentaDAO
     abstract val HistorialTicketDao :HistorialTicketDAO
-
 }

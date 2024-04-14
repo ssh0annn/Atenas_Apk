@@ -88,9 +88,10 @@ class HistorialRepositoryImp @Inject constructor(
     }
 
     override fun mostrarTicketsPorFecha(
-        fecha: String,
-        dias: Int
+        fechaIni: String,
+        fechaFinal:String,
+        catego: String
     ): Flow<List<HistorialTicketEntidad>> {
-       return daoTickets.getHistorialTicketFechaDias(fecha, dias)
+       return daoTickets.getHistorialTicketFechaDias(fechaIni, fechaFinal, catego)
     }
 }
