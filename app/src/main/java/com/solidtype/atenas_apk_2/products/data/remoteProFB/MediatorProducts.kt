@@ -90,9 +90,14 @@ class MediatorProducts @Inject constructor(
         if (listosParaSubir.isNotEmpty()) {
             confirmar = true
             println("Listos para subir $listosParaSubir")
-            queryFireStore.insertToFirebase(
-                "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
-            )
+            try{
+                queryFireStore.insertToFirebase(
+                    "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
+                )
+            }catch (e: Exception){
+                return false
+            }
+
         }
         return confirmar
 

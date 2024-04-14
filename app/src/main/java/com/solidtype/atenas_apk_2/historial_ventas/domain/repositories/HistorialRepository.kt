@@ -14,6 +14,8 @@ interface HistorialRepository {
     fun buscarPorFechasCategoriasVentas(Fecha_inicio:String, fecha_final:String, categoria:String): Flow<List<HistorialVentaEntidad>>
 
     fun mostrarTickets(): Flow<List<HistorialTicketEntidad>>
-    fun mostrarTicketsPorFecha(fecha : String, dias : Int): Flow<List<HistorialTicketEntidad>>
+    fun mostrarTicketsPorFecha(  fechaIni: String,
+                                 fechaFinal:String,
+                                 catego: String): Flow<List<HistorialTicketEntidad>>
 
 }
