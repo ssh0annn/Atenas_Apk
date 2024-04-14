@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.historial_ventas.domain.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,11 +13,12 @@ data class HistorialTicketEntidad(
     val EstadoEquipo : String,
     val Marca : String,
     val Email : String,
-    val Fecha : String,
     val Restante : Double,
     val Abono : Double,
     val Nota : String,
     val Precio : Double,
     val Servicio : String,
-    val Dias : Int
+    val Categoria : String,
+    val FechaInicial : String,
+    val FechaFinal : String
 )
