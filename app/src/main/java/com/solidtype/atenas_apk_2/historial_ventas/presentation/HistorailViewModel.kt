@@ -28,6 +28,8 @@ class HistorailViewModel @Inject constructor(
 
     init {
             MostrarHistoriar()
+            buscarProductosventa( "03-04-2024", "05-05-2024"  ,  "Venta")
+            println("venta" + uiState.value.Historial)
         }
 
 

@@ -131,6 +131,7 @@ class InventarioRepoImpl @Inject constructor(
 
     override suspend fun syncronizacionProductos() {
         mediador2()
+        mediatorHistorial()
     }
 
 }
