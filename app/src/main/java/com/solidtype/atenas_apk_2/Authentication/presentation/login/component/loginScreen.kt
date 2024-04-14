@@ -52,11 +52,12 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.Authentication.presentation.login.LoginViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.Authentication.presentation.pantallas.Screens
 
 @Composable
-fun Container(context: Context, nav: NavController,viewModel: LoginViewModel= hiltViewModel()) {
+fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
     val email: String by viewModel.mail.observeAsState(initial = "")
     val pass: String by viewModel.pass.observeAsState(initial = "")
     val loginEnabled: Boolean by viewModel.login.observeAsState(initial = false)

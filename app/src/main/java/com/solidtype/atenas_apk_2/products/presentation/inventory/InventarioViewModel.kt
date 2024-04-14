@@ -8,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,19 +22,24 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
-    private val context: Context): ViewModel() {
+    private val mediado: MediatorHistorialVentas
+    ): ViewModel() {
 
     var fileSelectionListener2: FileSelectionListener2? = null
+
 
      var uiState = MutableStateFlow(ProductosViewStates())
          private set
 
-    var excel by mutableStateOf("")
-        private set
-
 
             init {
                 mostrarProductos()
+                viewModelScope.launch {
+                    withContext(Dispatchers.Default) {
+                        syncProductos()
+                        mediado.ayscHistorial()
+                    }
+                }
             }
 
 
@@ -61,20 +68,28 @@ class InventarioViewModel @Inject constructor(
                 )
                 viewModelScope.launch {
                     casosInventario.createProductos(entidad)
+                    withContext(Dispatchers.Default){
+                        syncProductos()
+                    }
                 }
-                syncProductos()
+
             }
 
          fun mostrarProductos(){
                 val productos =casosInventario.getProductos()
-                 syncProductos()
+
                 viewModelScope.launch {
                    // uiState.update { it.copy(isLoading = true) }
                     productos.collect{ product ->
                        uiState.update {
                             it.copy(products = product)
+
                         }
+
                        // uiState.update { it.copy(isLoading = false) }
+                    }
+                    withContext(Dispatchers.IO){
+                        syncProductos()
                     }
 
                 }
@@ -97,10 +112,13 @@ class InventarioViewModel @Inject constructor(
                          uiState.update { it.copy(isLoading = false) }
                         println("Salgo del withcontext la funcion que exporta en viewmodel")
                         withContext(Dispatchers.Main){
-
-                        Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
+                        uiState.update {
+                            it.copy(uriPath = path.path.toString())
+                        }
+                       // Toast.makeText(context, "Se ha creado un nuevo archivo en: ${path.path}", Toast.LENGTH_LONG).show()
                         }
                     }
+                    mostrarProductos()
                 }
 
                     println(" fuera del withcontext, en el viewscope")
@@ -113,6 +131,10 @@ class InventarioViewModel @Inject constructor(
                         uiState.update { it.copy(isLoading = true) }
                         casosInventario.deleteProductos(producto)
                         uiState.update { it.copy(isLoading = false) }
+                        withContext(Dispatchers.Default){
+                            syncProductos()
+                        }
+
                     }
 
                 }
@@ -127,8 +149,10 @@ class InventarioViewModel @Inject constructor(
                 viewModelScope.launch {
                     val busqueda = casosInventario.searchProductos(any)
                     busqueda.collect{ product ->
+
                         uiState.update {
                             it.copy(products = product)
+
                         }
                     }
 
@@ -138,8 +162,8 @@ class InventarioViewModel @Inject constructor(
             fun syncProductos(){
                 viewModelScope.launch {
                     withContext(Dispatchers.Default){
-                        casosInventario.syncProductos()
 
+                        casosInventario.syncProductos()
                     }
                 }
             }
@@ -160,6 +184,7 @@ class InventarioViewModel @Inject constructor(
 
                 casosInventario.importarExcelFile(filePath)
                 uiState.update { it.copy(isLoading = false) }
+                syncProductos()
             }
 
         }
