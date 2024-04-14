@@ -56,6 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.BotonBlanco
@@ -100,8 +101,8 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
         objTicket(9, "09/02/2021", "Cliente 9", 9000.0, "Pagado"),
         objTicket(10, "10/02/2021", "Cliente 10", 10000.0, "Pagado"),
     ) // esto debe venir del viewModel
-
-    var ventasTickerDinero by rememberSaveable { mutableIntStateOf(10000) }
+    val total by viewModel.uiState.collectAsStateWithLifecycle()
+    var ventasTickerDinero by rememberSaveable { mutableStateOf(0.0) }
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") }
     var selected by rememberSaveable { mutableStateOf("") }
 
@@ -159,12 +160,12 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                             when (selected) {
                                 "Ventas" -> {
                                     ventasTickerTitulo = "Ventas"
-                                    ventasTickerDinero = 10000
+                                    ventasTickerDinero = total.total
                                 }
 
                                 "Ticket" -> {
                                     ventasTickerTitulo = "Cuenta x Cobrar"
-                                    ventasTickerDinero = 20000
+                                    ventasTickerDinero = total.total
                                 }
                             }
                         }
@@ -199,7 +200,12 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                     //Aquí va el menú de ventas
                     LazyColumn {
                         item {
-                            Row {
+                            Row(
+                                modifier = Modifier
+                                    .clickable {
+                                        // Aquí lógica para ordenar por ID
+                                    }
+                            ) {
                                 Text(
                                     "ID",
                                     fontSize = 24.sp,

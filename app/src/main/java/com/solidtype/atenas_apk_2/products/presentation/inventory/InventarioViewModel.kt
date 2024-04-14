@@ -3,6 +3,8 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel

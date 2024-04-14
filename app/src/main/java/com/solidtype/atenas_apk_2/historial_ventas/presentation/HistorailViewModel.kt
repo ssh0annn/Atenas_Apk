@@ -28,7 +28,6 @@ class HistorailViewModel @Inject constructor(
 
     init {
             MostrarHistoriar()
-
         }
 
 
@@ -58,61 +57,54 @@ class HistorailViewModel @Inject constructor(
 
 
     fun buscarProductosventa(
-        fecha_inicio: String = "02/02/24",
-        fecha_final: String = "05/05/24",
-        categoria: String = "venta"
+        fecha_inicio: String,
+        fecha_final: String,
+        categoria: String
     ) {
+        uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
+            var total = 0.0
             val productosRangoventa =
                 casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
             productosRangoventa.collect {
                 product ->
                 uiState.update {
-                    it.copy(Historial = product)
+                    it.copy(Historial = product, isLoading = false)
                 }
-                for (i in product) {
-                    println("nombre" + i.Nombre)
-                    println(i.NombreCliente)
-                    println(i.Cantidad)
-                    println(i.Codigo)
-                    println(i.Categoria)
-                    println(i.Imei)
-                    println(i.Marca)
-                    println(i.Modelo)
-                    println(i.Descripcion)
-                    println(i.FechaIni)
-                    println(i.FechaFin)
+                for (i in product){
+                    total += i.Precio * i.Cantidad
                 }
-
             }
+            uiState.update {
+                it.copy(total = total)
+            }
+           println( uiState.value.total)
         }
     }
 
 
     fun buscarProductosTicket(
-        fechaIni: String = "02/02/24",
-        fechaFinal: String = "05/05/24",
-        catego: String = "Ticket"
+        fechaIni: String ,
+        fechaFinal: String ,
+        catego: String
 
     ) {
+        uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
             val productosRangoticket =
                 casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
             productosRangoticket.collect { product ->
                 uiState.update {
-                    it.copy(Ticket = product)
+                    it.copy(Ticket = product, isLoading = false)
                 }
-                for (i in product) {
-                    println("nombre" + i.Codigo)
-                    println(i.NombreCliente)
-                    println(i.Abono)
-                    println(i.Marca)
-                    println(i.Precio)
-                    println(i.Servicio)
-                    println(i.Modelo)
-                    println(i.Telefono)
-                }
-
             }
         }
     }
@@ -120,30 +112,24 @@ class HistorailViewModel @Inject constructor(
 
     fun MostrarHistoriar() {
         val mostrarHistory = casosHistorialReportes.mostrarVentas()
-
+        var total = 0.0
+        uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
             mostrarHistory.collect { product ->
+                for ( i in product){
+                    total += i.Precio.toDouble() * i.Cantidad.toInt()
+                }
                 uiState.update {
-                    it.copy(Historial = product)
+                    it.copy(Historial = product, isLoading = false, total = total)
                 }
-                for (i in product) {
-                    println("-----------------")
-                    println("nombre" + i.Nombre)
-                    println(i.NombreCliente)
-                    println(i.Cantidad)
-                    println(i.Codigo)
-                    println(i.Categoria)
-                    println(i.Imei)
-                    println(i.Marca)
-                    println(i.Modelo)
-                    println(i.Descripcion)
-                    println(i.FechaIni)
-                    println(i.FechaFin)
-                }
+
             }
         }
     }
-
 }
 
 

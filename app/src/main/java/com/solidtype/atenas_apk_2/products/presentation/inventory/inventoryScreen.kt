@@ -19,10 +19,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -49,8 +53,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.BotonIconCircular
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.CardProduct
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Carrito
+import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
 
@@ -135,13 +138,15 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
             )
         }
     } else {
-        if(uiState.uriPath.isNotBlank()){
+        if (uiState.uriPath.isNotBlank()) {
 
             SnackBar(uiState.uriPath,
                 onShareClick = {
-                               Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
-            },
-                onViewClick = {  Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()})
+                    Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
+                },
+                onViewClick = {
+                    Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()
+                })
         }
         LazyColumn(
             modifier = Modifier
@@ -208,38 +213,77 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                     .clip(RoundedCornerShape(20.dp))
                                     .background(Color(parseColor("#343341")))
                             ) {
-                                LazyColumn(
+                                Column(
                                     modifier = Modifier
-                                        .padding(10.dp)
-                                        .fillMaxWidth()
-                                        .fillMaxHeight()
+                                        .fillMaxSize()
                                         .clip(RoundedCornerShape(5.dp))
                                         .background(Color(parseColor("#737A8C")))
-                                ) { //buscar componente para agregar filas de cards
-                                    item {
-                                        productos.chunked(4)
-                                            .forEach { row -> //chunked(4) = 4 productos por fila
-                                                Row {//productos es una lista de objetos
-                                                    row.forEach { product ->
-                                                        CardProduct(
-                                                            product
-                                                        ) { clicked ->
-                                                            codigo = "${clicked.Code_Product}"
-                                                            nombre = clicked.Name_Product
-                                                            categoria = clicked.Category_Product
-                                                            descripcion =
-                                                                clicked.Description_Product
-                                                            costo = clicked.Price_Product.toString()
-                                                            precio =
-                                                                clicked.Price_Vending_Product.toString()
-                                                            modelo = clicked.Model_Product
-                                                            marca = clicked.Tracemark_Product
-                                                            cantidad =
-                                                                clicked.Count_Product.toString()
+                                ){
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(5.dp))
+                                            .background(Color(parseColor("#737A8C")))
+
+                                    ) {
+                                        Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
+                                        Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                    }
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(5.dp))
+                                            .background(Color(parseColor("#737A8C")))
+                                    ) { //buscar componente para agregar filas de cards
+                                        item {
+                                            /*productos.chunked(4)
+                                                .forEach { row -> //chunked(4) = 4 productos por fila
+                                                    Row {//productos es una lista de objetos
+                                                        row.forEach { product ->
+                                                            CardProduct(
+                                                                product
+                                                            ) { clicked ->
+                                                                codigo = "${clicked.Code_Product}"
+                                                                nombre = clicked.Name_Product
+                                                                categoria = clicked.Category_Product
+                                                                descripcion =
+                                                                    clicked.Description_Product
+                                                                costo = clicked.Price_Product.toString()
+                                                                precio =
+                                                                    clicked.Price_Vending_Product.toString()
+                                                                modelo = clicked.Model_Product
+                                                                marca = clicked.Tracemark_Product
+                                                                cantidad =
+                                                                    clicked.Count_Product.toString()
+                                                            }
                                                         }
-                                                    }
-                                                }
+                                                }*/
+
+                                        }
+                                        items(productos) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .padding(10.dp)
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .background(Color(0xFFD9D9D9)),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Box(
+                                                    modifier = Modifier.padding(10.dp)
+                                                ){
+                                                    Carrito(false)
+                                                }// Aquí debería ir la imagen del producto
+                                                Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
                                             }
+                                        }
                                     }
                                 }
                             }
@@ -387,7 +431,8 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
 
                         }
                         Boton("Exportar") {
-                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
+                                .show()
                             viewModel.exportarExcel()
                         }
                         Boton("Ejemplar") {
@@ -402,8 +447,6 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
         }
     }
 }
-
-//Preview para Vortex T10M (T10MPROPLUS) Horizontal
 
 @Composable
 fun SnackBar(
@@ -451,7 +494,7 @@ fun SnackBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text =message,
+                        text = message,
                         color = Color(0xFF343341),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold

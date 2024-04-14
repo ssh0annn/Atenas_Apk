@@ -7,5 +7,6 @@ data class HistorialUIState(
     val isLoading: Boolean = false,
     val Historial: List<HistorialVentaEntidad> = listOf(),
     val Ticket: List<HistorialTicketEntidad> = listOf(),
+    val total: Double = 0.0,
     val uriPath:String=""
 )
