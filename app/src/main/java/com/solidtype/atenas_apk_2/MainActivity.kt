@@ -54,9 +54,8 @@ class MainActivity : ComponentActivity() {
             // FireManeger()
             //TestAutocompleteSelect()
             // Demo_SearchableExposedDropdownMenuBox()
-            HistorialScreen()
            // InventoryScreen()
-            //Navigation()
+            Navigation()
            // FireManeger()
         }
     }
