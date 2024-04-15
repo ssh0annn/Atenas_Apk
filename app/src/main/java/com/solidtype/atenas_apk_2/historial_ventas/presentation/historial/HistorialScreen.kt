@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -51,6 +53,8 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel= hiltViewModel()*/) {
+
+    val context = LocalContext.current
 
     val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
     // hice esto para poder probar la aplicación.
@@ -91,6 +95,8 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
 
     //var ventasTickerDinero by rememberSaveable { mutableStateOf(0.0) }
     var ventasTickerDinero = uiState.total
+
+    var uri = uiState.uriPath
 
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") } //Inmutable
     var selected by rememberSaveable { mutableStateOf("Ventas") }//Inmutable
@@ -424,6 +430,12 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                         Boton("Exportar") {
                             //Aquí lógica para exportar
                             viewModel.Exportar()
+                            uri = uiState.uriPath
+                            if(uri.isNotEmpty()){
+                                Toast.makeText(context, "Exportado con éxito en: $uri", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Error al exportar", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
