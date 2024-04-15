@@ -10,6 +10,7 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,7 +24,7 @@ class HistorailViewModel @Inject constructor(
 
 
     var uiState = MutableStateFlow(HistorialUIState())
-        private set
+
 
 
     init {
@@ -50,9 +51,7 @@ class HistorailViewModel @Inject constructor(
                     }
                 }
             }
-
         }
-
     }
 
 
@@ -99,15 +98,21 @@ class HistorailViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            val productosRangoticket =
-                casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
+            val productosRangoticket = casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
+            var deuda = 0.0
             productosRangoticket.collect { product ->
+                for (i in product){
+                    deuda += i.Precio - i.Abono
+                }
                 uiState.update {
-                    it.copy(Ticket = product, isLoading = false)
+                    it.copy(Ticket = product, isLoading = false, total2 = deuda)
                 }
             }
         }
     }
+
+
+
 
 
     fun MostrarHistoriar() {
@@ -130,6 +135,30 @@ class HistorailViewModel @Inject constructor(
             }
         }
     }
+
+    fun mostrarTicket() {
+        val mostrarTick = casosHistorialReportes.verTodosTickets()
+        var deuda = 0.0
+        viewModelScope.launch {
+            mostrarTick.collect { product ->
+                uiState.update {
+                    it.copy(Ticket = product, isLoading = false, total2 = deuda)
+                }
+                for (i in product) {
+                    deuda += i.Precio - i.Abono
+                }
+            }
+            uiState.update {
+                it.copy(isLoading = false)
+            }
+        }
+    }
+
+
 }
+
+
+
+
 
 
