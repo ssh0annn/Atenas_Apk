@@ -1,14 +1,11 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 /**
@@ -21,8 +18,7 @@ import javax.inject.Inject
  *  y devuelbe en las consulta un QuerySnapshot
  */
 class QuerysFirstore @Inject constructor(
-    private val fireStore: FirebaseFirestore,
-    private val authUser: FirebaseAuth
+    private val fireStore: FirebaseFirestore
 ) {
     private val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
 
@@ -43,12 +39,12 @@ class QuerysFirstore @Inject constructor(
                     .collection(collectionName)
                     .get()
                     .await<QuerySnapshot?>()
-
             } catch (e: Exception) {
                 Log.e("FirebaseError", "Error al obtener datos de Firebase", e)
                 throw Exception("no se pudo obtener los datos desde firebase $e")
             }
         }
+
 
 
     //se convierte el snashopt a json por medio de la
@@ -57,7 +53,7 @@ class QuerysFirstore @Inject constructor(
      * @return: String, serializado en json.
      * @Nota: No esta en uso aun.
      */
-    private fun snapshotToJson(snapshot: QuerySnapshot): String {
+    /*private fun snapshotToJson(snapshot: QuerySnapshot): String {
         val queryJson = mutableListOf<Map<String, Any?>>()
         //se recorre el la lista con el documento para la conversicio
         for (document in snapshot.documents) {
@@ -69,7 +65,8 @@ class QuerysFirstore @Inject constructor(
         }
         //luego se hace una convercion de json a string
         return Json.encodeToString(queryJson)
-    }
+    }*/
+
 
     /**
     @param: String, List<Map<String, String>>, String
@@ -84,6 +81,7 @@ class QuerysFirstore @Inject constructor(
         dataToInsert: List<Map<String, String>>,
         idDocumento: String
     ) {
+        println("idDocument: $idDocumento")
 
         try {
             withContext(Dispatchers.Default) {

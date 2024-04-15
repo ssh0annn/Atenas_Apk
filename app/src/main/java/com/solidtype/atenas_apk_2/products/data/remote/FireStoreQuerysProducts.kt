@@ -8,13 +8,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 class FireStoreQuerysProducts @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
-
-
-
 
     suspend fun getDatatProFB(uidPro:String): List<ProductEntity>{
         return withContext(Dispatchers.IO){

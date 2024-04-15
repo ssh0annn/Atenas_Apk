@@ -22,11 +22,8 @@ interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPro(pro: ProductEntity)
-
-
     @Query("select * from Product_Table WHERE Code_Product = :code ")
     fun getAllProductById(code: Int): Flow<List<ProductEntity>>
-
 
     @Query(
         "SELECT * FROM Product_Table WHERE " +
