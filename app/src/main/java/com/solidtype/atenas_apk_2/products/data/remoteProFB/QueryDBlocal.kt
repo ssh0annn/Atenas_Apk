@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
+import android.util.Log
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,11 @@ class QueryDBlocal @Inject constructor(
      * Favor verificar el formato de este objeto antes de someter la lista.
      * Los elementos deben ser igual a 9.
      */
+
+
+
+
+
     private fun entityConvert(it: List<String>): ProductEntity {
         if (it.size == 9) {
             try {
@@ -44,7 +50,7 @@ class QueryDBlocal @Inject constructor(
 
             }
         }
-        throw Exception("El tamaño de la lista enregada no es compatible")
+        throw Exception("El tamaño de la lista entregada no es compatible")
     }
 
     /**
@@ -130,6 +136,7 @@ class QueryDBlocal @Inject constructor(
             val intrusosConvetido = entityConvert(it)
             listaFirebaseMediatorproducts.add(intrusosConvetido)
         }
+
         val productosToDeleteInFirestore =
             listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
                 local.any { it.Code_Product == firestoreproductos.Code_Product }
@@ -170,11 +177,7 @@ class QueryDBlocal @Inject constructor(
             return@coroutineScope listProduct.await()
 
         }
-
-
     }
-
-
 }
 
 

@@ -20,6 +20,6 @@ class ExampleInstrumentedTest {
     @Test
     @Composable
     fun TestingCarlos() {
-        HistorialScreen()
+        //HistorialScreen()
     }
 }

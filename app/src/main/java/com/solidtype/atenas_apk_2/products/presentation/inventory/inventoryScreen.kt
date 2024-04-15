@@ -448,13 +448,6 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
     }
 }
 
-//Preview para Vortex T10M (T10MPROPLUS) Horizontal
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
-@Composable
-fun InventoryScreenPreview() {
-    InventoryScreen()
-}
-
 @Composable
 fun SnackBar(
     message: String,
