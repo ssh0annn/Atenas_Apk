@@ -1,9 +1,8 @@
 package com.solidtype.atenas_apk_2.products.data.remoteProFB
 
-import android.util.Log
+
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

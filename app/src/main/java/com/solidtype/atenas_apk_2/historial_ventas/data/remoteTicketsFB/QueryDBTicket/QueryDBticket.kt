@@ -5,6 +5,7 @@ import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicke
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -87,25 +88,24 @@ class QueryDBticket @Inject constructor(
 
         }
 
-        /**
-         * @return: List<List<String>>
-         * @funcionamiento: captura todo los productos de la base de dato local espesificcamente de la tabla HistorialTicketEntidad.
-         * Favor ver el objeto ProductEntity para mas informacion.
-         *
-         */
-        suspend fun getAllHistorial(): List<List<String>> {
-            var mutableListData: List<List<String>> = emptyList()
-            var listaDeEntity = emptyList<HistorialTicketEntidad>()
-            coroutineScope {
-                val response = async { listaDeEntity = dao.getAllTicketsNormal() }
-                response.await()
-                if (listaDeEntity.isNotEmpty()) {
-                    mutableListData = entityToListString(listaDeEntity)
-                }
+    /**
+     * @return: List<List<String>>
+     * @funcionamiento: captura todo los productos de la base de dato local espesificcamente de la tabla Productos.
+     * Favor ver el objeto ProductEntity para mas informacion.
+     *
+     */
+    suspend fun getAllProducts(): List<List<String>> {
+        var mutableListData: List<List<String>> = emptyList()
+        var listaDeEntity = emptyList<HistorialTicketEntidad>()
+        coroutineScope {
+            val response = async { listaDeEntity = dao.getAllTicketsNormal() }
+            response.await()
+            if (listaDeEntity.isNotEmpty()) {
+                mutableListData = entityToListString(listaDeEntity)
             }
-            Log.d("TestOrdenBaseDatosLocal","funcion: getAllHistorial()  Orden del objeto :Z$mutableListData")
-            return mutableListData
         }
+        return mutableListData
+    }
 
     /**
      * @param: MutableList<List<String>>
@@ -114,7 +114,7 @@ class QueryDBticket @Inject constructor(
      * @funcionamiento: Inserta productos en base de datos local si la lista es compatible con el formato para ProductEntity,
      * Esta funcion integra un hilo interno. Favor llamar desde una funcion suspendida.
      */
-    suspend fun insertAllHistoral(dataToInsert: MutableList<List<String>>) {
+    suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>) {
         val lista: MutableList<HistorialTicketEntidad> = mutableListOf()
         dataToInsert.forEach {
             try {
@@ -145,8 +145,8 @@ class QueryDBticket @Inject constructor(
         }
 
         val productosToDeleteInFirestore =
-            listaFirebaseMediatorproducts.filterNot { FireStoreTicets ->
-                local.any { it.Codigo == FireStoreTicets.Codigo }
+            listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
+                local.any { it.Codigo == firestoreproductos.Codigo }
             }
         return entityToListString(productosToDeleteInFirestore)
     }
@@ -159,36 +159,32 @@ class QueryDBticket @Inject constructor(
      * en base de dato local.
      */
     suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
-        val listaFirebaseMediatorHistorial: MutableList<HistorialTicketEntidad> = mutableListOf()
+        val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
         val local = datosLocales()
-
-
-        Log.d("dataHistorialToUpFirestore","Funcion compararLocalParriba()")
-        Log.d("dataHistorialToUpFirestore : Local","Datos locales Nuevo para compara con firebase $local")
-        Log.d("dataHistorialToUpFirestore","Datos para actualizar en Firebase $listIntrusos")
         listIntrusos.forEach {
             val intrusosConvetido = entityConvert(it)
-            listaFirebaseMediatorHistorial.add(intrusosConvetido)
+            listaFirebaseMediatorproducts.add(intrusosConvetido)
         }
-        val listaNoMutable: List<HistorialTicketEntidad> = listaFirebaseMediatorHistorial
+        val listaNoMutable: List<HistorialTicketEntidad> = listaFirebaseMediatorproducts
         val productToAddInFirebase = local.filterNot { firestoreproductos ->
             listaNoMutable.any {
                 it == firestoreproductos
             }
         }
-        Log.d("DatoToUpFireStore", "Estos son: ${entityToListString(productToAddInFirebase)}")
         return entityToListString(productToAddInFirebase)
     }
 
 
+    /**
+     * @return  List<ProductEntity>
+     * @funcion: captura todos los datos de la tabla Productos y los debuelve en una lista de objetos ProductEntity.
+     */
     private suspend fun datosLocales(): List<HistorialTicketEntidad> {
         return coroutineScope {
             val listProduct = async { dao.getAllTicketsNormal() }
-            Log.d("DatosAsyncHistoral","Estos son los datos de historial local: $listProduct <--")
             return@coroutineScope listProduct.await()
 
         }
     }
-
 
 }

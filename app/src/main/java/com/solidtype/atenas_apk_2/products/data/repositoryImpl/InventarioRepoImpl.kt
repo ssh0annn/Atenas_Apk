@@ -22,6 +22,7 @@ class InventarioRepoImpl @Inject constructor(
     override fun getProducts(): Flow<List<ProductEntity>> {
 
         return daoProductos.getProducts()
+
     }
 
     override fun getProductByCodigo(codigo: Int): Flow<List<ProductEntity>> {
@@ -131,7 +132,6 @@ class InventarioRepoImpl @Inject constructor(
 
     override suspend fun syncronizacionProductos() {
         mediador2()
-        mediatorHistorial()
     }
 
 }

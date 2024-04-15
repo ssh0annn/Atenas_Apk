@@ -1,33 +1,31 @@
-package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator
+package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket
 
 import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorialVenta
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticket
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.QuerysFirstore
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MediatorHistorialVentas @Inject constructor(
-    private val queriesFireStore: QuerysFirstore,
-    private val queryDBlocal: QueryDBHistorialVenta
+class RemoteTicketsFB @Inject constructor(
+    private val queryDBticket: QueryDBticket,
+    private val querYFIreStore:QuerysFirstore
 ) {
-    private val codigoHistoriales = "Codigo"
-    private val colletionName = "Historial_Ventas"
 
-    suspend operator fun invoke()  {
-        Log.e("Entre","Entre a la funcion Historial asyc" +
-                " async")
+    private val codigoTickets = "Codigo"
+    private val collectionName = "Tickets"
+
+
+
+    suspend operator fun invoke() {
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
-        val baseLocal = capturarDatosDB()
-        Log.d("TEstSnapToList","Esta es la lista de SnapShot a List lo convertimos$listaDeFireStore")
-        Log.d("TEstSnapToList","Estos son los datos de la base local $baseLocal")
         println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
 
-
+        val baseLocal = capturarDatosDB()
 
         //Verificamos que la base de datos local este vacia, y que la de firebase no este vacia
         if (logicaDeInsercionLocal(baseLocal, listaDeFireStore)) {
@@ -39,9 +37,9 @@ class MediatorHistorialVentas @Inject constructor(
             println("Se estan insertando en Firebase...")
 
         } else {
-
-            // analizamos datos para subir
-            if (listosParaSubirAFirestore(baseLocal,listaDeFireStore)) {
+            //si no se cumplen los demas esenarios es porque ambas tienen datos entonces.
+            // analizamos datos
+            if (listosParaSubirAFirestore(baseLocal, listaDeFireStore)) {
                 println("Sincronizando desde local a FireStore")
 
             } else {
@@ -53,7 +51,6 @@ class MediatorHistorialVentas @Inject constructor(
 
         }
     }
-
     /**
      * @param: List<List<String>>, MutableList<List<String>>
      * @return: Boolean
@@ -70,16 +67,17 @@ class MediatorHistorialVentas @Inject constructor(
                 val response = async {
                     try {
                         insertaInDbLocal(listaDeFireStore)
+                        confirmar = true
                     } catch (e: Exception) {
                         println("Mediador asyscPro:No se inserto en db local: $e <--")
                     }
                 }
                 response.await()
             }
-            confirmar = true
         }
         return confirmar
     }
+
 
     /**
      * @param: listaDeFireStore, baseLocal
@@ -90,30 +88,20 @@ class MediatorHistorialVentas @Inject constructor(
     private suspend fun logicaInsertarAFireStore(
         listaDeFireStore: MutableList<List<String>>, baseLocal: List<List<String>>
     ): Boolean {
-        Log.e("TEstSnapToList","Funcion LogicaInsertarFireStore")
-        Log.e("TEstSnapToList","Datos en la funcion Lista $$listaDeFireStore")
-
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
-                queriesFireStore.insertToFirebase(
-                    colletionName, convierteAObjetoMap(baseLocal), codigoHistoriales
+                querYFIreStore.insertToFirebase(
+                    collectionName, convierteAObjetoMap(baseLocal), codigoTickets
                 )
+                confirmar = true
             } catch (e: Exception) {
                 println("Problemas de insercion a Firestor: $e")
             }
-            confirmar = true
         }
         return confirmar
     }
 
-    /**
-     * @param: baseLocal: List<List<String>>,
-     *         listaDeFireStore: MutableList<List<String>>
-     *@return: Bollean
-     * @funcion: Se evaluan los datos que si existen en db local y no en remote (FireStore), entonces se procede a subir los datos no existentes en el remote.
-     *
-     */
 
     suspend fun listosParaSubirAFirestore(
         baseLocal: List<List<String>>, listaDeFireStore: MutableList<List<String>>
@@ -122,17 +110,16 @@ class MediatorHistorialVentas @Inject constructor(
 
         println("Contiene datos: Local : $baseLocal")
         println("Contiene datos: Firestore : $listaDeFireStore")
-        val listosParaSubir = queryDBlocal.compararLocalParriba(listaDeFireStore)
+        val listosParaSubir = queryDBticket.compararLocalParriba(listaDeFireStore)
         //Evaluamos los cambios producidos en base local para reflejarlos enla firestore.
         if (listosParaSubir.isNotEmpty()) {
-
+            confirmar = true
 
             println("Listos para subir $listosParaSubir")
             try{
-                queriesFireStore.insertToFirebase(
-                    colletionName, convierteAObjetoMap(listosParaSubir), codigoHistoriales
+                querYFIreStore.insertToFirebase(
+                    collectionName, convierteAObjetoMap(listosParaSubir), codigoTickets
                 )
-                confirmar = true
             }catch (e: Exception){
                 return false
             }
@@ -156,8 +143,8 @@ class MediatorHistorialVentas @Inject constructor(
             coroutineScope {
                 withContext(Dispatchers.Default) {
                     val result = async {
-                        queriesFireStore.deleteDataFirebase(
-                            colletionName, convierteAObjetoMap(sacarIntruso), codigoHistoriales
+                        querYFIreStore.deleteDataFirebase(
+                            "productos", convierteAObjetoMap(sacarIntruso), codigoTickets
                         )
                     }
                     println("Este es el resultado de tu result: ${result.await()}")
@@ -168,7 +155,6 @@ class MediatorHistorialVentas @Inject constructor(
     }
 
 
-
     /**
      * @param: ista: List<List<String>>
      *@return: MutableList<Map<String, String>>
@@ -177,22 +163,24 @@ class MediatorHistorialVentas @Inject constructor(
     private fun convierteAObjetoMap(lista: List<List<String>>): MutableList<Map<String, String>> {
         val listaMapa: MutableList<Map<String, String>> = mutableListOf()
         for (data in lista) {
-            if (data.isNotEmpty() && data.size == 14) {
+            if (data.isNotEmpty() && data.size == 16) {
                 val dataMapa = mapOf(
                     "Codigo" to data[0],
-                    "Nombre" to data[1],
-                    "NombreCliente" to data[2],
-                    "Descripcion" to data[3],
-                    "Imei" to data[4],
-                    "Cantidad" to data[5],
-                    "Categoria" to data[6],
-                    "Modelo" to data[7],
-                    "Marca" to data[8],
-                    "Precio" to data[9],
-                    "TipoVenta" to data[10],
-                    "Total" to data[11],
-                    "FechaFin" to data[12],
-                    "FechaIni" to data[13]
+                    "NombreCliente" to data[1],
+                    "Modelo" to data[2],
+                    "Telefono" to data[3],
+                    "FaltaEquipo" to data[4],
+                    "EstadoEquipo" to data[5],
+                    "Marca" to data[6],
+                    "Email" to data[7],
+                    "Restante" to data[8],
+                    "Abono" to data[9],
+                    "Nota" to data[10],
+                    "Precio" to data[11],
+                    "Servicio" to data[12],
+                    "Categoria" to data[13],
+                    "FechaIni" to data[14],
+                    "FechaFinal" to data[15],
                 )
                 listaMapa.add(dataMapa)
             }
@@ -211,19 +199,21 @@ class MediatorHistorialVentas @Inject constructor(
             val it = documentData.data
             val documentos = mutableListOf<String>()
             documentos.add(it["Codigo"].toString())
-            documentos.add(it["Nombre"].toString())
             documentos.add(it["NombreCliente"].toString())
-            documentos.add(it["Descripcion"].toString())
-            documentos.add(it["Imei"].toString())
-            documentos.add(it["Cantidad"].toString())
-            documentos.add(it["Categoria"].toString())
-            documentos.add(it["Marca"].toString())
             documentos.add(it["Modelo"].toString())
+            documentos.add(it["Telefono"].toString())
+            documentos.add(it["FaltaEquipo"].toString())
+            documentos.add(it["EstadoEquipo"].toString())
+            documentos.add(it["Marca"].toString())
+            documentos.add(it["Email"].toString())
+            documentos.add(it["Restante"].toString())
+            documentos.add(it["Abono"].toString())
+            documentos.add(it["Nota"].toString())
             documentos.add(it["Precio"].toString())
-            documentos.add(it["TipoVenta"].toString())
-            documentos.add(it["Total"].toString())
-            documentos.add(it["FechaFin"].toString())
-            documentos.add(it["FechaIni"].toString())
+            documentos.add(it["Servicio"].toString())
+            documentos.add(it["Categoria"].toString())
+            documentos.add(it["FechaInicial"].toString())
+            documentos.add(it["FechaFinal"].toString())
             listaDeLista.add(documentos)
         }
         println("Esta es la lista de SnapShot a List lo convertimos$listaDeLista")
@@ -231,6 +221,7 @@ class MediatorHistorialVentas @Inject constructor(
         return listaDeLista
 
     }
+
     /**
      * @param: data: MutableList<List<String>>
      * @return: Unit.
@@ -238,7 +229,7 @@ class MediatorHistorialVentas @Inject constructor(
      */
     private suspend fun insertaInDbLocal(data: MutableList<List<String>>) {
         coroutineScope {
-            async { queryDBlocal.insertAllHistoral(data) }
+            async { queryDBticket.insertAllProducts(data) }
         }.await()
     }
 
@@ -250,10 +241,10 @@ class MediatorHistorialVentas @Inject constructor(
      */
     private suspend fun sacarIntrusos(posiblesIntrusos: MutableList<List<String>>): List<List<String>> {
 
-        val intrusos = queryDBlocal.compararIntrusos(posiblesIntrusos)
+        val intrusos = queryDBticket.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
-            queriesFireStore.deleteDataFirebase(
-                colletionName , convierteAObjetoMap(intrusos), codigoHistoriales
+            querYFIreStore.deleteDataFirebase(
+                collectionName, convierteAObjetoMap(intrusos), codigoTickets
             )
             println("estos son los intrusos --> $intrusos <--")
         }
@@ -264,14 +255,13 @@ class MediatorHistorialVentas @Inject constructor(
      * @return:  List<List<String>>
      * @funcion: captura los datos de la base local y los debuelve en formato de lista de listas.
      */
-    private suspend fun capturarDatosDB() = queryDBlocal.getAllHistorial()
-
+    private suspend fun capturarDatosDB() = queryDBticket.getAllProducts()
     /**
      * @return  QuerySnapshot?
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = queriesFireStore.getAllDataFirebase(colletionName)
+    private suspend fun caputarDatosFirebaseEnSnapshot() = querYFIreStore.getAllDataFirebase(collectionName)
 
 
 }
