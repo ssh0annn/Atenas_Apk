@@ -14,8 +14,7 @@ import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao, private val excel: XlsManeger,
-    private val mediador2: MediatorProducts,
-    private val mediatorHistorial: MediatorHistorialVentas
+    private val mediador2: MediatorProducts
 ) : InventarioRepo {
 
 
