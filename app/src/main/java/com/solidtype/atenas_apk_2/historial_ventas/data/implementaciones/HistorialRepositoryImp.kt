@@ -39,6 +39,7 @@ class HistorialRepositoryImp @Inject constructor(
             "Marca",
             "Precio",
             "TipoVenta",
+            "Total",
             "FechaFin",
             "FechaIni"
         )
@@ -59,17 +60,15 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.Marca)
                 temp.add(productos.Precio.toString())
                 temp.add(productos.TipoVenta)
+                temp.add(productos.Total.toString())
                 temp.add(productos.FechaIni)
                 temp.add(productos.FechaFin)
-
                 productosVendidos.add(temp)
-
             }
 
             return excel.crearXls("HistorialVentas", columnas,productosVendidos )
         }catch( _ : Exception){
             println("Error en la conversion de datos")
-
         }
 
         return Uri.EMPTY
