@@ -1,12 +1,13 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
     private val casosHistorialReportes: CasosHistorialReportes,
+    private val MediatorHistorialVentas : MediatorHistorialVentas,
+    private val RemoteTicketsFB: RemoteTicketsFB
+
 ) : ViewModel() {
 
 
@@ -27,14 +31,21 @@ class HistorailViewModel @Inject constructor(
 
 
 
+
     init {
+            viewModelScope.launch (Dispatchers.IO){
+                MediatorHistorialVentas.asyc()
+                RemoteTicketsFB.asycTickets()
+
+                Log.d("MediatorHistorialVentas","Pase por el init mioooooooooooooo")
+            }
             MostrarHistoriar()
         }
 
 
     fun Exportar() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 println("inicia viewScope en la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 println("withContext la funcion que exporta en viewmodel")

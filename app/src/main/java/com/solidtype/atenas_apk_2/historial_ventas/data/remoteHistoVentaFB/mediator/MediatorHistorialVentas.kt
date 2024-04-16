@@ -17,7 +17,7 @@ class MediatorHistorialVentas @Inject constructor(
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
 
-    suspend operator fun invoke()  {
+    suspend fun asyc()  {
         Log.e("Entre","Entre a la funcion Historial asyc" +
                 " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()

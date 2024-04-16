@@ -20,12 +20,16 @@ class RemoteTicketsFB @Inject constructor(
 
 
 
-    suspend operator fun invoke() {
+    suspend fun asycTickets() {
+        Log.e("Entre","Entre a la funcion Tickets async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
-        println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
 
         val baseLocal = capturarDatosDB()
+        Log.d("TEstSnapToListTickets","Esta es la lista de SnapShot a List lo convertimos T$listaDeFireStore")
+        Log.d("TEstSnapToListTickets","Estos son los datos de la base local Tickets $baseLocal")
+        println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
+
 
         //Verificamos que la base de datos local este vacia, y que la de firebase no este vacia
         if (logicaDeInsercionLocal(baseLocal, listaDeFireStore)) {
