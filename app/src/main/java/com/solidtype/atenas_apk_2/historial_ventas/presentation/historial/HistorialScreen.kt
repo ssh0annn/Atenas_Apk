@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
@@ -104,18 +104,12 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") } //Inmutable
     var selected by rememberSaveable { mutableStateOf("Ventas") }//Inmutable
 
-    val datePickerState1: DatePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())//Inmutable
-    var showDatePicker1 by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val datePickerState1: DatePickerState = rememberDatePickerState()
+    var showDatePicker1 by rememberSaveable { mutableStateOf(false) }
     var fechaIni by rememberSaveable { mutableStateOf("") }
 
-    val datePickerState2: DatePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
-    var showDatePicker2 by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val datePickerState2: DatePickerState = rememberDatePickerState()
+    var showDatePicker2 by rememberSaveable { mutableStateOf(false) }
     var fechaFin by rememberSaveable { mutableStateOf("") }
 
     //if
@@ -156,23 +150,9 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                     ) {//Inputs
                         SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis) {
                             showDatePicker1 = true
-                            fechaIni = datePickerState1.selectedDateMillis?.let {
-                                Date(
-                                    it
-                                )
-                            }?.let { SimpleDateFormat("dd/MM/yyyy").format(it) }.toString()
-                            viewModel.buscarProductosTicket(fechaIni, fechaFin, "") //Inncesario parámetro "catego" o "categoria"
-                            viewModel.buscarProductosventa(fechaIni, fechaFin, "") //Inncesario parámetro "catego" o "categoria"
                         }
                         SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
                             showDatePicker2 = true
-                            fechaFin = datePickerState2.selectedDateMillis?.let {
-                                Date(
-                                    it
-                                )
-                            }?.let { SimpleDateFormat("dd/MM/yyyy").format(it) }.toString()
-                            viewModel.buscarProductosTicket(fechaIni, fechaFin, "") //Inncesario parámetro "catego" o "categoria"
-                            viewModel.buscarProductosventa(fechaIni, fechaFin, "") //Inncesario parámetro "catego" o "categoria"
                         }
                         //Aquí va un selector
                         Box(
@@ -470,6 +450,10 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 },
                 onClick = {
                     showDatePicker1 = false
+                    fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin)
+                    viewModel.buscarProductosTicket(fechaIni, fechaFin)
+                    Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
                 }
             )
             DatePickerDialogo(
@@ -480,6 +464,10 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 },
                 onClick = {
                     showDatePicker2 = false
+                    fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin)
+                    viewModel.buscarProductosTicket(fechaIni, fechaFin)
+                    Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -509,3 +497,15 @@ data class objTicket(
     val total: Double,
     val estado: String
 )*/
+
+@SuppressLint("SimpleDateFormat")
+fun formatearFecha(fecha: Long?): String {
+    val x = fecha?.let {
+        Date(
+            it
+        )
+    }?.let { SimpleDateFormat("dd/MM/yyyy").format(it) }.toString() ?: ""
+
+    Log.d("Carlos_Fecha_Funcion", "Fecha: $x <-")
+    return x
+}

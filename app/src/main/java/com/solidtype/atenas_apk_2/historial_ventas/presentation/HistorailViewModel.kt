@@ -55,10 +55,10 @@ class HistorailViewModel @Inject constructor(
     }
 
 
-    fun buscarProductosventa(
+    fun buscarProductosVenta(
         fecha_inicio: String,
         fecha_final: String,
-        categoria: String
+        categoria: String = "venta"
     ) {
         uiState.update {
             it.copy(
@@ -89,7 +89,7 @@ class HistorailViewModel @Inject constructor(
     fun buscarProductosTicket(
         fechaIni: String ,
         fechaFinal: String ,
-        catego: String
+        catego: String = "ticket"
 
     ) {
         uiState.update {
