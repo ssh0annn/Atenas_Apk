@@ -20,9 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes,
-    private val MediatorHistorialVentas : MediatorHistorialVentas,
-    private val RemoteTicketsFB: RemoteTicketsFB
+    private val casosHistorialReportes: CasosHistorialReportes
 
 ) : ViewModel() {
 
@@ -33,12 +31,7 @@ class HistorailViewModel @Inject constructor(
 
 
     init {
-            viewModelScope.launch (Dispatchers.IO){
-                MediatorHistorialVentas.asyc()
-                RemoteTicketsFB.asycTickets()
 
-                Log.d("MediatorHistorialVentas","Pase por el init mioooooooooooooo")
-            }
             MostrarHistoriar()
         }
 
