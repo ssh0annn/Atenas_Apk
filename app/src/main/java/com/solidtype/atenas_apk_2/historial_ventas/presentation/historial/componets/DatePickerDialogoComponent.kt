@@ -26,20 +26,22 @@ fun DatePickerDialogo(
 ) {
     if (showDatePicker) {
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .scrollable(
+                    state = rememberScrollState(), orientation = Orientation.Vertical
+                )
         ) {
             DatePickerDialog(modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp)
-                .scrollable(
-                    state = rememberScrollState(), orientation = Orientation.Vertical
-                ), onDismissRequest = onDismissRequest, confirmButton = {
-                Button(
-                    onClick = onClick
-                ) {
-                    Text("Aceptar")
-                }
-            }) {
+                .height(500.dp),
+                onDismissRequest = onDismissRequest, confirmButton = {
+                    Button(
+                        onClick = onClick
+                    ) {
+                        Text("Aceptar")
+                    }
+                }) {
                 DatePicker(state = datePickerState)
             }
         }
