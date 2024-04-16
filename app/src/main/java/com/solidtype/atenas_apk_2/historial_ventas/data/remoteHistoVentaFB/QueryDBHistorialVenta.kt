@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB
 import android.util.Log
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -124,7 +125,6 @@ class QueryDBHistorialVenta @Inject constructor(
             response.await()
         }
     }
-
     /**
      * @param: MutableList<List<String>>
      * @return: List<List<String>>
@@ -140,11 +140,13 @@ class QueryDBHistorialVenta @Inject constructor(
         }
 
         val productosToDeleteInFirestore =
-            listaFirebaseMediatorproducts.filterNot { FireStoreHistorial ->
-                local.any { it.Codigo == FireStoreHistorial.Codigo }
+            listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
+                local.any { it.Codigo == firestoreproductos.Codigo }
             }
         return entityToListString(productosToDeleteInFirestore)
     }
+
+
 
     /**
      * @param: MutableList<List<String>>
@@ -154,26 +156,21 @@ class QueryDBHistorialVenta @Inject constructor(
      * en base de dato local.
      */
     suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
-        val listaFirebaseMediatorHistorial: MutableList<HistorialVentaEntidad> = mutableListOf()
+        val listaFirebaseMediatorproducts: MutableList<HistorialVentaEntidad> = mutableListOf()
         val local = datosLocales()
-
-
-        Log.d("dataHistorialToUpFirestore","Funcion compararLocalParriba()")
-        Log.d("dataHistorialToUpFirestore : Local","Datos locales Nuevo para compara con firebase $local")
-        Log.d("dataHistorialToUpFirestore","Datos para actualizar en Firebase $listIntrusos")
         listIntrusos.forEach {
             val intrusosConvetido = entityConvert(it)
-            listaFirebaseMediatorHistorial.add(intrusosConvetido)
+            listaFirebaseMediatorproducts.add(intrusosConvetido)
         }
-        val listaNoMutable: List<HistorialVentaEntidad> = listaFirebaseMediatorHistorial
+        val listaNoMutable: List<HistorialVentaEntidad> = listaFirebaseMediatorproducts
         val productToAddInFirebase = local.filterNot { firestoreproductos ->
             listaNoMutable.any {
                 it == firestoreproductos
             }
         }
-        Log.d("DatoToUpFireStore", "Estos son: ${entityToListString(productToAddInFirebase)}")
         return entityToListString(productToAddInFirebase)
     }
+
 
     /**
      * @return  List<ProductEntity>
@@ -182,7 +179,6 @@ class QueryDBHistorialVenta @Inject constructor(
     private suspend fun datosLocales(): List<HistorialVentaEntidad> {
         return coroutineScope {
             val listProduct = async { dao.getHistorialNormal() }
-            Log.d("DatosAsyncHistoral","Estos son los datos de historial local: $listProduct <--")
             return@coroutineScope listProduct.await()
 
         }

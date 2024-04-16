@@ -14,14 +14,14 @@ import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao, private val excel: XlsManeger,
-    private val mediador2: MediatorProducts,
-    private val mediatorHistorial: MediatorHistorialVentas
+    private val mediador2: MediatorProducts
 ) : InventarioRepo {
 
 
     override fun getProducts(): Flow<List<ProductEntity>> {
 
         return daoProductos.getProducts()
+
     }
 
     override fun getProductByCodigo(codigo: Int): Flow<List<ProductEntity>> {
@@ -131,7 +131,6 @@ class InventarioRepoImpl @Inject constructor(
 
     override suspend fun syncronizacionProductos() {
         mediador2()
-        mediatorHistorial()
     }
 
 }

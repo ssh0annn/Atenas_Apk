@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,13 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.SelecionarFecha
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,25 +96,21 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
     val listTicket = uiState.Ticket
 
     //var ventasTickerDinero by rememberSaveable { mutableStateOf(0.0) }
-    var ventasTickerDinero = uiState.total
+    var totalVentas = uiState.total
+    var totalTicket = uiState.total2
 
-    var uri = uiState.uriPath
+    var uri: String
 
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") } //Inmutable
     var selected by rememberSaveable { mutableStateOf("Ventas") }//Inmutable
 
-    val datePickerState1: DatePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())//Inmutable
+    val datePickerState1: DatePickerState = rememberDatePickerState()
+    var showDatePicker1 by rememberSaveable { mutableStateOf(false) }
+    var fechaIni by rememberSaveable { mutableStateOf("") }
 
-    var showDatePicker1 by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    val datePickerState2: DatePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
-    var showDatePicker2 by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val datePickerState2: DatePickerState = rememberDatePickerState()
+    var showDatePicker2 by rememberSaveable { mutableStateOf(false) }
+    var fechaFin by rememberSaveable { mutableStateOf("") }
 
     //if
     if (false) {
@@ -168,12 +166,12 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                 when (selected) {
                                     "Ventas" -> {
                                         ventasTickerTitulo = "Ventas"
-                                        ventasTickerDinero = uiState.total
+                                        totalVentas = uiState.total
                                     }
 
                                     "Ticket" -> {
                                         ventasTickerTitulo = "Cuenta x Cobrar"
-                                        ventasTickerDinero = uiState.total
+                                        totalTicket = uiState.total2
                                     }
                                 }
                             }
@@ -189,7 +187,11 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "$ventasTickerDinero RD$",
+                            text = when(selected){
+                                "Ventas" -> "$totalVentas RD$"
+                                "Ticket" -> "$totalTicket RD$"
+                                else -> "0.0 RD$"
+                            },
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             fontStyle = FontStyle.Italic
@@ -448,6 +450,10 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 },
                 onClick = {
                     showDatePicker1 = false
+                    fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin)
+                    viewModel.buscarProductosTicket(fechaIni, fechaFin)
+                    Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
                 }
             )
             DatePickerDialogo(
@@ -458,6 +464,10 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 },
                 onClick = {
                     showDatePicker2 = false
+                    fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin)
+                    viewModel.buscarProductosTicket(fechaIni, fechaFin)
+                    Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -487,3 +497,15 @@ data class objTicket(
     val total: Double,
     val estado: String
 )*/
+
+@SuppressLint("SimpleDateFormat")
+fun formatearFecha(fecha: Long?): String {
+    val x = fecha?.let {
+        Date(
+            it
+        )
+    }?.let { SimpleDateFormat("dd/MM/yyyy").format(it) }.toString() ?: ""
+
+    Log.d("Carlos_Fecha_Funcion", "Fecha: $x <-")
+    return x
+}

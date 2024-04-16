@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
-    private val casosInventario: CasosInventario
+    private val casosInventario: CasosInventario,
 ) : ViewModel() {
 
     var fileSelectionListener2: FileSelectionListener2? = null
@@ -28,7 +29,9 @@ class InventarioViewModel @Inject constructor(
 
     init {
         mostrarProductos()
-       }
+
+
+    }
 
 
     fun crearProductos(
@@ -65,6 +68,8 @@ class InventarioViewModel @Inject constructor(
 
     fun mostrarProductos() {
         val productos = casosInventario.getProductos()
+
+
 
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
@@ -134,7 +139,6 @@ class InventarioViewModel @Inject constructor(
     fun syncProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-
                 casosInventario.syncProductos()
             }
         }
