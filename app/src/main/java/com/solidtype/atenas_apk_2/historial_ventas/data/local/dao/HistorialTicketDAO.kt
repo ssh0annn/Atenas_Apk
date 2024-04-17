@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface HistorialTicketDAO {
@@ -16,8 +17,8 @@ interface HistorialTicketDAO {
     @Query("SELECT * FROM HistorialTicket_Table")
     fun getHistorialTicket(): Flow<List<HistorialTicketEntidad>>
 
-    @Query("SELECT * FROM HistorialTicket_Table WHERE ((FechaInicial >= :fechaI) AND (FechaInicial <= :fechaF) AND (Categoria = :cate))")
-    fun getHistorialTicketFechaDias(fechaI :String, fechaF :String, cate :String): Flow<List<HistorialTicketEntidad>>
+    @Query("SELECT * FROM HistorialTicket_Table WHERE ((FechaInicial >= :fechaI) AND (FechaInicial <= :fechaF))")
+    fun getHistorialTicketFechaDias(fechaI :LocalDate, fechaF :LocalDate): Flow<List<HistorialTicketEntidad>>
 
     @Query("SELECT * FROM HistorialTicket_Table")
     fun getAllTicketsNormal(): List<HistorialTicketEntidad>

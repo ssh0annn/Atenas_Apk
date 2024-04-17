@@ -216,7 +216,7 @@ class RemoteTicketsFB @Inject constructor(
             documentos.add(it["Precio"].toString())
             documentos.add(it["Servicio"].toString())
             documentos.add(it["Categoria"].toString())
-            documentos.add(it["FechaInicial"].toString())
+            documentos.add(it["FechaIni"].toString()) // Aqui el fallo (Habia una discrepancia)
             documentos.add(it["FechaFinal"].toString())
             listaDeLista.add(documentos)
         }

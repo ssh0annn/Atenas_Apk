@@ -400,13 +400,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            formatoParaUser(listTicket[index].FechaInicial),
+                                            formatoParaUser(listTicket[index].FechaInicial.toString()),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            formatoParaUser(listTicket[index].FechaFinal),
+                                            formatoParaUser(listTicket[index].FechaFinal.toString()),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center

@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.historial_ventas.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 @Entity(tableName = "HistorialTicket_Table")
 data class HistorialTicketEntidad(
@@ -19,6 +20,6 @@ data class HistorialTicketEntidad(
     val Precio : Double,
     val Servicio : String,
     val Categoria : String,
-    val FechaInicial : String,
-    val FechaFinal : String
+    val FechaInicial : LocalDate,
+    val FechaFinal : LocalDate
 )

@@ -37,7 +37,7 @@ class QueryDBHistorialVenta @Inject constructor(
                     Precio = it[9].toDouble(),
                     TipoVenta = it[10],
                     Total = it[11].toDouble(),
-                    FechaIni = it[12].toIsoDate("dd/MM/yyyy").toLocalDate()
+                    FechaIni = it[12].toIsoDate().toLocalDate()
                 )
             } catch (e: Exception) {
                 println("Este es la razon lista: $it, size ${it.size}")
