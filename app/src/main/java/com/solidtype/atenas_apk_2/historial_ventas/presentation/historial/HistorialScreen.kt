@@ -158,8 +158,8 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                 selectedItem = selectedCategoria,
                             ) {
                                 selectedCategoria = it
-                                viewModel.buscarProductosVenta(fechaIni, fechaFin, selectedCategoria)
-                                viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                                viewModel.buscarProductosVenta(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
+                                viewModel.buscarProductosTicket(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
                                 Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -461,10 +461,10 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                     fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
                     when (selected) {
                         "Ventas" -> {
-                            viewModel.buscarProductosVenta(fechaIni, fechaIni, selectedCategoria)
+                            viewModel.buscarProductosVenta(formatoDDBB(fechaIni), formatoDDBB(fechaIni), selectedCategoria)
                         }
                         "Ticket" -> {
-                            viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                            viewModel.buscarProductosTicket(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
                         }
                     }
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
@@ -479,8 +479,8 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 onClick = {
                     showDatePicker2 = false
                     fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
-                    viewModel.buscarProductosVenta(fechaIni, fechaFin, selectedCategoria)
-                    viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                    viewModel.buscarProductosVenta(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
+                    viewModel.buscarProductosTicket(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
                 }
             )
@@ -492,4 +492,9 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
 fun formatearFecha(fecha: Long?): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy")
     return sdf.format(Date(fecha!!))
+}
+
+fun formatoDDBB(fecha: String): String {
+    val array = fecha.split("/")
+    return "${array[2]}-${array[1]}-${array[0]}"
 }
