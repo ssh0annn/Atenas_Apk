@@ -3,6 +3,8 @@ package com.solidtype.atenas_apk_2.historial_ventas.domain.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.type.DateTime
+import java.time.LocalDate
 import java.util.Date
 
 @Entity(tableName = "HistorialVenta_Table")
@@ -19,7 +21,6 @@ data class HistorialVentaEntidad(
         val Precio : Double,
         val TipoVenta : String,
         val Total : Double,
-        val FechaFin : String,
-        val FechaIni : String
+        val FechaIni : LocalDate
 )
 

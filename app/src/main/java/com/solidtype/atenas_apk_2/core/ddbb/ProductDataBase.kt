@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.core.ddbb
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
@@ -9,8 +10,8 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEn
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
-@Database(entities = [ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class], version = 5, exportSchema = false)
-
+@Database(entities = [ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class], version = 7, exportSchema = false)
+@TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
     abstract val HistorialVentaDao :HistorialVentaDAO

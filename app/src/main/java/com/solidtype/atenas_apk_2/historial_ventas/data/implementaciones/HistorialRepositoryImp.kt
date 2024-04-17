@@ -4,19 +4,29 @@ import android.net.Uri
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.util.XlsManeger
+import com.solidtype.atenas_apk_2.util.toIsoDate
+import com.solidtype.atenas_apk_2.util.toLocalDate
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HistorialRepositoryImp @Inject constructor(
     private val dao: HistorialVentaDAO,
     private val excel: XlsManeger,
-    private val daoTickets:HistorialTicketDAO
+    private val daoTickets:HistorialTicketDAO,
+    private val sync1: MediatorHistorialVentas,
+    private val sync2: RemoteTicketsFB
 ) : HistorialRepository {
+
     override fun mostrarTodasVentas(): Flow<List<HistorialVentaEntidad>> {
+
+
         return dao.getHistorialVenta()
     }
 
@@ -25,9 +35,6 @@ class HistorialRepositoryImp @Inject constructor(
     ){
         dao.setHistorialVenta(ojeto)
     }
-
-
-
 
     override suspend fun exportarVentas(listaProductos:List<HistorialVentaEntidad>): Uri {
         val columnas = listOf(
@@ -44,7 +51,6 @@ class HistorialRepositoryImp @Inject constructor(
             "TipoVenta",
             "Total",
             "FechaFin",
-            "FechaIni"
         )
         val productosVendidos:MutableList<List<String>> = mutableListOf()
         try {
@@ -64,8 +70,7 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.Precio.toString())
                 temp.add(productos.TipoVenta)
                 temp.add(productos.Total.toString())
-                temp.add(productos.FechaIni)
-                temp.add(productos.FechaFin)
+                temp.add(productos.FechaIni.toString())
                 productosVendidos.add(temp)
             }
 
@@ -76,14 +81,15 @@ class HistorialRepositoryImp @Inject constructor(
 
         return Uri.EMPTY
     }
-
+    //Removi la variable fecha final de donde la recive el DAO, ARREGLALO!
     override fun buscarPorFechasCategoriasVentas(
         fecha_inicio: String,
         fecha_final: String,
         categoria: String
     ): Flow<List<HistorialVentaEntidad>> {
-        
-       return dao.getHistorialVentaFechaCategoria(fecha_final, fecha_inicio, categoria)
+
+       return dao.getHistorialVentaFechaCategoria(fecha_inicio.toIsoDate("dd/MM/yyyy").toLocalDate(), fecha_final.toIsoDate("dd/MM/yyyy").toLocalDate(), categoria)
+
     }
 
     override fun mostrarTickets(): Flow<List<HistorialTicketEntidad>> {
@@ -97,10 +103,14 @@ class HistorialRepositoryImp @Inject constructor(
         catego: String
     ): Flow<List<HistorialTicketEntidad>> {
         //Aqui cambie porque actualize la base de datos.
-        var pepe= ""
-        var pepita= ""
-        var pepere= ""
-       return daoTickets.getHistorialTicketFechaDias(pepe, pepita
-       , pepere)
+
+       return daoTickets.getHistorialTicketFechaDias(fechaIni, fechaFinal, catego)
+    }
+
+    override suspend fun sync() {
+        withContext(Dispatchers.Default){
+            sync1()
+            sync2.asycTickets()
+        }
     }
 }

@@ -17,5 +17,6 @@ interface HistorialRepository {
     fun mostrarTicketsPorFecha(  fechaIni: String,
                                  fechaFinal:String,
                                  catego: String): Flow<List<HistorialTicketEntidad>>
+    suspend fun sync()
 
 }

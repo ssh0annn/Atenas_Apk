@@ -31,8 +31,15 @@ class HistorailViewModel @Inject constructor(
 
 
     init {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                casosHistorialReportes.syncronizacion()
+            }
+        }
 
             MostrarHistoriar()
+            mostrarTicket()
+
         }
 
 
@@ -62,13 +69,9 @@ class HistorailViewModel @Inject constructor(
     fun buscarProductosVenta(
         fecha_inicio: String,
         fecha_final: String,
-        categoria: String = "venta"
+        categoria: String
     ) {
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
+
         viewModelScope.launch {
             var total = 0.0
             val productosRangoventa =
@@ -96,11 +99,7 @@ class HistorailViewModel @Inject constructor(
         catego: String = "ticket"
 
     ) {
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
+
         viewModelScope.launch {
             val productosRangoticket = casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
             var deuda = 0.0
@@ -128,6 +127,7 @@ class HistorailViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
+
             mostrarHistory.collect { product ->
                 for ( i in product){
                     total += i.Precio.toDouble() * i.Cantidad.toInt()
@@ -137,6 +137,9 @@ class HistorailViewModel @Inject constructor(
                 }
 
             }
+            casosHistorialReportes.syncronizacion()
+
+
         }
     }
 

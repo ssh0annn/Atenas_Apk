@@ -17,7 +17,7 @@ class MediatorHistorialVentas @Inject constructor(
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
 
-    suspend fun asyc()  {
+    suspend operator fun invoke()  {
         Log.e("Entre","Entre a la funcion Historial asyc" +
                 " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
@@ -177,7 +177,7 @@ class MediatorHistorialVentas @Inject constructor(
     private fun convierteAObjetoMap(lista: List<List<String>>): MutableList<Map<String, String>> {
         val listaMapa: MutableList<Map<String, String>> = mutableListOf()
         for (data in lista) {
-            if (data.isNotEmpty() && data.size == 14) {
+            if (data.isNotEmpty() && data.size == 13) {
                 val dataMapa = mapOf(
                     "Codigo" to data[0],
                     "Nombre" to data[1],
@@ -191,8 +191,7 @@ class MediatorHistorialVentas @Inject constructor(
                     "Precio" to data[9],
                     "TipoVenta" to data[10],
                     "Total" to data[11],
-                    "FechaFin" to data[12],
-                    "FechaIni" to data[13]
+                    "FechaIni" to data[12]
                 )
                 listaMapa.add(dataMapa)
             }
@@ -222,7 +221,6 @@ class MediatorHistorialVentas @Inject constructor(
             documentos.add(it["Precio"].toString())
             documentos.add(it["TipoVenta"].toString())
             documentos.add(it["Total"].toString())
-            documentos.add(it["FechaFin"].toString())
             documentos.add(it["FechaIni"].toString())
             listaDeLista.add(documentos)
         }

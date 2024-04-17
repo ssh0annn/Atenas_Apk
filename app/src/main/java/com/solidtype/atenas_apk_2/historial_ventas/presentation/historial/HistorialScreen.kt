@@ -59,7 +59,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
 
     val context = LocalContext.current
 
-    //val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
+  //  val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
     // hice esto para poder probar la aplicación.
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -277,18 +277,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
-                                        Text(
-                                            listVentas[index].FechaIni,
-                                            fontSize = 16.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            listVentas[index].FechaFin,
-                                            fontSize = 16.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
+
                                         Text(
                                             listVentas[index].Precio.toString(),
                                             fontSize = 16.sp,
@@ -452,7 +441,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 onClick = {
                     showDatePicker1 = false
                     fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
-                    viewModel.buscarProductosVenta(fechaIni, fechaFin)
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin, "ventas")
                     viewModel.buscarProductosTicket(fechaIni, fechaFin)
                     Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
                 }
@@ -466,7 +455,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 onClick = {
                     showDatePicker2 = false
                     fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
-                    viewModel.buscarProductosVenta(fechaIni, fechaFin)
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin, "ventas")
                     viewModel.buscarProductosTicket(fechaIni, fechaFin)
                     Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
                 }

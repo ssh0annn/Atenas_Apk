@@ -3,7 +3,8 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB
 import android.util.Log
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.util.toIsoDate
+import com.solidtype.atenas_apk_2.util.toLocalDate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -21,9 +22,8 @@ class QueryDBHistorialVenta @Inject constructor(
      * Los elementos deben ser igual a 12.
      */
     private fun entityConvert(it: List<String>): HistorialVentaEntidad {
-        if (it.size == 14) {
+        if (it.size == 13) {
             try {
-
                 return HistorialVentaEntidad(
                     Codigo = it[0].toInt(),
                     Nombre = it[1],
@@ -37,9 +37,7 @@ class QueryDBHistorialVenta @Inject constructor(
                     Precio = it[9].toDouble(),
                     TipoVenta = it[10],
                     Total = it[11].toDouble(),
-                    FechaIni = it[12],
-                    FechaFin = it[13]
-
+                    FechaIni = it[12].toIsoDate("dd/MM/yyyy").toLocalDate()
                 )
             } catch (e: Exception) {
                 println("Este es la razon lista: $it, size ${it.size}")
@@ -74,8 +72,7 @@ class QueryDBHistorialVenta @Inject constructor(
                 mutableList.add(it.Precio.toString())
                 mutableList.add(it.TipoVenta)
                 mutableList.add(it.Total.toString())
-                mutableList.add(it.FechaFin)
-                mutableList.add(it.FechaIni)
+                mutableList.add(it.FechaIni.toString())
                 mutableListData.add(mutableList)
             }
         }
@@ -145,7 +142,6 @@ class QueryDBHistorialVenta @Inject constructor(
             }
         return entityToListString(productosToDeleteInFirestore)
     }
-
 
 
     /**

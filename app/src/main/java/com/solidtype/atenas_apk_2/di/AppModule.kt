@@ -36,6 +36,7 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodas
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
+import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.Sync
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
@@ -113,7 +114,8 @@ object AppModule {
         exportarVentas = ExportarVentas(repo),
         buscarporFechCatego = BuscarporFechCatego(repo), 
         verTicketsPorFechas = VerTicketsPorFechas(repo),
-        verTodosTickets = VerTodosTickets(repo)
+        verTodosTickets = VerTodosTickets(repo),
+        syncronizacion = Sync(repo)
     )
 
 
