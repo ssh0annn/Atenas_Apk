@@ -518,5 +518,6 @@ fun formatearFecha(fecha: Long?): String {
 
 fun formatoDDBB(fecha: String): String {
     val array = fecha.split("/")
+    if(array.size != 3) return ""
     return "${array[2]}-${array[1]}-${array[0]}"
 }
