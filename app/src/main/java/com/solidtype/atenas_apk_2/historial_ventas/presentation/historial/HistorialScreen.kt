@@ -287,7 +287,7 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listVentas[index].FechaIni,
+                                            formatoParaUser(listVentas[index].FechaIni),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -387,13 +387,13 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaInicial,
+                                            formatoParaUser(listTicket[index].FechaInicial),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaFinal,
+                                            formatoParaUser(listTicket[index].FechaFinal),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -520,4 +520,10 @@ fun formatoDDBB(fecha: String): String {
     val array = fecha.split("/")
     if(array.size != 3) return ""
     return "${array[2]}-${array[1]}-${array[0]}"
+}
+
+fun formatoParaUser(fecha: String): String {
+    val array = fecha.split("-")
+    if(array.size != 3) return ""
+    return "${array[2]}/${array[1]}/${array[0]}"
 }
