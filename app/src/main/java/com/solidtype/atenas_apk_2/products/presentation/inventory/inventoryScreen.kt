@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -25,7 +26,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +57,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.BotonIconCircular
@@ -80,6 +89,8 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
     //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
 
+    //al viewModel: InventarioViewModel = hiltViewModel() //Luego lo quito; solo para pruebas
+
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -91,7 +102,6 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
     } else {
         viewModel.mostrarProductos()
     }
-
 
     if (uiState.pathExcel!!.isNotBlank()) {
         Toast.makeText(context, "Exportado: ${uiState.pathExcel}", Toast.LENGTH_LONG).show()
@@ -126,6 +136,14 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
     }
 
     val productos = uiState.products
+
+    val categoriaList = listOf(
+        "Accesorios",
+        "Celulares",
+        "Laptops",
+        "Tablets",
+        "Otros"
+    )
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -322,9 +340,9 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                         }
                                         Column {// Categoría y Nombre
                                             // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
-                                            InputDetalle(
-                                                "Categoria", true, categoria
-                                            ) { categoria = it }
+                                            AutocompleteSelect("Categoría", categoriaList, true) {
+                                                categoria = it
+                                            }
                                             InputDetalle(
                                                 "Nombre", true, nombre
                                             ) { nombre = it }
@@ -509,7 +527,3 @@ fun SnackBar(
         }
     )
 }
-
-
-
-

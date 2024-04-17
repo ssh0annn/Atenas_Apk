@@ -1,7 +1,6 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,44 +58,18 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
 
     val context = LocalContext.current
 
+
   //  val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
     // hice esto para poder probar la aplicación.
+
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val items = listOf("Ventas", "Ticket")
 
-    /*val listVentas = listOf(
-        objVenta(1, "01/01/2021", "Cliente 1", 1000.0, "Pagado"),
-        objVenta(2, "02/01/2021", "Cliente 2", 2000.0, "Pendiente"),
-        objVenta(3, "03/01/2021", "Cliente 3", 3000.0, "Pagado"),
-        objVenta(4, "04/01/2021", "Cliente 4", 4000.0, "Pagado"),
-        objVenta(5, "05/01/2021", "Cliente 5", 5000.0, "Pendiente"),
-        objVenta(6, "06/01/2021", "Cliente 6", 6000.0, "Pagado"),
-        objVenta(7, "07/01/2021", "Cliente 7", 7000.0, "Pagado"),
-        objVenta(8, "08/01/2021", "Cliente 8", 8000.0, "Pendiente"),
-        objVenta(9, "09/01/2021", "Cliente 9", 9000.0, "Pagado"),
-        objVenta(10, "10/01/2021", "Cliente 10", 10000.0, "Pagado"),
-    )*/ // esto debe venir del viewModel
-
     val listVentas = uiState.Historial
-
-    /*val listTicket = listOf(
-        objTicket(1, "01/02/2021", "Cliente 1", 1000.0, "Pagado"),
-        objTicket(2, "02/02/2021", "Cliente 2", 2000.0, "Pendiente"),
-        objTicket(3, "03/02/2021", "Cliente 3", 3000.0, "Pagado"),
-        objTicket(4, "04/02/2021", "Cliente 4", 4000.0, "Pagado"),
-        objTicket(5, "05/02/2021", "Cliente 5", 5000.0, "Pendiente"),
-        objTicket(6, "06/02/2021", "Cliente 6", 6000.0, "Pagado"),
-        objTicket(7, "07/02/2021", "Cliente 7", 7000.0, "Pagado"),
-        objTicket(8, "08/02/2021", "Cliente 8", 8000.0, "Pendiente"),
-        objTicket(9, "09/02/2021", "Cliente 9", 9000.0, "Pagado"),
-        objTicket(10, "10/02/2021", "Cliente 10", 10000.0, "Pagado"),
-    )*/ // esto debe venir del viewModel
-
     val listTicket = uiState.Ticket
 
-    //var ventasTickerDinero by rememberSaveable { mutableStateOf(0.0) }
     var totalVentas = uiState.total
     var totalTicket = uiState.total2
 
@@ -113,7 +86,17 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
     var showDatePicker2 by rememberSaveable { mutableStateOf(false) }
     var fechaFin by rememberSaveable { mutableStateOf("") }
 
-    //if
+    val categoria = listOf(
+        "Celular",
+        "Tablet",
+        "Laptop",
+        "Accesorios",
+        "Jabón",
+        "Otros"
+    )
+    var selectedCategoria by rememberSaveable { mutableStateOf("Celular") }
+
+
     if (false) {
         //nav.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
@@ -149,15 +132,44 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                     Row(
                         modifier = Modifier.weight(3f), horizontalArrangement = Arrangement.SpaceBetween
                     ) {//Inputs
-                        SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis) {
-                            showDatePicker1 = true
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 4.dp)
+                                .weight(2f)
+                        ){
+                            when(selected){
+                                "Ventas" ->{
+                                    SelecionarFecha("Seleciona Fecha", datePickerState1.selectedDateMillis) {
+                                        showDatePicker1 = true
+                                    }
+                                }
+                                "Ticket" ->{
+                                    SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis) {
+                                        showDatePicker1 = true
+                                    }
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
+                                        showDatePicker2 = true
+                                    }
+                                }
+                            }
                         }
-                        SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
-                            showDatePicker2 = true
-                        }
-                        //Aquí va un selector
+                        //Aquí va un selectores
                         Box(
-                            modifier = Modifier.width(200.dp)
+                            modifier = Modifier.width(200.dp).weight(1f)
+                        ) {
+                            DropdownSelect(
+                                items = categoria,
+                                selectedItem = selectedCategoria,
+                            ) {
+                                selectedCategoria = it
+                                viewModel.buscarProductosVenta(fechaIni, fechaFin, selectedCategoria)
+                                viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                                Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        Box(
+                            modifier = Modifier.width(200.dp).weight(1f)
                         ) {
                             DropdownSelect(
                                 items = items,
@@ -319,13 +331,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            "Fecha_Inicial",
+                                            "Fecha_Ini",
                                             fontSize = 20.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            "Fecha_Final",
+                                            "Fecha_Fin",
                                             fontSize = 20.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -338,6 +350,12 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                         )
                                         Text(
                                             "Restante",
+                                            fontSize = 20.sp,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            "Abono",
                                             fontSize = 20.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -385,6 +403,12 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                         )
                                         Text(
                                             listTicket[index].Restante.toString(),
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            listTicket[index].Abono.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -441,9 +465,17 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 onClick = {
                     showDatePicker1 = false
                     fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
-                    viewModel.buscarProductosVenta(fechaIni, fechaFin, "ventas")
-                    viewModel.buscarProductosTicket(fechaIni, fechaFin)
-                    Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
+
+                    when (selected) {
+                        "Ventas" -> {
+                            viewModel.buscarProductosVenta(fechaIni, fechaIni, selectedCategoria)
+                        }
+                        "Ticket" -> {
+                            viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                        }
+                    }
+                    Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
+
                 }
             )
             DatePickerDialogo(
@@ -455,47 +487,19 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 onClick = {
                     showDatePicker2 = false
                     fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
-                    viewModel.buscarProductosVenta(fechaIni, fechaFin, "ventas")
-                    viewModel.buscarProductosTicket(fechaIni, fechaFin)
-                    Toast.makeText(context, "No olvides selecionar ambas.", Toast.LENGTH_SHORT).show()
+
+                    viewModel.buscarProductosVenta(fechaIni, fechaFin, selectedCategoria)
+                    viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                    Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
+
                 }
             )
         }
     }
 }
 
-//Preview para Vortex T10M (T10MPROPLUS) Horizontal
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
-@Composable
-fun HistorialScreenPreview() {
-
-}
-
-/*
-data class objVenta(
-    val id: Int,
-    val fecha: String,
-    val cliente: String,
-    val total: Double,
-    val estado: String
-)
-
-data class objTicket(
-    val id: Int,
-    val fecha: String,
-    val cliente: String,
-    val total: Double,
-    val estado: String
-)*/
-
 @SuppressLint("SimpleDateFormat")
 fun formatearFecha(fecha: Long?): String {
-    val x = fecha?.let {
-        Date(
-            it
-        )
-    }?.let { SimpleDateFormat("dd/MM/yyyy").format(it) }.toString() ?: ""
-
-    Log.d("Carlos_Fecha_Funcion", "Fecha: $x <-")
-    return x
+    val sdf = SimpleDateFormat("dd/MM/yyyy")
+    return sdf.format(Date(fecha!!))
 }
