@@ -75,7 +75,7 @@ class HistorailViewModel @Inject constructor(
         viewModelScope.launch {
             var total = 0.0
             val productosRangoventa =
-                casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
+                casosHistorialReportes.buscarporFechCatego("2023-12-11", "2024-01-01", "venta")
             productosRangoventa.collect {
                 product ->
                 uiState.update {

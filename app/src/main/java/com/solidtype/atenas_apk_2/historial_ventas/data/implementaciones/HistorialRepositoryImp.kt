@@ -88,7 +88,7 @@ class HistorialRepositoryImp @Inject constructor(
         categoria: String
     ): Flow<List<HistorialVentaEntidad>> {
 
-       return dao.getHistorialVentaFechaCategoria(fecha_inicio.toIsoDate("dd/MM/yyyy").toLocalDate(), fecha_final.toIsoDate("dd/MM/yyyy").toLocalDate(), categoria)
+       return dao.getHistorialVentaFechaCategoria(fecha_inicio.toLocalDate(), fecha_final.toLocalDate(), categoria)
 
     }
 
