@@ -104,7 +104,7 @@ class HistorialRepositoryImp @Inject constructor(
     ): Flow<List<HistorialTicketEntidad>> {
         //Aqui cambie porque actualize la base de datos.
 
-       return daoTickets.getHistorialTicketFechaDias(fechaIni, fechaFinal, catego)
+       return daoTickets.getHistorialTicketFechaDias(fechaIni.toLocalDate(), fechaFinal.toLocalDate())
     }
 
     override suspend fun sync() {

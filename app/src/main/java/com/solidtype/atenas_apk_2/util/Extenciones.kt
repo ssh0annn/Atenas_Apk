@@ -6,11 +6,14 @@ import java.time.format.DateTimeFormatter
 
 fun String.toLocalDate(formato: String = "yyyy-MM-dd"): LocalDate {
     val format= DateTimeFormatter.ofPattern(formato)
+    if(this.isEmpty()){
+       return  LocalDate.now()
+    }
 
-    return  LocalDate.parse(this,format)
+    return LocalDate.parse(this,format)
 }
 
-fun String.toIsoDate(formato: String): String {
+fun String.toIsoDate(formato: String="yyyy-MM-dd"): String {
     val localDate = this.toLocalDate(formato)
     return localDate.toString()
 }

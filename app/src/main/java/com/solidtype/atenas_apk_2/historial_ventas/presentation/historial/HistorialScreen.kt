@@ -82,8 +82,6 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
     var totalVentas = uiState.total
     var totalTicket = uiState.total2
 
-    var uri: String
-
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") } //Inmutable
     var selected by rememberSaveable { mutableStateOf("Ventas") }//Inmutable
 
@@ -98,7 +96,7 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
     var showSnackbar by rememberSaveable { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
-    var snackbarJob by remember { mutableStateOf(Job()) }
+    var snackbarJob: Job by remember { mutableStateOf(Job()) }
 
     var showSnackbarIni by rememberSaveable { mutableStateOf(false) }
 
@@ -130,7 +128,7 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
             snackbarJob = coroutineScope.launch {
                 delay(10000L)
                 showSnackbar = false
-            } as CompletableJob
+            }
         }
         Column(
             //To.do
@@ -424,13 +422,13 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            formatoParaUser(listTicket[index].FechaInicial),
+                                            formatoParaUser(listTicket[index].FechaInicial.toString()),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            formatoParaUser(listTicket[index].FechaFinal),
+                                            formatoParaUser(listTicket[index].FechaFinal.toString()),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -485,9 +483,9 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                             //Aquí lógica para cancelar
                         }
                         Boton("Exportar") {
-                            //Aquí lógica para exportar
+                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
+                                .show()
                             viewModel.Exportar()
-                            uri = uiState.uriPath
                             showSnackbarIni = true
                         }
                     }

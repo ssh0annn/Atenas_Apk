@@ -6,6 +6,8 @@ import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVenta
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.util.toIsoDate
+import com.solidtype.atenas_apk_2.util.toLocalDate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -26,7 +28,7 @@ class QueryDBticket @Inject constructor(
                 try {
 
                     return HistorialTicketEntidad(
-                       Codigo = it[0].toInt(),
+                        Codigo = it[0].toInt(),
                         NombreCliente = it[1],
                         Modelo = it[2],
                         Telefono = it[3].toInt(),
@@ -40,8 +42,8 @@ class QueryDBticket @Inject constructor(
                         Precio = it[11].toDouble(),
                         Servicio = it[12],
                         Categoria = it[13],
-                        FechaFinal = it[14],
-                        FechaInicial = it[15]
+                        FechaFinal = it[14].toLocalDate(),
+                        FechaInicial = it[15].toLocalDate()
 
 
                     )
@@ -79,8 +81,8 @@ class QueryDBticket @Inject constructor(
                     mutableList.add(it.Precio.toString())
                     mutableList.add(it.Servicio)
                     mutableList.add(it.Categoria)
-                    mutableList.add(it.FechaInicial)
-                    mutableList.add(it.FechaFinal)
+                    mutableList.add(it.FechaInicial.toString())
+                    mutableList.add(it.FechaFinal.toString())
                     mutableListData.add(mutableList)
                 }
             }
