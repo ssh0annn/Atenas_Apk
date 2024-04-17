@@ -74,13 +74,13 @@ class HistorailViewModel @Inject constructor(
 
         viewModelScope.launch {
             var total = 0.0
-            val productosRangoventa =
-                casosHistorialReportes.buscarporFechCatego("2023-12-11", "2024-01-01", "venta")
-            productosRangoventa.collect {
+            val productosRangoventa =casosHistorialReportes.buscarporFechCatego(fecha_inicio ,fecha_final,"venta")
+               productosRangoventa.collect {
                 product ->
                 uiState.update {
                     it.copy(Historial = product, isLoading = false)
                 }
+                   println("Resultados de la busqueda: $product")
                 for (i in product){
                     total += i.Precio * i.Cantidad
                 }
@@ -88,7 +88,7 @@ class HistorailViewModel @Inject constructor(
             uiState.update {
                 it.copy(total = total)
             }
-           println( uiState.value.total)
+
         }
     }
 
