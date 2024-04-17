@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,8 +54,8 @@ class MainActivity : ComponentActivity() {
             // FireManeger()
             //TestAutocompleteSelect()
             // Demo_SearchableExposedDropdownMenuBox()
-           // HistorialScreen()
-            InventoryScreen()
+            HistorialScreen()
+           // InventoryScreen()
             //Navigation()
            // FireManeger()
         }

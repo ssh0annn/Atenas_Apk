@@ -125,46 +125,54 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 ) //Título
                 Row {//Inpus y Area de Ventas
                     Row(
-                        modifier = Modifier.weight(3f), horizontalArrangement = Arrangement.SpaceBetween
+                        modifier = Modifier.weight(3f),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {//Inputs
                         Row(
                             modifier = Modifier
                                 .padding(top = 4.dp)
                                 .weight(2f)
-                        ){
-                            when(selected){
-                                "Ventas" ->{
-                                    SelecionarFecha("Seleciona Fecha", datePickerState1.selectedDateMillis) {
-                                        showDatePicker1 = true
-                                    }
-                                }
-                                "Ticket" ->{
-                                    SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis) {
-                                        showDatePicker1 = true
-                                    }
-                                    Spacer(modifier = Modifier.width(16.dp))
-                                    SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
-                                        showDatePicker2 = true
-                                    }
-                                }
+                        ) {
+                            SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis) {
+                                showDatePicker1 = true
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
+                                showDatePicker2 = true
                             }
                         }
                         //Aquí va un selectores
                         Box(
-                            modifier = Modifier.width(200.dp).weight(1f)
+                            modifier = Modifier
+                                .width(200.dp)
+                                .weight(1f)
                         ) {
                             DropdownSelect(
                                 items = categoria,
                                 selectedItem = selectedCategoria,
                             ) {
                                 selectedCategoria = it
-                                viewModel.buscarProductosVenta(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
-                                viewModel.buscarProductosTicket(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
-                                Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
+                                viewModel.buscarProductosVenta(
+                                    formatoDDBB(fechaIni),
+                                    formatoDDBB(fechaFin),
+                                    selectedCategoria
+                                )
+                                viewModel.buscarProductosTicket(
+                                    formatoDDBB(fechaIni),
+                                    formatoDDBB(fechaFin),
+                                    selectedCategoria
+                                )
+                                Toast.makeText(
+                                    context,
+                                    "No olvides selecionar las fechas.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                         Box(
-                            modifier = Modifier.width(200.dp).weight(1f)
+                            modifier = Modifier
+                                .width(200.dp)
+                                .weight(1f)
                         ) {
                             DropdownSelect(
                                 items = items,
@@ -195,7 +203,7 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = when(selected){
+                            text = when (selected) {
                                 "Ventas" -> "$totalVentas RD$"
                                 "Ticket" -> "$totalTicket RD$"
                                 else -> "0.0 RD$"
@@ -307,6 +315,7 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                 }
                             }
                         }
+
                         "Ticket" -> {
                             //Aquí va el menú de ticket
                             LazyColumn {
@@ -418,13 +427,14 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                 }
                             }
                         }
+
                         else -> {
                             Text(text = "Seleccione un tipo de reporte", fontSize = 24.sp)
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Row{ //Avatar y Botones
+                Row { //Avatar y Botones
                     //Avatar
                     if (true) { // si no hay imagen de perfil
                         Avatar()
@@ -441,10 +451,15 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                             //Aquí lógica para exportar
                             viewModel.Exportar()
                             uri = uiState.uriPath
-                            if(uri.isNotEmpty()){
-                                Toast.makeText(context, "Exportado con éxito en: $uri", Toast.LENGTH_SHORT).show()
+                            if (uri.isNotEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Exportado con éxito en: $uri",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
-                                Toast.makeText(context, "Error al exportar", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Error al exportar", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                     }
@@ -459,15 +474,13 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 onClick = {
                     showDatePicker1 = false
                     fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
-                    when (selected) {
-                        "Ventas" -> {
-                            viewModel.buscarProductosVenta(formatoDDBB(fechaIni), formatoDDBB(fechaIni), selectedCategoria)
-                        }
-                        "Ticket" -> {
-                            viewModel.buscarProductosTicket(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
-                        }
-                    }
-                    Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
+                    viewModel.buscarProductosTicket(
+                        formatoDDBB(fechaIni),
+                        formatoDDBB(fechaFin),
+                        selectedCategoria
+                    )
+                    Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             )
             DatePickerDialogo(
@@ -479,9 +492,18 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 onClick = {
                     showDatePicker2 = false
                     fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
-                    viewModel.buscarProductosVenta(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
-                    viewModel.buscarProductosTicket(formatoDDBB(fechaIni), formatoDDBB(fechaFin), selectedCategoria)
-                    Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
+                    viewModel.buscarProductosVenta(
+                        formatoDDBB(fechaIni),
+                        formatoDDBB(fechaFin),
+                        selectedCategoria
+                    )
+                    viewModel.buscarProductosTicket(
+                        formatoDDBB(fechaIni),
+                        formatoDDBB(fechaFin),
+                        selectedCategoria
+                    )
+                    Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             )
         }
