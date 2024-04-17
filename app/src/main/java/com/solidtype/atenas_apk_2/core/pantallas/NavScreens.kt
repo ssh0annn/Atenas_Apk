@@ -90,7 +90,7 @@ fun Navigation() {
         }
 
         composable(route = Screens.Productos.route ) {
-//             InventoryScreen(navController)
+             InventoryScreen(navController)
         }
 
     }

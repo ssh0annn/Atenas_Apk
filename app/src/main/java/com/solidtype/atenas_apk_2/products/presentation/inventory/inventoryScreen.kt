@@ -105,15 +105,16 @@ fun showFilePicker(context: Context) {
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun InventoryScreen(
-//    navController: NavController,
-//    viewModel: InventarioViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: InventarioViewModel = hiltViewModel()
 ) {
     //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
 
-    val viewModel: InventarioViewModel = hiltViewModel() //Luego lo quito; solo para pruebas
+    //val viewModel: InventarioViewModel = hiltViewModel() //Luego lo quito; solo para pruebas
 
     val context = LocalContext.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var busqueda by rememberSaveable { mutableStateOf("") }
@@ -157,9 +158,14 @@ fun InventoryScreen(
         mutableStateOf("")
     }
 
-    val productos = uiState.products
-
     var showSnackbar by rememberSaveable { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+    var snackbarJob: Job by remember { mutableStateOf(Job()) }
+
+    var showSnackbarIni by rememberSaveable { mutableStateOf(false) }
+
+    val productos = uiState.products
 
     val categoriaList = listOf(
         "Accesorios",
@@ -168,14 +174,6 @@ fun InventoryScreen(
         "Tablets",
         "Otros"
     )//Esto debería venir del ViewModel
-
-//    val coroutineScope = rememberCoroutineScope()
-//    val snackbarHostState = remember { SnackbarHostState() } //No debe ser rememberSaveable
-
-    val coroutineScope = rememberCoroutineScope()
-    var snackbarJob: Job by remember { mutableStateOf(Job()) }
-
-    var showSnackbarIni by rememberSaveable { mutableStateOf(false) }
 
     if (false) {
         //nav.navigate(Screens.Login.route)
