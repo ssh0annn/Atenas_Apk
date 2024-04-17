@@ -82,6 +82,7 @@ class HistorialRepositoryImp @Inject constructor(
         fecha_final: String,
         categoria: String
     ): Flow<List<HistorialVentaEntidad>> {
+        
        return dao.getHistorialVentaFechaCategoria(fecha_final, fecha_inicio, categoria)
     }
 
@@ -95,6 +96,11 @@ class HistorialRepositoryImp @Inject constructor(
         fechaFinal:String,
         catego: String
     ): Flow<List<HistorialTicketEntidad>> {
-       return daoTickets.getHistorialTicketFechaDias(fechaIni, fechaFinal, catego)
+        //Aqui cambie porque actualize la base de datos.
+        var pepe= ""
+        var pepita= ""
+        var pepere= ""
+       return daoTickets.getHistorialTicketFechaDias(pepe, pepita
+       , pepere)
     }
 }

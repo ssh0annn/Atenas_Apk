@@ -74,7 +74,7 @@ fun Navigation() {
             GestionUsuarios(navController)
         }
         composable(route = Screens.HistorialVentasTickets.route ) {
-//            HistorialScreen(navController)
+          HistorialScreen(navController)
         }
         composable(route = Screens.Inventario.route ) {
             Inventario(navController)

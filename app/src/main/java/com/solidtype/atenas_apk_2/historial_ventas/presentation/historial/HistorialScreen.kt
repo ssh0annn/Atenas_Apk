@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
@@ -54,11 +55,11 @@ import java.util.Date
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel= hiltViewModel()*/) {
+fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= hiltViewModel()) {
 
     val context = LocalContext.current
 
-    val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
+    //val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
     // hice esto para poder probar la aplicación.
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
