@@ -82,7 +82,6 @@ class HistorailViewModel @Inject constructor(
                     println(i.Modelo)
                     println(i.Descripcion)
                     println(i.FechaIni)
-                    println(i.FechaFin)
                 }
 
             }

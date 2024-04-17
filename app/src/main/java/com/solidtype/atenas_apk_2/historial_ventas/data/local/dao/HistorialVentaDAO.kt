@@ -16,8 +16,8 @@ interface HistorialVentaDAO {
     @Query("SELECT * FROM HistorialVenta_Table")
     fun getHistorialVenta(): Flow<List<HistorialVentaEntidad>>
 
-    @Query("SELECT * FROM HistorialVenta_Table WHERE ((FechaIni >= :fechaI) AND (FechaFin <= :fechaF) AND (Categoria = :cate))")
-    fun getHistorialVentaFechaCategoria(fechaF : String, fechaI : String, cate : String): Flow<List<HistorialVentaEntidad>>
+    @Query("SELECT * FROM HistorialVenta_Table WHERE ((FechaIni >= :fechaI) AND (FechaIni <= :fechaF) AND (Categoria = :cate))")
+    fun getHistorialVentaFechaCategoria(fechaI : String, fechaF: String, cate : String): Flow<List<HistorialVentaEntidad>>
 
     //funciones usadas para las operacions aysnc de firebase
     @Insert(onConflict = OnConflictStrategy.REPLACE)

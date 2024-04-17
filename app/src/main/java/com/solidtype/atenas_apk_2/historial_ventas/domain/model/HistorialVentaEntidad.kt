@@ -19,7 +19,6 @@ data class HistorialVentaEntidad(
         val Precio : Double,
         val TipoVenta : String,
         val Total : Double,
-        val FechaFin : String,
         val FechaIni : String
 )
 

@@ -60,7 +60,6 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.Precio.toString())
                 temp.add(productos.TipoVenta)
                 temp.add(productos.FechaIni)
-                temp.add(productos.FechaFin)
 
                 productosVendidos.add(temp)
 
@@ -74,13 +73,13 @@ class HistorialRepositoryImp @Inject constructor(
 
         return Uri.EMPTY
     }
-
+    //Removi la variable fecha final de donde la recive el DAO, ARREGLALO!
     override fun buscarPorFechasCategoriasVentas(
         fecha_inicio: String,
         fecha_final: String,
         categoria: String
     ): Flow<List<HistorialVentaEntidad>> {
-       return dao.getHistorialVentaFechaCategoria(fecha_final, fecha_inicio, categoria)
+       return dao.getHistorialVentaFechaCategoria(fecha_inicio,fecha_final, categoria)
     }
 
     override fun mostrarTickets(): Flow<List<HistorialTicketEntidad>> {

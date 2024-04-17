@@ -15,6 +15,6 @@ interface HistorialTicketDAO {
     @Query("SELECT * FROM HistorialTicket_Table")
     fun getHistorialTicket(): Flow<List<HistorialTicketEntidad>>
 
-    @Query("SELECT * FROM HistorialTicket_Table WHERE ((FechaInicial >= :fechaI) AND (FechaFinal <= :fechaF) AND (Categoria = :cate))")
+    @Query("SELECT * FROM HistorialTicket_Table WHERE ((FechaInicial >= :fechaI) AND (FechaInicial <= :fechaF) AND (Categoria = :cate))")
     fun getHistorialTicketFechaDias(fechaI :String, fechaF :String, cate :String): Flow<List<HistorialTicketEntidad>>
 }
