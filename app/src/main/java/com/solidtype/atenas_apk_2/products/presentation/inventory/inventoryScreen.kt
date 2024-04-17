@@ -173,7 +173,9 @@ fun InventoryScreen(
 //    val snackbarHostState = remember { SnackbarHostState() } //No debe ser rememberSaveable
 
     val coroutineScope = rememberCoroutineScope()
-    var snackbarJob: Job by rememberSaveable { mutableStateOf(Job()) }
+    var snackbarJob: Job by remember { mutableStateOf(Job()) }
+
+    var showSnackbarIni by rememberSaveable { mutableStateOf(false) }
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -186,24 +188,15 @@ fun InventoryScreen(
             )
         }
     } else {
-        /*if (uiState.uriPath.isNotBlank()) {
-
-            SnackBar(uiState.uriPath,
-                onShareClick = {
-                    Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
-                },
-                onViewClick = {
-                    Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()
-                })
-        }*/
-        /*if(uiState.uriPath.isNotBlank()){
-            snackbarJob?.cancel() //Cancela el job anterior si existe
+        if (showSnackbarIni) {
+            showSnackbarIni = false
+            snackbarJob.cancel() //Cancela el job anterior si existe
             showSnackbar = true
             snackbarJob = coroutineScope.launch {
                 delay(10000L)
                 showSnackbar = false
             }
-        }*/
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
@@ -538,25 +531,17 @@ fun InventoryScreen(
                     } else {//Mostrar foto de perfil
                         //Image(painter = , contentDescription = )
                     }
-
                     Spacer(modifier = Modifier.width(400.dp))
-
                     Row {
                         //Botones para Importar, Exportar y Ver
                         Boton("Importar") {
                             showFilePicker(context)
-
                         }
                         Boton("Exportar") {
                             Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
                                 .show()
                             viewModel.exportarExcel()
-                            snackbarJob?.cancel() //Cancela el job anterior si existe
-                            showSnackbar = true
-                            snackbarJob = coroutineScope.launch {
-                                delay(10000L)
-                                showSnackbar = false
-                            }
+                            showSnackbarIni = true
                         }
                         Boton("Ejemplar") {
                             mostrar = true
@@ -589,7 +574,7 @@ fun InventoryScreen(
                             }
                             Spacer(modifier = Modifier.width(10.dp))
                             BotonBlanco("Cerrar") {
-                                snackbarJob?.cancel() //Cancela el job anterior si existe
+                                snackbarJob.cancel() //Cancela el job anterior si existe
                                 showSnackbar = false
                             }
                         }
