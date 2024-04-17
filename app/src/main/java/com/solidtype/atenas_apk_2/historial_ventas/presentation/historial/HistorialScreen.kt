@@ -50,7 +50,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import java.text.SimpleDateFormat
 import java.util.Date
-
+import com.solidtype.atenas_apk_2.util.toLocalDate
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -299,6 +299,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                         )
 
                                         Text(
+                                            formatoParaUser(listVentas[index].FechaIni.toString()),
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+
+                                        Text(
                                             listVentas[index].Precio.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
@@ -393,13 +400,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaInicial,
+                                            formatoParaUser(listTicket[index].FechaInicial),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaFinal,
+                                            formatoParaUser(listTicket[index].FechaFinal),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -528,4 +535,10 @@ fun formatoDDBB(fecha: String): String {
     val array = fecha.split("/")
     if(array.size != 3) return ""
     return "${array[2]}-${array[1]}-${array[0]}"
+}
+
+fun formatoParaUser(fecha: String): String {
+    val array = fecha.split("-")
+    if(array.size != 3) return ""
+    return "${array[2]}/${array[1]}/${array[0]}"
 }
