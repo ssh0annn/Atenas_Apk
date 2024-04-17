@@ -18,11 +18,9 @@ package com.solidtype.atenas_apk_2.core.pantallas
         object Inventario: Screens("invenario")
         object Factura: Screens("factura")
 
-
         //vendedor
         object Ticket: Screens("ticket")
         object Venta: Screens("venta")
         object Servicio: Screens("servicio")
-
 
     }

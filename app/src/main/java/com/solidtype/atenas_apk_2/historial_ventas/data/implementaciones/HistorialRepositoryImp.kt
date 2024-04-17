@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones
 import android.net.Uri
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
@@ -24,6 +25,8 @@ class HistorialRepositoryImp @Inject constructor(
     ){
         dao.setHistorialVenta(ojeto)
     }
+
+
 
 
     override suspend fun exportarVentas(listaProductos:List<HistorialVentaEntidad>): Uri {
@@ -84,6 +87,7 @@ class HistorialRepositoryImp @Inject constructor(
 
     override fun mostrarTickets(): Flow<List<HistorialTicketEntidad>> {
         return daoTickets.getHistorialTicket()
+
     }
 
     override fun mostrarTicketsPorFecha(

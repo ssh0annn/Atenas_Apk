@@ -5,8 +5,10 @@ import javax.inject.Inject
 
 class VerTicketsPorFechas @Inject constructor(private val repo: HistorialRepository) {
 
+
     operator fun invoke(  fechaIni: String,
                           fechaFinal:String,
                           catego: String)=repo.mostrarTicketsPorFecha(fechaIni, fechaFinal, catego)
+
 
     }

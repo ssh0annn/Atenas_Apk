@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
 import android.net.Uri
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.MediatorProducts
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
@@ -20,6 +21,7 @@ class InventarioRepoImpl @Inject constructor(
     override fun getProducts(): Flow<List<ProductEntity>> {
 
         return daoProductos.getProducts()
+
     }
 
     override fun getProductByCodigo(codigo: Int): Flow<List<ProductEntity>> {
@@ -129,7 +131,6 @@ class InventarioRepoImpl @Inject constructor(
 
     override suspend fun syncronizacionProductos() {
         mediador2()
-
     }
 
 }

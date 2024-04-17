@@ -1,0 +1,190 @@
+package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket
+
+import android.util.Log
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
+import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import javax.inject.Inject
+
+class QueryDBticket @Inject constructor(
+    private val dao:HistorialTicketDAO
+) {
+        /**
+         * @param: List<String>
+         * @return: Data Object
+         * @throws: Exception si no es compatible los datos con el objeto espesificado.
+         * @funcionamiento: Es para uso interno, para convertir una lista de strings en datos adecuados para el objeto HistorialTicketEntidad
+         * Favor verificar el formato de este objeto antes de someter la lista.
+         * Los elementos deben ser igual a 16.
+         */
+        private fun entityConvert(it: List<String>): HistorialTicketEntidad {
+            if (it.size == 16) {
+                try {
+
+                    return HistorialTicketEntidad(
+                       Codigo = it[0].toInt(),
+                        NombreCliente = it[1],
+                        Modelo = it[2],
+                        Telefono = it[3].toInt(),
+                        FaltaEquipo = it[4],
+                        EstadoEquipo = it[5],
+                        Marca = it[6],
+                        Email = it[7],
+                        Restante = it[8].toDouble(),
+                        Abono = it[9].toDouble(),
+                        Nota =it[10],
+                        Precio = it[11].toDouble(),
+                        Servicio = it[12],
+                        Categoria = it[13],
+                        FechaFinal = it[14],
+                        FechaInicial = it[15]
+
+
+                    )
+                } catch (e: Exception) {
+                    println("Este es la razon lista: $it, size ${it.size}")
+                    throw Exception("El tipo de la lista no es compatible con la Entity HistorialTicketEntidad $e")
+
+                }
+            }
+            throw Exception("El tamaño de la lista entregada no es compatible")
+        }
+
+        /**
+         * @param  List<HistorialVentaEntidad>
+         * @return List<List<String>>
+         * @funcionamiento Funcion de uso interno para convertir una entidad de tipo HistorialTicketEntidad en una lista de lista de Strings.
+         * Favor ver la data class HistorialTicketEntidad.
+         */
+        private fun entityToListString(data: List<HistorialTicketEntidad>): List<List<String>> {
+            val mutableListData: MutableList<List<String>> = mutableListOf()
+            if (data.isNotEmpty()) {
+                data.forEach {
+                    val mutableList = mutableListOf<String>()
+                    mutableList.add(it.Codigo.toString())
+                    mutableList.add(it.NombreCliente)
+                    mutableList.add(it.Modelo)
+                    mutableList.add(it.Telefono.toString())
+                    mutableList.add(it.FaltaEquipo)
+                    mutableList.add(it.EstadoEquipo.toString())
+                    mutableList.add(it.Marca)
+                    mutableList.add(it.Email)
+                    mutableList.add(it.Restante.toString())
+                    mutableList.add(it.Abono.toString())
+                    mutableList.add(it.Nota)
+                    mutableList.add(it.Precio.toString())
+                    mutableList.add(it.Servicio)
+                    mutableList.add(it.Categoria)
+                    mutableList.add(it.FechaInicial)
+                    mutableList.add(it.FechaFinal)
+                    mutableListData.add(mutableList)
+                }
+            }
+            return mutableListData
+
+        }
+
+    /**
+     * @return: List<List<String>>
+     * @funcionamiento: captura todo los productos de la base de dato local espesificcamente de la tabla Productos.
+     * Favor ver el objeto ProductEntity para mas informacion.
+     *
+     */
+    suspend fun getAllProducts(): List<List<String>> {
+        var mutableListData: List<List<String>> = emptyList()
+        var listaDeEntity = emptyList<HistorialTicketEntidad>()
+        coroutineScope {
+            val response = async { listaDeEntity = dao.getAllTicketsNormal() }
+            response.await()
+            if (listaDeEntity.isNotEmpty()) {
+                mutableListData = entityToListString(listaDeEntity)
+            }
+        }
+        return mutableListData
+    }
+
+    /**
+     * @param: MutableList<List<String>>
+     * @return: Unit
+     * @throws: El tipo de la lista no es compatible con la Entity producto
+     * @funcionamiento: Inserta productos en base de datos local si la lista es compatible con el formato para ProductEntity,
+     * Esta funcion integra un hilo interno. Favor llamar desde una funcion suspendida.
+     */
+    suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>) {
+        val lista: MutableList<HistorialTicketEntidad> = mutableListOf()
+        dataToInsert.forEach {
+            try {
+                lista.add(entityConvert(it))
+            } catch (e: Exception) {
+                throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
+            }
+        }
+        coroutineScope {
+            println("Aqui veamos la lista: $lista y siez ${lista.size}")
+            val response = async { dao.insertAllTickets(lista) }
+            response.await()
+        }
+    }
+
+    /**
+     * @param: MutableList<List<String>>
+     * @return: List<List<String>>
+     * @funcion: recibe una lista de listas mutables, para luego comparar con las base de datos locales de los posibles datos diferentes
+     * tomando la base de datos local como referencia de "Single true of trust". Luego debuelve en una lista los datos no iguales.
+     */
+    suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
+        val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
+        val local = datosLocales()
+        listIntrusos.forEach {
+            val intrusosConvetido = entityConvert(it)
+            listaFirebaseMediatorproducts.add(intrusosConvetido)
+        }
+
+        val productosToDeleteInFirestore =
+            listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
+                local.any { it.Codigo == firestoreproductos.Codigo }
+            }
+        return entityToListString(productosToDeleteInFirestore)
+    }
+
+    /**
+     * @param: MutableList<List<String>>
+     * @return: List<List<String>>
+     * @funcion: recibe una lista de listas mutables, para luego comparar con las base de datos locales de los posibles datos diferentes
+     * tomando la base la lista entrante como referencia. Luego debuelve en una lista los datos no iguales, los cuales no se encuentran
+     * en base de dato local.
+     */
+    suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
+        val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
+        val local = datosLocales()
+        listIntrusos.forEach {
+            val intrusosConvetido = entityConvert(it)
+            listaFirebaseMediatorproducts.add(intrusosConvetido)
+        }
+        val listaNoMutable: List<HistorialTicketEntidad> = listaFirebaseMediatorproducts
+        val productToAddInFirebase = local.filterNot { firestoreproductos ->
+            listaNoMutable.any {
+                it == firestoreproductos
+            }
+        }
+        return entityToListString(productToAddInFirebase)
+    }
+
+
+    /**
+     * @return  List<ProductEntity>
+     * @funcion: captura todos los datos de la tabla Productos y los debuelve en una lista de objetos ProductEntity.
+     */
+    private suspend fun datosLocales(): List<HistorialTicketEntidad> {
+        return coroutineScope {
+            val listProduct = async { dao.getAllTicketsNormal() }
+            return@coroutineScope listProduct.await()
+
+        }
+    }
+
+}

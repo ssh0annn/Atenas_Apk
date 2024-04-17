@@ -1,15 +1,17 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,23 +20,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes,
-    private val historialRepositoryImp: HistorialRepositoryImp
+    private val casosHistorialReportes: CasosHistorialReportes
+
 ) : ViewModel() {
 
 
     var uiState = MutableStateFlow(HistorialUIState())
-        private set
+
+
 
 
     init {
+
             MostrarHistoriar()
         }
 
 
     fun Exportar() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 println("inicia viewScope en la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 println("withContext la funcion que exporta en viewmodel")
@@ -51,59 +55,114 @@ class HistorailViewModel @Inject constructor(
                     }
                 }
             }
-
         }
-
     }
 
 
-    fun buscarProductos(
-        fecha_inicio: String = "02/02/24",
-        fecha_final: String = "05/05/24",
+    fun buscarProductosVenta(
+        fecha_inicio: String,
+        fecha_final: String,
         categoria: String = "venta"
     ) {
-
+        uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
-            val productosRango =
+            var total = 0.0
+            val productosRangoventa =
                 casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
-            productosRango.collect { product ->
+            productosRangoventa.collect {
+                product ->
                 uiState.update {
-                    it.copy(Historial = product)
+                    it.copy(Historial = product, isLoading = false)
                 }
+                for (i in product){
+                    total += i.Precio * i.Cantidad
+                }
+            }
+            uiState.update {
+                it.copy(total = total)
+            }
+           println( uiState.value.total)
+        }
+    }
 
-                for (i in product) {
-                    println("nombre" + i.Nombre)
-                    println(i.NombreCliente)
-                    println(i.Cantidad)
-                    println(i.Codigo)
-                    println(i.Categoria)
-                    println(i.Imei)
-                    println(i.Marca)
-                    println(i.Modelo)
-                    println(i.Descripcion)
-                    println(i.FechaIni)
+
+    fun buscarProductosTicket(
+        fechaIni: String ,
+        fechaFinal: String ,
+        catego: String = "ticket"
+
+    ) {
+        uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+        viewModelScope.launch {
+            val productosRangoticket = casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
+            var deuda = 0.0
+            productosRangoticket.collect { product ->
+                for (i in product){
+                    deuda += i.Precio - i.Abono
+                }
+                uiState.update {
+                    it.copy(Ticket = product, isLoading = false, total2 = deuda)
+                }
+            }
+        }
+    }
+
+
+
+
+
+    fun MostrarHistoriar() {
+        val mostrarHistory = casosHistorialReportes.mostrarVentas()
+        var total = 0.0
+        uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+        viewModelScope.launch {
+            mostrarHistory.collect { product ->
+                for ( i in product){
+                    total += i.Precio.toDouble() * i.Cantidad.toInt()
+                }
+                uiState.update {
+                    it.copy(Historial = product, isLoading = false, total = total)
                 }
 
             }
         }
     }
 
-    fun MostrarHistoriar() {
-        val mostrarHistory = casosHistorialReportes.mostrarVentas()
-
+    fun mostrarTicket() {
+        val mostrarTick = casosHistorialReportes.verTodosTickets()
+        var deuda = 0.0
         viewModelScope.launch {
-            mostrarHistory.collect { product ->
+            mostrarTick.collect { product ->
                 uiState.update {
-                    it.copy(Historial = product)
+                    it.copy(Ticket = product, isLoading = false, total2 = deuda)
                 }
-
-
-
+                for (i in product) {
+                    deuda += i.Precio - i.Abono
+                }
+            }
+            uiState.update {
+                it.copy(isLoading = false)
             }
         }
     }
 
 
 }
+
+
+
+
 
 
