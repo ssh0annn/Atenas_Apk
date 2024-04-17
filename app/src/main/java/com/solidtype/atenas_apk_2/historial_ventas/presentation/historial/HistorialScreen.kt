@@ -459,8 +459,14 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                 onClick = {
                     showDatePicker1 = false
                     fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
-                    viewModel.buscarProductosVenta(fechaIni, fechaFin, selectedCategoria)
-                    viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                    when (selected) {
+                        "Ventas" -> {
+                            viewModel.buscarProductosVenta(fechaIni, fechaIni, selectedCategoria)
+                        }
+                        "Ticket" -> {
+                            viewModel.buscarProductosTicket(fechaIni, fechaFin, selectedCategoria)
+                        }
+                    }
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT).show()
                 }
             )
