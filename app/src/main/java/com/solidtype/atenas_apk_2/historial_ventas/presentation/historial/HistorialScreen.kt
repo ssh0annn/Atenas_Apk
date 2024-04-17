@@ -2,6 +2,9 @@ package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +25,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.BotonBlanco
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.SelecionarFecha
@@ -51,17 +58,19 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import java.text.SimpleDateFormat
 import java.util.Date
 import com.solidtype.atenas_apk_2.util.toLocalDate
-@SuppressLint("SimpleDateFormat")
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+@SuppressLint("SimpleDateFormat", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= hiltViewModel()) {
+fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel= hiltViewModel()*/) {
 
     val context = LocalContext.current
 
-
-  //  val viewModel: HistorailViewModel = hiltViewModel() //luego se arregla los parámetros;
-    // hice esto para poder probar la aplicación.
-
+    val viewModel: HistorailViewModel = hiltViewModel()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -86,6 +95,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
     var showDatePicker2 by rememberSaveable { mutableStateOf(false) }
     var fechaFin by rememberSaveable { mutableStateOf("") }
 
+    var showSnackbar by rememberSaveable { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+    var snackbarJob by remember { mutableStateOf(Job()) }
+
+    var showSnackbarIni by rememberSaveable { mutableStateOf(false) }
+
     val categoria = listOf(
         "Celular",
         "Tablet",
@@ -93,9 +109,8 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
         "Accesorios",
         "Jabón",
         "Otros"
-    )
-    var selectedCategoria by rememberSaveable { mutableStateOf("Celular") }
-
+    ) //Debería venir del viewModel
+    var selectedCategoria by rememberSaveable { mutableStateOf(categoria.first()) }
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -108,6 +123,15 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
             )
         }
     } else {
+        if (showSnackbarIni) {
+            showSnackbarIni = false
+            snackbarJob.cancel() //Cancela el job anterior si existe
+            showSnackbar = true
+            snackbarJob = coroutineScope.launch {
+                delay(10000L)
+                showSnackbar = false
+            } as CompletableJob
+        }
         Column(
             //To.do
             modifier = Modifier
@@ -464,16 +488,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                             //Aquí lógica para exportar
                             viewModel.Exportar()
                             uri = uiState.uriPath
-                            if (uri.isNotEmpty()) {
-                                Toast.makeText(
-                                    context,
-                                    "Exportado con éxito en: $uri",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(context, "Error al exportar", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+                            showSnackbarIni = true
                         }
                     }
                 }
@@ -521,6 +536,46 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
 
                 }
             )
+        }
+        AnimatedVisibility(
+            visible = showSnackbar,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(500)
+            )
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Snackbar(
+                    action = {
+                        Row {
+                            BotonBlanco("Compartir") { //Aquí lógica para compartir el archivo exportado
+                                if (uiState.uriPath.isNotBlank()) {
+                                    //compartir archivo
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            BotonBlanco("Cerrar") {
+                                snackbarJob.cancel() //Cancela el job anterior si existe
+                                showSnackbar = false
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(8.dp),
+                    containerColor = Color(0xFF343341)
+                ) {
+                    Text(
+                        text = if (uiState.uriPath.isNotBlank()) "El archivo se guardó en: ${uiState.uriPath}" else "Hubo un error al exportar",
+                        color =
+                        if (uiState.uriPath.isNotBlank())
+                            Color(0xFF77FF77)
+                        else
+                            Color(0xFFFF7777),
+                    )
+                }
+            }
         }
     }
 }
