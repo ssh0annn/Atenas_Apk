@@ -21,7 +21,7 @@ class MediatorProducts @Inject constructor(
     private val queryDblocal: DataDbProducts,
     private val queryDataService: DataCloud
 
-) {
+):AsyncPro {
     private val codigoProductos = "code_Product"
     private val ColletionName = "productos"
 
@@ -139,7 +139,7 @@ class MediatorProducts @Inject constructor(
      * @funcion: Es donde sucede toda la logica del proceso de sincronizacion. En esta funcion se manejan muchos algoritmos
      * con corrutinas, favor manajar en el hilo Default para evitar bloqueos del hilo main.
      */
-    suspend operator fun invoke() {
+    override suspend operator fun invoke() {
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
         println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")

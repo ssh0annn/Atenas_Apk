@@ -1,8 +1,7 @@
-package com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb
+package com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts
 
 
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.DataDbProducts
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

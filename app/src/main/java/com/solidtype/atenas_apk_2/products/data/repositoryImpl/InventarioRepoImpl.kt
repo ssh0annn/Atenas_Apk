@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
 import android.net.Uri
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.AsyncPro
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.MediatorProducts
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
     private val daoProductos: ProductDao, private val excel: XlsManeger,
-    private val mediador2: MediatorProducts
+    private val mediador2: AsyncPro
 ) : InventarioRepo {
 
 

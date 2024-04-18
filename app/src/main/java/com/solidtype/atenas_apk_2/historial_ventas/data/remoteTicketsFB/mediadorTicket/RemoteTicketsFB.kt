@@ -14,14 +14,14 @@ import javax.inject.Inject
 class RemoteTicketsFB @Inject constructor(
     private val queryDBticket: DataDbTickets,
     private val queryDataService: DataCloud
-) {
+): AsyncTickets {
 
     private val codigoTickets = "Codigo"
     private val collectionName = "Tickets"
 
 
 
-    suspend fun asycTickets() {
+    override suspend fun asycTickets() {
         Log.e("Entre","Entre a la funcion Tickets async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)

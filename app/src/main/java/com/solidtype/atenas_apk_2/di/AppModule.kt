@@ -42,15 +42,21 @@ import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.DataDbHistorial
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVenta
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.AsyncVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.DataDbTickets
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticket
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.AsyncTickets
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.ExportarTicketsHistorial
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.Sync
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.DataDbProducts
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.AsyncPro
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.MediatorProducts
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
@@ -189,5 +195,23 @@ object AppModule {
     fun providesAuthInterface(auth:FirebaseAuth): auth{
         return RemoteFirebase(auth)
     }
+    //proveyendo el asyncPro interface
+    @Provides
+    @Singleton
+    fun providesAsyncPro(dbPro:DataDbProducts,dataCloud: DataCloud): AsyncPro{
+        return MediatorProducts(dbPro,dataCloud)
+    }
+    //proveyendo el asyncVentas interface
+    @Provides
+    @Singleton
+    fun providesAsyncVentas(db:DataDbHistorial,dataCloud: DataCloud): AsyncVentas{
+        return MediatorHistorialVentas(dataCloud,db)
+    }
 
+    //proveyendo el asyncTicejts interface
+    @Provides
+    @Singleton
+    fun providesAsyncTickets(db:DataDbTickets,dataCloud: DataCloud): AsyncTickets{
+        return RemoteTicketsFB(db,dataCloud)
+    }
 }

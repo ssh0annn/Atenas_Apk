@@ -13,11 +13,11 @@ import kotlinx.coroutines.withContext
 class MediatorHistorialVentas @Inject constructor(
     private val queryDataService: DataCloud,
     private val queryDBlocal: DataDbHistorial
-) {
+) :AsyncVentas{
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
 
-    suspend operator fun invoke()  {
+    override suspend operator fun invoke()  {
         Log.e("Entre","Entre a la funcion Historial asyc" +
                 " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
