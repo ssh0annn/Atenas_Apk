@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class QueryDBticket @Inject constructor(
     private val dao:HistorialTicketDAO
-) {
+): DataDbTickets {
         /**
          * @param: List<String>
          * @return: Data Object
@@ -96,7 +96,7 @@ class QueryDBticket @Inject constructor(
      * Favor ver el objeto ProductEntity para mas informacion.
      *
      */
-    suspend fun getAllProducts(): List<List<String>> {
+    override suspend fun getAllTicekts(): List<List<String>> {
         var mutableListData: List<List<String>> = emptyList()
         var listaDeEntity = emptyList<HistorialTicketEntidad>()
         coroutineScope {
@@ -116,7 +116,7 @@ class QueryDBticket @Inject constructor(
      * @funcionamiento: Inserta productos en base de datos local si la lista es compatible con el formato para ProductEntity,
      * Esta funcion integra un hilo interno. Favor llamar desde una funcion suspendida.
      */
-    suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>) {
+    override suspend fun insertAllTickets(dataToInsert: MutableList<List<String>>) {
         val lista: MutableList<HistorialTicketEntidad> = mutableListOf()
         dataToInsert.forEach {
             try {
@@ -138,7 +138,7 @@ class QueryDBticket @Inject constructor(
      * @funcion: recibe una lista de listas mutables, para luego comparar con las base de datos locales de los posibles datos diferentes
      * tomando la base de datos local como referencia de "Single true of trust". Luego debuelve en una lista los datos no iguales.
      */
-    suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
+    override suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
         val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
         val local = datosLocales()
         listIntrusos.forEach {
@@ -160,7 +160,7 @@ class QueryDBticket @Inject constructor(
      * tomando la base la lista entrante como referencia. Luego debuelve en una lista los datos no iguales, los cuales no se encuentran
      * en base de dato local.
      */
-    suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
+    override suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
         val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
         val local = datosLocales()
         listIntrusos.forEach {

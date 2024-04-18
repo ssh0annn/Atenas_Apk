@@ -1,7 +1,8 @@
-package com.solidtype.atenas_apk_2.products.data.remoteProFB
+package com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator
 
-import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.DataDbProducts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -17,7 +18,9 @@ import javax.inject.Inject
  *
  */
 class MediatorProducts @Inject constructor(
-    private val queryDblocal: QueryDBlocal, private val queryFireStore: QuerysFirstore
+    private val queryDblocal: DataDbProducts,
+    private val queryDataService: DataCloud
+
 ) {
     private val codigoProductos = "code_Product"
     private val ColletionName = "productos"
@@ -61,7 +64,7 @@ class MediatorProducts @Inject constructor(
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
-                queryFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     ColletionName, convierteAObjetoMap(baseLocal), codigoProductos
                 )
                 confirmar = true
@@ -94,7 +97,7 @@ class MediatorProducts @Inject constructor(
 
             println("Listos para subir $listosParaSubir")
             try{
-                queryFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
                 )
             }catch (e: Exception){
@@ -120,8 +123,8 @@ class MediatorProducts @Inject constructor(
             coroutineScope {
                 withContext(Dispatchers.Default) {
                     val result = async {
-                        queryFireStore.deleteDataFirebase(
-                            "productos", convierteAObjetoMap(sacarIntruso), codigoProductos
+                        queryDataService.deleteDataInCloud(
+                            ColletionName, convierteAObjetoMap(sacarIntruso), codigoProductos
                         )
                     }
                     println("Este es el resultado de tu result: ${result.await()}")
@@ -243,7 +246,7 @@ class MediatorProducts @Inject constructor(
 
         val intrusos = queryDblocal.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
-            queryFireStore.deleteDataFirebase(
+            queryDataService.deleteDataInCloud(
                 ColletionName, convierteAObjetoMap(intrusos), codigoProductos
             )
             println("estos son los intrusos --> $intrusos <--")
@@ -263,7 +266,7 @@ class MediatorProducts @Inject constructor(
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = queryFireStore.getAllDataFirebase("productos")
+    private suspend fun caputarDatosFirebaseEnSnapshot() = queryDataService.getallData(ColletionName)
 
 
 }

@@ -16,8 +16,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class FirestoreConnect @Inject constructor(private val db:FirebaseFirestore,
-                                           private val auth: FirebaseAuth){
+class FirestoreConnect @Inject constructor(
+    private val db:FirebaseFirestore,
+    private val auth: FirebaseAuth
+){
 
 
 

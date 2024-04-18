@@ -1,14 +1,17 @@
 package com.solidtype.atenas_apk_2.Authentication.data.remote
 
 import com.google.firebase.auth.FirebaseAuth
+import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RemoteFirebase @Inject constructor(private val auth: FirebaseAuth){
+class RemoteFirebase @Inject constructor(
+    private val auth: FirebaseAuth
+): auth{
 
-   suspend fun signup(email: String, clave: String) = withContext(Dispatchers.IO) {
+   override suspend fun signup(email: String, clave: String) = withContext(Dispatchers.IO) {
        try {
            val result = auth.createUserWithEmailAndPassword(email, clave).await()
            println("Resultado de withContext ${result} <---")
@@ -23,7 +26,7 @@ class RemoteFirebase @Inject constructor(private val auth: FirebaseAuth){
    }  // -> Boolean
 
 
-    suspend fun signinCorru(email: String, clave: String) = withContext(Dispatchers.IO){
+    override suspend fun signinCorru(email: String, clave: String) = withContext(Dispatchers.IO){
                 try{
                     val result = auth.signInWithEmailAndPassword(email, clave).await()
                     println("Resultado de withContext $result <---")
@@ -35,8 +38,8 @@ class RemoteFirebase @Inject constructor(private val auth: FirebaseAuth){
                 }
 
             } // -> Boolean
-    fun getCurrentUser()= auth.currentUser // -> FirebaseUser?
-    fun signOut() = auth.signOut()  // -> Unit
+    override fun getCurrentUser()= auth.currentUser // -> FirebaseUser?
+    override fun signOut() = auth.signOut()  // -> Unit
 
 
 

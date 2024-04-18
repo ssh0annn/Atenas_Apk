@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.solidtype.atenas_apk_2.Authentication.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
@@ -36,11 +37,20 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodas
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
+import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.DataDbHistorial
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVenta
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.DataDbTickets
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.ExportarTicketsHistorial
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.Sync
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.DataDbProducts
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.QueryDBlocal
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
@@ -147,5 +157,37 @@ object AppModule {
         return db.HistorialTicketDao
     }
 
+    //proveeyendo el DataCloud correspondiente
+    @Provides
+    @Singleton
+    fun providesDataCloud(firestore: FirebaseFirestore): DataCloud {
+        return DataCloudImpl(firestore)
+    }
+    //proveyendo Los data Intafaces
+
+    @Provides
+    @Singleton
+    fun providesDataDbHistorial(dao: HistorialVentaDAO):DataDbHistorial{
+        return QueryDBHistorialVenta(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun providesDataDbTicekts(dao:HistorialTicketDAO):DataDbTickets{
+        return QueryDBticket(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun providesDataDBTickets(dao:ProductDao): DataDbProducts{
+        return QueryDBlocal(dao)
+    }
+    //proveyendo el auth interface
+
+    @Provides
+    @Singleton
+    fun providesAuthInterface(auth:FirebaseAuth): auth{
+        return RemoteFirebase(auth)
+    }
 
 }

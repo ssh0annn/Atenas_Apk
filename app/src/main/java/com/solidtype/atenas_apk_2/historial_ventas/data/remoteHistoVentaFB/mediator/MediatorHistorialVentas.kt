@@ -2,19 +2,17 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.medi
 
 import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorialVenta
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.QuerysFirstore
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.DataDbHistorial
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import com.google.firebase.Timestamp
-import java.text.SimpleDateFormat
 
 class MediatorHistorialVentas @Inject constructor(
-    private val queriesFireStore: QuerysFirstore,
-    private val queryDBlocal: QueryDBHistorialVenta
+    private val queryDataService: DataCloud,
+    private val queryDBlocal: DataDbHistorial
 ) {
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
@@ -99,7 +97,7 @@ class MediatorHistorialVentas @Inject constructor(
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
-                queriesFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     colletionName, convierteAObjetoMap(baseLocal), codigoHistoriales
                 )
             } catch (e: Exception) {
@@ -132,7 +130,7 @@ class MediatorHistorialVentas @Inject constructor(
 
             println("Listos para subir $listosParaSubir")
             try{
-                queriesFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     colletionName, convierteAObjetoMap(listosParaSubir), codigoHistoriales
                 )
                 confirmar = true
@@ -159,7 +157,7 @@ class MediatorHistorialVentas @Inject constructor(
             coroutineScope {
                 withContext(Dispatchers.Default) {
                     val result = async {
-                        queriesFireStore.deleteDataFirebase(
+                        queryDataService.deleteDataInCloud(
                             colletionName, convierteAObjetoMap(sacarIntruso), codigoHistoriales
                         )
                     }
@@ -253,7 +251,7 @@ class MediatorHistorialVentas @Inject constructor(
 
         val intrusos = queryDBlocal.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
-            queriesFireStore.deleteDataFirebase(
+            queryDataService.deleteDataInCloud(
                 colletionName , convierteAObjetoMap(intrusos), codigoHistoriales
             )
             println("estos son los intrusos --> $intrusos <--")
@@ -265,7 +263,7 @@ class MediatorHistorialVentas @Inject constructor(
      * @return:  List<List<String>>
      * @funcion: captura los datos de la base local y los debuelve en formato de lista de listas.
      */
-    private suspend fun capturarDatosDB() = queryDBlocal.getAllHistorial()
+    private suspend fun capturarDatosDB() = queryDBlocal.getallDataHistorial()
 
     /**
      * @return  QuerySnapshot?
@@ -276,7 +274,7 @@ class MediatorHistorialVentas @Inject constructor(
         var query:QuerySnapshot? = null
         try {
             coroutineScope {
-                async{query= queriesFireStore.getAllDataFirebase(colletionName)  }
+                async{query= queryDataService.getallData(colletionName)  }
 
             }.await()
 
