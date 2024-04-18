@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes
+    private val casosHistorialReportes: CasosHistorialReportes,
+    private val classesAsyncs : MediatorHistorialVentas
 
 ) : ViewModel() {
 
@@ -32,10 +34,12 @@ class HistorailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                casosHistorialReportes.syncronizacion()
+            withContext(Dispatchers.Default){
+
+                classesAsyncs
             }
         }
+
 
             MostrarHistoriar()
             mostrarTicket()
@@ -66,6 +70,7 @@ class HistorailViewModel @Inject constructor(
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun buscarProductosVenta(
         fecha_inicio: String,
         fecha_final: String,

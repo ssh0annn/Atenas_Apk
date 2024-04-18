@@ -9,6 +9,8 @@ import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
 
 class MediatorHistorialVentas @Inject constructor(
     private val queriesFireStore: QuerysFirstore,
@@ -92,6 +94,7 @@ class MediatorHistorialVentas @Inject constructor(
     ): Boolean {
         Log.e("TEstSnapToList","Funcion LogicaInsertarFireStore")
         Log.e("TEstSnapToList","Datos en la funcion Lista $$listaDeFireStore")
+        Log.e("TEstSnapToList","Datos en la funcion Lista local en la funcion LogicaInsertarFireStore(): $$baseLocal")
 
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
