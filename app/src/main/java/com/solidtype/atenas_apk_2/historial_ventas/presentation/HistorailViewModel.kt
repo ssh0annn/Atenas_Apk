@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
@@ -28,19 +29,17 @@ class HistorailViewModel @Inject constructor(
     var uiState = MutableStateFlow(HistorialUIState())
 
 
-
-
     init {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 casosHistorialReportes.syncronizacion()
             }
         }
 
-            MostrarHistoriar()
-            mostrarTicket()
+        MostrarHistoriar()
+    //  mostrarTicket()
 
-        }
+    }
 
 
     fun Exportar() {
@@ -49,9 +48,18 @@ class HistorailViewModel @Inject constructor(
                 println("inicia viewScope en la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 println("withContext la funcion que exporta en viewmodel")
-                val corr = casosHistorialReportes.exportarVentas(uiState.value.Historial)
+                val corr:Uri
+                if(uiState.value.ventasOTicket){
+                    corr =  casosHistorialReportes.exportarTickets(uiState.value.Ticket)
+                    println("Se guardo el archivo en: ${corr} son tickets")
 
-                println("Se guardo el archivo en: ${corr}")
+                }else{
+                     corr = casosHistorialReportes.exportarVentas(uiState.value.Historial)
+                    println("Se guardo el archivo en: ${corr} Es ventas")
+
+                }
+
+
 
                 uiState.update { it.copy(isLoading = false) }
                 println("Salgo del withcontext la funcion que exporta en viewmodel")
@@ -74,14 +82,15 @@ class HistorailViewModel @Inject constructor(
 
         viewModelScope.launch {
             var total = 0.0
-            val productosRangoventa =casosHistorialReportes.buscarporFechCatego(fecha_inicio ,fecha_final,"venta")
-               productosRangoventa.collect {
-                product ->
+            val productosRangoventa =
+                casosHistorialReportes.buscarporFechCatego(fecha_inicio,
+                    fecha_final, "venta")
+            productosRangoventa.collect { product ->
                 uiState.update {
                     it.copy(Historial = product, isLoading = false)
                 }
-                   println("Resultados de la busqueda: $product")
-                for (i in product){
+                println("Resultados de la busqueda: $product")
+                for (i in product) {
                     total += i.Precio * i.Cantidad
                 }
             }
@@ -92,19 +101,19 @@ class HistorailViewModel @Inject constructor(
         }
     }
 
-
     fun buscarProductosTicket(
-        fechaIni: String ,
-        fechaFinal: String ,
+        fechaIni: String,
+        fechaFinal: String,
         catego: String = "ticket"
 
     ) {
 
         viewModelScope.launch {
-            val productosRangoticket = casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
+            val productosRangoticket =
+                casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
             var deuda = 0.0
             productosRangoticket.collect { product ->
-                for (i in product){
+                for (i in product) {
                     deuda += i.Precio - i.Abono
                 }
                 uiState.update {
@@ -113,9 +122,6 @@ class HistorailViewModel @Inject constructor(
             }
         }
     }
-
-
-
 
 
     fun MostrarHistoriar() {
@@ -129,11 +135,11 @@ class HistorailViewModel @Inject constructor(
         viewModelScope.launch {
 
             mostrarHistory.collect { product ->
-                for ( i in product){
+                for (i in product) {
                     total += i.Precio.toDouble() * i.Cantidad.toInt()
                 }
                 uiState.update {
-                    it.copy(Historial = product, isLoading = false, total = total)
+                    it.copy(Historial = product, isLoading = false, total = total, ventasOTicket = false)
                 }
 
             }
@@ -145,11 +151,12 @@ class HistorailViewModel @Inject constructor(
 
     fun mostrarTicket() {
         val mostrarTick = casosHistorialReportes.verTodosTickets()
+
         var deuda = 0.0
         viewModelScope.launch {
             mostrarTick.collect { product ->
                 uiState.update {
-                    it.copy(Ticket = product, isLoading = false, total2 = deuda)
+                    it.copy(Ticket = product, isLoading = false, total2 = deuda, ventasOTicket = true)
                 }
                 for (i in product) {
                     deuda += i.Precio - i.Abono

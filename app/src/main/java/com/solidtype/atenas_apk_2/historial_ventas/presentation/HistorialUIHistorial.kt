@@ -9,5 +9,7 @@ data class HistorialUIState(
     val Ticket: List<HistorialTicketEntidad> = listOf(),
     val total: Double = 0.0,
     val total2: Double = 0.0,
-    val uriPath:String=""
+    val uriPath:String="",
+    val ventasOTicket:Boolean=false //SI esta en false porque se esta observando
+    //las ventas, si esta en true, es porque se observan los tickets.
 )

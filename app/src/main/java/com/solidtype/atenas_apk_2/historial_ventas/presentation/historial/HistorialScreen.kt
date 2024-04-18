@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("SimpleDateFormat", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel= hiltViewModel()*/) {
+fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= hiltViewModel()) {
 
     val context = LocalContext.current
 
@@ -210,11 +210,15 @@ fun HistorialScreen(/*navController: NavController, viewModel:HistorailViewModel
                                     "Ventas" -> {
                                         ventasTickerTitulo = "Ventas"
                                         totalVentas = uiState.total
+                                        viewModel.MostrarHistoriar()//Se debe lanzar un evento
+
                                     }
 
                                     "Ticket" -> {
+                                        viewModel.mostrarTicket()// se debe lanzar un evento de consulta
                                         ventasTickerTitulo = "Cuenta x Cobrar"
                                         totalTicket = uiState.total2
+
                                     }
                                 }
                             }

@@ -41,8 +41,8 @@ class HistorialRepositoryImp @Inject constructor(
             "Codigo",
             "Nombre",
             "NombreCliente",
-            "Imei",
             "Descripcion",
+            "Imei",
             "Cantidad",
             "Categoria",
             "Modelo",
@@ -50,7 +50,7 @@ class HistorialRepositoryImp @Inject constructor(
             "Precio",
             "TipoVenta",
             "Total",
-            "FechaFin",
+            "FechaFin"
         )
         val productosVendidos:MutableList<List<String>> = mutableListOf()
         try {
@@ -59,10 +59,9 @@ class HistorialRepositoryImp @Inject constructor(
 
                 temp.add(productos.Codigo.toString())
                 temp.add(productos.Nombre)
-                temp.add(productos.TipoVenta)
                 temp.add(productos.NombreCliente)
-                temp.add(productos.Imei)
                 temp.add(productos.Descripcion)
+                temp.add(productos.Imei)
                 temp.add(productos.Cantidad.toString())
                 temp.add(productos.Categoria)
                 temp.add(productos.Modelo)
@@ -81,6 +80,58 @@ class HistorialRepositoryImp @Inject constructor(
 
         return Uri.EMPTY
     }
+
+    override suspend fun exportarHistorialTickets(listaProductos: List<HistorialTicketEntidad>): Uri {
+        val columnas = listOf(
+            "Codigo",
+            "NombreCliente",
+            "Modelo",
+            "Telefono",
+            "FaltaEquipo",
+            "EstadoEquipo",
+            "Marca",
+            "Email",
+            "Restante",
+            "Abono",
+            "Nota",
+            "Precio",
+            "Servicio",
+            "Categoria",
+            "FechaInicial",
+            "FechaFinal"
+        )
+        val productosVendidos:MutableList<List<String>> = mutableListOf()
+        try {
+            for(productos in listaProductos ){
+                val temp = mutableListOf<String>()
+
+                temp.add(productos.Codigo.toString())
+                temp.add(productos.NombreCliente)
+                temp.add(productos.Modelo)
+                temp.add(productos.Telefono.toString())
+                temp.add(productos.FaltaEquipo)
+                temp.add(productos.EstadoEquipo)
+                temp.add(productos.Marca)
+                temp.add(productos.Email)
+                temp.add(productos.Restante.toString())
+                temp.add(productos.Abono.toString())
+                temp.add(productos.Nota)
+                temp.add(productos.Precio.toString())
+                temp.add(productos.Servicio)
+                temp.add(productos.Categoria)
+                temp.add(productos.FechaInicial.toString())
+                temp.add(productos.FechaFinal.toString())
+                productosVendidos.add(temp)
+            }
+
+            return excel.crearXls("HistorialTickets", columnas,productosVendidos )
+        }catch( _ : Exception){
+            println("Error en la conversion de datos")
+        }
+
+        return Uri.EMPTY
+    }
+
     //Removi la variable fecha final de donde la recive el DAO, ARREGLALO!
     override fun buscarPorFechasCategoriasVentas(
         fecha_inicio: String,
