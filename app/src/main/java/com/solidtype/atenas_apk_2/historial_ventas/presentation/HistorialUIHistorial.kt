@@ -9,5 +9,6 @@ data class HistorialUIState(
     val Ticket: List<HistorialTicketEntidad> = listOf(),
     val total: Double = 0.0,
     val total2: Double = 0.0,
-    val uriPath:String=""
+    val uriPath:String="",
+    val error:String=""
 )

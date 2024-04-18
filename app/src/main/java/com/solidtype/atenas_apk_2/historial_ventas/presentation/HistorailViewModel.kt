@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
@@ -29,9 +30,9 @@ class HistorailViewModel @Inject constructor(
 
     init {
             MostrarHistoriar()
-            mostrarTicket()
-        println("historial" + uiState.value.Historial)
-            println("ticket" + uiState.value.Ticket)
+
+        println("total1 =" + uiState.value.total)
+
         }
 
 
@@ -63,28 +64,36 @@ class HistorailViewModel @Inject constructor(
         fecha_final: String,
         categoria: String
     ) {
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-        viewModelScope.launch {
-            var total = 0.0
-            val productosRangoventa =
-                casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
-            productosRangoventa.collect {
-                product ->
-                uiState.update {
-                    it.copy(Historial = product, isLoading = false)
-                }
-                for (i in product){
-                    total += i.Precio * i.Cantidad
-                }
-            }
+        if (fecha_inicio.isBlank() || fecha_final.isBlank() || categoria.isBlank()){
             uiState.update {
-                it.copy(total = total)
+                it.copy(
+                    error = "Campos vacio"
+                )
             }
-           println( uiState.value.total)
+        }else{
+            uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+            viewModelScope.launch {
+                var total = 0.0
+                val productosRangoventa =
+                    casosHistorialReportes.buscarporFechCatego(fecha_inicio, fecha_final, categoria)
+                productosRangoventa.collect {
+                        product ->
+                    uiState.update {
+                        it.copy(Historial = product, isLoading = false)
+                    }
+                    for (i in product){
+                        total += i.Precio * i.Cantidad
+                    }
+                }
+                uiState.update {
+                    it.copy(total = total)
+                }
+                println( uiState.value.total)
+            }
         }
     }
 
@@ -92,23 +101,30 @@ class HistorailViewModel @Inject constructor(
     fun buscarProductosTicket(
         fechaIni: String ,
         fechaFinal: String ,
-        catego: String
-
+        catego: String,
     ) {
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-        viewModelScope.launch {
-            val productosRangoticket = casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
-            var deuda = 0.0
-            productosRangoticket.collect { product ->
-                for (i in product){
-                    deuda += i.Precio - i.Abono
-                }
-                uiState.update {
-                    it.copy(Ticket = product, isLoading = false, total2 = deuda)
+        if (fechaIni.isBlank() || fechaFinal.isBlank() || catego.isBlank()){
+            uiState.update {
+                it.copy(
+                    error = "Campo Vacios"
+                )
+            }
+        }else{
+            uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+            viewModelScope.launch {
+                val productosRangoticket = casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
+                var deuda = 0.0
+                productosRangoticket.collect { product ->
+                    for (i in product){
+                        deuda += i.Precio - i.Abono
+                    }
+                    uiState.update {
+                        it.copy(Ticket = product, isLoading = false, total2 = deuda)
+                    }
                 }
             }
         }
@@ -130,11 +146,14 @@ class HistorailViewModel @Inject constructor(
             mostrarHistory.collect { product ->
                 for ( i in product){
                     total += i.Precio.toDouble() * i.Cantidad.toInt()
+                    println(i)
                 }
-                uiState.update {
-                    it.copy(Historial = product, isLoading = false, total = total)
-                }
+                println("total" +  total)
 
+
+                uiState.update {
+                  it.copy(Historial = product, isLoading = false, total = total)
+              }
             }
         }
     }
@@ -144,11 +163,11 @@ class HistorailViewModel @Inject constructor(
         var deuda = 0.0
         viewModelScope.launch {
             mostrarTick.collect { product ->
+                for (i in product) {
+                    deuda += i.Restante
+                }
                 uiState.update {
                     it.copy(Ticket = product, isLoading = false, total2 = deuda)
-                }
-                for (i in product) {
-                    deuda += i.Precio - i.Abono
                 }
             }
             uiState.update {
