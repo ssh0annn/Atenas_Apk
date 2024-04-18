@@ -1,12 +1,17 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color.parseColor
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +29,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
@@ -32,11 +39,18 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,6 +70,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.BotonBlanco
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
@@ -65,6 +80,9 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Busc
 import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun showFilePicker(context: Context) {
 
@@ -83,15 +101,20 @@ fun showFilePicker(context: Context) {
 }
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
-fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel= hiltViewModel()) {
+fun InventoryScreen(
+    navController: NavController,
+    viewModel: InventarioViewModel = hiltViewModel()
+) {
     //val logeado:Boolean by InventarioViewModel.logeado.observeAsState(initial = true)
     //val logeado = true;
 
-    //al viewModel: InventarioViewModel = hiltViewModel() //Luego lo quito; solo para pruebas
+    //val viewModel: InventarioViewModel = hiltViewModel() //Luego lo quito; solo para pruebas
 
     val context = LocalContext.current
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var busqueda by rememberSaveable { mutableStateOf("") }
@@ -135,6 +158,13 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
         mutableStateOf("")
     }
 
+    var showSnackbar by rememberSaveable { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+    var snackbarJob: Job by remember { mutableStateOf(Job()) }
+
+    var showSnackbarIni by rememberSaveable { mutableStateOf(false) }
+
     val productos = uiState.products
 
     val categoriaList = listOf(
@@ -143,7 +173,7 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
         "Laptops",
         "Tablets",
         "Otros"
-    )
+    )//Esto debería venir del ViewModel
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -156,15 +186,14 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
             )
         }
     } else {
-        if (uiState.uriPath.isNotBlank()) {
-
-            SnackBar(uiState.uriPath,
-                onShareClick = {
-                    Toast.makeText(context, "Pulsaste compartir", Toast.LENGTH_LONG).show()
-                },
-                onViewClick = {
-                    Toast.makeText(context, "Pulsaste View", Toast.LENGTH_LONG).show()
-                })
+        if (showSnackbarIni) {
+            showSnackbarIni = false
+            snackbarJob.cancel() //Cancela el job anterior si existe
+            showSnackbar = true
+            snackbarJob = coroutineScope.launch {
+                delay(10000L)
+                showSnackbar = false
+            }
         }
         LazyColumn(
             modifier = Modifier
@@ -236,7 +265,7 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                         .fillMaxSize()
                                         .clip(RoundedCornerShape(5.dp))
                                         .background(Color(parseColor("#737A8C")))
-                                ){
+                                ) {
                                     Row(
                                         modifier = Modifier
                                             .padding(10.dp)
@@ -245,11 +274,36 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                             .background(Color(parseColor("#737A8C")))
 
                                     ) {
-                                        Text(text = "Imagen", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center) // Aquí debería ir la imagen del producto
-                                        Text(text = "Código", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                        Text(text = "Producto", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                        Text(text = "Precio", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
-                                        Text(text = "Cantidad", modifier = Modifier.weight(1f), color = Color(0xFFFFFFFF), textAlign = TextAlign.Center)
+                                        Text(
+                                            text = "Imagen",
+                                            modifier = Modifier.weight(1f),
+                                            color = Color(0xFFFFFFFF),
+                                            textAlign = TextAlign.Center
+                                        ) // Aquí debería ir la imagen del producto
+                                        Text(
+                                            text = "Código",
+                                            modifier = Modifier.weight(1f),
+                                            color = Color(0xFFFFFFFF),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = "Producto",
+                                            modifier = Modifier.weight(1f),
+                                            color = Color(0xFFFFFFFF),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = "Precio",
+                                            modifier = Modifier.weight(1f),
+                                            color = Color(0xFFFFFFFF),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = "Cantidad",
+                                            modifier = Modifier.weight(1f),
+                                            color = Color(0xFFFFFFFF),
+                                            textAlign = TextAlign.Center
+                                        )
                                     }
                                     LazyColumn(
                                         modifier = Modifier
@@ -288,18 +342,45 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                                 modifier = Modifier
                                                     .padding(10.dp)
                                                     .clip(RoundedCornerShape(10.dp))
-                                                    .background(Color(0xFFD9D9D9)),
+                                                    .background(Color(0xFFD9D9D9))
+                                                    .clickable {
+                                                        codigo = it.Code_Product.toString()
+                                                        nombre = it.Name_Product
+                                                        categoria = it.Category_Product
+                                                        descripcion = it.Description_Product
+                                                        costo = it.Price_Product.toString()
+                                                        precio = it.Price_Vending_Product.toString()
+                                                        modelo = it.Model_Product
+                                                        marca = it.Tracemark_Product
+                                                        cantidad = it.Count_Product.toString()
+                                                    },
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 Box(
                                                     modifier = Modifier.padding(10.dp)
-                                                ){
+                                                ) {
                                                     Carrito(false)
                                                 }// Aquí debería ir la imagen del producto
-                                                Text(text = it.Code_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                                                Text(text = it.Name_Product, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                                                Text(text = it.Price_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                                                Text(text = it.Count_Product.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                                Text(
+                                                    text = it.Code_Product.toString(),
+                                                    modifier = Modifier.weight(1f),
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    text = it.Name_Product,
+                                                    modifier = Modifier.weight(1f),
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    text = it.Price_Product.toString(),
+                                                    modifier = Modifier.weight(1f),
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    text = it.Count_Product.toString(),
+                                                    modifier = Modifier.weight(1f),
+                                                    textAlign = TextAlign.Center
+                                                )
                                             }
                                         }
                                     }
@@ -340,7 +421,12 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                         }
                                         Column {// Categoría y Nombre
                                             // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
-                                            AutocompleteSelect("Categoría", categoriaList, true) {
+                                            AutocompleteSelect(
+                                                "Categoría",
+                                                categoria,
+                                                categoriaList,
+                                                true
+                                            ) {
                                                 categoria = it
                                             }
                                             InputDetalle(
@@ -422,7 +508,11 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                                             Count_Product = cantidad
                                         )
                                     } catch (e: Exception) {
-                                        Toast.makeText(context, "error: campos invalidos", Toast.LENGTH_LONG)
+                                        Toast.makeText(
+                                            context,
+                                            "error: campos invalidos",
+                                            Toast.LENGTH_LONG
+                                        )
                                             .show()
                                     }/*viewModel.onGuardarDetalles()*/
                                 })
@@ -439,19 +529,17 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
                     } else {//Mostrar foto de perfil
                         //Image(painter = , contentDescription = )
                     }
-
                     Spacer(modifier = Modifier.width(400.dp))
-
                     Row {
                         //Botones para Importar, Exportar y Ver
                         Boton("Importar") {
                             showFilePicker(context)
-
                         }
                         Boton("Exportar") {
                             Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
                                 .show()
                             viewModel.exportarExcel()
+                            showSnackbarIni = true
                         }
                         Boton("Ejemplar") {
                             mostrar = true
@@ -463,67 +551,47 @@ fun InventoryScreen(navController: NavController, viewModel:InventarioViewModel=
         Dialogo(mostrar = mostrar) {
             mostrar = false
         }
-    }
-}
-
-@Composable
-fun SnackBar(
-    message: String,
-    onShareClick: () -> Unit,
-    onViewClick: () -> Unit
-) {
-    Dialog(
-        onDismissRequest = {
-
-        },
-        content = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(280.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0xAACCD2E4),
-                                Color(0xAA727694),
-                            )
-                        ),
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .blur(5.dp)
+        AnimatedVisibility(
+            visible = showSnackbar,
+            enter = slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(500)
             )
+        ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = Color(0x00FFFFFF),
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xAAFFFFFF),
-                        shape = RoundedCornerShape(16.dp)
-                    )
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Snackbar(
+                    action = {
+                        Row {
+                            BotonBlanco("Compartir") { //Aquí lógica para compartir el archivo exportado
+                                if (uiState.uriPath.isNotBlank()) {
+                                    //compartir archivo
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            BotonBlanco("Cerrar") {
+                                snackbarJob.cancel() //Cancela el job anterior si existe
+                                showSnackbar = false
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(8.dp),
+                    containerColor = Color(0xFF343341)
                 ) {
                     Text(
-                        text = message,
-                        color = Color(0xFF343341),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        text = if (uiState.uriPath.isNotBlank()) "El archivo se guardó en: ${uiState.uriPath}" else "Hubo un error al exportar",
+                        color =
+                        if (uiState.uriPath.isNotBlank())
+                            Color(0xFF77FF77)
+                        else
+                            Color(0xFFFF7777),
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Boton("Cerrar") {
-
-                    }
                 }
             }
         }
-    )
+    }
 }
+
+

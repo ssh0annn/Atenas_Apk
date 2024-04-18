@@ -272,7 +272,18 @@ class MediatorHistorialVentas @Inject constructor(
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = queriesFireStore.getAllDataFirebase(colletionName)
+    private suspend fun caputarDatosFirebaseEnSnapshot():QuerySnapshot?{
+        var query:QuerySnapshot? = null
+        try {
+            coroutineScope {
+                async{query= queriesFireStore.getAllDataFirebase(colletionName)  }
 
+            }.await()
+
+        }catch (e:Exception){
+            println("Error en Medidor QuerySnapshot : $e")
+        }
+        return query
+    }
 
 }

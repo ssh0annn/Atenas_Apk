@@ -29,12 +29,15 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun AutocompleteSelect(
     text: String,
+    categoria: String,
     items: List<String>,
     corto: Boolean = false,
     onSelectionChange: (String) -> Unit
 ) {
     var searchText: String by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
+
+    searchText = categoria
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -99,6 +102,7 @@ fun AutocompleteSelect(
                         onSelectionChange(item)
                     })
                 }
+                //Si le dan al botón Atrás, debe cerrarse
             }
         }
     }

@@ -6,6 +6,7 @@ data class CasosHistorialReportes(
     val buscarporFechCatego: BuscarporFechCatego,
     val verTicketsPorFechas: VerTicketsPorFechas,
     val verTodosTickets: VerTodosTickets,
-    val syncronizacion: Sync
+    val syncronizacion: Sync,
+    val exportarTickets:ExportarTicketsHistorial
 
 )

@@ -11,6 +11,7 @@ interface HistorialRepository {
 
     fun mostrarTodasVentas() :Flow <List<HistorialVentaEntidad>>
     suspend fun exportarVentas(listaProductos:List<HistorialVentaEntidad>):Uri
+    suspend fun exportarHistorialTickets(listaProductos:List<HistorialTicketEntidad>):Uri
     fun buscarPorFechasCategoriasVentas(Fecha_inicio:String, fecha_final:String, categoria:String): Flow<List<HistorialVentaEntidad>>
 
     fun mostrarTickets(): Flow<List<HistorialTicketEntidad>>

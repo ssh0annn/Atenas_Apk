@@ -32,7 +32,7 @@ class QuerysFirstore @Inject constructor(
 
     suspend fun getAllDataFirebase(collectionName: String): QuerySnapshot? =
 
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             try {
                 return@withContext fireStore.collection("usuarios")
                     .document(uidUser)
