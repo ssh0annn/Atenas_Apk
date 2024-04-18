@@ -265,7 +265,22 @@ class RemoteTicketsFB @Inject constructor(
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = querYFIreStore.getAllDataFirebase(collectionName)
+    private suspend fun caputarDatosFirebaseEnSnapshot() : QuerySnapshot?{
+        var query:QuerySnapshot?=null
+        try {
+
+            coroutineScope {
+                async { query=querYFIreStore.getAllDataFirebase(collectionName)}
+
+            }.await()
+
+        }catch (e:Exception){
+            println("Error capturando datos: $e")
+
+        }
+        return query
+    }
+
 
 
 }
