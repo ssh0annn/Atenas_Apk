@@ -2,20 +2,15 @@ package com.solidtype.atenas_apk_2.products.data.remote
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
-import com.solidtype.atenas_apk_2.products.data.local.ProductDataBase
+import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 class FireStoreQuerysProducts @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
-
-
-
 
     suspend fun getDatatProFB(uidPro:String): List<ProductEntity>{
         return withContext(Dispatchers.IO){
@@ -33,7 +28,7 @@ class FireStoreQuerysProducts @Inject constructor(
             }
         }
     }
-    suspend fun insertFromFireBUsersToLocal(users: List<ProductEntity>, dbLocal:ProductDataBase) {
+    suspend fun insertFromFireBUsersToLocal(users: List<ProductEntity>, dbLocal: ProductDataBase) {
         try {
             users.forEach {
                 dbLocal.ProductDao.insertProduct(it)

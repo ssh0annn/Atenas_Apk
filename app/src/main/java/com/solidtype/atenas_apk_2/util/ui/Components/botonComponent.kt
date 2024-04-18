@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.util.ui.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height

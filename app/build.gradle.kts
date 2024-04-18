@@ -108,6 +108,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 
+    //Serializacion para json
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
     //Corrutinas
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
