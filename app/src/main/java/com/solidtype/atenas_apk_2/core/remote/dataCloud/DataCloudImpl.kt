@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.core.remote.dataCloud
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -19,9 +20,16 @@ import javax.inject.Inject
  */
 
 class DataCloudImpl @Inject constructor(
-    private val fireStore: FirebaseFirestore
+    private val fireStore: FirebaseFirestore,
+    private val  auth: auth
 ): DataCloud {
-    private val uidUser: String = "VUxGubuZ1AZy7hXBvP8E"
+
+
+
+
+
+    private val uidUser: String = auth.getCurrentUser()!!.uid
+
 
     //se convierte el snashopt a json por medio de la
     /**
@@ -54,7 +62,9 @@ class DataCloudImpl @Inject constructor(
      */
 
     override suspend fun getallData(collection: String): QuerySnapshot? =
+
         withContext(Dispatchers.Default) {
+            println("Este es el uid actual DataCloudImpl $uidUser <----")
             try {
                 return@withContext fireStore.collection("usuarios")
                     .document(uidUser)

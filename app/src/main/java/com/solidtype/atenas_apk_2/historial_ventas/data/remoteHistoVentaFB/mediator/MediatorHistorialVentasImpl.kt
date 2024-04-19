@@ -3,17 +3,18 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.medi
 import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.DataDbHistorial
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
-class MediatorHistorialVentas @Inject constructor(
+class MediatorHistorialVentasImpl @Inject constructor(
     private val queryDataService: DataCloud,
-    private val queryDBlocal: DataDbHistorial
-) :AsyncVentas{
+    private val queryDBlocal: QueryDBHistorialVentas
+) : MediatorHistorialVentas {
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
 

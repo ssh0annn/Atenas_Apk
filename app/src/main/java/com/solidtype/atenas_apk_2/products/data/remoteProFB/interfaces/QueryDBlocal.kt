@@ -1,6 +1,6 @@
-package com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts
+package com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces
 
-interface DataDbProducts {
+interface QueryDBlocal {
     suspend fun getAllProducts(): List<List<String>>
 
     suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>)

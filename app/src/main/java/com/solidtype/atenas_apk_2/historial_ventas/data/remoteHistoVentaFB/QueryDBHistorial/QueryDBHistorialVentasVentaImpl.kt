@@ -2,7 +2,7 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.Quer
 
 import android.util.Log
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.DataDbHistorial
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.util.toIsoDate
 import com.solidtype.atenas_apk_2.util.toLocalDate
@@ -10,9 +10,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
-class QueryDBHistorialVenta @Inject constructor(
+class QueryDBHistorialVentasVentaImpl @Inject constructor(
     private val dao: HistorialVentaDAO
-): DataDbHistorial {
+): QueryDBHistorialVentas {
 
     /**
      * @param: List<String>

@@ -3,18 +3,18 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediado
 import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.DataDbTickets
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticket
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.QueryDBticket
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.RemoteTicketsFB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RemoteTicketsFB @Inject constructor(
-    private val queryDBticket: DataDbTickets,
+class RemoteTicketsFBFBImpl @Inject constructor(
+    private val queryDBticket: QueryDBticket,
     private val queryDataService: DataCloud
-): AsyncTickets {
+): RemoteTicketsFB {
 
     private val codigoTickets = "Codigo"
     private val collectionName = "Tickets"

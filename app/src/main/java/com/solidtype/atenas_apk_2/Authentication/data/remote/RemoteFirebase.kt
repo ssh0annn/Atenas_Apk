@@ -38,7 +38,7 @@ class RemoteFirebase @Inject constructor(
                 }
 
             } // -> Boolean
-    override fun getCurrentUser()= auth.currentUser // -> FirebaseUser?
+    override fun getCurrentUser()= auth.currentUser// -> FirebaseUser?
     override fun signOut() = auth.signOut()  // -> Unit
 
 

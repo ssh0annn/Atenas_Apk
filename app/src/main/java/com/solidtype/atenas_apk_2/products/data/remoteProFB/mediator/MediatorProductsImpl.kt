@@ -2,7 +2,9 @@ package com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator
 
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.DataDbProducts
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.MediatorProducts
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -17,11 +19,11 @@ import javax.inject.Inject
  * el feature Productos en espesifico. Solo necesitas llamar el metodo async. y listo.
  *
  */
-class MediatorProducts @Inject constructor(
-    private val queryDblocal: DataDbProducts,
+class MediatorProductsImpl @Inject constructor(
+    private val queryDblocal: QueryDBlocal,
     private val queryDataService: DataCloud
 
-):AsyncPro {
+): MediatorProducts {
     private val codigoProductos = "code_Product"
     private val ColletionName = "productos"
 
@@ -96,11 +98,11 @@ class MediatorProducts @Inject constructor(
             confirmar = true
 
             println("Listos para subir $listosParaSubir")
-            try{
+            try {
                 queryDataService.insertAllToCloud(
                     "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
                 )
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 return false
             }
         }
@@ -266,7 +268,15 @@ class MediatorProducts @Inject constructor(
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = queryDataService.getallData(ColletionName)
+    private suspend fun caputarDatosFirebaseEnSnapshot(): QuerySnapshot? {
+        return try {
+            coroutineScope {
+                async { queryDataService.getallData(ColletionName) }
+            }.await()
 
+        } catch (e: Exception) {
+            null
+        }
+    }
 
 }
