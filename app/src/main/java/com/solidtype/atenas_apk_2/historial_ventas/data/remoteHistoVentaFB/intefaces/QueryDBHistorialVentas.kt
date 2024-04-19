@@ -1,6 +1,6 @@
-package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial
+package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces
 
-interface DataDbHistorial {
+interface QueryDBHistorialVentas {
     suspend fun getallDataHistorial(): List<List<String>>
 
     suspend fun insertAllHistoral(dataToInsert: MutableList<List<String>>)

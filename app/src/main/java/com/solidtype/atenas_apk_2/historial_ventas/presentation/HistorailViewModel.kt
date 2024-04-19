@@ -3,18 +3,13 @@ package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentasImpl
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
     private val casosHistorialReportes: CasosHistorialReportes,
-    private val classesAsyncs : MediatorHistorialVentas
+    private val classesAsyncs : MediatorHistorialVentasImpl
 
 ) : ViewModel() {
 

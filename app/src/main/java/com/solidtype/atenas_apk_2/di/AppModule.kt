@@ -40,23 +40,23 @@ import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.DataDbHistorial
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVenta
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.AsyncVentas
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.DataDbTickets
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticket
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.AsyncTickets
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVentasVentaImpl
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentasImpl
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.QueryDBticket
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticketImpl
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.RemoteTicketsFB
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFBFBImpl
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.ExportarTicketsHistorial
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.Sync
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.DataDbProducts
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.QueryDBlocal
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.AsyncPro
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.MediatorProducts
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.MediatorProducts
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.MediatorProductsImpl
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
@@ -166,52 +166,36 @@ object AppModule {
     //proveeyendo el DataCloud correspondiente
     @Provides
     @Singleton
-    fun providesDataCloud(firestore: FirebaseFirestore): DataCloud {
-        return DataCloudImpl(firestore)
-    }
-    //proveyendo Los data Intafaces
+    fun providesDataImpl(DataImpl: DataCloudImpl): DataCloud = DataImpl
 
     @Provides
     @Singleton
-    fun providesDataDbHistorial(dao: HistorialVentaDAO):DataDbHistorial{
-        return QueryDBHistorialVenta(dao)
-    }
+    fun providesDataDbHistorial(Query: QueryDBHistorialVentasVentaImpl): QueryDBHistorialVentas = Query
+
+     @Provides
+    @Singleton
+    fun providesDataDbTicekts(QueryDBticketImpl:QueryDBticketImpl): QueryDBticket = QueryDBticketImpl
 
     @Provides
     @Singleton
-    fun providesDataDbTicekts(dao:HistorialTicketDAO):DataDbTickets{
-        return QueryDBticket(dao)
-    }
+    fun providesDataDBTickets(QueryDBlocalImpl:QueryDBlocalImpl): QueryDBlocal = QueryDBlocalImpl
 
     @Provides
     @Singleton
-    fun providesDataDBTickets(dao:ProductDao): DataDbProducts{
-        return QueryDBlocal(dao)
-    }
-    //proveyendo el auth interface
-
-    @Provides
-    @Singleton
-    fun providesAuthInterface(auth:FirebaseAuth): auth{
-        return RemoteFirebase(auth)
-    }
+    fun providesAuthInterface(RemoteFirebase:RemoteFirebase): auth = RemoteFirebase
     //proveyendo el asyncPro interface
+
     @Provides
     @Singleton
-    fun providesAsyncPro(dbPro:DataDbProducts,dataCloud: DataCloud): AsyncPro{
-        return MediatorProducts(dbPro,dataCloud)
-    }
-    //proveyendo el asyncVentas interface
+    fun providesAsyncPro(MediatorProductsImpl:MediatorProductsImpl): MediatorProducts = MediatorProductsImpl
+
     @Provides
     @Singleton
-    fun providesAsyncVentas(db:DataDbHistorial,dataCloud: DataCloud): AsyncVentas{
-        return MediatorHistorialVentas(dataCloud,db)
-    }
+    fun providesAsyncVentas(MediatorHistorialVentasImpl: MediatorHistorialVentasImpl): MediatorHistorialVentas = MediatorHistorialVentasImpl
+
 
     //proveyendo el asyncTicejts interface
     @Provides
     @Singleton
-    fun providesAsyncTickets(db:DataDbTickets,dataCloud: DataCloud): AsyncTickets{
-        return RemoteTicketsFB(db,dataCloud)
-    }
+    fun providesAsyncTickets(RemoteTicketsFBImpl: RemoteTicketsFBFBImpl): RemoteTicketsFB = RemoteTicketsFBImpl
 }

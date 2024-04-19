@@ -1,8 +1,6 @@
-package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket
+package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces
 
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
-
-interface DataDbTickets {
+interface QueryDBticket {
     suspend fun getAllTicekts(): List<List<String>>
 
     suspend fun insertAllTickets(dataToInsert: MutableList<List<String>>)

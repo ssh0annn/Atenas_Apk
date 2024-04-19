@@ -3,15 +3,12 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones
 import android.net.Uri
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.AsyncVentas
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.AsyncTickets
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.util.XlsManeger
-import com.solidtype.atenas_apk_2.util.toIsoDate
 import com.solidtype.atenas_apk_2.util.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,8 +19,8 @@ class HistorialRepositoryImp @Inject constructor(
     private val dao: HistorialVentaDAO,
     private val excel: XlsManeger,
     private val daoTickets:HistorialTicketDAO,
-    private val sync1: AsyncVentas,
-    private val sync2: AsyncTickets
+    private val sync1: MediatorHistorialVentas,
+    private val sync2: RemoteTicketsFB
 ) : HistorialRepository {
 
     override fun mostrarTodasVentas(): Flow<List<HistorialVentaEntidad>> {

@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProduc
 
 
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.QueryDBlocal
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -12,9 +13,9 @@ import javax.inject.Inject
  * @funcionamiento: Los parametros del constructor los recibe de daggerHilt.
  * Esta clase esta atada a la data class ProductEntity y a la tabla Productos de RoomDatabase.
  */
-class QueryDBlocal @Inject constructor(
+class QueryDBlocalImpl @Inject constructor(
     private val dao: ProductDao
-):DataDbProducts {
+): QueryDBlocal {
     /**
      * @param: List<String>
      * @return: Data Object
