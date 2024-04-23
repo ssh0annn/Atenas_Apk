@@ -1,20 +1,16 @@
 package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket
 
-import android.util.Log
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.QueryDBticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import com.solidtype.atenas_apk_2.util.toIsoDate
 import com.solidtype.atenas_apk_2.util.toLocalDate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
-class QueryDBticket @Inject constructor(
+class QueryDBticketImpl @Inject constructor(
     private val dao:HistorialTicketDAO
-) {
+): QueryDBticket {
         /**
          * @param: List<String>
          * @return: Data Object
@@ -96,7 +92,7 @@ class QueryDBticket @Inject constructor(
      * Favor ver el objeto ProductEntity para mas informacion.
      *
      */
-    suspend fun getAllProducts(): List<List<String>> {
+    override suspend fun getAllTicekts(): List<List<String>> {
         var mutableListData: List<List<String>> = emptyList()
         var listaDeEntity = emptyList<HistorialTicketEntidad>()
         coroutineScope {
@@ -116,7 +112,7 @@ class QueryDBticket @Inject constructor(
      * @funcionamiento: Inserta productos en base de datos local si la lista es compatible con el formato para ProductEntity,
      * Esta funcion integra un hilo interno. Favor llamar desde una funcion suspendida.
      */
-    suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>) {
+    override suspend fun insertAllTickets(dataToInsert: MutableList<List<String>>) {
         val lista: MutableList<HistorialTicketEntidad> = mutableListOf()
         dataToInsert.forEach {
             try {
@@ -138,7 +134,7 @@ class QueryDBticket @Inject constructor(
      * @funcion: recibe una lista de listas mutables, para luego comparar con las base de datos locales de los posibles datos diferentes
      * tomando la base de datos local como referencia de "Single true of trust". Luego debuelve en una lista los datos no iguales.
      */
-    suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
+    override suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
         val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
         val local = datosLocales()
         listIntrusos.forEach {
@@ -160,7 +156,7 @@ class QueryDBticket @Inject constructor(
      * tomando la base la lista entrante como referencia. Luego debuelve en una lista los datos no iguales, los cuales no se encuentran
      * en base de dato local.
      */
-    suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
+    override suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
         val listaFirebaseMediatorproducts: MutableList<HistorialTicketEntidad> = mutableListOf()
         val local = datosLocales()
         listIntrusos.forEach {

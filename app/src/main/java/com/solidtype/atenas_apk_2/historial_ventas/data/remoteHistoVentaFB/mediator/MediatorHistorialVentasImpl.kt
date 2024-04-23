@@ -2,22 +2,23 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.medi
 
 import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorialVenta
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.QuerysFirstore
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
-class MediatorHistorialVentas @Inject constructor(
-    private val queriesFireStore: QuerysFirstore,
-    private val queryDBlocal: QueryDBHistorialVenta
-) {
+class MediatorHistorialVentasImpl @Inject constructor(
+    private val queryDataService: DataCloud,
+    private val queryDBlocal: QueryDBHistorialVentas
+) : MediatorHistorialVentas {
     private val codigoHistoriales = "Codigo"
     private val colletionName = "Historial_Ventas"
 
-    suspend operator fun invoke()  {
+    override suspend operator fun invoke()  {
         Log.e("Entre","Entre a la funcion Historial asyc" +
                 " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
@@ -92,11 +93,12 @@ class MediatorHistorialVentas @Inject constructor(
     ): Boolean {
         Log.e("TEstSnapToList","Funcion LogicaInsertarFireStore")
         Log.e("TEstSnapToList","Datos en la funcion Lista $$listaDeFireStore")
+        Log.e("TEstSnapToList","Datos en la funcion Lista local en la funcion LogicaInsertarFireStore(): $$baseLocal")
 
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
-                queriesFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     colletionName, convierteAObjetoMap(baseLocal), codigoHistoriales
                 )
             } catch (e: Exception) {
@@ -129,7 +131,7 @@ class MediatorHistorialVentas @Inject constructor(
 
             println("Listos para subir $listosParaSubir")
             try{
-                queriesFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     colletionName, convierteAObjetoMap(listosParaSubir), codigoHistoriales
                 )
                 confirmar = true
@@ -156,7 +158,7 @@ class MediatorHistorialVentas @Inject constructor(
             coroutineScope {
                 withContext(Dispatchers.Default) {
                     val result = async {
-                        queriesFireStore.deleteDataFirebase(
+                        queryDataService.deleteDataInCloud(
                             colletionName, convierteAObjetoMap(sacarIntruso), codigoHistoriales
                         )
                     }
@@ -250,7 +252,7 @@ class MediatorHistorialVentas @Inject constructor(
 
         val intrusos = queryDBlocal.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
-            queriesFireStore.deleteDataFirebase(
+            queryDataService.deleteDataInCloud(
                 colletionName , convierteAObjetoMap(intrusos), codigoHistoriales
             )
             println("estos son los intrusos --> $intrusos <--")
@@ -262,14 +264,25 @@ class MediatorHistorialVentas @Inject constructor(
      * @return:  List<List<String>>
      * @funcion: captura los datos de la base local y los debuelve en formato de lista de listas.
      */
-    private suspend fun capturarDatosDB() = queryDBlocal.getAllHistorial()
+    private suspend fun capturarDatosDB() = queryDBlocal.getallDataHistorial()
 
     /**
      * @return  QuerySnapshot?
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = queriesFireStore.getAllDataFirebase(colletionName)
+    private suspend fun caputarDatosFirebaseEnSnapshot():QuerySnapshot?{
+        var query:QuerySnapshot? = null
+        try {
+            coroutineScope {
+                async{query= queryDataService.getallData(colletionName)  }
 
+            }.await()
+
+        }catch (e:Exception){
+            println("Error en Medidor QuerySnapshot : $e")
+        }
+        return query
+    }
 
 }

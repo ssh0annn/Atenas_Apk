@@ -1,18 +1,16 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
+
+import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentas
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediadorTicket.RemoteTicketsFB
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentasImpl
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
+//import com.solidtype.atenas_apk_2.util.toMapa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes
+    private val casosHistorialReportes: CasosHistorialReportes,
+    private val classesAsyncs : MediatorHistorialVentasImpl
 
 ) : ViewModel() {
 
@@ -31,8 +30,11 @@ class HistorailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+
             withContext(Dispatchers.IO) {
                 casosHistorialReportes.syncronizacion()
+
+
             }
         }
 
@@ -74,6 +76,7 @@ class HistorailViewModel @Inject constructor(
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun buscarProductosVenta(
         fecha_inicio: String,
         fecha_final: String,
@@ -86,6 +89,8 @@ class HistorailViewModel @Inject constructor(
                 casosHistorialReportes.buscarporFechCatego(fecha_inicio,
                     fecha_final, "venta")
             productosRangoventa.collect { product ->
+
+
                 uiState.update {
                     it.copy(Historial = product, isLoading = false)
                 }
@@ -113,7 +118,9 @@ class HistorailViewModel @Inject constructor(
                 casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
             var deuda = 0.0
             productosRangoticket.collect { product ->
+
                 for (i in product) {
+
                     deuda += i.Precio - i.Abono
                 }
                 uiState.update {

@@ -4,7 +4,9 @@ import android.util.Log
 
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 import kotlinx.coroutines.tasks.await
 
@@ -16,8 +18,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class FirestoreConnect @Inject constructor(private val db:FirebaseFirestore,
-                                           private val auth: FirebaseAuth){
+class FirestoreConnect @Inject constructor(
+    private val db:FirebaseFirestore,
+    private val auth: FirebaseAuth
+){
 
 
 
