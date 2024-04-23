@@ -1,9 +1,9 @@
-package com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator
+package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator
 
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.QueryDBlocal
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.MediatorProducts
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

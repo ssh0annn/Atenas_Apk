@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces
+package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces
 
 interface QueryDBlocal {
     suspend fun getAllProducts(): List<List<String>>

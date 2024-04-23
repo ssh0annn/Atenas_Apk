@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentasImpl
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
+//import com.solidtype.atenas_apk_2.util.toMapa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,8 @@ class HistorailViewModel @Inject constructor(
 
             withContext(Dispatchers.IO) {
                 casosHistorialReportes.syncronizacion()
+
+
             }
         }
 
@@ -86,6 +89,8 @@ class HistorailViewModel @Inject constructor(
                 casosHistorialReportes.buscarporFechCatego(fecha_inicio,
                     fecha_final, "venta")
             productosRangoventa.collect { product ->
+
+
                 uiState.update {
                     it.copy(Historial = product, isLoading = false)
                 }
@@ -113,7 +118,9 @@ class HistorailViewModel @Inject constructor(
                 casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal, catego)
             var deuda = 0.0
             productosRangoticket.collect { product ->
+
                 for (i in product) {
+
                     deuda += i.Precio - i.Abono
                 }
                 uiState.update {

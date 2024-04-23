@@ -40,6 +40,12 @@ import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
+import com.solidtype.atenas_apk_2.facturacion.data.FacturaRepositoryImpl
+import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.BuscarFacturas
+import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
+import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
+import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
+import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVentasVentaImpl
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
@@ -53,10 +59,10 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.Sync
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.QueryDBlocal
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.interfaces.MediatorProducts
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.mediator.MediatorProductsImpl
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.MediatorProductsImpl
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
@@ -178,7 +184,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesDataDBTickets(QueryDBlocalImpl:QueryDBlocalImpl): QueryDBlocal = QueryDBlocalImpl
+    fun providesDataDBTickets(QueryDBlocalImpl: QueryDBlocalImpl): QueryDBlocal = QueryDBlocalImpl
 
     @Provides
     @Singleton
@@ -187,7 +193,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesAsyncPro(MediatorProductsImpl:MediatorProductsImpl): MediatorProducts = MediatorProductsImpl
+    fun providesAsyncPro(MediatorProductsImpl: MediatorProductsImpl): MediatorProducts = MediatorProductsImpl
 
     @Provides
     @Singleton
@@ -198,4 +204,22 @@ object AppModule {
     @Provides
     @Singleton
     fun providesAsyncTickets(RemoteTicketsFBImpl: RemoteTicketsFBFBImpl): RemoteTicketsFB = RemoteTicketsFBImpl
+
+
 }
+//Esta injection esta a espera del viewmodel. Cuando el viewmodel este completo ,hay que quitar el comentario
+
+/*
+@Provides
+@Singleton
+fun provideFacturaRepo(impl: FacturaRepositoryImpl): FacturaRepository = impl
+
+@Provides
+@Singleton
+fun provideFacturacionCasosUso(repo: FacturaRepository) = FacturacionCasosdeUso(
+    buscarFacturas= BuscarFacturas(repo),
+    detallesFacturas = DetallesFacturas(repo),
+    mostrarTodo = MostrarTodo(repo)
+)
+
+ */
