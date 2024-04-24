@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets
+package com.solidtype.atenas_apk_2.util.ui.Components
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
