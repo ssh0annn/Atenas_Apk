@@ -70,7 +70,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
 
     val context = LocalContext.current
 
-    val viewModel: HistorailViewModel = hiltViewModel()
+    //val viewModel: HistorailViewModel = hiltViewModel()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
