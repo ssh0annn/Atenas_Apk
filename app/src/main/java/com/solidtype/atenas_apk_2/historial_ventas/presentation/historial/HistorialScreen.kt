@@ -51,6 +51,9 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewMod
 import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
+import com.solidtype.atenas_apk_2.util.formatearFecha
+import com.solidtype.atenas_apk_2.util.formatoDDBB
+import com.solidtype.atenas_apk_2.util.formatoParaUser
 import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
@@ -177,13 +180,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                             ) {
                                 selectedCategoria = it
                                 viewModel.buscarProductosVenta(
-                                    formatoDDBB(fechaIni),
-                                    formatoDDBB(fechaFin),
+                                    fechaIni.formatoDDBB(),
+                                    fechaFin.formatoDDBB(),
                                     selectedCategoria
                                 )
                                 viewModel.buscarProductosTicket(
-                                    formatoDDBB(fechaIni),
-                                    formatoDDBB(fechaFin),
+                                    fechaIni.formatoDDBB(),
+                                    fechaFin.formatoDDBB(),
                                     selectedCategoria
                                 )
                                 Toast.makeText(
@@ -322,7 +325,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                         )
 
                                         Text(
-                                            formatoParaUser(listVentas[index].FechaIni.toString()),
+                                            listVentas[index].FechaIni.toString().formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -423,13 +426,13 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            formatoParaUser(listTicket[index].FechaInicial.toString()),
+                                            listTicket[index].FechaInicial.toString().formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            formatoParaUser(listTicket[index].FechaFinal.toString()),
+                                            listTicket[index].FechaFinal.toString().formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -500,11 +503,11 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 },
                 onClick = {
                     showDatePicker1 = false
-                    fechaIni = formatearFecha(datePickerState1.selectedDateMillis)
+                    fechaIni = datePickerState1.selectedDateMillis.formatearFecha()
 
                     viewModel.buscarProductosTicket(
-                        formatoDDBB(fechaIni),
-                        formatoDDBB(fechaFin),
+                        fechaIni.formatoDDBB(),
+                        fechaFin.formatoDDBB(),
                         selectedCategoria
                     )
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
@@ -519,15 +522,15 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 },
                 onClick = {
                     showDatePicker2 = false
-                    fechaFin = formatearFecha(datePickerState2.selectedDateMillis)
+                    fechaFin = datePickerState2.selectedDateMillis.formatearFecha()
                      viewModel.buscarProductosVenta(
-                        formatoDDBB(fechaIni),
-                        formatoDDBB(fechaFin),
+                        fechaIni.formatoDDBB(),
+                        fechaFin.formatoDDBB(),
                         selectedCategoria
                     )
                     viewModel.buscarProductosTicket(
-                        formatoDDBB(fechaIni),
-                        formatoDDBB(fechaFin),
+                        fechaIni.formatoDDBB(),
+                        fechaFin.formatoDDBB(),
                         selectedCategoria
                     )
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
@@ -577,22 +580,4 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
             }
         }
     }
-}
-
-@SuppressLint("SimpleDateFormat")
-fun formatearFecha(fecha: Long?): String {
-    val sdf = SimpleDateFormat("dd/MM/yyyy")
-    return sdf.format(Date(fecha!!))
-}
-
-fun formatoDDBB(fecha: String): String {
-    val array = fecha.split("/")
-    if(array.size != 3) return ""
-    return "${array[2]}-${array[1]}-${array[0]}"
-}
-
-fun formatoParaUser(fecha: String): String {
-    val array = fecha.split("-")
-    if(array.size != 3) return ""
-    return "${array[2]}/${array[1]}/${array[0]}"
 }
