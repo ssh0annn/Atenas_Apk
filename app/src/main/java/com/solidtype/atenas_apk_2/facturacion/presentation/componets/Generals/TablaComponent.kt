@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +38,7 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.sumaTotal
 import com.solidtype.atenas_apk_2.util.formatoParaUser
 
 @Composable
-fun Tabla(facturas: List<Factura> = listOf()){
+fun Tabla(facturas: List<Factura> = listOf()) {
 
     var desplegar by rememberSaveable { mutableStateOf(List(facturas.size) { false }) }
     val size = LocalConfiguration.current.screenWidthDp.dp - 780.dp
@@ -43,7 +48,7 @@ fun Tabla(facturas: List<Factura> = listOf()){
             .fillMaxWidth()
             .height(size)
             .background(Color(0xFF343341), shape = RoundedCornerShape(20.dp))
-    ) { // Datos o Tabla
+    ) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
@@ -85,6 +90,10 @@ fun Tabla(facturas: List<Factura> = listOf()){
                     modifier = Modifier.weight(1f),
                     color = Color(0xFFFFFFFF),
                     textAlign = TextAlign.Center
+                )
+                Text(
+                    "",
+                    modifier = Modifier.weight(0.2f)
                 )
             }
             LazyColumn(
@@ -141,6 +150,15 @@ fun Tabla(facturas: List<Factura> = listOf()){
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
+                            Icon(
+                                imageVector = if (desplegar[i]) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
+                                contentDescription = "",
+                                tint = Color(0xFF343341),
+                                modifier = Modifier
+                                    .padding(end = 10.dp)
+                                    .size(20.dp)
+                                    .weight(0.2f)
+                            )
                         }
                         AnimatedVisibility(desplegar[i]) {
                             Box(
@@ -183,7 +201,7 @@ fun Tabla(facturas: List<Factura> = listOf()){
                                         )
                                     }
                                     Divider()
-                                    factura.productos.forEach {Producto -> //Cuerpo
+                                    factura.productos.forEach { Producto -> //Cuerpo
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
@@ -216,7 +234,7 @@ fun Tabla(facturas: List<Factura> = listOf()){
                                         }
                                     }
                                     Divider()
-                                    Row{ // Pie
+                                    Row { // Pie
                                         Text(
                                             text = "Total",
                                             modifier = Modifier.weight(1f),
