@@ -27,7 +27,8 @@ fun String.toIsoDate(formato: String="yyyy-MM-dd"): String {
 @SuppressLint("SimpleDateFormat")
 fun Long?.formatearFecha(): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy")
-    return sdf.format(Date(this!!))
+    if(this == null) return ""
+    return sdf.format(Date(this))
 }
 
 fun String.formatoDDBB(): String {

@@ -32,16 +32,15 @@ fun DatePickerDialogo(
                     state = rememberScrollState(), orientation = Orientation.Vertical
                 )
         ) {
-            DatePickerDialog(modifier = Modifier
-                .fillMaxWidth()
-                .height(500.dp),
-                onDismissRequest = onDismissRequest, confirmButton = {
-                    Button(
-                        onClick = onClick
-                    ) {
-                        Text("Aceptar")
-                    }
-                }) {
+            MyDatePickerDialog(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(500.dp),
+                onDismissRequest = onDismissRequest,
+                confirmButton = {
+                    Boton("Aceptar", onClick = onClick)
+                }
+            ) {
                 DatePicker(state = datePickerState)
             }
         }

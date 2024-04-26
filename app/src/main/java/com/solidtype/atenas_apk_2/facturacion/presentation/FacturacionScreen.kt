@@ -124,6 +124,7 @@ fun FacturacionScreen() {
                             ).show()
                         } else {
                             /*viewModel.buscarFacturas(
+                                noFactura,
                                 formatoDDBB(fecha),
                                 selectedCategoria
                             )*/

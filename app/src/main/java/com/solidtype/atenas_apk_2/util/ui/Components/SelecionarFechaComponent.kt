@@ -29,7 +29,7 @@ fun SelecionarFecha(
         BotonBlanco(text = text, onClick = onClick, modifier = modifierHijo, size = size)
         data?.let {
             Text(
-                SimpleDateFormat("dd/MM/yyyy").format(Date(it)),
+                if (it == 0L) "" else SimpleDateFormat("dd/MM/yyyy").format(Date(it)),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
