@@ -50,7 +50,7 @@ fun FacturacionScreen() {
     val context = LocalContext.current
 
     val datePickerState: DatePickerState = rememberDatePickerState()
-    var showDatePicker by rememberSaveable { mutableStateOf(true) }
+    var showDatePicker by rememberSaveable { mutableStateOf(false) }
 
     var fecha by rememberSaveable { mutableStateOf("") }
     var noFactura by rememberSaveable { mutableStateOf("") }

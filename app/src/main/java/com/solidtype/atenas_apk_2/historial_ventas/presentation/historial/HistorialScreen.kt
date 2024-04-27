@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,17 +47,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
-import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
-import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
 import com.solidtype.atenas_apk_2.util.formatearFecha
 import com.solidtype.atenas_apk_2.util.formatoDDBB
 import com.solidtype.atenas_apk_2.util.formatoParaUser
-import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
+import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
+import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -247,7 +244,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 //Aquí el menú de ventas o ticket
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
@@ -256,59 +253,52 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                     when (selected) {
                         "Ventas" -> { //selected == "Ventas"
                             //Aquí va el menú de ventas
+                            Row {
+                                Text(
+                                    "Código",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Producto",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Fecha_Inicio",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Fecha_Final",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Precio",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Cantidad",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Cliente",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider()
                             LazyColumn {
-                                item {
-                                    Row(
-                                        modifier = Modifier
-                                            .clickable {
-                                                // Aquí lógica para ordenar por ID
-                                            }
-                                    ) {
-                                        Text(
-                                            "Código",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Producto",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Fecha_Inicio",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Fecha_Final",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Precio",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Cantidad",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Cliente",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                    Divider()
-                                }
                                 items(listVentas.size) { index ->
                                     Row {
                                         Text(
@@ -357,60 +347,58 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
 
                         "Ticket" -> {
                             //Aquí va el menú de ticket
+                            Row {
+                                Text(
+                                    "Código",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Estado",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Fecha_Ini",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Fecha_Fin",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Precio",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Restante",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Abono",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Cliente",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider()
                             LazyColumn {
-                                item {
-                                    Row {
-                                        Text(
-                                            "Código",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Estado",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Fecha_Ini",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Fecha_Fin",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Precio",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Restante",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Abono",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            "Cliente",
-                                            fontSize = 20.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                    Divider()
-                                }
                                 items(listTicket.size) { index ->
                                     Row {
                                         Text(
@@ -523,7 +511,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                 onClick = {
                     showDatePicker2 = false
                     fechaFin = datePickerState2.selectedDateMillis.formatearFecha()
-                     viewModel.buscarProductosVenta(
+                    viewModel.buscarProductosVenta(
                         fechaIni.formatoDDBB(),
                         fechaFin.formatoDDBB(),
                         selectedCategoria
@@ -535,7 +523,6 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                     )
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
                         .show()
-
                 }
             )
         }
