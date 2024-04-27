@@ -31,15 +31,10 @@ class HistorailViewModel @Inject constructor(
 
 
     init {
-
         viewModelScope.launch {
-
             withContext(Dispatchers.IO) {
                 casosHistorialReportes.syncronizacion()
-
-
             }
-
         }
 
         MostrarHistoriar()
@@ -65,8 +60,6 @@ class HistorailViewModel @Inject constructor(
 
                 }
 
-
-
                 uiState.update { it.copy(isLoading = false) }
                 println("Salgo del withcontext la funcion que exporta en viewmodel")
 
@@ -86,23 +79,6 @@ class HistorailViewModel @Inject constructor(
         fecha_final: String,
         categoria: String
     ) {
-        viewModelScope.launch {
-            var total = 0.0
-            val productosRangoventa =
-                casosHistorialReportes.buscarporFechCatego(fecha_inicio,
-                    fecha_final, "venta")
-            productosRangoventa.collect { product ->
-
-
-                uiState.update {
-                    it.copy(Historial = product, isLoading = false)
-                }
-                println("Resultados de la busqueda: $product")
-                for (i in product) {
-                    total += i.Precio * i.Cantidad
-                }
-            }
-
         if (fecha_inicio.isBlank() || fecha_final.isBlank() || categoria.isBlank()){
 
             uiState.update {
@@ -146,7 +122,7 @@ class HistorailViewModel @Inject constructor(
         if (fechaIni.isBlank() || fechaFinal.isBlank() || catego.isBlank()){
             uiState.update {
                 it.copy(
-                    error = "Campo Vacios"
+                    error = "Campos Vacios"
                 )
             }
         }else{
@@ -189,12 +165,7 @@ class HistorailViewModel @Inject constructor(
                 uiState.update {
                     it.copy(Historial = product, isLoading = false, total = total, ventasOTicket = false)
                 }
-
                 println("total" +  total)
-
-                uiState.update {
-                  it.copy(Historial = product, isLoading = false, total = total)
-              }
             }
             casosHistorialReportes.syncronizacion()
 
@@ -221,7 +192,7 @@ class HistorailViewModel @Inject constructor(
         }
     }
 }
-}
+
 
 
 
