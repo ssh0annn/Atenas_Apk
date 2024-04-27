@@ -21,6 +21,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
 
 @ExperimentalMultiplatform
 @Composable
@@ -49,25 +51,25 @@ fun InputBlanco(
             ),
             modifier = Modifier
                 .width(200.dp)
-                .background(Color(0xFFFFFFFF), RoundedCornerShape(15.dp))
+                .background(Blanco, RoundedCornerShape(15.dp))
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp))
                 .border(
                     width = 2.dp,
-                    color = Color(0xFF343341),
+                    color = AzulGris,
                     shape = RoundedCornerShape(15.dp)
                 ),
             label = {
                 Text(
                     text = label,
-                    color = Color(0xFF343341),
+                    color = AzulGris,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
             },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White,
+                focusedBorderColor = Blanco,
+                unfocusedBorderColor = Blanco,
             )
         )
     }

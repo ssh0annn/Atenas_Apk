@@ -28,13 +28,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.facturacion.presentation.Factura
 import com.solidtype.atenas_apk_2.facturacion.presentation.sumaTotal
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
+import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoParaUser
 
 @Composable
@@ -47,13 +50,13 @@ fun Tabla(facturas: List<Factura> = listOf()) {
         modifier = Modifier
             .fillMaxWidth()
             .height(size)
-            .background(Color(0xFF343341), shape = RoundedCornerShape(20.dp))
+            .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxSize()
-                .background(Color(0xFF737A8C), shape = RoundedCornerShape(20.dp))
+                .background(GrisOscuro, shape = RoundedCornerShape(20.dp))
         ) {
             Row(
                 modifier = Modifier
@@ -64,31 +67,31 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                 Text(
                     text = "No. Factura",
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFFFFFFFF),
+                    color = Blanco,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Fecha",
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFFFFFFFF),
+                    color = Blanco,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Total",
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFFFFFFFF),
+                    color = Blanco,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Tipo de Pago",
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFFFFFFFF),
+                    color = Blanco,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "ID",
                     modifier = Modifier.weight(1f),
-                    color = Color(0xFFFFFFFF),
+                    color = Blanco,
                     textAlign = TextAlign.Center
                 )
                 Text(
@@ -100,7 +103,7 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
                     .fillMaxSize()
-                    .background(Color(0xFF737A8C))
+                    .background(GrisOscuro)
             ) { //buscar componente para agregar filas de cards
                 itemsIndexed(facturas) { i, factura ->
                     Column {
@@ -115,7 +118,7 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                                 .fillMaxWidth()
                                 .height(40.dp)
                                 .clip(RoundedCornerShape(50.dp))
-                                .background(Color(0xFFFFFFFF))
+                                .background(Blanco)
                                 .clickable {
                                     desplegar = desplegar
                                         .toMutableList()
@@ -153,7 +156,7 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                             Icon(
                                 imageVector = if (desplegar[i]) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
                                 contentDescription = "",
-                                tint = Color(0xFF343341),
+                                tint = AzulGris,
                                 modifier = Modifier
                                     .padding(end = 10.dp)
                                     .size(20.dp)
@@ -165,7 +168,7 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
-                                    .background(Color(0xFF8285A5))
+                                    .background(GrisAzulado)
                             ) {
                                 Column {
                                     Row {//Cabecera

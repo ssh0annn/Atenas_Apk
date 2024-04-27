@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 
 @Composable
 fun Titulo(){
@@ -20,14 +21,14 @@ fun Titulo(){
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.FactCheck,
             contentDescription = "",
-            tint = Color(0xFF343341),
+            tint = AzulGris,
             modifier = Modifier
                 .padding(top = 10.dp)
                 .size(40.dp)
         )
         Text(
             text = "Facturas",
-            color = Color(0xFF343341),
+            color = AzulGris,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(10.dp)

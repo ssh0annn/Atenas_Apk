@@ -24,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
@@ -36,6 +35,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
 import com.solidtype.atenas_apk_2.util.ui.Components.NavPlato
 import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
+import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 
 @SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
@@ -50,7 +50,7 @@ fun FacturacionScreen() {
     val context = LocalContext.current
 
     val datePickerState: DatePickerState = rememberDatePickerState()
-    var showDatePicker by rememberSaveable { mutableStateOf(false) }
+    var showDatePicker by rememberSaveable { mutableStateOf(true) }
 
     var fecha by rememberSaveable { mutableStateOf("") }
     var noFactura by rememberSaveable { mutableStateOf("") }
@@ -62,7 +62,7 @@ fun FacturacionScreen() {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(
-                Color(0xFFD7D7D9)
+                color = GrisClaro
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
