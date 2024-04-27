@@ -16,6 +16,7 @@ import java.util.Date
 fun SelecionarFecha(
     text: String,
     data: Long?,
+    fechaString: String?,
     derecho: Boolean = false,
     @SuppressLint("ModifierParameter") modifierPadre: Modifier = Modifier,
     modifierHijo: Modifier = Modifier,
@@ -27,12 +28,11 @@ fun SelecionarFecha(
         modifier = modifierPadre
     ) {
         BotonBlanco(text = text, onClick = onClick, modifier = modifierHijo, size = size)
-        data?.let {
             Text(
-                if (it == 0L) "" else SimpleDateFormat("dd/MM/yyyy").format(Date(it)),
+                if (data == null || data == 0L || fechaString == "") "No seleccionado"
+                else SimpleDateFormat("dd/MM/yyyy").format(Date(data)),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
-        }
     }
 }

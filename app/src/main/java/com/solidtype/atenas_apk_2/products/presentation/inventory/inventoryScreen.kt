@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color.parseColor
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -81,7 +82,7 @@ fun showFilePicker(context: Context) {
 }
 
 
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "QueryPermissionsNeeded")
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun InventoryScreen(
@@ -154,6 +155,8 @@ fun InventoryScreen(
         "Tablets",
         "Otros"
     )//Esto debería venir del ViewModel
+
+    val uri = uiState.uriPath
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -544,16 +547,42 @@ fun InventoryScreen(
             ) {
                 Snackbar(
                     action = {
-                        Row {
-                            BotonBlanco("Compartir") { //Aquí lógica para compartir el archivo exportado
-                                if (uiState.uriPath.isNotBlank()) {
-                                    //compartir archivo
+                        if(uri.isNotBlank()){
+                            Row {
+                                BotonBlanco("Compartir") {
+                                    val fileUri = Uri.parse(uri)
+                                    val shareIntent: Intent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_STREAM, fileUri)
+                                        type =
+                                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                    }
+                                    val chooser =
+                                        Intent.createChooser(shareIntent, "Compartir archivo")
+                                    context.startActivity(chooser)
                                 }
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
-                            BotonBlanco("Cerrar") {
-                                snackbarJob.cancel() //Cancela el job anterior si existe
-                                showSnackbar = false
+                                Spacer(modifier = Modifier.width(10.dp))
+                                BotonBlanco("Ver") {
+                                    val fileUri = Uri.parse(uri)
+                                    val openIntent: Intent = Intent().apply {
+                                        action = Intent.ACTION_VIEW
+                                        setDataAndType(
+                                            fileUri,
+                                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                        )
+                                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                    }
+                                    val chooser = Intent.createChooser(openIntent, "Abrir archivo")
+                                    if (openIntent.resolveActivity(context.packageManager) != null) {
+                                        context.startActivity(chooser)
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "No se encontró una aplicación para abrir este archivo. Favor de instalar una aplicación compatible con archivos de Excel.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
                             }
                         }
                     },
@@ -561,9 +590,9 @@ fun InventoryScreen(
                     containerColor = Color(0xFF343341)
                 ) {
                     Text(
-                        text = if (uiState.uriPath.isNotBlank()) "El archivo se guardó en: ${uiState.uriPath}" else "Hubo un error al exportar",
+                        text = if (uri.isNotBlank()) "El archivo se guardó en: $uri" else "Hubo un error al exportar",
                         color =
-                        if (uiState.uriPath.isNotBlank())
+                        if (uri.isNotBlank())
                             Color(0xFF77FF77)
                         else
                             Color(0xFFFF7777),

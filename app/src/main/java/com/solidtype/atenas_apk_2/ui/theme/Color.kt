@@ -13,6 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 //Carlos's colors
 val Blanco = Color(0xFFFFFFFF)
 val Negro = Color(0xFF000000)
+val Rojo = Color(0xFFFF0000)
 val AzulGris = Color(0xFF343341)
 val GrisOscuro = Color(0xFF737A8C)
 val GrisAzulado = Color(0xFF8285A5)

@@ -104,6 +104,7 @@ fun FacturacionScreen() {
                             .width(200.dp)
                             .height(55.dp),
                         size = 16,
+                        fechaString = fecha
                     ) {
                         showDatePicker = true
                     }

@@ -1,6 +1,8 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -60,10 +62,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@SuppressLint("SimpleDateFormat", "CoroutineCreationDuringComposition")
+@SuppressLint("SimpleDateFormat", "CoroutineCreationDuringComposition", "QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= hiltViewModel()) {
+fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
 
@@ -78,6 +80,8 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
 
     var totalVentas = uiState.total
     var totalTicket = uiState.total2
+
+//    var ventasOTicket = uiState.ventasOTicket
 
     var ventasTickerTitulo by rememberSaveable { mutableStateOf("Ventas") } //Inmutable
     var selected by rememberSaveable { mutableStateOf("Ventas") }//Inmutable
@@ -105,7 +109,10 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
         "Jabón",
         "Otros"
     ) //Debería venir del viewModel
+
     var selectedCategoria by rememberSaveable { mutableStateOf(categoria.first()) }
+
+    val uri = uiState.uriPath
 
     if (false) {
         //nav.navigate(Screens.Login.route)
@@ -157,15 +164,15 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                 .padding(top = 4.dp)
                                 .weight(2f)
                         ) {
-                            SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis) {
+                            SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis, fechaIni) {
                                 showDatePicker1 = true
                             }
                             Spacer(modifier = Modifier.width(16.dp))
-                            SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis) {
+                            SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis, fechaFin) {
                                 showDatePicker2 = true
                             }
                         }
-                        //Aquí va un selectores
+                        //Aquí va un selector
                         Box(
                             modifier = Modifier
                                 .width(200.dp)
@@ -208,14 +215,14 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                         ventasTickerTitulo = "Ventas"
                                         totalVentas = uiState.total
                                         viewModel.MostrarHistoriar()//Se debe lanzar un evento
-
+//                                        ventasOTicket = false
                                     }
 
                                     "Ticket" -> {
-                                        viewModel.mostrarTicket()// se debe lanzar un evento de consulta
                                         ventasTickerTitulo = "Cuenta x Cobrar"
                                         totalTicket = uiState.total2
-
+                                        viewModel.mostrarTicket()// se debe lanzar un evento de consulta
+//                                        ventasOTicket = true
                                     }
                                 }
                             }
@@ -267,13 +274,7 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Fecha_Inicio",
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
-                                Text(
-                                    "Fecha_Final",
+                                    "Fecha",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
@@ -414,13 +415,15 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaInicial.toString().formatoParaUser(),
+                                            listTicket[index].FechaInicial.toString()
+                                                .formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaFinal.toString().formatoParaUser(),
+                                            listTicket[index].FechaFinal.toString()
+                                                .formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -470,9 +473,12 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                     }
                     Spacer(modifier = Modifier.width(400.dp))
                     Row {
-                        //Botones para Importar, Exportar y Ver
-                        Boton("Cancelar") {
-                            //Aquí lógica para cancelar
+                        Boton("Ver Todo") {
+                            viewModel.MostrarHistoriar()
+                            viewModel.mostrarTicket()
+                            // limpiar fechas
+                            fechaIni = ""
+                            fechaFin = ""
                         }
                         Boton("Exportar") {
                             Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
@@ -539,16 +545,42 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
             ) {
                 Snackbar(
                     action = {
-                        Row {
-                            BotonBlanco("Compartir") { //Aquí lógica para compartir el archivo exportado
-                                if (uiState.uriPath.isNotBlank()) {
-                                    //compartir archivo
+                        if (uri.isNotBlank()) {
+                            Row {
+                                BotonBlanco("Compartir") {
+                                    val fileUri = Uri.parse(uri)
+                                    val shareIntent: Intent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_STREAM, fileUri)
+                                        type =
+                                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                    }
+                                    val chooser =
+                                        Intent.createChooser(shareIntent, "Compartir archivo")
+                                    context.startActivity(chooser)
                                 }
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
-                            BotonBlanco("Cerrar") {
-                                snackbarJob.cancel() //Cancela el job anterior si existe
-                                showSnackbar = false
+                                Spacer(modifier = Modifier.width(10.dp))
+                                BotonBlanco("Ver") {
+                                    val fileUri = Uri.parse(uri)
+                                    val openIntent: Intent = Intent().apply {
+                                        action = Intent.ACTION_VIEW
+                                        setDataAndType(
+                                            fileUri,
+                                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                        )
+                                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                    }
+                                    val chooser = Intent.createChooser(openIntent, "Abrir archivo")
+                                    if (openIntent.resolveActivity(context.packageManager) != null) {
+                                        context.startActivity(chooser)
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "No se encontró una aplicación para abrir este archivo. Favor de instalar una aplicación compatible con archivos de Excel.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
                             }
                         }
                     },
@@ -556,9 +588,9 @@ fun HistorialScreen(navController: NavController, viewModel:HistorailViewModel= 
                     containerColor = Color(0xFF343341)
                 ) {
                     Text(
-                        text = if (uiState.uriPath.isNotBlank()) "El archivo se guardó en: ${uiState.uriPath}" else "Hubo un error al exportar",
+                        text = if (uri.isNotBlank()) "El archivo se guardó en: $uri" else "Hubo un error al exportar",
                         color =
-                        if (uiState.uriPath.isNotBlank())
+                        if (uri.isNotBlank())
                             Color(0xFF77FF77)
                         else
                             Color(0xFFFF7777),

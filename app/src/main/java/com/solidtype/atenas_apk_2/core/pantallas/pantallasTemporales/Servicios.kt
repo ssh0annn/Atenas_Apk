@@ -21,10 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.facturacion.presentation.facturacion.FacturacionScreen
 
 @Composable
 fun Servicios(navController: NavController){
-    LazyColumn(
+
+    FacturacionScreen()
+
+    /*LazyColumn(
         Modifier
             .fillMaxHeight()
             .fillMaxWidth()
@@ -125,7 +129,7 @@ fun Servicios(navController: NavController){
                 )
             }
         }
-    }
+    }*/
 
 
 }
