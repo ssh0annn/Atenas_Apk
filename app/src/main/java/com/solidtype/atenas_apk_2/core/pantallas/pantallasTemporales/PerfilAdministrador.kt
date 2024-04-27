@@ -17,10 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 
 @Composable
 fun PerfilAdministrador(navController: NavController){
@@ -35,10 +37,11 @@ fun PerfilAdministrador(navController: NavController){
     ) {
         item {
             Text(
-                text = "Pantalla Perfil Administrador ",
+                text = "Pantalla Perfil Administrador",
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(android.graphics.Color.parseColor("#343341"))
+                color = AzulGris,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
@@ -106,8 +109,7 @@ fun PerfilAdministrador(navController: NavController){
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {//Aqui el codigo para moverse a otra ventana
-                    navController.navigate(Screens.Home.route)
-
+                    navController.navigate(Screens.Servicio.route)
                 },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
