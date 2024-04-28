@@ -1,4 +1,4 @@
-/*
+
 package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import androidx.lifecycle.ViewModel
@@ -46,9 +46,7 @@ class FacturaViewModel  @Inject constructor(
         fechafinal: LocalDate,
         datoSemejante: String,
     ){
-        if(*/
-/*fechaini.isBlank() || fechafinal.isBlank() || *//*
-datoSemejante.isBlank()){
+        if(datoSemejante.isBlank()){
             uiState.update {
                 it.copy(
                     error = "Campos vacios"
@@ -95,4 +93,4 @@ datoSemejante.isBlank()){
     }
 
 
-}*/
+}

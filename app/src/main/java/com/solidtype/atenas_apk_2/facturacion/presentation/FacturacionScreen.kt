@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
@@ -42,10 +43,10 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 @Composable
 fun FacturacionScreen() {
 
-    /*val configuration = LocalConfiguration.current
+      val configuration = LocalConfiguration.current
 
        val screenHeight = configuration.screenHeightDp.dp
-       val screenWidth = configuration.screenWidthDp.dp*/
+       val screenWidth = configuration.screenWidthDp.dp
 
     val context = LocalContext.current
 

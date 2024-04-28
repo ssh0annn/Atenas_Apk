@@ -205,21 +205,21 @@ object AppModule {
     @Singleton
     fun providesAsyncTickets(RemoteTicketsFBImpl: RemoteTicketsFBFBImpl): RemoteTicketsFB = RemoteTicketsFBImpl
 
-
-}
 //Esta injection esta a espera del viewmodel. Cuando el viewmodel este completo ,hay que quitar el comentario
 
-/*
-@Provides
-@Singleton
-fun provideFacturaRepo(impl: FacturaRepositoryImpl): FacturaRepository = impl
 
-@Provides
-@Singleton
-fun provideFacturacionCasosUso(repo: FacturaRepository) = FacturacionCasosdeUso(
-    buscarFacturas= BuscarFacturas(repo),
-    detallesFacturas = DetallesFacturas(repo),
-    mostrarTodo = MostrarTodo(repo)
-)
+    @Provides
+    @Singleton
+    fun provideFacturaRepo(impl: FacturaRepositoryImpl): FacturaRepository = impl
 
- */
+    @Provides
+    @Singleton
+    fun provideFacturacionCasosUso(repo: FacturaRepository) = FacturacionCasosdeUso(
+        buscarFacturas= BuscarFacturas(repo),
+        detallesFacturas = DetallesFacturas(repo),
+        mostrarTodo = MostrarTodo(repo)
+    )
+
+
+
+}
