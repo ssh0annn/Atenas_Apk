@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
@@ -52,6 +53,7 @@ fun NavPlato(
                 modifier = Modifier
                     .padding(bottom = if (pantalla == "Servicios") 10.dp else 0.dp)
                     .size(if (pantalla == "Servicios") 80.dp else 70.dp)
+                    .shadow(5.dp, shape = RoundedCornerShape(100.dp))
                     .background(Color(0xFF323341), shape = RoundedCornerShape(100.dp))
                     .clickable {
                         //Navegar a Servicios

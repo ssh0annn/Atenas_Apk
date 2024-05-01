@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.util.ui.Components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -21,12 +22,20 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 fun Boton(
     text: String = "",
     habilitar: Boolean = true,
+    icon: @Composable (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
     Button(
         enabled = habilitar,
+        elevation =  ButtonDefaults.buttonElevation(
+            defaultElevation = 5.dp
+        ),
         onClick = onClick,
-        modifier = Modifier
+        modifier =
+        if(icon != null) Modifier
+            .size(80.dp)
+            .padding(5.dp)
+        else Modifier
             .padding(10.dp)
             .width(120.dp)
             .height(50.dp)
@@ -36,6 +45,13 @@ fun Boton(
             containerColor = AzulGris
         )
     ) {
-        Text(text)
+        if (icon != null) {
+            icon()
+        } else {
+            Text(
+                text = text,
+                color = Blanco
+            )
+        }
     }
 }
