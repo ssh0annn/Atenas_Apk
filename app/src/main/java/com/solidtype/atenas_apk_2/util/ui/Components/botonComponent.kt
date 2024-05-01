@@ -14,18 +14,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 
 @Composable
-fun Boton(text: String = "", onClick: () -> Unit) {
+fun Boton(
+    text: String = "",
+    habilitar: Boolean = true,
+    onClick: () -> Unit
+) {
     Button(
+        enabled = habilitar,
         onClick = onClick,
         modifier = Modifier
             .padding(10.dp)
             .width(120.dp)
             .height(50.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(AzulGris),
+            .clip(RoundedCornerShape(20.dp)),
         colors = ButtonDefaults.buttonColors(
+            disabledContainerColor = Blanco,
             containerColor = AzulGris
         )
     ) {

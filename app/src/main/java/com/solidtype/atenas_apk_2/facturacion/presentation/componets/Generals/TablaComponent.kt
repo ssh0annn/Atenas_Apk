@@ -71,6 +71,12 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                     textAlign = TextAlign.Center
                 )
                 Text(
+                    text = "Cliente",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
                     text = "Fecha",
                     modifier = Modifier.weight(1f),
                     color = Blanco,
@@ -130,6 +136,11 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                         ) {
                             Text(
                                 text = factura.noFactura.toString(),
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = factura.cliente,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )

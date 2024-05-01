@@ -29,7 +29,7 @@ fun SelecionarFecha(
     ) {
         BotonBlanco(text = text, onClick = onClick, modifier = modifierHijo, size = size)
             Text(
-                if (data == null || data == 0L || fechaString == "") "No seleccionado"
+                if (data == null || data == 0L || fechaString == "") "No seleccionada"
                 else SimpleDateFormat("dd/MM/yyyy").format(Date(data)),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
