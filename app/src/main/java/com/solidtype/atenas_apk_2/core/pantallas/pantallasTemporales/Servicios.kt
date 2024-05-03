@@ -26,7 +26,7 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.facturacion.Facturaci
 @Composable
 fun Servicios(navController: NavController){
 
-    FacturacionScreen()
+    FacturacionScreen(navController = navController)
 
     /*LazyColumn(
         Modifier

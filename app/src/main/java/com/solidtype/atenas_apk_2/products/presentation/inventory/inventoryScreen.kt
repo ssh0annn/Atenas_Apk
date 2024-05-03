@@ -60,6 +60,7 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boto
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoV2
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -531,7 +532,7 @@ fun InventoryScreen(
                 }
             }
         }
-        Dialogo(mostrar = mostrar) {
+        DialogoV2(mostrar) {
             mostrar = false
         }
         AnimatedVisibility(

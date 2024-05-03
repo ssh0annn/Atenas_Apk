@@ -49,14 +49,9 @@ import com.solidtype.atenas_apk_2.util.formatoDDBB
 @SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FacturacionScreen(/*navController: NavController, viewModel: FacturaViewModel = hiltViewModel()*/) {
+fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel = hiltViewModel()) {
 
-    /*val configuration = LocalConfiguration.current
-
-       val screenHeight = configuration.screenHeightDp.dp
-       val screenWidth = configuration.screenWidthDp.dp*/
-
-    val viewModel: FacturaViewModel = hiltViewModel()
+    //val viewModel: FacturaViewModel = hiltViewModel()
 
     val context = LocalContext.current
 
@@ -175,7 +170,7 @@ fun FacturacionScreen(/*navController: NavController, viewModel: FacturaViewMode
                 }
             }
         }
-        NavPlato("Facturas")
+        NavPlato("factura", navController)
         DatePickerDialogo(
             showDatePicker = showDatePicker1,
             datePickerState = datePickerState1,

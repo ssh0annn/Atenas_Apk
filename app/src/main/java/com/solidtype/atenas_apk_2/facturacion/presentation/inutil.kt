@@ -117,7 +117,7 @@ val facturas = listOf(
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
 @Composable
 fun FacturacionScreenPreview() {
-    FacturacionScreen()
+    //FacturacionScreen()
 }
 
 data class Factura(  // Devería ser del VM
