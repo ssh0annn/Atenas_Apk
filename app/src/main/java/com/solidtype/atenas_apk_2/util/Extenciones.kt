@@ -43,3 +43,7 @@ fun String.formatoParaUser(): String {
     return "${array[2]}/${array[1]}/${array[0]}"
 }
 
+fun String.fomatoLocalDate(): LocalDate{
+    val format = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return LocalDate.parse(this,format)
+}
