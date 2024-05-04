@@ -1,9 +1,13 @@
-package com.solidtype.atenas_apk_2.core.entidades
+package com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.solidtype.atenas_apk_2.core.entidades.persona
+import com.solidtype.atenas_apk_2.core.entidades.ticket
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
+import com.solidtype.atenas_apk_2.core.entidades.usuario
 
 @Entity(foreignKeys = [
     ForeignKey(entity = ticket::class, parentColumns = ["id_ticket"], childColumns = ["codigo_ticket"]),

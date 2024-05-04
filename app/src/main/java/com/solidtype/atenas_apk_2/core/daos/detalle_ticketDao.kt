@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.core.entidades.detalle_ticket
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.detalle_ticket
 
 @Dao
 interface detalle_ticketDao {
@@ -16,7 +16,7 @@ interface detalle_ticketDao {
     @Query("select * from detalle_ticket")
     suspend fun getDetalleTickets():List<detalle_ticket>
     @Query("select * from detalle_ticket where id_detalle_ticket ==:id")
-    suspend fun getDetalleTicketById(id :Int):detalle_ticket
+    suspend fun getDetalleTicketById(id :Int): detalle_ticket
     @Update
     suspend fun updateDetalleTicket(detalleTicket: detalle_ticket)
     @Delete

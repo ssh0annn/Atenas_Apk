@@ -14,8 +14,8 @@ import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
 import com.solidtype.atenas_apk_2.core.daos.usuarioDao
 import com.solidtype.atenas_apk_2.core.daos.ventaDao
 import com.solidtype.atenas_apk_2.core.entidades.categoria
-import com.solidtype.atenas_apk_2.core.entidades.detalle_ticket
-import com.solidtype.atenas_apk_2.core.entidades.detalle_venta
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.detalle_ticket
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.detalle_venta
 import com.solidtype.atenas_apk_2.core.entidades.inventario
 import com.solidtype.atenas_apk_2.core.entidades.persona
 import com.solidtype.atenas_apk_2.core.entidades.roll_usuarios

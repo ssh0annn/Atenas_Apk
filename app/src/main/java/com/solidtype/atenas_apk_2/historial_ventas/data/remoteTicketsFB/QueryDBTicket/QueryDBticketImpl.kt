@@ -41,7 +41,6 @@ class QueryDBticketImpl @Inject constructor(
                         FechaFinal = it[15].toLocalDate(),
                         FechaInicial = it[16].toLocalDate()
 
-
                     )
                 } catch (e: Exception) {
                     println("Este es la razon lista: $it, size ${it.size}")
