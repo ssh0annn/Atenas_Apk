@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.core.daos
+package com.solidtype.atenas_apk_2.facturacion.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.detalle_venta
+import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 
 @Dao
 interface detalle_ventaDao {

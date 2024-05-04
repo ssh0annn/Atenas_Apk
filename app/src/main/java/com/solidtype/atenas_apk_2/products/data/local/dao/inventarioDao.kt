@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.core.daos
+package com.solidtype.atenas_apk_2.products.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.core.entidades.inventario
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 
 @Dao
 interface inventarioDao {

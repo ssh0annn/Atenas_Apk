@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.core.daos
+package com.solidtype.atenas_apk_2.products.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.core.entidades.categoria
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 
 @Dao
 interface categoriaDao {
@@ -16,7 +16,7 @@ interface categoriaDao {
     @Query("select * from categoria")
     suspend fun getCategorias():List<categoria>
     @Query("select * from categoria where id_categoria ==:id")
-    suspend fun getCategoriasById(id :Int):categoria
+    suspend fun getCategoriasById(id :Int): categoria
     @Update
     suspend fun updateCategoria(categoria: categoria)
     @Delete
