@@ -22,24 +22,24 @@ class QueryDBticketImpl @Inject constructor(
         private fun entityConvert(it: List<String>): HistorialTicketEntidad {
             if (it.size == 16) {
                 try {
-
                     return HistorialTicketEntidad(
                         Codigo = it[0].toInt(),
                         NombreCliente = it[1],
-                        Modelo = it[2],
-                        Telefono = it[3].toInt(),
-                        FaltaEquipo = it[4],
-                        EstadoEquipo = it[5],
-                        Marca = it[6],
-                        Email = it[7],
-                        Restante = it[8].toDouble(),
-                        Abono = it[9].toDouble(),
-                        Nota =it[10],
-                        Precio = it[11].toDouble(),
-                        Servicio = it[12],
-                        Categoria = it[13],
-                        FechaFinal = it[14].toLocalDate(),
-                        FechaInicial = it[15].toLocalDate()
+                        NumeroFactura = it[2].toInt(),
+                        Modelo = it[3],
+                        Telefono = it[4].toInt(),
+                        FaltaEquipo = it[5],
+                        EstadoEquipo = it[6],
+                        Marca = it[7],
+                        Email = it[8],
+                        Restante = it[9].toDouble(),
+                        Abono = it[10].toDouble(),
+                        Nota =it[11],
+                        Precio = it[12].toDouble(),
+                        Servicio = it[13],
+                        Categoria = it[14],
+                        FechaFinal = it[15].toLocalDate(),
+                        FechaInicial = it[16].toLocalDate()
 
                     )
                 } catch (e: Exception) {
@@ -64,6 +64,7 @@ class QueryDBticketImpl @Inject constructor(
                     val mutableList = mutableListOf<String>()
                     mutableList.add(it.Codigo.toString())
                     mutableList.add(it.NombreCliente)
+                    mutableList.add(it.NumeroFactura.toString())
                     mutableList.add(it.Modelo)
                     mutableList.add(it.Telefono.toString())
                     mutableList.add(it.FaltaEquipo)

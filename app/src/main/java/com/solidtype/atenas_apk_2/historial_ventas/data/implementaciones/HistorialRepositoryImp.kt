@@ -39,7 +39,6 @@ class HistorialRepositoryImp @Inject constructor(
         val columnas = listOf(
             "Codigo",
             "Nombre",
-            "NombreCliente",
             "Descripcion",
             "Imei",
             "Cantidad",
@@ -58,7 +57,6 @@ class HistorialRepositoryImp @Inject constructor(
 
                 temp.add(productos.Codigo.toString())
                 temp.add(productos.Nombre)
-                temp.add(productos.NombreCliente)
                 temp.add(productos.Descripcion)
                 temp.add(productos.Imei)
                 temp.add(productos.Cantidad.toString())

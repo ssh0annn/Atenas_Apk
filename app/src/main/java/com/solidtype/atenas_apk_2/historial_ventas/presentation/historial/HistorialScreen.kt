@@ -334,12 +334,6 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
-                                        Text(
-                                            listVentas[index].NombreCliente,
-                                            fontSize = 16.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
                                     }
                                     Divider()
                                 }
