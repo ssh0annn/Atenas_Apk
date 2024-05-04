@@ -2,7 +2,6 @@ package com.solidtype.atenas_apk_2.core.ddbb
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.solidtype.atenas_apk_2.core.daos.categoriaDao
 import com.solidtype.atenas_apk_2.core.daos.detalle_ticketDao
 import com.solidtype.atenas_apk_2.core.daos.detalle_ventaDao
@@ -25,34 +24,22 @@ import com.solidtype.atenas_apk_2.core.entidades.ticket
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.core.entidades.usuario
 import com.solidtype.atenas_apk_2.core.entidades.venta
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
 @Database(entities = [
-    ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class,
     categoria::class, detalle_ticket::class, detalle_venta::class, inventario::class,
     persona::class, roll_usuarios::class, servicio::class, ticket::class,
     tipo_venta::class, usuario::class, venta::class
-], version = 10, exportSchema = false)
-@TypeConverters(Converter::class)
-abstract class ProductDataBase : RoomDatabase() {
-    abstract val ProductDao :ProductDao
-    abstract val HistorialVentaDao :HistorialVentaDAO
-    abstract val HistorialTicketDao :HistorialTicketDAO
-
-    abstract val categoriaDAO: categoriaDao
-    abstract val detalleTicketDAO: detalle_ticketDao
-    abstract val detalleVentaDAO: detalle_ventaDao
-    abstract val inventarioDAO: inventarioDao
-    abstract val personaDAO: personaDao
-    abstract val rollUsuarioDAO: roll_usuarioDao
-    abstract val servicioDAO: servicioDao
-    abstract val ticketDAO: ticketDao
-    abstract val tipoVentaDAO: tipo_ventaDao
-    abstract val usuarioDAO: usuarioDao
-    abstract val ventaDAO: ventaDao
+                     ], version = 1)
+abstract class BaseDatosLocal : RoomDatabase() {
+    abstract fun categoriaDAO():categoriaDao
+    abstract fun detalleTicketDAO():detalle_ticketDao
+    abstract fun detalleVentaDAO():detalle_ventaDao
+    abstract fun inventarioDAO():inventarioDao
+    abstract fun personaDAO():personaDao
+    abstract fun rollUsuarioDAO():roll_usuarioDao
+    abstract fun servicioDAO():servicioDao
+    abstract fun ticketDAO():ticketDao
+    abstract fun tipoVentaDAO():tipo_ventaDao
+    abstract fun usuarioDAO():usuarioDao
+    abstract fun ventaDAO():ventaDao
 }

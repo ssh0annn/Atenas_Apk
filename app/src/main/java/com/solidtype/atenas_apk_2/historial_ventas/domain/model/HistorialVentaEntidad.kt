@@ -11,7 +11,7 @@ import java.util.Date
 data class HistorialVentaEntidad(
         @PrimaryKey val Codigo : Int,
         val Nombre : String,
-        val NombreCliente:String,
+        val NumeroFactura : Int,
         val Descripcion : String,
         val Imei: String,
         val Cantidad : Int,

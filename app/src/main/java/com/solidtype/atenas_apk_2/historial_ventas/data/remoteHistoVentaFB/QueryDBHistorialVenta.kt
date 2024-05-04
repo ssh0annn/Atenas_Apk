@@ -27,7 +27,7 @@ class QueryDBHistorialVenta @Inject constructor(
                 return HistorialVentaEntidad(
                     Codigo = it[0].toInt(),
                     Nombre = it[1],
-                    NombreCliente = it[2],
+                    NumeroFactura = it[2].toInt(),
                     Descripcion = it[3],
                     Imei = it[4],
                     Cantidad = it[5].toInt(),
@@ -62,7 +62,7 @@ class QueryDBHistorialVenta @Inject constructor(
                 val mutableList = mutableListOf<String>()
                 mutableList.add(it.Codigo.toString())
                 mutableList.add(it.Nombre)
-                mutableList.add(it.NombreCliente)
+                mutableList.add(it.NumeroFactura.toString())
                 mutableList.add(it.Descripcion)
                 mutableList.add(it.Imei)
                 mutableList.add(it.Cantidad.toString())
