@@ -251,9 +251,10 @@ fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = 
                             fontWeight = FontWeight.Bold,
                             color = Color(android.graphics.Color.parseColor("#343341"))
                         )
-                        Button(
+                        /*Button(
                             onClick = {
-                                nav.navigate(Screens.Register.route)
+                               // nav.navigate(Screens.Register.route)
+                                      //Esta parte de registro debe llevarte a  la pagina de compra para la app. 
 
                                                             },
                             shape = RoundedCornerShape(25.dp),
@@ -272,6 +273,8 @@ fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = 
                                 fontSize = 20.sp
                             )
                         }
+
+                         */
                     }
                     Spacer(modifier = Modifier.height(100.dp))
                 }

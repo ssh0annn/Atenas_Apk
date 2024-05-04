@@ -7,10 +7,11 @@ import com.solidtype.atenas_apk_2.Authentication.data.remote.FirestoreConnect
 import com.solidtype.atenas_apk_2.Authentication.data.remote.Modelo
 import com.solidtype.atenas_apk_2.Authentication.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.Authentication.domain.repository.UserRepository
+import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import javax.inject.Inject
 
 
-class RepositoryImpl @Inject constructor(private val auth : RemoteFirebase,
+class RepositoryImpl @Inject constructor(private val auth : auth,
                                          private val store: FirestoreConnect): UserRepository {
 
 

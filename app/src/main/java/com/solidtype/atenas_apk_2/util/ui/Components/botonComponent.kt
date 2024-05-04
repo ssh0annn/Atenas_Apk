@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 
 @Composable
 fun Boton(text: String = "", onClick: () -> Unit) {
@@ -23,9 +24,9 @@ fun Boton(text: String = "", onClick: () -> Unit) {
             .width(120.dp)
             .height(50.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(Color(android.graphics.Color.parseColor("#343341"))),
+            .background(AzulGris),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(android.graphics.Color.parseColor("#343341"))
+            containerColor = AzulGris
         )
     ) {
         Text(text)

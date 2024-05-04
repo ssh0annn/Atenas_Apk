@@ -2,25 +2,26 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.mediado
 
 import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
-import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.QueryDBTicket.QueryDBticket
-import com.solidtype.atenas_apk_2.products.data.remoteProFB.QuerysFirstore
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.QueryDBticket
+import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.RemoteTicketsFB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RemoteTicketsFB @Inject constructor(
+class RemoteTicketsFBFBImpl @Inject constructor(
     private val queryDBticket: QueryDBticket,
-    private val querYFIreStore:QuerysFirstore
-) {
+    private val queryDataService: DataCloud
+): RemoteTicketsFB {
 
     private val codigoTickets = "Codigo"
     private val collectionName = "Tickets"
 
 
 
-    suspend fun asycTickets() {
+    override suspend fun asycTickets() {
         Log.e("Entre","Entre a la funcion Tickets async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
@@ -95,7 +96,7 @@ class RemoteTicketsFB @Inject constructor(
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
-                querYFIreStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     collectionName, convierteAObjetoMap(baseLocal), codigoTickets
                 )
                 confirmar = true
@@ -121,7 +122,7 @@ class RemoteTicketsFB @Inject constructor(
 
             println("Listos para subir $listosParaSubir")
             try{
-                querYFIreStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     collectionName, convierteAObjetoMap(listosParaSubir), codigoTickets
                 )
             }catch (e: Exception){
@@ -147,7 +148,7 @@ class RemoteTicketsFB @Inject constructor(
             coroutineScope {
                 withContext(Dispatchers.Default) {
                     val result = async {
-                        querYFIreStore.deleteDataFirebase(
+                        queryDataService.deleteDataInCloud(
                             "productos", convierteAObjetoMap(sacarIntruso), codigoTickets
                         )
                     }
@@ -233,7 +234,7 @@ class RemoteTicketsFB @Inject constructor(
      */
     private suspend fun insertaInDbLocal(data: MutableList<List<String>>) {
         coroutineScope {
-            async { queryDBticket.insertAllProducts(data) }
+            async { queryDBticket.insertAllTickets(data) }
         }.await()
     }
 
@@ -247,7 +248,7 @@ class RemoteTicketsFB @Inject constructor(
 
         val intrusos = queryDBticket.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
-            querYFIreStore.deleteDataFirebase(
+            queryDataService.deleteDataInCloud(
                 collectionName, convierteAObjetoMap(intrusos), codigoTickets
             )
             println("estos son los intrusos --> $intrusos <--")
@@ -259,13 +260,28 @@ class RemoteTicketsFB @Inject constructor(
      * @return:  List<List<String>>
      * @funcion: captura los datos de la base local y los debuelve en formato de lista de listas.
      */
-    private suspend fun capturarDatosDB() = queryDBticket.getAllProducts()
+    private suspend fun capturarDatosDB() = queryDBticket.getAllTicekts()
     /**
      * @return  QuerySnapshot?
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = querYFIreStore.getAllDataFirebase(collectionName)
+    private suspend fun caputarDatosFirebaseEnSnapshot() : QuerySnapshot?{
+        var query:QuerySnapshot?=null
+        try {
+
+            coroutineScope {
+                async { query=queryDataService.getallData(collectionName)}
+
+            }.await()
+
+        }catch (e:Exception){
+            println("Error capturando datos: $e")
+
+        }
+        return query
+    }
+
 
 
 }

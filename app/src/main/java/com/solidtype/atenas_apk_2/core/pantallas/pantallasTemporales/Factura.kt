@@ -64,7 +64,7 @@ fun HomeScreen(navController: NavController){
                     .padding(top = 30.dp)
             ) {
                 Text(
-                    "Servicios",
+                    "Facturación",
                     fontSize = 24.sp
                 )
             }
@@ -131,6 +131,5 @@ fun HomeScreen(navController: NavController){
             }
         }
     }
-
 }
 

@@ -1,7 +1,10 @@
-package com.solidtype.atenas_apk_2.products.data.remoteProFB
+package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator
 
-import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
+import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.QueryDBlocal
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -16,9 +19,11 @@ import javax.inject.Inject
  * el feature Productos en espesifico. Solo necesitas llamar el metodo async. y listo.
  *
  */
-class MediatorProducts @Inject constructor(
-    private val queryDblocal: QueryDBlocal, private val queryFireStore: QuerysFirstore
-) {
+class MediatorProductsImpl @Inject constructor(
+    private val queryDblocal: QueryDBlocal,
+    private val queryDataService: DataCloud
+
+): MediatorProducts {
     private val codigoProductos = "code_Product"
     private val ColletionName = "productos"
 
@@ -61,7 +66,7 @@ class MediatorProducts @Inject constructor(
         var confirmar = false
         if (listaDeFireStore.isEmpty() && baseLocal.isNotEmpty()) {
             try {
-                queryFireStore.insertToFirebase(
+                queryDataService.insertAllToCloud(
                     ColletionName, convierteAObjetoMap(baseLocal), codigoProductos
                 )
                 confirmar = true
@@ -93,11 +98,11 @@ class MediatorProducts @Inject constructor(
             confirmar = true
 
             println("Listos para subir $listosParaSubir")
-            try{
-                queryFireStore.insertToFirebase(
+            try {
+                queryDataService.insertAllToCloud(
                     "productos", convierteAObjetoMap(listosParaSubir), codigoProductos
                 )
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 return false
             }
         }
@@ -120,8 +125,8 @@ class MediatorProducts @Inject constructor(
             coroutineScope {
                 withContext(Dispatchers.Default) {
                     val result = async {
-                        queryFireStore.deleteDataFirebase(
-                            "productos", convierteAObjetoMap(sacarIntruso), codigoProductos
+                        queryDataService.deleteDataInCloud(
+                            ColletionName, convierteAObjetoMap(sacarIntruso), codigoProductos
                         )
                     }
                     println("Este es el resultado de tu result: ${result.await()}")
@@ -136,7 +141,7 @@ class MediatorProducts @Inject constructor(
      * @funcion: Es donde sucede toda la logica del proceso de sincronizacion. En esta funcion se manejan muchos algoritmos
      * con corrutinas, favor manajar en el hilo Default para evitar bloqueos del hilo main.
      */
-    suspend operator fun invoke() {
+    override suspend operator fun invoke() {
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
         println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
@@ -243,7 +248,7 @@ class MediatorProducts @Inject constructor(
 
         val intrusos = queryDblocal.compararIntrusos(posiblesIntrusos)
         if (intrusos.isNotEmpty()) {
-            queryFireStore.deleteDataFirebase(
+            queryDataService.deleteDataInCloud(
                 ColletionName, convierteAObjetoMap(intrusos), codigoProductos
             )
             println("estos son los intrusos --> $intrusos <--")
@@ -263,7 +268,15 @@ class MediatorProducts @Inject constructor(
      * @funcion: captura los datos del documento de productos desde firestore y los debuelve en un formato QuerySnapshot
      */
 
-    private suspend fun caputarDatosFirebaseEnSnapshot() = queryFireStore.getAllDataFirebase("productos")
+    private suspend fun caputarDatosFirebaseEnSnapshot(): QuerySnapshot? {
+        return try {
+            coroutineScope {
+                async { queryDataService.getallData(ColletionName) }
+            }.await()
 
+        } catch (e: Exception) {
+            null
+        }
+    }
 
 }
