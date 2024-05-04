@@ -39,7 +39,6 @@ import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.
 import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
 import com.solidtype.atenas_apk_2.core.daos.usuarioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
-import com.solidtype.atenas_apk_2.core.ddbb.BaseDatosLocal
 import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.BuscarporFechCatego
@@ -228,68 +227,68 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCategoriaDao(db: BaseDatosLocal): categoriaDao {
-        return db.categoriaDAO()
+    fun provideCategoriaDao(db: ProductDataBase): categoriaDao {
+        return db.categoriaDAO
     }
 
     @Provides
     @Singleton
-    fun provideDetalleVentaDao(db: BaseDatosLocal): detalle_ventaDao {
-        return db.detalleVentaDAO()
+    fun provideDetalleVentaDao(db: ProductDataBase): detalle_ventaDao {
+        return db.detalleVentaDAO
     }
 
     @Provides
     @Singleton
-    fun provideDetalleTicketDao(db: BaseDatosLocal): detalle_ticketDao {
-        return db.detalleTicketDAO()
+    fun provideDetalleTicketDao(db: ProductDataBase): detalle_ticketDao {
+        return db.detalleTicketDAO
     }
 
     @Provides
     @Singleton
-    fun provideInventarioDao(db: BaseDatosLocal): inventarioDao {
-        return db.inventarioDAO()
+    fun provideInventarioDao(db: ProductDataBase): inventarioDao {
+        return db.inventarioDAO
     }
 
     @Provides
     @Singleton
-    fun provideRollUsuarioDao(db: BaseDatosLocal): roll_usuarioDao {
-        return db.rollUsuarioDAO()
+    fun provideRollUsuarioDao(db: ProductDataBase): roll_usuarioDao {
+        return db.rollUsuarioDAO
     }
 
     @Provides
     @Singleton
-    fun provideServicioDao(db: BaseDatosLocal): servicioDao {
-        return db.servicioDAO()
+    fun provideServicioDao(db: ProductDataBase): servicioDao {
+        return db.servicioDAO
     }
 
     @Provides
     @Singleton
-    fun provideTicketDao(db: BaseDatosLocal): ticketDao {
-        return db.ticketDAO()
+    fun provideTicketDao(db: ProductDataBase): ticketDao {
+        return db.ticketDAO
     }
 
     @Provides
     @Singleton
-    fun provideTipoVentaDao(db: BaseDatosLocal): tipo_ventaDao {
-        return db.tipoVentaDAO()
+    fun provideTipoVentaDao(db: ProductDataBase): tipo_ventaDao {
+        return db.tipoVentaDAO
     }
 
     @Provides
     @Singleton
-    fun provideUsuarioDao(db: BaseDatosLocal): usuarioDao {
-        return db.usuarioDAO()
+    fun provideUsuarioDao(db: ProductDataBase): usuarioDao {
+        return db.usuarioDAO
     }
 
     @Provides
     @Singleton
-    fun provideVentaDao(db: BaseDatosLocal): ventaDao {
-        return db.ventaDAO()
+    fun provideVentaDao(db: ProductDataBase): ventaDao {
+        return db.ventaDAO
     }
 
     @Provides
     @Singleton
-    fun providePersonaDao(db: BaseDatosLocal): personaDao {
-        return db.personaDAO()
+    fun providePersonaDao(db: ProductDataBase): personaDao {
+        return db.personaDAO
     }
 
     @Provides
