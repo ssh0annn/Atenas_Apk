@@ -22,6 +22,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ticket
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ventas
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreenV2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,7 +91,7 @@ fun Navigation() {
         }
 
         composable(route = Screens.Productos.route ) {
-             InventoryScreen(navController)
+            InventoryScreenV2(navController)
         }
 
     }
