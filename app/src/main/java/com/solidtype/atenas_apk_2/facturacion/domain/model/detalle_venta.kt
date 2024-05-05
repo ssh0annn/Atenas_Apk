@@ -8,6 +8,7 @@ import com.solidtype.atenas_apk_2.core.entidades.persona
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.core.entidades.usuario
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
+import java.time.LocalDate
 
 @Entity(foreignKeys = [
     ForeignKey(entity = venta::class, parentColumns = ["id_venta"], childColumns = ["codigo_venta"]),
@@ -24,6 +25,6 @@ data class detalle_venta (
     val codigo :Int,
     val cantidad :Int,
     val total :Double,
-    val fecha :String,
+    val fecha :LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

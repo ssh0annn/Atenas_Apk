@@ -37,13 +37,13 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
     categoria::class, detalle_ticket::class, detalle_venta::class, inventario::class,
     persona::class, roll_usuarios::class, servicio::class, ticket::class,
     tipo_venta::class, usuario::class, venta::class
-], version = 10, exportSchema = false)
+], version = 11, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
     abstract val HistorialVentaDao :HistorialVentaDAO
     abstract val HistorialTicketDao :HistorialTicketDAO
-
+    //nuevas bases de datos oficiales y centradas en el proyecto completas (version 1 de ellas)
     abstract val categoriaDAO: categoriaDao
     abstract val detalleTicketDAO: detalle_ticketDao
     abstract val detalleVentaDAO: detalle_ventaDao

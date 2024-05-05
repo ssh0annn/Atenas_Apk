@@ -8,6 +8,7 @@ import com.solidtype.atenas_apk_2.core.entidades.persona
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.core.entidades.usuario
+import java.time.LocalDate
 
 @Entity(foreignKeys = [
     ForeignKey(entity = ticket::class, parentColumns = ["id_ticket"], childColumns = ["codigo_ticket"]),
@@ -27,7 +28,7 @@ data class detalle_ticket (
     val nota :String,
     val cantidad :Int,
     val total :Double,
-    val fecha_inicio :String,
-    val fecha_final :String,
+    val fecha_inicio :LocalDate,
+    val fecha_final :LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )
