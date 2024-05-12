@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 data class usuario (
     @PrimaryKey(autoGenerate = true) val id_usuario :Long,
     val id_roll_usuario :Long,
-    val nombre :String,
+    val nombre :String, // vendedor, tecnico
     val apellido :String,
     val email :String,
     val direccion_negocio :String?,

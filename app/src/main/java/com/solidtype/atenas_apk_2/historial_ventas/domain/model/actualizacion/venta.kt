@@ -9,10 +9,11 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 @Entity(foreignKeys = [
     ForeignKey(entity = inventario::class, parentColumns = ["id_inventario"], childColumns = ["id_producto"])
 ])
+
 data class venta (
-    @PrimaryKey(autoGenerate = true) val id_venta :Long,
+    @PrimaryKey(autoGenerate = true) val id_venta :Long,//codigo_venta :Long,  //Referencia a venta.
     val id_producto :Long,
-    val codigo :Int,
+    val codigo :Int,  //
     val subtotal :Double,
     val impuesto :Double,
     val total :Double,

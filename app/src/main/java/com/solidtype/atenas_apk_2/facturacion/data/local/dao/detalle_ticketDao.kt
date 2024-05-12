@@ -6,6 +6,8 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_ticket
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface detalle_ticketDao {
@@ -14,7 +16,9 @@ interface detalle_ticketDao {
     @Insert
     suspend fun addDetalleTickets(detalleTicket : List<detalle_ticket>)
     @Query("select * from detalle_ticket")
-    suspend fun getDetalleTickets():List<detalle_ticket>
+    fun getDetalleTickets(): Flow<List<detalle_ticket>>
+    @Query("select * from detalle_ticket where fecha_inicio == :fecha")
+    fun buscarTickets(fecha:LocalDate): Flow<List<detalle_ticket>>
     @Query("select * from detalle_ticket where id_detalle_ticket ==:id")
     suspend fun getDetalleTicketById(id :Int): detalle_ticket
     @Update

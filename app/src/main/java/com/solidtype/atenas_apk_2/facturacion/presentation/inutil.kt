@@ -2,7 +2,6 @@ package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.solidtype.atenas_apk_2.facturacion.presentation.facturacion.FacturacionScreen
 
 val facturas = listOf(
     Factura(

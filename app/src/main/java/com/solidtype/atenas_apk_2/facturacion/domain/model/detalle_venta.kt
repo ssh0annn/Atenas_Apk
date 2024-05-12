@@ -16,14 +16,15 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ve
     ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"]),
 ])
 data class detalle_venta (
-    @PrimaryKey(autoGenerate = true) val id_detalle_venta :Long,
-    val codigo_venta :Long,
+    @PrimaryKey(autoGenerate = true) val id_detalle_venta :Long,  //ID de detalle
+    val codigo_venta :Long,  //Referencia a venta.
     val id_vendedor :Long,
-    val id_cliente :Long,
-    val id_tipo_venta :Long,
-    val codigo :Int,
+    val id_cliente :Long,   //Nombre de cliente.
+    val id_tipo_venta :Long,  //Tipo de pago
+    val codigo :Int,  //Numero de factura
     val cantidad :Int,
-    val total :Double,
-    val fecha :String,
+    val total :Double,    //Total
+    val fecha :String,  //Fecha
     @ColumnInfo(defaultValue = "true") val estado :Boolean
+
 )

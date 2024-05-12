@@ -1,8 +1,7 @@
-package com.solidtype.atenas_apk_2.facturacion.presentation.facturacion
+package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,11 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.facturacion.presentation.FacturaViewModel
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Titulo
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.InputBlanco
-import com.solidtype.atenas_apk_2.facturacion.presentation.facturas
 import com.solidtype.atenas_apk_2.util.formatearFecha
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
@@ -44,7 +41,6 @@ import com.solidtype.atenas_apk_2.util.ui.Components.NavPlato
 import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.fomatoLocalDate
-import com.solidtype.atenas_apk_2.util.formatoDDBB
 
 @SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
