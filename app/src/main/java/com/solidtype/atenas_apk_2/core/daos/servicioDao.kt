@@ -6,19 +6,20 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.core.entidades.servicio
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface servicioDao {
     @Insert
-    suspend fun addServicio(servicio : servicio)
+    fun addServicio(servicio : servicio)
     @Insert
-    suspend fun addServicios(servicio : List<servicio>)
+    fun addServicios(servicio : List<servicio>)
     @Query("select * from servicio")
-    suspend fun getServicios():List<servicio>
+    fun getServicios(): Flow<List<servicio>>
     @Query("select * from servicio where id_servicio ==:id")
-    suspend fun getServiciosById(id :Int): servicio
+    fun getServiciosById(id :Int): servicio
     @Update
-    suspend fun updateServicio(servicio: servicio)
+    fun updateServicio(servicio: servicio)
     @Delete
-    suspend fun deleteServicio(servicio: servicio)
+    fun deleteServicio(servicio: servicio)
 }

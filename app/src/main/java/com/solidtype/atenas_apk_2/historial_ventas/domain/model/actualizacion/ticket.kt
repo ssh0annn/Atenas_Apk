@@ -4,18 +4,27 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.solidtype.atenas_apk_2.core.entidades.persona
 import com.solidtype.atenas_apk_2.core.entidades.servicio
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
+import com.solidtype.atenas_apk_2.core.entidades.usuario
+import java.time.LocalDate
 
 @Entity(foreignKeys = [
-    ForeignKey(entity = servicio::class, parentColumns = ["id_servicio"], childColumns = ["tipo_servicio"])
+    ForeignKey(entity = usuario::class, parentColumns = ["id_usuario"], childColumns = ["id_vendedor"]),
+    ForeignKey(entity = persona::class, parentColumns = ["id_persona"], childColumns = ["id_cliente"]),
+    ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"])
 ])
 data class ticket (
     @PrimaryKey(autoGenerate = true) val id_ticket :Long,
-    val tipo_servicio :Long,
-    val codigo :Int,
+    val id_vendedor :Long,
+    val id_cliente :Long,
+    val id_tipo_venta :Long,
     val descripcion :String,
     val subtotal :Double,
     val impuesto :Double,
     val total :Double,
+    val fecha_inicio : LocalDate,
+    val fecha_final : LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

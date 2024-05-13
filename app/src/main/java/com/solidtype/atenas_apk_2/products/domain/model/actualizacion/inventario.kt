@@ -14,14 +14,12 @@ data class inventario (
     @PrimaryKey(autoGenerate = true) val id_inventario :Long,
     val id_categoria :Long,
     val id_proveedor :Long,
-    val codigo :Int,
     val nombre :String,
     val marca :String?,
     val modelo :String?,
     val cantidad :Int,
     val precio_compra :Double,
     val precio_venta :Double,
-    val total :Double,
     val descripcion :String?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

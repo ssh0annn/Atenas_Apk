@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class tipo_venta (
     @PrimaryKey(autoGenerate = true) val id_tipo_venta :Long,
-    val nombre :String,
-    val tiene_descuento :Boolean,
+    val tipo_pago :String,
     val descuento :Double?,
     val tipo_comprobante :String?,
     val serie_comprobante :String?,
