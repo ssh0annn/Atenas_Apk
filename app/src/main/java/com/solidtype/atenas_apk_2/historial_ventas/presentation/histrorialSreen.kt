@@ -25,7 +25,6 @@ fun Prueba(
     Text("holaa")
 }
 
-
 @Composable
 fun Screen(historialVentaEntidad: HistorialVentaEntidad, onProductClick:(HistorialVentaEntidad) -> Unit){
     Column(

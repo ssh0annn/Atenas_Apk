@@ -22,7 +22,6 @@ class FacturaViewModel @Inject constructor(
     private val facturacionCasosdeUso: FacturacionCasosdeUso,
     private val prueba: kk
 ) : ViewModel() {
-
     var uiState = MutableStateFlow(FacturaUI())
         private set
     var job: Job? = null
@@ -51,7 +50,6 @@ class FacturaViewModel @Inject constructor(
                     println("Facturas $product")
                 }
             }
-
         }
     }
     fun buscarfacturas(

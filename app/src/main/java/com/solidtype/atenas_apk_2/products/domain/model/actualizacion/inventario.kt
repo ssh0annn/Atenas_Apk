@@ -11,7 +11,7 @@ import com.solidtype.atenas_apk_2.core.entidades.persona
     ForeignKey(entity = persona::class, parentColumns = ["id_persona"], childColumns = ["id_proveedor"])
 ])
 data class inventario (
-    @PrimaryKey(autoGenerate = true) val id_inventario :Long,
+    @PrimaryKey(autoGenerate = true) val id_inventario :Long = 7000,
     val id_categoria :Long,
     val id_proveedor :Long,
     val nombre :String,

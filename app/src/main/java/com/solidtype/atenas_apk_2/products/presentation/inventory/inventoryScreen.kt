@@ -321,7 +321,7 @@ fun InventoryScreen(
                                                 }*/
 
                                         }
-                                        items(productos) {
+                                        items(productos) {/*
                                             Row(
                                                 modifier = Modifier
                                                     .padding(10.dp)
@@ -366,6 +366,7 @@ fun InventoryScreen(
                                                     textAlign = TextAlign.Center
                                                 )
                                             }
+                                            */
                                         }
                                     }
                                 }
@@ -445,7 +446,7 @@ fun InventoryScreen(
                                 BotonIconCircular(
                                     true,
                                     onClick = {//Boton X para borrar productos
-                                        try {
+                                        try {/*
                                             viewModel.eliminarProductos(
                                                 ProductEntity(
                                                     codigo.toInt(),
@@ -458,7 +459,9 @@ fun InventoryScreen(
                                                     marca,
                                                     cantidad.toInt()
                                                 )
+
                                             )
+                                            */
                                             codigo = ""
                                             categoria = ""
                                             nombre = ""
@@ -480,6 +483,7 @@ fun InventoryScreen(
                                 Spacer(modifier = Modifier.width(60.dp))
                                 BotonIconCircular(false, onClick = {
                                     try {
+                                        /*
                                         viewModel.crearProductos(
                                             Code_Product = codigo,
                                             Name_Product = nombre,
@@ -491,6 +495,8 @@ fun InventoryScreen(
                                             Tracemark_Product = marca,
                                             Count_Product = cantidad
                                         )
+
+                                         */
                                     } catch (e: Exception) {
                                         Toast.makeText(
                                             context,

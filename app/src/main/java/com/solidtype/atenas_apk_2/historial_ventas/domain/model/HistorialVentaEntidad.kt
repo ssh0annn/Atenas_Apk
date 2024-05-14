@@ -20,5 +20,7 @@ data class HistorialVentaEntidad(
         val TipoVenta : String,
         val Total : Double,
         val FechaIni : LocalDate
-)
+){
+
+}
 

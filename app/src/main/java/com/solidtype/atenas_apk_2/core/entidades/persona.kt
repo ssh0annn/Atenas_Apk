@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class persona (
-    @PrimaryKey(autoGenerate = true) val id_persona :Long,
+    @PrimaryKey(autoGenerate = true) val id_persona :Long = 0,
     val tipo_persona :String,//proveedor, cliente
     val nombre :String,
     val tipo_documento :String,  //cedula, RNC, DNI
