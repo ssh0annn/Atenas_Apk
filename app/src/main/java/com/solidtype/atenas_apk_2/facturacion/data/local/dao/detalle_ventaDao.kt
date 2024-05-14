@@ -17,7 +17,10 @@ interface detalle_ventaDao {
     @Query("select * from detalle_venta")
     fun getDetalleVentas(): Flow<List<detalle_venta>>
     @Query("select * from detalle_venta where id_detalle_venta ==:id")
-    fun getDetalleVentaById(id :Int): detalle_venta
+    fun getDetalleVentaById(id :Long): detalle_venta
+
+    @Query("select * from detalle_venta where id_venta ==:id")
+    fun getDetalleVentaByIdVenta(id :Long): detalle_venta
     @Update
     fun updateDetalleVenta(detalleVenta: detalle_venta)
     @Delete

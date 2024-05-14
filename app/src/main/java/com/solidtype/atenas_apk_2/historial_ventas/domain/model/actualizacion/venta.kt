@@ -23,7 +23,7 @@ data class venta (
     val subtotal :Double,
     val impuesto :Double,
     val total :Double,
-    val cantidad :Int,
+    val cantidad :Int, //Cantidad articulos
     val fecha : LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )
