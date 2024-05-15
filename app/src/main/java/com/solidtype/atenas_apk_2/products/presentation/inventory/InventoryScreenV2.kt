@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -34,6 +35,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissState
@@ -163,6 +165,13 @@ fun InventoryScreenV2(
             mutableStateOf(List(productos.size) { mutableStateOf(false) })
     }
 
+    val isEditedList by rememberSaveable(productos) {
+        if(productos.isEmpty())
+            mutableStateOf(emptyList())
+        else
+            mutableStateOf(List(productos.size) { mutableStateOf(false) })
+    }
+
     val stateList =
         if (productos.isEmpty())
             emptyList()
@@ -184,13 +193,15 @@ fun InventoryScreenV2(
         mutableStateOf(false)
     }
 
-    LaunchedEffect(key1 = isRemovedList) {
-        if (lastDeletedItemPosition != null && deshechado){ //Si se deshizo la eliminación
-            isRemovedList.toMutableList()[lastDeletedItemPosition!!].value = false
-            stateList[lastDeletedItemPosition!!].value.reset()
-            lastDeletedItemPosition = null
-            lastDeletedItem = null
-            deshechado = false
+    if (productos.isNotEmpty()) {
+        LaunchedEffect(key1 = isRemovedList) {
+            if (lastDeletedItemPosition != null && deshechado) { //Si se deshizo la eliminación
+                isRemovedList.toMutableList()[lastDeletedItemPosition!!].value = false
+                stateList[lastDeletedItemPosition!!].value.reset()
+                lastDeletedItemPosition = null
+                lastDeletedItem = null
+                deshechado = false
+            }
         }
     }
 
@@ -329,16 +340,20 @@ fun InventoryScreenV2(
                             ) {
                                 if(productos.isNotEmpty()){
                                     itemsIndexed(productos) {i, it ->
-                                        SwipeToDeleteContainer(
+                                        SwipeContainer(
                                             item = it,
-                                            isRemovedItem = isRemovedList[i],
                                             stateItem = stateList[i],
+                                            isRemovedItem = isRemovedList[i],
+                                            isEditedItem = isEditedList[i],
                                             onDelete = {producto ->
                                                 lastDeletedItem = producto
                                                 lastDeletedItemPosition = i
                                                 isRemovedList.toMutableList()[i].value = true
                                                 showConfirmSnackbar = true
                                                 viewModel.eliminarProductos(producto)
+                                            },
+                                            onEdit = {
+                                                Log.i("Wow", "Editando producto")
                                             }
                                         ) {
                                             Row(
@@ -586,31 +601,54 @@ fun showFilePicker2(context: Context) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> SwipeToDeleteContainer(
+fun <T> SwipeContainer(
     item: T,
-    isRemovedItem: MutableState<Boolean>,
     stateItem: MutableState<DismissState>,
+    isRemovedItem: MutableState<Boolean>,
+    isEditedItem: MutableState<Boolean>,
     onDelete: (T) -> Unit,
+    onEdit: (T) -> Unit,
     animationDuration: Int = 500,
     content: @Composable (T) -> Unit
 ) {
 
     stateItem.value = rememberDismissState(
         confirmValueChange = { value ->
-            if (value == DismissValue.DismissedToStart) {
+            /*if (value == DismissValue.DismissedToStart) {
                 isRemovedItem.value = true
                 true
             } else {
-                isRemovedItem.value = false
-                false
+                if (value != DismissValue.DismissedToEnd) {
+                    isRemovedItem.value = false
+                    false
+                }
+            }*/
+            when (value) {
+                DismissValue.DismissedToStart -> {
+                    isRemovedItem.value = true
+                    true
+                }
+                DismissValue.DismissedToEnd -> {
+                    isEditedItem.value = true
+                    true
+                }
+
+                else -> {
+                    false
+                }
             }
         }
     )
 
-    LaunchedEffect(key1 = isRemovedItem.value) {
+    LaunchedEffect(key1 = stateItem.value.dismissDirection) {
         if(isRemovedItem.value) {
             delay(animationDuration.toLong())
             onDelete(item)
+            Log.i("Wow", "Eliminando producto desde el primer if")
+        }
+        if (isEditedItem.value) {
+            delay(animationDuration.toLong())
+            onEdit(item)
         }
     }
 
@@ -622,21 +660,28 @@ fun <T> SwipeToDeleteContainer(
 
     //Si swipeDismissState.dismissDirection == DismissDirection.EndToStart y la animación terminó, entonces se elimina el item
     LaunchedEffect(key1 = stateItem.value.dismissDirection) {
-        if (stateItem.value.dismissDirection == DismissDirection.EndToStart) {
+        if (stateItem.value.dismissDirection == DismissDirection.EndToStart && stateItem.value.progress == 2f) {
             delay(animationDuration.toLong())
             onDelete(item)
+            Log.i("Wow", "Eliminando producto desde el LaunchedEffect")
         }
     }
 
-    //Si el deplazamiento hacia la izquierda es menor al 25%, regresa a su posición original
-    LaunchedEffect(key1 = stateItem.value.progress) {
+    /*LaunchedEffect(key1 = stateItem.value.progress) {
         if (stateItem.value.progress < 0.25f) {
+            stateItem.value.reset()
+        }
+    }*/
+
+    //Evitar que se deslice hacia la derecha para editar (restaurar)
+    if (isEditedItem.value) {
+        LaunchedEffect(key1 = Unit) {
             stateItem.value.reset()
         }
     }
 
     AnimatedVisibility(
-        visible = !isRemovedItem.value,
+        visible = !isRemovedItem.value || !isEditedItem.value,
         exit = shrinkVertically(
             animationSpec = tween(durationMillis = animationDuration),
             shrinkTowards = Alignment.Top
@@ -645,26 +690,31 @@ fun <T> SwipeToDeleteContainer(
         SwipeToDismiss(
             state = stateItem.value,
             background = {
-                DeleteBackground(swipeDismissState = stateItem.value)
+                MyBackground(swipeDismissState = stateItem.value)
             },
             dismissContent = { content(item) },
-            directions = setOf(DismissDirection.EndToStart)
+            directions = setOf(DismissDirection.EndToStart, DismissDirection.StartToEnd)
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteBackground(
+fun MyBackground(
     swipeDismissState: DismissState
 ) {
     val color =
-        if (swipeDismissState.dismissDirection == DismissDirection.EndToStart)
+        /*if (swipeDismissState.dismissDirection == DismissDirection.EndToStart)
             Color(0xFFFF7777)
         else
-            Color.Transparent
+            Color.Transparent*/
+        when (swipeDismissState.dismissDirection) {
+            DismissDirection.EndToStart -> Color(0xFFFF7777)
+            DismissDirection.StartToEnd -> Color(0xFF7777FF)
+            else -> Color.Transparent
+        }
 
-    if (!swipeDismissState.isDismissed(DismissDirection.EndToStart)) { // Si no se deslizó hacia la izquierda
+    /*if (!swipeDismissState.isDismissed(DismissDirection.EndToStart)) { // Si no se deslizó hacia la izquierda
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -682,5 +732,47 @@ fun DeleteBackground(
         }
     }else{
         Box{}
+    }*/
+
+    when (swipeDismissState.dismissDirection) {
+        DismissDirection.EndToStart -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(8.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .padding(end = ((Pantalla.ancho * 0.5f) - 160.dp) * swipeDismissState.progress),
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = null,
+                    tint = Blanco
+                )
+            }
+        }
+
+        DismissDirection.StartToEnd -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(8.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = ((Pantalla.ancho * 0.5f) - 160.dp) * swipeDismissState.progress),
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = null,
+                    tint = Blanco
+                )
+            }
+        }
+
+        else -> {
+            Box{}
+        }
     }
 }
