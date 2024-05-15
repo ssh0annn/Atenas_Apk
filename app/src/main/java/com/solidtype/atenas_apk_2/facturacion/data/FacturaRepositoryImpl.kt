@@ -23,7 +23,7 @@ class FacturaRepositoryImpl @Inject constructor() : FacturaRepository {
             listOf( " Adderlis", "Pendejo")
         ))
     }
-
+ 
     override fun DetalleFactura(numeroFactura: Long): Flow<List<List<String>>> {
        return flowOf(listOf(
            listOf( " Adderlis", "Pendejo")
