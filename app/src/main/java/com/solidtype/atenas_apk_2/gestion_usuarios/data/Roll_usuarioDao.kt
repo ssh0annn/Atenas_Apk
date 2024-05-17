@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.core.daos
+package com.solidtype.atenas_apk_2.gestion_usuarios.data
 
 import androidx.room.Dao
 import androidx.room.Delete

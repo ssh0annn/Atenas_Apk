@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class roll_usuarios (
-    @PrimaryKey(autoGenerate = true) val id_roll_usuario : Long, //
+    @PrimaryKey(autoGenerate = true) val id_roll_usuario : Long = 0, //
     val nombre : String, //roll: administrador, vendedor, tecnico
     val descripcion : String, //
     @ColumnInfo(defaultValue = "true") val estado : Boolean
