@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.core.entidades.usuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import kotlinx.coroutines.flow.Flow
 
 @Dao
