@@ -25,7 +25,6 @@ fun Prueba(
     Text("holaa")
 }
 
-
 @Composable
 fun Screen(historialVentaEntidad: HistorialVentaEntidad, onProductClick:(HistorialVentaEntidad) -> Unit){
     Column(
@@ -40,6 +39,6 @@ fun Screen(historialVentaEntidad: HistorialVentaEntidad, onProductClick:(Histori
         verticalArrangement = Arrangement.Center
     ) {
         Text("Cod: ${historialVentaEntidad.Codigo}", textAlign = TextAlign.Center)
-        Text("Cod: ${historialVentaEntidad.NombreCliente}", textAlign = TextAlign.Center)
+        Text("Cod: ${historialVentaEntidad.Nombre}", textAlign = TextAlign.Center)
     }
 }

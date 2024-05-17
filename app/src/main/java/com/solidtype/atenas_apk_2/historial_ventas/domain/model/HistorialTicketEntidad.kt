@@ -8,6 +8,7 @@ import java.time.LocalDate
 data class HistorialTicketEntidad(
     @PrimaryKey val Codigo : Int,
     val NombreCliente : String,
+    val NumeroFactura : Int,
     val Modelo : String,
     val Telefono : Int,
     val FaltaEquipo : String,

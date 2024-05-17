@@ -9,7 +9,7 @@ import java.time.LocalDate
 data class HistorialVentaEntidad(
         @PrimaryKey val Codigo : Int,
         val Nombre : String,
-        val NombreCliente:String,
+        val NumeroFactura : Int,
         val Descripcion : String,
         val Imei: String,
         val Cantidad : Int,
@@ -20,5 +20,7 @@ data class HistorialVentaEntidad(
         val TipoVenta : String,
         val Total : Double,
         val FechaIni : LocalDate
-)
+){
+
+}
 

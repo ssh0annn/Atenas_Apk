@@ -4,17 +4,23 @@ package com.solidtype.atenas_apk_2.products.domain.repository
 import android.net.Uri
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import kotlinx.coroutines.flow.Flow
 
 interface InventarioRepo {
-    fun getProducts(): Flow<List<ProductEntity>>
-    fun getProductByCodigo(codigo:Int): Flow<List<ProductEntity>>
-    fun searchProductsLike(datos:String):Flow<List<ProductEntity>>
-    suspend fun createProducts(prodcuto: ProductEntity):Boolean
-    suspend fun deleteProduct(codigo:ProductEntity):Boolean
-    suspend fun updateProduct(producto:ProductEntity): Boolean
-    suspend fun exportarExcel(productos: List<ProductEntity>):Uri
+    fun getProducts(): Flow<List<inventario>>
+    suspend fun getProductByCodigo(codigo:Int): inventario
+    fun searchProductsLike(datos:String):Flow<List<inventario>>
+    suspend fun createProducts(prodcuto: inventario):Boolean
+    suspend fun deleteProduct(codigo:inventario):Boolean
+    suspend fun updateProduct(producto:inventario): Boolean
+    suspend fun exportarExcel(productos: List<inventario>):Uri
     suspend fun importarExcel(path:Uri):Boolean
     suspend fun syncronizacionProductos()
+
+    fun getCategorias():Flow<List<categoria>>
+
+    suspend fun agregarCategorias(categoria: categoria)
 
 }
