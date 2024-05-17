@@ -6,7 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
-import java.time.LocalDate
 
 @Entity(foreignKeys = [
     ForeignKey(entity = venta::class, parentColumns = ["id_venta"], childColumns = ["id_venta"], onDelete = ForeignKey.CASCADE),

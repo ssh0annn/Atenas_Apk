@@ -11,15 +11,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface usuarioDao {
     @Insert
-    fun addUsuario(usuario : usuario)
+    suspend fun addUsuario(usuario : usuario)
     @Insert
-    fun addUsuarios(usuario : List<usuario>)
+    suspend fun addUsuarios(usuario : List<usuario>)
     @Query("select * from usuario")
     fun getUsuarios(): Flow<List<usuario>>
+    @Query("select * from usuario where id_roll_usuario ==:id")
+    fun getUsuariosByIdRoll(id :Int): Flow<List<usuario>>
     @Query("select * from usuario where id_usuario ==:id")
-    fun getUsuariosById(id :Int): usuario
+    suspend fun getUsuariosById(id :Int): usuario
     @Update
-    fun updateUsuario(usuario : usuario)
+    suspend fun updateUsuario(usuario : usuario)
     @Delete
-    fun deleteUsuario(usuario : usuario)
+    suspend fun deleteUsuario(usuario : usuario)
 }

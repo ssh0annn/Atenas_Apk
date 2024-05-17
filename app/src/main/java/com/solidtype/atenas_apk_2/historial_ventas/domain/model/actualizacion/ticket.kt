@@ -23,7 +23,7 @@ data class ticket (
     val descripcion :String,
     val subtotal :Double,
     val impuesto :Double,
-    val total :Double,
+    val total :Double?,
     val fecha_inicio : LocalDate,
     val fecha_final : LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean

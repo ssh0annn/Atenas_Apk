@@ -7,19 +7,27 @@ import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface ventaDao {
     @Insert
-    fun addVenta(venta: venta)
+    suspend fun addVenta(venta: venta)
     @Insert
-    fun addVentas(venta : List<venta>)
+    suspend fun addVentas(venta : List<venta>)
     @Query("select * from venta")
     fun getVentas(): Flow<List<venta>>
     @Query("select * from venta where id_venta ==:id")
-    fun getVentasById(id :Int): venta
+    suspend fun getVentasById(id :Int): venta
+    @Query("select * from venta " +
+            "where id_venta like'%' || :any || '%' " +
+            "or id_vendedor like '%' || :any || '%'" +
+            "or id_cliente like '%' || :any || '%'" +
+            "or id_tipo_venta like '%' || :any || '%'" +
+            "and fecha between :fechaInicial and :fechaFinal")
+    fun getVentasByIdsAndFecha(any : String, fechaInicial : LocalDate, fechaFinal : LocalDate):Flow<List<venta>>
     @Update
-    fun updateVenta(venta : venta)
+    suspend fun updateVenta(venta : venta)
     @Delete
-    fun deleteVenta(venta : venta)
+    suspend fun deleteVenta(venta : venta)
 }

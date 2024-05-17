@@ -11,15 +11,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface detalle_ventaDao {
     @Insert
-    fun addDetalleVenta(detalleVenta : detalle_venta)
+    suspend fun addDetalleVenta(detalleVenta : detalle_venta)
     @Insert
-    fun addDetalleVentas(detalleVenta : List<detalle_venta>)
+    suspend fun addDetalleVentas(detalleVenta : List<detalle_venta>)
     @Query("select * from detalle_venta")
     fun getDetalleVentas(): Flow<List<detalle_venta>>
+    @Query("select * from detalle_venta where id_venta ==:id_venta")
+    fun getDetalleVentasByIdVenta(id_venta :Int):Flow<List<detalle_venta>>
+    @Query("select * from detalle_venta where id_producto ==:id_producto")
+    fun getDetalleVentasByIdProducto(id_producto :Int):Flow<List<detalle_venta>>
     @Query("select * from detalle_venta where id_detalle_venta ==:id")
-    fun getDetalleVentaById(id :Int): detalle_venta
+    suspend fun getDetalleVentaById(id :Int): detalle_venta
     @Update
-    fun updateDetalleVenta(detalleVenta: detalle_venta)
+    suspend fun updateDetalleVenta(detalleVenta: detalle_venta)
     @Delete
-    fun deleteDetalleVenta(detalleVenta: detalle_venta)
+    suspend fun deleteDetalleVenta(detalleVenta: detalle_venta)
 }

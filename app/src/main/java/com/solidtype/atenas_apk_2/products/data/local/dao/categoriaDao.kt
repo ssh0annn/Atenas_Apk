@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface categoriaDao {
@@ -14,7 +15,7 @@ interface categoriaDao {
     @Insert
     suspend fun addCategorias(categoria : List<categoria>)
     @Query("select * from categoria")
-    suspend fun getCategorias():List<categoria>
+    fun getCategorias(): Flow<List<categoria>>
     @Query("select * from categoria where id_categoria ==:id")
     suspend fun getCategoriasById(id :Int): categoria
     @Update

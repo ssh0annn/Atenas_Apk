@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class roll_usuarios (
     @PrimaryKey(autoGenerate = true) val id_roll_usuario : Long,
     val nombre : String,
-    val descripcion : String,
+    val descripcion : String?,
     @ColumnInfo(defaultValue = "true") val estado : Boolean
 )

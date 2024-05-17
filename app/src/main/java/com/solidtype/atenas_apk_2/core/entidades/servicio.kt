@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class servicio (
     @PrimaryKey(autoGenerate = true) val id_servicio : Long,
     val nombre :String,
-    val descripcion :String,
+    val descripcion :String?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

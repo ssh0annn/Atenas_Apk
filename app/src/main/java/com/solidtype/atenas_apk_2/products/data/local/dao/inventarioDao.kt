@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface inventarioDao {
@@ -14,7 +15,11 @@ interface inventarioDao {
     @Insert
     suspend fun addInventarios(inventario : List<inventario>)
     @Query("select * from inventario")
-    suspend fun getInventario():List<inventario>
+    fun getInventario(): Flow<List<inventario>>
+    @Query("select * from inventario where id_categoria ==:id_cate")
+    fun getInventariosByIdCategoria(id_cate :Int): Flow<List<inventario>>
+    @Query("select * from inventario where id_proveedor ==:id_prov")
+    fun getInventariosByIdProveedor(id_prov :Int): Flow<List<inventario>>
     @Query("select * from inventario where id_inventario ==:id")
     suspend fun getInventariosById(id :Int): inventario
     @Update

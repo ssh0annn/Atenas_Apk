@@ -11,15 +11,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface personaDao {
     @Insert
-    fun addPersona(persona : persona)
+    suspend fun addPersona(persona : persona)
     @Insert
-    fun addPersonas(persona : List<persona>)
+    suspend fun addPersonas(persona : List<persona>)
     @Query("select * from persona")
     fun getPersonas(): Flow<List<persona>>
     @Query("select * from persona where id_persona ==:id")
-    fun getPersonasById(id :Int): persona
+    suspend fun getPersonasById(id :Int): persona
     @Update
-    fun updatePersona(persona: persona)
+    suspend fun updatePersona(persona: persona)
     @Delete
-    fun deletePersona(persona: persona)
+    suspend fun deletePersona(persona: persona)
 }
