@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     ForeignKey(entity = roll_usuarios::class, parentColumns = ["id_roll_usuario"], childColumns = ["id_roll_usuario"])
 ])
 data class usuario (
-    @PrimaryKey(autoGenerate = true) val id_usuario :Long,
+    @PrimaryKey(autoGenerate = true) val id_usuario :Long = 0,
     val id_roll_usuario :Long,
     val nombre :String, // vendedor, tecnico
     val apellido :String,

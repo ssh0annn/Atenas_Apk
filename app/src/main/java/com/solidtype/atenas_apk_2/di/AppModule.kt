@@ -58,6 +58,16 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.repository.GestionUserRepository
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Actualizar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Agregar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Buscar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.CrearRoles
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Eliminar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.GetRoles
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.MostrarUsuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVentasVentaImpl
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
@@ -309,11 +319,31 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFacturacionCasosUso(repo: FacturaRepository) = FacturacionCasosdeUso(
-        buscarFacturas= BuscarFacturas(repo),
+        buscarFacturas = BuscarFacturas(repo),
         detallesFacturas = DetallesFacturas(repo),
         mostrarTodo = MostrarTodo(repo)
     )
 
+    //USUARIOS GESTION
+
+    @Provides
+    @Singleton
+    fun provideRepositorioUsuario(
+        userDao: usuarioDao,
+        roll: roll_usuarioDao
+    ): GestionUserRepository = GestionUserRepoImpl(roll, userDao)
+
+    @Provides
+    @Singleton
+    fun provideCasosUsuario(repo: GestionUserRepository) = UsuarioUseCases(
+        actualizar = Actualizar(repo),
+        agregar = Agregar(repo),
+        eliminar = Eliminar(repo),
+        mostrarUsuarios = MostrarUsuario(repo),
+        buscarUsuario = Buscar(repo),
+        getRoles = GetRoles(repo),
+        crearRoles = CrearRoles(repo)
+    )
 
 
 }

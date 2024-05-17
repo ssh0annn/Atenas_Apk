@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.util
 
 import android.annotation.SuppressLint
 import com.google.firebase.Timestamp
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
@@ -77,5 +78,42 @@ fun ListaTicket():List<String>{
         "fecha_inicio",
         "fecha_final",
         "estado"
+    )
+}
+
+/**
+ * param: map(string, any)
+ * return: Usuario Entity
+ */
+
+fun Map<String, Any?>.toUsuario(): usuario {
+    val usuario= setOf("id_roll_usuario","nombre", "apellido", "email", "clave", "telefono", "estado")
+    if(this.keys.toSet() == usuario){
+        return usuario(
+            id_roll_usuario = this["id_roll_usuario"] as Long,
+            nombre = this["nombre"] as String,
+            apellido = this["apellido"] as String,
+            email = this["email"] as String,
+            clave = this["clave"] as String,
+            telefono = this["telefono"] as String,
+            estado = this["estado"] as Boolean,
+
+            )
+    }
+    throw Exception("No se reconoce el mapa, favor solo usar un mapa que sea compatible con Usuario")
+}
+/**
+ * param: map(string, any)
+ * return: Usuario Entity
+ */
+fun usuario.toMap(): Map<String, Any?>{
+    return mapOf(
+        "id_roll_usuario" to id_roll_usuario,
+        "nombre" to nombre,
+        "apellido" to apellido,
+        "email" to email,
+        "clave" to clave,
+        "telefono" to telefono,
+        "estado" to estado
     )
 }
