@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.core.entidades
+package com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,9 +9,9 @@ import androidx.room.PrimaryKey
     ForeignKey(entity = roll_usuarios::class, parentColumns = ["id_roll_usuario"], childColumns = ["id_roll_usuario"])
 ])
 data class usuario (
-    @PrimaryKey(autoGenerate = true) val id_usuario :Long,
+    @PrimaryKey(autoGenerate = true) val id_usuario :Long = 0,
     val id_roll_usuario :Long,
-    val nombre :String,
+    val nombre :String, // vendedor, tecnico
     val apellido :String,
     val email :String,
     val clave :String,

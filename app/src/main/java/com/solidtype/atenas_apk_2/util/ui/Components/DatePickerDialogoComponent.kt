@@ -6,14 +6,18 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,17 +46,27 @@ fun DatePickerDialogo(
             MyDatePickerDialog(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(500.dp),
+                    .height(600.dp),
                 onDismissRequest = onDismissRequest,
                 confirmButton = {
-                    Boton("Ok", onClick = onClick)
+                    Boton(
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "cotejo",
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = Blanco
+                            )
+                        },
+                        onClick = onClick
+                    )
                 },
                 content = {
                     DatePicker(
                         state = datePickerState,
                         modifier = Modifier
-                            .background(Blanco)
-                        ,
+                            .background(Blanco),
                         colors = DatePickerDefaults.colors(
                             containerColor = GrisClaro,
                             selectedYearContainerColor = AzulGris,

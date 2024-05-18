@@ -3,13 +3,19 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.solidtype.atenas_apk_2.R
+import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun Dialogo(
@@ -73,11 +81,11 @@ fun Dialogo(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text ="Ejemplar de Excel",
+                            text = "Ejemplar de Excel",
                             color = Color(0xFF343341),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
-                            )
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                         Image(
                             painter = painterResource(id = R.drawable.ejemplar),
@@ -97,9 +105,105 @@ fun Dialogo(
     }
 }
 
+@Composable
+fun MyDialog(
+    mostrar: Boolean,
+    onCerrarDialogo: () -> Unit,
+    contenido: @Composable () -> Unit
+) {
+    if (mostrar) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(semiTransparente),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(Pantalla.ancho - 100.dp)
+                    .height(Pantalla.alto - 100.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xAACCD2E4),
+                                Color(0xAA727694),
+                            )
+                        ),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .blur(5.dp)
+            )
+            Box(
+                modifier = Modifier
+                    .width(Pantalla.ancho - 100.dp)
+                    .height(Pantalla.alto - 100.dp)
+                    .background(
+                        color = Color(0x00FFFFFF),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xAAFFFFFF),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    contenido()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Boton("Cerrar") {
+                            onCerrarDialogo()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DialogoV2(
+    mostrar: Boolean,
+    onCerrarDialogo: () -> Unit
+) {
+    MyDialog(
+        mostrar = mostrar,
+        onCerrarDialogo = onCerrarDialogo
+    ) {
+        Text(
+            text = "Ejemplar de Excel",
+            color = Color(0xFF343341),
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Image(
+            painter = painterResource(id = R.drawable.ejemplar),
+            contentDescription = "Ejemplar de Excel",
+            modifier = Modifier
+                .size(
+                    width = Pantalla.ancho - 100.dp,
+                    height = Pantalla.alto - 410.dp
+                )
+                .shadow(16.dp, shape = RoundedCornerShape(16.dp))
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+
 //Preview para Vortex T10M (T10MPROPLUS) Horizontal
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560)
 @Composable
 fun DialogoPreview() {
-    Dialogo(mostrar = true)
+    DialogoV2(mostrar = true, onCerrarDialogo = {})
 }

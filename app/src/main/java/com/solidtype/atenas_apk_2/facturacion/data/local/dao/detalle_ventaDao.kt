@@ -22,6 +22,8 @@ interface detalle_ventaDao {
     fun getDetalleVentasByIdProducto(id_producto :Int):Flow<List<detalle_venta>>
     @Query("select * from detalle_venta where id_detalle_venta ==:id")
     suspend fun getDetalleVentaById(id :Int): detalle_venta
+    @Query("select * from detalle_venta where id_venta ==:id")
+    fun getDetalleVentaByIdVenta(id :Long): detalle_venta
     @Update
     suspend fun updateDetalleVenta(detalleVenta: detalle_venta)
     @Delete

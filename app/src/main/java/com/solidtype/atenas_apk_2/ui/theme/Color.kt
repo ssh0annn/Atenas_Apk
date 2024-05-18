@@ -18,4 +18,4 @@ val AzulGris = Color(0xFF343341)
 val GrisOscuro = Color(0xFF737A8C)
 val GrisAzulado = Color(0xFF8285A5)
 val GrisClaro = Color(0xFFD7D7D9)
-
+val semiTransparente = Color(0x88000000)

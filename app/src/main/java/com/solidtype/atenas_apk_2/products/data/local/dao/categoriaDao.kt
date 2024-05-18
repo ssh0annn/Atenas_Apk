@@ -18,6 +18,9 @@ interface categoriaDao {
     fun getCategorias(): Flow<List<categoria>>
     @Query("select * from categoria where id_categoria ==:id")
     suspend fun getCategoriasById(id :Int): categoria
+
+    @Query("SELECT * FROM categoria WHERE nombre LIKE '%' || :catego || '%'")
+    fun buscarCategorias(catego:String): categoria
     @Update
     suspend fun updateCategoria(categoria: categoria)
     @Delete

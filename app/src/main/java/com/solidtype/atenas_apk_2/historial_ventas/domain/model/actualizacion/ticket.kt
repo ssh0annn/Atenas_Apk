@@ -5,9 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.solidtype.atenas_apk_2.core.entidades.persona
-import com.solidtype.atenas_apk_2.core.entidades.servicio
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
-import com.solidtype.atenas_apk_2.core.entidades.usuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import java.time.LocalDate
 
 @Entity(foreignKeys = [
@@ -23,7 +22,7 @@ data class ticket (
     val descripcion :String,
     val subtotal :Double,
     val impuesto :Double,
-    val total :Double?,
+    val total :Double,
     val fecha_inicio : LocalDate,
     val fecha_final : LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean

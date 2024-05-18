@@ -4,12 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.solidtype.atenas_apk_2.core.entidades.persona
 import com.solidtype.atenas_apk_2.core.entidades.servicio
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
-import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
-import com.solidtype.atenas_apk_2.core.entidades.usuario
-import java.time.LocalDate
 
 @Entity(foreignKeys = [
     ForeignKey(entity = servicio::class, parentColumns = ["id_servicio"], childColumns = ["tipo_servicio"]),

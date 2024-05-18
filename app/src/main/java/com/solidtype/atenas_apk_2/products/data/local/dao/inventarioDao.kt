@@ -22,6 +22,22 @@ interface inventarioDao {
     fun getInventariosByIdProveedor(id_prov :Int): Flow<List<inventario>>
     @Query("select * from inventario where id_inventario ==:id")
     suspend fun getInventariosById(id :Int): inventario
+
+    @Query("""SELECT * FROM inventario 
+        WHERE id_categoria LIKE '%' || :any || '%'
+        OR id_inventario LIKE '%' || :any || '%'
+        OR id_proveedor LIKE '%' || :any || '%'
+        OR nombre LIKE '%' || :any || '%'
+        OR marca LIKE '%' || :any || '%'
+        OR modelo LIKE '%' || :any || '%'
+        OR cantidad LIKE '%' || :any || '%'
+        OR precio_compra LIKE '%' || :any || '%'
+        OR precio_venta LIKE '%' || :any || '%'
+        OR descripcion LIKE '%' || :any || '%'
+ 
+        """)
+    fun buscarEnInventario(any:String):Flow<List<inventario>>
+
     @Update
     suspend fun updateInventario(inventario: inventario)
     @Delete

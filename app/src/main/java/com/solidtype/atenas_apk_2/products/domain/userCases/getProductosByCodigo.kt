@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class getProductosByCodigo @Inject constructor(private val repo: InventarioRepo) {
 
-    operator fun invoke(id:Int)=repo.getProductByCodigo(id)
+    suspend operator fun invoke(id:Int)=repo.getProductByCodigo(id)
 }

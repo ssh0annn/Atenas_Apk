@@ -9,11 +9,11 @@ import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.core.daos.personaDao
-import com.solidtype.atenas_apk_2.core.daos.roll_usuarioDao
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
 import com.solidtype.atenas_apk_2.core.daos.servicioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
 import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
-import com.solidtype.atenas_apk_2.core.daos.usuarioDao
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
 import com.solidtype.atenas_apk_2.core.entidades.administrador
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
@@ -21,11 +21,11 @@ import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_ticket
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.core.entidades.persona
-import com.solidtype.atenas_apk_2.core.entidades.roll_usuarios
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.core.entidades.servicio
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
-import com.solidtype.atenas_apk_2.core.entidades.usuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
@@ -39,7 +39,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
     categoria::class, detalle_ticket::class, detalle_venta::class, inventario::class,
     persona::class, roll_usuarios::class, servicio::class, ticket::class,
     tipo_venta::class, usuario::class, venta::class, administrador::class
-], version = 15, exportSchema = false)
+], version = 16, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao

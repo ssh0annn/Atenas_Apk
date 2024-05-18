@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,7 @@ class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
 ) : ViewModel() {
 
-    var fileSelectionListener2: FileSelectionListener2? = null
+    private var fileSelectionListener2: FileSelectionListener2? = null
 
     var uiState = MutableStateFlow(ProductosViewStates())
         private set
@@ -26,33 +27,35 @@ class InventarioViewModel @Inject constructor(
 
     init {
         mostrarProductos()
-
-
     }
 
-
     fun crearProductos(
-        Code_Product: String,
-        Name_Product: String,
-        Description_Product: String,
-        Category_Product: String,
-        Price_Product: String,
-        Model_Product: String,
-        Price_Vending_Product: String,
-        Tracemark_Product: String,
-        Count_Product: String
+        id_categoria: Long,
+        id_proveedor: Long,
+        nombre: String,
+        marca: String?,
+        modelo: String?,
+        cantidad: Int,
+        precio_compra: Double,
+        precio_venta: Double,
+        impuesto : Double,
+        descripcion: String?,
+        estado: Boolean
+
     ) {
 
-        val entidad = ProductEntity(
-            Code_Product.toInt(),
-            Name_Product,
-            Description_Product,
-            Category_Product,
-            Price_Product.toDouble(),
-            Model_Product,
-            Price_Vending_Product.toDouble(),
-            Tracemark_Product,
-            Count_Product.toInt()
+        val entidad = inventario(
+            id_categoria=id_categoria,
+            id_proveedor=id_proveedor,
+            nombre=nombre,
+            marca=marca,
+            modelo=modelo,
+            cantidad=cantidad,
+            precio_compra=precio_compra,
+            precio_venta=precio_venta,
+            impuesto = impuesto,
+            descripcion=descripcion,
+            estado =estado
         )
         viewModelScope.launch {
             casosInventario.createProductos(entidad)
@@ -77,10 +80,7 @@ class InventarioViewModel @Inject constructor(
                     it.copy(products = product)
                 }
             }
-
-
         }
-
     }
 
     fun exportarExcel() {
@@ -106,7 +106,7 @@ class InventarioViewModel @Inject constructor(
 
     }
 
-    fun eliminarProductos(producto: ProductEntity) {
+    fun eliminarProductos(producto: inventario) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 uiState.update { it.copy(isLoading = true) }
@@ -153,7 +153,11 @@ class InventarioViewModel @Inject constructor(
                 if (casosInventario.importarExcelFile(filePath)) {
                     syncProductos()
                 } else {
-                   uiState.update { it.copy(isLoading = false,errorMessages = "Formato invalido") }
+                    uiState.update {
+                        it.copy(
+                            isLoading = false, errorMessages = "Formato invalido"
+                        )
+                    }
 
                 }
                 casosInventario.importarExcelFile(filePath)

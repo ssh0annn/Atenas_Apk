@@ -19,23 +19,7 @@ class YourViewModel @Inject constructor(private val casosInventario: CasosInvent
     init {
 
          casosInventario.getProductos()
-        viewModelScope.launch {
-            casosInventario.createProductos(ProductEntity(
-                9090,
-                "Adderlis",
-                "Ninguna ",
-                "Boberia",
-                2.3,
-                "12091A",
-                89.23,
-                "Samsung",
-                8
-            )
-            )
-            withContext(Dispatchers.Default){
-                casosInventario.syncProductos()
-            }
-        }
+
     }
 
     fun fileSelected(filePath: Uri) {

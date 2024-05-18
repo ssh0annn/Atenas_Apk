@@ -9,5 +9,7 @@ data class CasosInventario(
     val deleteProductos: DeleteProductos,
     val exportarExcel: ExportarExcel,
     val importarExcelFile: ImportarExcelFile,
-    val syncProductos: SyncProductos
+    val syncProductos: SyncProductos,
+    val agregarCategoria: CrearCategoria,
+    val getCategorias: GetCategorias
 )

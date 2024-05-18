@@ -303,33 +303,33 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                 items(listVentas.size) { index ->
                                     Row {
                                         Text(
-                                            listVentas[index].Codigo.toString(),
+                                            listVentas[index].id_venta.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listVentas[index].Nombre,
-                                            fontSize = 16.sp,
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-
-                                        Text(
-                                            listVentas[index].FechaIni.toString().formatoParaUser(),
+                                            listVentas[index].id_cliente.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
 
                                         Text(
-                                            listVentas[index].Precio.toString(),
+                                            listVentas[index].fecha.toString().formatoParaUser(),
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+
+                                        Text(
+                                            listVentas[index].subtotal.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listVentas[index].Cantidad.toString(),
+                                            listVentas[index].cantidad.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -397,51 +397,51 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                 items(listTicket.size) { index ->
                                     Row {
                                         Text(
-                                            listTicket[index].Codigo.toString(),
+                                            listTicket[index].id_ticket.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].EstadoEquipo,
+                                            listTicket[index].descripcion,
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaInicial.toString()
+                                            listTicket[index].fecha_inicio.toString()
                                                 .formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].FechaFinal.toString()
+                                            listTicket[index].fecha_final.toString()
                                                 .formatoParaUser(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].Precio.toString(),
+                                            listTicket[index].subtotal.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].Restante.toString(),
+                                            listTicket[index].impuesto.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].Abono.toString(),
+                                            listTicket[index].total.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
-                                            listTicket[index].NombreCliente,
+                                            listTicket[index].id_cliente.toString(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
