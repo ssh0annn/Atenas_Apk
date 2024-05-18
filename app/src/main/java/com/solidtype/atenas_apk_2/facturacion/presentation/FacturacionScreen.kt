@@ -101,9 +101,9 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
                     .fillMaxSize()
                     .padding(horizontal = 100.dp, vertical = 20.dp)
             ) {//Contenedor
-                Titulo()
                 Column {//Entradas, Datos y Botón
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Titulo()
+                    //Spacer(modifier = Modifier.height(25.dp))
                     Row {//Entradas
                         InputBlanco(
                             placeholder = "Buscar por Cliente o No. de Factura...",
@@ -170,7 +170,7 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
                 }
             }
         }
-        NavPlato("factura", navController)
+        //NavPlato("factura", navController)
         DatePickerDialogo(
             showDatePicker = showDatePicker1,
             datePickerState = datePickerState1,
