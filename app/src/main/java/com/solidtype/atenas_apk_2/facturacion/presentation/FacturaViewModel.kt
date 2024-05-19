@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class FacturaViewModel @Inject constructor(
+class  FacturaViewModel @Inject constructor(
     private val facturacionCasosdeUso: FacturacionCasosdeUso,
     private val prueba: kk
 ) : ViewModel() {

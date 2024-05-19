@@ -1,8 +1,10 @@
-package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
+package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,9 +13,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
-class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) : ViewModel() {
+class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores) : ViewModel() {
 
     var uiState: MutableStateFlow<UserStatesUI> = MutableStateFlow(UserStatesUI())
         private set
@@ -65,19 +66,19 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
 
     private fun AgregarUsuario(usuario: Map<String, Any?>) {
         viewModelScope.launch {
-            casos.agregar(usuario = usuario)
+            casos.crearProveedor(proveedor = usuario)
         }
     }
 
     private fun EditarUsuario(usuario: Map<String, Any?>) {
         viewModelScope.launch {
-            casos.actualizar(usuario = usuario)
+           // casos.actualizar(usuario = usuario)
         }
     }
 
     private fun borrarUsuario(usuario: Map<String, Any?>) {
         viewModelScope.launch {
-            casos.eliminar(usuario)
+            casos.eliminarPersona(usuario)
             recentlyDelete = usuario
         }
     }
@@ -85,7 +86,7 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
     private fun restaurarUsuario() {
         viewModelScope.launch {
             if (recentlyDelete.isNotEmpty()) {
-                casos.agregar(recentlyDelete)
+                casos.crearProveedor(recentlyDelete)
                 recentlyDelete = emptyMap()
             }
         }
@@ -93,7 +94,7 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
 
     private fun getUsuarios() {
         userJob?.cancel()
-        userJob = casos.mostrarUsuarios().onEach { users ->
+        userJob = casos.getProveedores().onEach { users ->
             uiState.update { it.copy(usuarios = users) }
 
         }.launchIn(viewModelScope)
@@ -102,9 +103,8 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
     private fun buscarUsuarios(any: String) {
 
         userJob?.cancel()
-        userJob = casos.buscarUsuario(any).onEach { users ->
+        userJob = casos.buscarProveedores(any).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
-
         }.launchIn(viewModelScope)
 
     }
