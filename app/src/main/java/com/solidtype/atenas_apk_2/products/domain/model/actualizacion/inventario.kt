@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.solidtype.atenas_apk_2.core.entidades.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
 
 @Entity(foreignKeys = [
     ForeignKey(entity = categoria::class, parentColumns = ["id_categoria"], childColumns = ["id_categoria"]),
