@@ -1,7 +1,7 @@
-package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.usuarios
+package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
 sealed class UserEvent{
-   data class BuscarUsuario(val any:String) :UserEvent()
+   data class BuscarUsuario(val any:String) : UserEvent()
 
    data class BorrarUsuario(val usuario:Map<String, Any?>) : UserEvent()
 

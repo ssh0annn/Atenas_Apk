@@ -9,7 +9,7 @@ import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
-import com.solidtype.atenas_apk_2.core.daos.personaDao
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
 import com.solidtype.atenas_apk_2.core.daos.servicioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
@@ -22,7 +22,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_ticket
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
-import com.solidtype.atenas_apk_2.core.entidades.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.core.entidades.servicio
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
