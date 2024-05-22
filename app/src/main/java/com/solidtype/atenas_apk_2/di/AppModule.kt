@@ -28,6 +28,7 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.S
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignOutUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.VerificaICCIDUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
+import com.solidtype.atenas_apk_2.core.daos.DispositivoDao
 import com.solidtype.atenas_apk_2.core.daos.administradorDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
@@ -310,6 +311,12 @@ object AppModule {
     @Singleton
     fun provideAdministradorDao(db: ProductDataBase): administradorDao {
         return db.adminDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideDispositivoDao(db: ProductDataBase): DispositivoDao {
+        return db.dispositivoDao
     }
 
     @Provides

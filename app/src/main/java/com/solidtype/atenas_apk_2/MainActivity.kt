@@ -39,10 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.util.MyScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

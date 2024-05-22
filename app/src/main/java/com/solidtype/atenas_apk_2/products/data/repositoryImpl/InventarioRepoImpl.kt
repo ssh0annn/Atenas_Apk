@@ -118,7 +118,8 @@ class InventarioRepoImpl @Inject constructor(
                                 cantidad = i[6].toInt(),
                                 precio_compra = i[7].toDouble(),
                                 precio_venta = i[8].toDouble(),
-                                descripcion = i[8],
+                                impuesto = i[9].toDouble(),
+                                descripcion = i[10],
                                 estado = true
                             )
                         )

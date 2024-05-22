@@ -100,7 +100,7 @@ class HistorialRepositoryImp @Inject constructor(
         categoria: String
     ): Flow<List<venta>> {
 
-       return dao.buscarporRangoFecha(categoria,fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
+       return dao.getVentasByIdsAndFecha(categoria,fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
 
     }
 

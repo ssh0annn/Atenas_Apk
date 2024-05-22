@@ -9,8 +9,8 @@ data class persona (
     @PrimaryKey(autoGenerate = true) val id_persona :Long = 0,
     val tipo_persona :String,//proveedor, cliente
     val nombre :String,
-    val tipo_documento :String,  //cedula, RNC, DNI
-    val documento :String, //22838238, numero del documento
+    val tipo_documento :String?,
+    val documento :String?,
     val direccion :String?,
     val telefono :String,
     val email :String,

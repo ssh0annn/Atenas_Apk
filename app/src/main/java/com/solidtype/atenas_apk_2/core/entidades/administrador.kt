@@ -12,10 +12,10 @@ data class administrador(
     val apellido :String,
     val correo :String,
     val clave :String,
-    val direccion_negocio :String,
+    val direccion_negocio :String?,
     val nombre_negocio :String,
     val licencia :String,
-    val fecha_compra :LocalDate,
-    val fecha_caduca :LocalDate,
+    val fecha_compra :LocalDate?,
+    val fecha_caduca :LocalDate?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

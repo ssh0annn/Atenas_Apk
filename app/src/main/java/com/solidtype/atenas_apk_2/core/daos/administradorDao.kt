@@ -11,15 +11,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface administradorDao {
     @Insert
-    fun addAdministrador(admin : administrador)
+    suspend fun addAdministrador(admin : administrador)
     @Insert
-    fun addAdministradores(admin : List<administrador>)
+    suspend fun addAdministradores(admin : List<administrador>)
     @Query("select * from administrador")
     fun getAdministradores(): Flow<List<administrador>>
     @Query("select * from administrador where id_administrador ==:id")
-    fun getAdministradoresById(id :Int): administrador
+    suspend fun getAdministradoresById(id :Int): administrador
     @Update
-    fun updateAdministrador(admin: administrador)
+    suspend fun updateAdministrador(admin: administrador)
     @Delete
-    fun deleteAdministrador(admin: administrador)
+    suspend fun deleteAdministrador(admin: administrador)
 }

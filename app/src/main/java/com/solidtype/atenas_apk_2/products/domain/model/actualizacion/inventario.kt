@@ -13,13 +13,14 @@ import com.solidtype.atenas_apk_2.core.entidades.persona
 data class inventario (
     @PrimaryKey(autoGenerate = true) val id_inventario :Long = 7000,
     val id_categoria :Long,
-    val id_proveedor :Long,
+    val id_proveedor :Long?,
     val nombre :String,
     val marca :String?,
     val modelo :String?,
     val cantidad :Int,
     val precio_compra :Double,
     val precio_venta :Double,
+    val impuesto : Double,
     val descripcion :String?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

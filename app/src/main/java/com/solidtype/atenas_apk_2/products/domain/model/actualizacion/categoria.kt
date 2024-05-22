@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class categoria (
     @PrimaryKey(autoGenerate = true) val id_categoria :Long = 1000,
     @ColumnInfo val nombre :String,
-    @ColumnInfo val descripcion :String,
+    @ColumnInfo val descripcion :String?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

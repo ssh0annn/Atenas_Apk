@@ -16,6 +16,10 @@ interface inventarioDao {
     suspend fun addInventarios(inventario : List<inventario>)
     @Query("select * from inventario")
     fun getInventario(): Flow<List<inventario>>
+    @Query("select * from inventario where id_categoria ==:id_cate")
+    fun getInventariosByIdCategoria(id_cate :Int): Flow<List<inventario>>
+    @Query("select * from inventario where id_proveedor ==:id_prov")
+    fun getInventariosByIdProveedor(id_prov :Int): Flow<List<inventario>>
     @Query("select * from inventario where id_inventario ==:id")
     suspend fun getInventariosById(id :Int): inventario
 
