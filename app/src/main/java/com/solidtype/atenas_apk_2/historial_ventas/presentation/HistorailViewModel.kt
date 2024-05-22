@@ -102,7 +102,7 @@ class HistorailViewModel @Inject constructor(
                         it.copy(Historial = product, isLoading = false)
                     }
                     for (i in product){
-                        total += i.Precio * i.Cantidad
+                        total += i.total
                     }
                 }
                 uiState.update {
@@ -136,7 +136,7 @@ class HistorailViewModel @Inject constructor(
                 var deuda = 0.0
                 productosRangoticket.collect { product ->
                     for (i in product){
-                        deuda += i.Precio - i.Abono
+                        deuda += i.total
                     }
                     uiState.update {
                         it.copy(Ticket = product, isLoading = false, total2 = deuda)
@@ -159,7 +159,7 @@ class HistorailViewModel @Inject constructor(
 
             mostrarHistory.collect { product ->
                 for (i in product) {
-                    total += i.Precio.toDouble() * i.Cantidad.toInt()
+                    total += i.total
                     println(i)
                 }
                 uiState.update {
@@ -180,7 +180,7 @@ class HistorailViewModel @Inject constructor(
         viewModelScope.launch {
             mostrarTick.collect { product ->
                 for (i in product) {
-                    deuda += i.Restante
+                    deuda += i.total
                 }
                 uiState.update {
                     it.copy(Ticket = product, isLoading = false, total2 = deuda, ventasOTicket = true)
