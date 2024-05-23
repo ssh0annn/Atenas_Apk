@@ -58,9 +58,6 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
                 EditarUsuario(evento.usuario)
             }
 
-            else -> {
-
-            }
         }
     }
 
