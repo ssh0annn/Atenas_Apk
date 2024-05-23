@@ -27,13 +27,13 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
         getUsuarios()
     }
 
-    fun onUserEvent(evento: UserEvent) {
+    fun onUserEvent(evento: ProveedorEvent) {
         when (evento) {
-            is UserEvent.MostrarUserEvent -> {
+            is ProveedorEvent.MostrarProveedorEvent -> {
                 getUsuarios()
             }
 
-            is UserEvent.BuscarUsuario -> {
+            is ProveedorEvent.BuscarProveedor -> {
                 if (evento.any.isNotEmpty()) {
                     buscarUsuarios(evento.any)
                 } else {
@@ -41,21 +41,21 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
                 }
             }
 
-            is UserEvent.BorrarUsuario -> {
-                borrarUsuario(evento.usuario)
+            is ProveedorEvent.BorrarProveedor -> {
+                borrarUsuario(evento.proveedors)
             }
 
-            is UserEvent.RestaurarUsuario -> {
+            is ProveedorEvent.RestaurarProveedor -> {
                 restaurarUsuario()
             }
 
-            is UserEvent.AgregarUsuario -> {
-                AgregarUsuario(evento.usuario)
+            is ProveedorEvent.AgregarProveedor -> {
+                AgregarUsuario(evento.proveedors)
 
             }
 
-            is UserEvent.EditarUsuario -> {
-                EditarUsuario(evento.usuario)
+            is ProveedorEvent.EditarProveedor -> {
+                EditarUsuario(evento.proveedors)
             }
 
         }
