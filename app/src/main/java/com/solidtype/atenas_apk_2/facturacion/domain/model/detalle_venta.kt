@@ -13,10 +13,12 @@ import java.time.LocalDate
     ForeignKey(entity = inventario::class, parentColumns = ["id_inventario"], childColumns = ["id_producto"])
 ])
 data class detalle_venta (
+
     @PrimaryKey(autoGenerate = true) val id_detalle_venta :Long,
     val id_venta :Long,
     val id_producto :Long,
     val cantidad :Int,
     val total :Double,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
+
 )

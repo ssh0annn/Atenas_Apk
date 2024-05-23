@@ -25,9 +25,6 @@ class DataCloudImpl @Inject constructor(
 ): DataCloud {
 
 
-
-
-
     private val uidUser: String = auth.getCurrentUser()!!.uid
 
 

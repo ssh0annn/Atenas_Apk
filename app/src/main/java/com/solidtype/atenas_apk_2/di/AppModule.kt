@@ -33,12 +33,12 @@ import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
-import com.solidtype.atenas_apk_2.core.daos.personaDao
-import com.solidtype.atenas_apk_2.core.daos.roll_usuarioDao
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
 import com.solidtype.atenas_apk_2.core.daos.servicioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
 import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
-import com.solidtype.atenas_apk_2.core.daos.usuarioDao
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones.HistorialRepositoryImp
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
@@ -58,6 +58,27 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.repositoryimpl.ClienteProveedorRepoImpl
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.EliminarPersona
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CasosClientes
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CrearClientes
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.GetClientes
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.BuscarProveedores
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.repository.GestionUserRepository
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Actualizar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Agregar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Buscar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.CrearRoles
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Eliminar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.GetRoles
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.MostrarUsuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.QueryDBHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial.QueryDBHistorialVentasVentaImpl
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
@@ -75,7 +96,9 @@ import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.Qu
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.MediatorProductsImpl
+import com.solidtype.atenas_apk_2.products.domain.userCases.CrearCategoria
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
+import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
 import dagger.Module
@@ -139,7 +162,9 @@ object AppModule {
         deleteProductos = DeleteProductos(repository),
         exportarExcel = ExportarExcel(repository),
         importarExcelFile = ImportarExcelFile(repository),
-        syncProductos = SyncProductos(repository)
+        syncProductos = SyncProductos(repository),
+        agregarCategoria = CrearCategoria(repository),
+        getCategorias = GetCategorias(repository)
     )
 
     @Singleton
@@ -305,11 +330,56 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFacturacionCasosUso(repo: FacturaRepository) = FacturacionCasosdeUso(
-        buscarFacturas= BuscarFacturas(repo),
+        buscarFacturas = BuscarFacturas(repo),
         detallesFacturas = DetallesFacturas(repo),
         mostrarTodo = MostrarTodo(repo)
     )
 
+    //USUARIOS GESTION
+
+    @Provides
+    @Singleton
+    fun provideRepositorioUsuario(
+        userDao: usuarioDao,
+        roll: roll_usuarioDao
+    ): GestionUserRepository = GestionUserRepoImpl(roll, userDao)
+
+    @Provides
+    @Singleton
+    fun provideCasosUsuario(repo: GestionUserRepository) = UsuarioUseCases(
+        actualizar = Actualizar(repo),
+        agregar = Agregar(repo),
+        eliminar = Eliminar(repo),
+        mostrarUsuarios = MostrarUsuario(repo),
+        buscarUsuario = Buscar(repo),
+        getRoles = GetRoles(repo),
+        crearRoles = CrearRoles(repo)
+    )
+    //Injectando Personas y tipos de personas.
+
+    @Provides
+    @Singleton
+    fun provideClienteProveedorRepository(persDao: personaDao): ClienteProveedorRepository {
+        return ClienteProveedorRepoImpl(persDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCasosCliente(repo: ClienteProveedorRepository) = CasosClientes(
+        buscarClientes = BuscarClientes(repo),
+        getClientes = GetClientes(repo),
+        crearClientes = CrearClientes(repo),
+        eliminarPersona = EliminarPersona(repo)
+    )
+
+    @Provides
+    @Singleton
+    fun provideCasosProveedor(repo: ClienteProveedorRepository) = CasosProveedores(
+        buscarProveedores = BuscarProveedores(repo),
+        getProveedores = GetProveedores(repo),
+        crearProveedor = CrearProveedor(repo),
+        eliminarPersona = EliminarPersona(repo)
+    )
 
 
 }

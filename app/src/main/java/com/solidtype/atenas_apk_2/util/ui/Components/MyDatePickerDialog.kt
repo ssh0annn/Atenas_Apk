@@ -65,9 +65,9 @@ fun MyDatePickerDialog(
         }
         Box( //Botón
             modifier = Modifier
-                .requiredWidth(400.dp)
+                .requiredWidth(500.dp)
                 .heightIn(300.dp)
-                .padding(top = 430.dp, start = 250.dp),
+                .padding(top = 450.dp, start = 370.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             CompositionLocalProvider(

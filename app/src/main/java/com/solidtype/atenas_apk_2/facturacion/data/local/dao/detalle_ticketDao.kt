@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_ticket
 import kotlinx.coroutines.flow.Flow
-
 @Dao
 interface detalle_ticketDao {
     @Insert

@@ -19,14 +19,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
 fun NavPlato(
     pantalla: String,
-    navController: String = "Esta función debería tener un navController para navegar entre pantallas"
-){
+    navController: NavController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +40,7 @@ fun NavPlato(
                 .width(300.dp)
                 .height(60.dp)
                 .background(Color(0xFFA3A1A6), shape = RoundedCornerShape(100.dp))
-        ){ /* de lujo */ }
+        ) { /* de lujo */ }
         Row(
             //separar los botones o bolas
             modifier = Modifier
@@ -47,17 +49,19 @@ fun NavPlato(
                 .height(120.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.Bottom
-        ){//bolas
+        ) {//bolas
             Box(//Servicios
                 modifier = Modifier
-                    .padding(bottom = if (pantalla == "Servicios") 10.dp else 0.dp)
-                    .size(if (pantalla == "Servicios") 80.dp else 70.dp)
+                    .padding(bottom = if (pantalla == "servicio") 10.dp else 0.dp)
+                    .size(if (pantalla == "servicio") 80.dp else 70.dp)
+                    .shadow(5.dp, shape = RoundedCornerShape(100.dp))
                     .background(Color(0xFF323341), shape = RoundedCornerShape(100.dp))
                     .clickable {
                         //Navegar a Servicios
+                        navController.navigate("servicio")
                     },
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Work,
                     contentDescription = "",
@@ -73,9 +77,10 @@ fun NavPlato(
                     .background(Color(0xFF323341), shape = RoundedCornerShape(100.dp))
                     .clickable {
                         //Navegar a CheckOut
+                        navController.navigate("CheckOut")
                     },
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ShoppingCart,
                     contentDescription = "",
@@ -86,14 +91,15 @@ fun NavPlato(
             }
             Box(//Facturas
                 modifier = Modifier
-                    .padding(bottom = if (pantalla == "Facturas") 10.dp else 0.dp)
-                    .size(if (pantalla == "Facturas") 80.dp else 70.dp)
+                    .padding(bottom = if (pantalla == "factura") 10.dp else 0.dp)
+                    .size(if (pantalla == "factura") 80.dp else 70.dp)
                     .background(Color(0xFF323341), shape = RoundedCornerShape(100.dp))
                     .clickable {
                         //Navegar a Facturas
+                        navController.navigate("factura")
                     },
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.FactCheck,
                     contentDescription = "",
