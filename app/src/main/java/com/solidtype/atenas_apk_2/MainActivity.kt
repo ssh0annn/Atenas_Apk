@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent{
+        setContent {
             ImeiBoton {
 
 
@@ -62,20 +62,6 @@ class MainActivity : ComponentActivity() {
             null
         }
     }
-
-    fun prueba(){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-               println("Fetching FCM registration token failed" + task.exception)
-                return@addOnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            println("InstanceID" + token)
-        }
 
 
 }

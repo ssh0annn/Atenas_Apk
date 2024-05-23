@@ -3,7 +3,7 @@ package com.solidtype.atenas_apk_2.core.ddbb
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.solidtype.atenas_apk_2.core.daos.administradorDao
+import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
@@ -14,7 +14,7 @@ import com.solidtype.atenas_apk_2.core.daos.servicioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
 import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
-import com.solidtype.atenas_apk_2.core.entidades.administrador
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_ticket
