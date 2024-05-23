@@ -27,13 +27,13 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
         getUsuarios()
     }
 
-    fun onUserEvent(evento: UserEvent) {
+    fun onUserEvent(evento: ClienteEvent) {
         when (evento) {
-            is UserEvent.MostrarUserEvent -> {
+            is ClienteEvent.MostrarClientesEvent -> {
                 getUsuarios()
             }
 
-            is UserEvent.BuscarUsuario -> {
+            is ClienteEvent.BuscarClientes -> {
                 if (evento.any.isNotEmpty()) {
                     buscarUsuarios(evento.any)
                 } else {
@@ -41,21 +41,21 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
                 }
             }
 
-            is UserEvent.BorrarUsuario -> {
-                borrarUsuario(evento.usuario)
+            is ClienteEvent.BorrarClientes -> {
+                borrarUsuario(evento.clientes)
             }
 
-            is UserEvent.RestaurarUsuario -> {
+            is ClienteEvent.RestaurarClientes -> {
                 restaurarUsuario()
             }
 
-            is UserEvent.AgregarUsuario -> {
-                AgregarUsuario(evento.usuario)
+            is ClienteEvent.AgregarClientes -> {
+                AgregarUsuario(evento.clientes)
 
             }
 
-            is UserEvent.EditarUsuario -> {
-                EditarUsuario(evento.usuario)
+            is ClienteEvent.EditarClientes -> {
+                EditarUsuario(evento.clientes)
             }
 
         }
