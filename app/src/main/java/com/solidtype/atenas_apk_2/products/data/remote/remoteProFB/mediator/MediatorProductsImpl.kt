@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator
 
+import android.util.Log
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.QueryDBlocal
@@ -142,6 +143,7 @@ class MediatorProductsImpl @Inject constructor(
      * con corrutinas, favor manajar en el hilo Default para evitar bloqueos del hilo main.
      */
     override suspend operator fun invoke() {
+        Log.e("Entre","Entre a la funcion ProductAsync")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
         println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
