@@ -4,17 +4,14 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-23T21:25:56.019132500Z">
+        <DropdownSelection timestamp="2024-05-23T22:06:30.595090300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Johan\.android\avd\Phone_Pixel.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Johan\.android\avd\vortex.avd" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="Atenas_Apk.Atenas_apk_2.app">
-        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>
