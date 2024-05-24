@@ -5,13 +5,6 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-<<<<<<< HEAD
-      <SelectionState runConfigName="InvetoryScreenPreview">
-=======
-      <SelectionState runConfigName="Atenas_Apk.Atenas_apk_2.app">
->>>>>>> a29ee81dec567328bf0966600764452c4c298c9a
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
     </selectionStates>
   </component>
 </project>

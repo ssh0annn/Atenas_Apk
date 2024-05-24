@@ -7,6 +7,7 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosd
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,7 +28,7 @@ class  FacturaViewModel @Inject constructor(
 ) : ViewModel() {
     var uiState = MutableStateFlow(FacturaUI())
         private set
-    var job: Job? = null
+    private var job: Job? = null
 
     init {
 
@@ -42,24 +43,13 @@ class  FacturaViewModel @Inject constructor(
                 )
             }
             withContext(Dispatchers.IO) {
-                val mostrar = facturacionCasosdeUso.mostrarTodo()
 
-                val facturaConDetalle: Flow<List<FacturaConDetalle>> = mostrar.map { ventas ->
-                    ventas.map {
-                        FacturaConDetalle(
-                            factura = it,
-                            detalle =  facturacionCasosdeUso.detallesFacturas(it.id_venta)
-                        )
-                    }
-                }
-                facturaConDetalle.collect { product ->
-
+                facturacionCasosdeUso.mostrarTodo().helper().collect { product ->
                     uiState.update {
                         it.copy(
                             facturaConDetalle = product, isLoading = false
                         )
                     }
-                    println("Facturas $product")
                 }
             }
         }
@@ -83,33 +73,27 @@ class  FacturaViewModel @Inject constructor(
             }
             job?.cancel()
             job = viewModelScope.launch {
-                val buscarf =
+                withContext(Dispatchers.IO) {
                     facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante)
-
-                buscarf.collect { product ->
-                    uiState.update {
-                        it.copy(buscar = product, isLoading = false)
+                        .helper().collect { product ->
+                        uiState.update {
+                            it.copy(facturaConDetalle = product, isLoading = false)
+                        }
                     }
                 }
             }
         }
     }
-    fun detealleFactura(
-        NoFactura: Long,
 
-        ) {
-        viewModelScope.launch {
-            uiState.update {
-                it.copy(
-                    isLoading = true
+    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
+
+        return this.map { ventas ->
+            ventas.map {
+                FacturaConDetalle(
+                    factura = it,
+                    detalle = it?.let { it1 -> facturacionCasosdeUso.detallesFacturas(it1.id_venta) }
                 )
             }
-            withContext(Dispatchers.IO) {
-                val detalle = facturacionCasosdeUso.detallesFacturas(NoFactura)
-                uiState.update { it.copy(detalles = detalle, isLoading = false) }
-                println("Facturas $detalle")
-            }
-
         }
     }
 }
