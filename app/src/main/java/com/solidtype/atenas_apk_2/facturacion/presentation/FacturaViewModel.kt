@@ -5,11 +5,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,10 +44,19 @@ class  FacturaViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 val mostrar = facturacionCasosdeUso.mostrarTodo()
 
-                mostrar.collect { product ->
+                val facturaConDetalle: Flow<List<FacturaConDetalle>> = mostrar.map { ventas ->
+                    ventas.map {
+                        FacturaConDetalle(
+                            factura = it,
+                            detalle =  facturacionCasosdeUso.detallesFacturas(it.id_venta)
+                        )
+                    }
+                }
+                facturaConDetalle.collect { product ->
+
                     uiState.update {
                         it.copy(
-                            facturas = product, isLoading = false
+                            facturaConDetalle = product, isLoading = false
                         )
                     }
                     println("Facturas $product")
