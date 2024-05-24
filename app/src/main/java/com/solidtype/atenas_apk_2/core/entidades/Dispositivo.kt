@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Dispositivo (
-    @PrimaryKey(autoGenerate = true) val id_dispositivo : Long,
+    @PrimaryKey(autoGenerate = true) val id_dispositivo : Long = 10000,
     val nombre_comercial : String,
     val modelo :String,
     val marca :String

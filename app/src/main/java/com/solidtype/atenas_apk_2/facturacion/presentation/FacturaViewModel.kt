@@ -73,22 +73,25 @@ class  FacturaViewModel @Inject constructor(
             }
             job?.cancel()
             job = viewModelScope.launch {
-                facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante).helper().collect { product ->
-                    uiState.update {
-                        it.copy(facturaConDetalle = product, isLoading = false)
+                withContext(Dispatchers.IO){
+                    facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante).helper().collect { product ->
+                        uiState.update {
+                            it.copy(facturaConDetalle = product, isLoading = false)
+                        }
                     }
                 }
+
             }
         }
     }
 
     private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
 
-        return this.map { ventas ->
-            ventas.map {
+        return this.map { listaFacturas ->
+            listaFacturas.map { factura->
                 FacturaConDetalle(
-                    factura = it,
-                    detalle = it?.let { it1 -> facturacionCasosdeUso.detallesFacturas(it1.id_venta) }
+                    factura = factura,
+                    detalle = factura?.let { detalle -> facturacionCasosdeUso.detallesFacturas(detalle.id_venta) }
                 )
             }
         }
