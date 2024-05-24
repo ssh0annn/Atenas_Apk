@@ -17,8 +17,8 @@ data class detalle_ticket (
     val tipo_servicio :Long,
     val estado_equipo :String,
     val falta_equipo :String,
-    val nota :String,
+    val nota :String?,
     val cantidad :Int,
-    val total :Double,
+    val total :Double?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

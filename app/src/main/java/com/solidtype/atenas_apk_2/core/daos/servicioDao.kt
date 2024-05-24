@@ -11,15 +11,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface servicioDao {
     @Insert
-    fun addServicio(servicio : servicio)
+    suspend fun addServicio(servicio : servicio)
     @Insert
-    fun addServicios(servicio : List<servicio>)
+    suspend fun addServicios(servicio : List<servicio>)
     @Query("select * from servicio")
     fun getServicios(): Flow<List<servicio>>
     @Query("select * from servicio where id_servicio ==:id")
-    fun getServiciosById(id :Int): servicio
+    suspend fun getServiciosById(id :Int): servicio
     @Update
-    fun updateServicio(servicio: servicio)
+    suspend fun updateServicio(servicio: servicio)
     @Delete
-    fun deleteServicio(servicio: servicio)
+    suspend fun deleteServicio(servicio: servicio)
 }

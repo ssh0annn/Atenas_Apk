@@ -4,16 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,8 +58,6 @@ class MainActivity : ComponentActivity() {
             null
         }
     }
-
-
 }
 
 @Composable
