@@ -141,6 +141,10 @@ dependencies {
     //Excel maneger
     implementation("org.apache.poi:poi:5.2.5") // Para trabajar con formatos de archivo de Excel (XLS)
     implementation ("org.apache.poi:poi-ooxml:5.2.5") // Para trabajar con formatos de archivo de Excel (XLSX)
+    implementation ("com.google.android.gms:play-services-base:17.6.0")
+    implementation ("com.google.firebase:firebase-messaging:22.0.0")
+
+
 }
 
 ksp {

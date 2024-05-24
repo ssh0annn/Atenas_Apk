@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.core.daos
+package com.solidtype.atenas_apk_2.perfil_administrador.data
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.core.entidades.administrador
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import kotlinx.coroutines.flow.Flow
 
 @Dao

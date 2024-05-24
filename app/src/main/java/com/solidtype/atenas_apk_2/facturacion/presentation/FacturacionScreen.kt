@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import android.annotation.SuppressLint
-import android.util.Log
-import android.util.MutableBoolean
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +19,6 @@ import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,24 +31,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Titulo
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.InputBlanco
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
+import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.fomatoLocalDate
 import com.solidtype.atenas_apk_2.util.formatearFecha
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
 import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
-import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.fomatoLocalDate
 
 @SuppressLint("MutableCollectionMutableState", "SuspiciousIndentation")
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel = hiltViewModel()) {
-
-    //val viewModel: FacturaViewModel = hiltViewModel()
 
     val context = LocalContext.current
 
@@ -68,27 +62,8 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
     var fechaFin by rememberSaveable { mutableStateOf("") }
     var noFacturaCliente by rememberSaveable { mutableStateOf("") }
 
-    val facturas = uiState.facturas
-    val detalles = uiState.detalles
-
-    //var listaDetalles by rememberSaveable { mutableStateOf(listOf <detalles_ventas> (facturas.size) { null }) }
-
-    var listaDestalles by rememberSaveable { mutableStateOf(mutableListOf<detalle_venta>()) }
-
-    val facturasConDetalles by rememberSaveable { mutableStateOf(mutableListOf<FacturaConDetalle>()) }
-
-    if (facturas.isNotEmpty()) {
-        viewModel.detealleFactura(facturas.first().id_venta)
-
-    }
-
-    Log.i("uiState.facturas", uiState.facturas.toString())
-    Log.i("uiState.detalles", uiState.detalles.toString())
-    Log.i("uiState.buscar", uiState.buscar.toString())
-    Log.i("uiState.facturasConDetalles", facturasConDetalles.toString())
-
     if (false) {
-        //nav.navigate(Screens.Login.route)
+        navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
             Modifier.fillMaxSize()
@@ -98,24 +73,6 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
             )
         }
     } else {
-
-        val ind by rememberSaveable { mutableIntStateOf(0) }
-        val activador = MutableBoolean(false)
-        //Joder(detalles, ind, facturas, listaDestalles, activador)
-
-        LaunchedEffect(key1 = facturas) {
-            facturasConDetalles.clear()
-            if (facturas.isNotEmpty()) {
-                for (factura in facturas) {
-                    viewModel.detealleFactura(factura.id_venta)
-                    facturasConDetalles.add(FacturaConDetalle(factura,
-                        //listaDestalles[facturas.indexOf(factura)]
-                        detalles
-                    ))
-                }
-            }
-        }
-
         Column(
             //All
             modifier = Modifier
@@ -177,8 +134,8 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (facturasConDetalles.isNotEmpty())
-                    Tabla(facturas = facturasConDetalles)
+                    if (uiState.facturaConDetalle.isNotEmpty())
+                    Tabla(facturas = uiState.facturaConDetalle)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -224,32 +181,5 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
                 fechaFin = datePickerState2.selectedDateMillis.formatearFecha()
             }
         )
-    }
-}
-
-@Composable
-fun Joder(
-    detalles: detalle_venta?,
-    ind: Int,
-    facturas: List<venta>,
-    listaDestalles: MutableList<detalle_venta>,
-    activador: MutableBoolean,
-) {
-    var ind1 = ind
-    LaunchedEffect(detalles) {
-        if (ind1 < facturas.size && ind1 == listaDestalles.size) {
-            if (detalles != null) {
-                listaDestalles.add(detalles)
-            }
-            ind1 += 1
-        }
-        if (ind1 < facturas.size && ind1 > listaDestalles.size) {
-            if (detalles != null) {
-                listaDestalles.add(detalles)
-            }
-        }
-        if (ind1 == facturas.size) {
-            activador.value = true
-        }
     }
 }

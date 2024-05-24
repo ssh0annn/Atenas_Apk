@@ -53,8 +53,6 @@ class LoginViewModel @Inject constructor(
 
             if(casos_uso.current_user() != null){
 
-
-
                 if (logicaNegocio()){
                     if (casos_uso.usuarioExiste()){
                         usuario=casos_uso.current_user()!!.email.toString()
