@@ -31,7 +31,7 @@ fun Titulo(){
             color = AzulGris,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(top=10.dp)
         )
     }
 }

@@ -117,3 +117,12 @@ fun usuario.toMap(): Map<String, Any?>{
         "estado" to estado
     )
 }
+
+fun LocalDate.formatoParaUser(): String {
+    val format = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return this.format(format)
+}
+
+fun Boolean.formatoActivo(): String {
+    return if (this) "Activo" else "Inactivo"
+}
