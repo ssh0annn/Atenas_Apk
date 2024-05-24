@@ -28,7 +28,7 @@ class  FacturaViewModel @Inject constructor(
 ) : ViewModel() {
     var uiState = MutableStateFlow(FacturaUI())
         private set
-    var job: Job? = null
+    private var job: Job? = null
 
     init {
 
@@ -82,8 +82,7 @@ class  FacturaViewModel @Inject constructor(
         }
     }
 
-
-    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle>> {
+    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
 
         return this.map { ventas ->
             ventas.map {
