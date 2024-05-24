@@ -19,16 +19,15 @@ interface ventaDao {
     fun getVentas(): Flow<List<venta>>
     @Query("select * from venta where id_venta ==:id")
     suspend fun getVentasById(id :Int): venta
+    @Query("select * from venta " +
+            "where id_venta like'%' || :any || '%' " +
+            "or id_vendedor like '%' || :any || '%'" +
+            "or id_cliente like '%' || :any || '%'" +
+            "or id_tipo_venta like '%' || :any || '%'" +
+            "and fecha between :fechaInicial and :fechaFinal")
+    fun getVentasByIdsAndFecha(any : String, fechaInicial : LocalDate, fechaFinal : LocalDate):Flow<List<venta>>
     @Update
     suspend fun updateVenta(venta : venta)
     @Delete
     suspend fun deleteVenta(venta : venta)
-
-    @Query("""SELECT * FROM venta
-           WHERE id_venta LIKE '%' || :any || '%'
-           OR id_vendedor LIKE '%' || :any || '%'
-           OR id_cliente LIKE '%' || :any || '%'
-           OR id_tipo_venta LIKE '%' || :any || '%'
-           AND (fecha BETWEEN :fechaIni AND :fechaFin)""")
-    fun buscarporRangoFecha(any: String, fechaIni:LocalDate, fechaFin:LocalDate):Flow<List<venta>>
 }
