@@ -48,9 +48,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DropdownSelect
 import com.solidtype.atenas_apk_2.util.formatearFecha
+import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoDDBB
 import com.solidtype.atenas_apk_2.util.formatoParaUser
 import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
@@ -115,7 +117,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
     val uri = uiState.uriPath
 
     if (false) {
-        //nav.navigate(Screens.Login.route)
+        navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
             Modifier.fillMaxSize()
@@ -268,7 +270,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Producto",
+                                    "Cliente",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
@@ -280,7 +282,13 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Precio",
+                                    "Subtotal",
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    "Total",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
@@ -292,7 +300,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Cliente",
+                                    "Estado",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
@@ -321,7 +329,6 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
                                         )
-
                                         Text(
                                             listVentas[index].subtotal.toString(),
                                             fontSize = 16.sp,
@@ -329,7 +336,19 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                             textAlign = TextAlign.Center
                                         )
                                         Text(
+                                            listVentas[index].total.toString(),
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
                                             listVentas[index].cantidad.toString(),
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            listVentas[index].estado.formatoActivo(),
                                             fontSize = 16.sp,
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center
@@ -350,7 +369,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Estado",
+                                    "Descripción",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
@@ -368,19 +387,19 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Precio",
+                                    "Subtotal",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Restante",
+                                    "Impuesto",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    "Abono",
+                                    "Total",
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
