@@ -164,11 +164,19 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                 .padding(top = 4.dp)
                                 .weight(2f)
                         ) {
-                            SelecionarFecha("Fecha Inicial", datePickerState1.selectedDateMillis, fechaIni) {
+                            SelecionarFecha(
+                                "Fecha Inicial",
+                                datePickerState1.selectedDateMillis,
+                                fechaIni
+                            ) {
                                 showDatePicker1 = true
                             }
                             Spacer(modifier = Modifier.width(16.dp))
-                            SelecionarFecha("Fecha Final", datePickerState2.selectedDateMillis, fechaFin) {
+                            SelecionarFecha(
+                                "Fecha Final",
+                                datePickerState2.selectedDateMillis,
+                                fechaFin
+                            ) {
                                 showDatePicker2 = true
                             }
                         }
@@ -185,13 +193,11 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                                 selectedCategoria = it
                                 viewModel.buscarProductosVenta(
                                     fechaIni.formatoDDBB(),
-                                    fechaFin.formatoDDBB(),
-                                    selectedCategoria
+                                    fechaFin.formatoDDBB()
                                 )
                                 viewModel.buscarProductosTicket(
                                     fechaIni.formatoDDBB(),
-                                    fechaFin.formatoDDBB(),
-                                    selectedCategoria
+                                    fechaFin.formatoDDBB()
                                 )
                                 Toast.makeText(
                                     context,
@@ -495,8 +501,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
 
                     viewModel.buscarProductosTicket(
                         fechaIni.formatoDDBB(),
-                        fechaFin.formatoDDBB(),
-                        selectedCategoria
+                        fechaFin.formatoDDBB()
                     )
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
                         .show()
@@ -513,13 +518,11 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                     fechaFin = datePickerState2.selectedDateMillis.formatearFecha()
                     viewModel.buscarProductosVenta(
                         fechaIni.formatoDDBB(),
-                        fechaFin.formatoDDBB(),
-                        selectedCategoria
+                        fechaFin.formatoDDBB()
                     )
                     viewModel.buscarProductosTicket(
                         fechaIni.formatoDDBB(),
-                        fechaFin.formatoDDBB(),
-                        selectedCategoria
+                        fechaFin.formatoDDBB()
                     )
                     Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
                         .show()
