@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.core.entidades
+package com.solidtype.atenas_apk_2.dispositivos.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
