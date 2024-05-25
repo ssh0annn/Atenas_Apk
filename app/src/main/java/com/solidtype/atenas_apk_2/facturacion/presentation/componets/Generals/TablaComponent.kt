@@ -39,17 +39,17 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoParaUser
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun Tabla(facturas: List<FacturaConDetalle?>) {
 
     var desplegar by rememberSaveable { mutableStateOf(List(facturas.size) { false }) }
-    val size = LocalConfiguration.current.screenWidthDp.dp - 780.dp
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(size)
+            .height(Pantalla.ancho - 800.dp)
             .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
