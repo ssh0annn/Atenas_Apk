@@ -28,8 +28,8 @@ import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.S
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignOutUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.VerificaICCIDUseCase
 import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
-import com.solidtype.atenas_apk_2.core.daos.DispositivoDao
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
+import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
@@ -53,6 +53,14 @@ import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
+import com.solidtype.atenas_apk_2.dispositivos.data.repository.DispositivosRepositoryImpl
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.ActualizarDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.AgregarDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.BuscarDispositivos
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.CasosDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.EliminarDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.GetDispositivos
+import com.solidtype.atenas_apk_2.dispositivos.model.repository.DispositivosRepository
 import com.solidtype.atenas_apk_2.facturacion.data.FacturaRepositoryImpl
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.BuscarFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
@@ -398,6 +406,7 @@ object AppModule {
     @Singleton
     fun provideAdministradorRepository(adminDao: administradorDao): PerfilAdminRepository =
         PerfilAdminRepoImpl(adminDao)
+
     @Provides
     @Singleton
     fun proviteCasosPerfilAdministrador(repo: PerfilAdminRepository) = AdminUseCases(
@@ -405,4 +414,22 @@ object AppModule {
         updateAdmin = UpdateAdmin(repo)
     )
 
+    //Dispositivos
+    @Provides
+    @Singleton
+    fun provideCasosDispositivos(repo: DispositivosRepository): CasosDispositivo {
+        return CasosDispositivo(
+            actualizar = ActualizarDispositivo(repo),
+            agregarDispositivo = AgregarDispositivo(repo),
+            buscarDispositivos = BuscarDispositivos(repo),
+            eliminar = EliminarDispositivo(repo),
+            getDispositivos = GetDispositivos(repo)
+        )
+
+    }
+    @Provides
+    @Singleton
+    fun provideDispositivoRepository(dao:DispositivoDao) : DispositivosRepository {
+        return DispositivosRepositoryImpl(dao)
+    }
 }

@@ -72,17 +72,6 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    val categoria = listOf(
-        "Celular",
-        "Tablet",
-        "Laptop",
-        "Accesorios",
-        "Jabón",
-        "Otros"
-    ) //Debería venir del viewModel
-
-    val selectedCategoria by rememberSaveable { mutableStateOf(categoria.first()) }
-
     if (false) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
@@ -128,8 +117,8 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                 Spacer(modifier = Modifier.height(12.dp))
                 AvatarConBotones(viewModel, fechaIni, fechaFin, context, showSnackbarIni)
             }
-            DatePickerDialogoSimple(showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin, selectedCategoria, context)
-            DatePickerDialogoSimple(showDatePicker2, datePickerState2, fechaFin, viewModel, fechaIni, selectedCategoria, context)
+            DatePickerDialogoSimple(showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin, context)
+            DatePickerDialogoSimple(showDatePicker2, datePickerState2, fechaFin, viewModel, fechaIni, context)
         }
         SnackbarAnimado(showSnackbar, uiState, context)
     }

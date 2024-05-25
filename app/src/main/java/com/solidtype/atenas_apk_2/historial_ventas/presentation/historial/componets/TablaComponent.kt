@@ -185,54 +185,54 @@ fun Tabla(
                 }
                 Divider()
                 LazyColumn {
-                    items(uiState.Ticket.size) { index ->
+                    items(uiState.Ticket.size) { i ->
                         Row {
                             Text(
-                                uiState.Ticket[index].id_ticket.toString(),
+                                uiState.Ticket[i].id_ticket.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].descripcion,
+                                uiState.Ticket[i].descripcion,
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].fecha_inicio.toString()
+                                uiState.Ticket[i].fecha_inicio.toString()
                                     .formatoParaUser(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].fecha_final.toString()
+                                uiState.Ticket[i].fecha_final.toString()
                                     .formatoParaUser(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].subtotal.toString(),
+                                uiState.Ticket[i].subtotal.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].impuesto.toString(),
+                                uiState.Ticket[i].impuesto.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].total.toString(),
+                                uiState.Ticket[i].total.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[index].id_cliente.toString(),
+                                uiState.Ticket[i].id_cliente.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center

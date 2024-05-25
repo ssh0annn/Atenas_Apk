@@ -19,7 +19,6 @@ fun DatePickerDialogoSimple(
     fechaIni: MutableState<String>,
     viewModel: HistorailViewModel,
     fechaFin: MutableState<String>,
-    selectedCategoria: String,
     context: Context
 ) {
     DatePickerDialogo(
@@ -31,11 +30,13 @@ fun DatePickerDialogoSimple(
         onClick = {
             showDatePicker.value = false
             fechaIni.value = datePickerState.selectedDateMillis.formatearFecha()
-
+            viewModel.buscarProductosVenta(
+                fechaIni.value.formatoDDBB(),
+                fechaFin.value.formatoDDBB(),
+            )
             viewModel.buscarProductosTicket(
                 fechaIni.value.formatoDDBB(),
                 fechaFin.value.formatoDDBB(),
-                selectedCategoria
             )
             Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
                 .show()

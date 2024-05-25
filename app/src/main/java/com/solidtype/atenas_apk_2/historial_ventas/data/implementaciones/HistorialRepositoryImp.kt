@@ -95,12 +95,12 @@ class HistorialRepositoryImp @Inject constructor(
 
     //Removi la variable fecha final de donde la recive el DAO, ARREGLALO!
     override fun buscarPorFechasCategoriasVentas(
-        fecha_inicio: String,
+        Fecha_inicio: String,
         fecha_final: String,
-        categoria: String
+
     ): Flow<List<venta>> {
 
-       return dao.getVentasByIdsAndFecha(categoria,fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
+       return dao.getHistorialVentaFechaCategoria(Fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
 
     }
 
@@ -111,8 +111,7 @@ class HistorialRepositoryImp @Inject constructor(
 
     override fun mostrarTicketsPorFecha(
         fechaIni: String,
-        fechaFinal:String,
-        catego: String
+        fechaFinal:String
     ): Flow<List<ticket>> {
         //Aqui cambie porque actualize la base de datos.
        return daoTickets.getTicketsByFechas(fechaIni.toLocalDate(), fechaFinal.toLocalDate())
