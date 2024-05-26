@@ -35,8 +35,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".perfil_administrador.presentation.PefilAdministrador"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilAdministrador"
+            android:exported="false"
+            android:theme="@style/Theme.Atenas_apk_2" />
+        <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".Splash"
             android:exported="true"
