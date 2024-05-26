@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun Buscador(busqueda: String, onBusquedaChange: (String) -> Unit) {
@@ -31,9 +32,9 @@ fun Buscador(busqueda: String, onBusquedaChange: (String) -> Unit) {
         onValueChange = onBusquedaChange,
         singleLine = true,
         modifier = Modifier
-            .width(500.dp)
+            .width(Pantalla.ancho - 525.dp)
             .height(66.dp)
-            .padding(start = 25.dp, end = 25.dp, top = 4.dp, bottom = 4.dp),
+            .padding(start = 25.dp, end = 5.dp, top = 4.dp, bottom = 4.dp),
         shape = RoundedCornerShape(50),
         placeholder = {
             Text(

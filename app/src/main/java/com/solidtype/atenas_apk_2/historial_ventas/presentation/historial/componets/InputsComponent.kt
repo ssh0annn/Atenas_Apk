@@ -18,6 +18,7 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Inputs(
+    identificador: MutableState<String>,
     datePickerState1: DatePickerState,
     fechaIni: MutableState<String>,
     showDatePicker1: MutableState<Boolean>,
@@ -40,6 +41,7 @@ fun Inputs(
             fechaIni.value
         ) {
             showDatePicker1.value = true
+            identificador.value = "FechaIni"
         }
         Spacer(modifier = Modifier.width(16.dp))
         SelecionarFecha(
@@ -48,8 +50,9 @@ fun Inputs(
             fechaFin.value
         ) {
             showDatePicker2.value = true
+            identificador.value = "FechaFin"
         }
-        Spacer(modifier = Modifier.width(Pantalla.ancho * 0.17f))
-        SelectorVentaTicket(selected, ventasTickerTitulo, viewModel)
+        Spacer(modifier = Modifier.width(Pantalla.ancho * 0.18f))
+        SelectorVentaTicket(selected, ventasTickerTitulo, viewModel, fechaIni, fechaFin)
     }
 }

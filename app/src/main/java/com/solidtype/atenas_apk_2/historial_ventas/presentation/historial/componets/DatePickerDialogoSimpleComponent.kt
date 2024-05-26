@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,6 +15,8 @@ import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDialogoSimple(
+    identificador: MutableState<String>,
+    selected: MutableState<String>,
     showDatePicker: MutableState<Boolean>,
     datePickerState: DatePickerState,
     fechaIni: MutableState<String>,
@@ -29,15 +32,24 @@ fun DatePickerDialogoSimple(
         },
         onClick = {
             showDatePicker.value = false
-            fechaIni.value = datePickerState.selectedDateMillis.formatearFecha()
-            viewModel.buscarProductosVenta(
-                fechaIni.value.formatoDDBB(),
-                fechaFin.value.formatoDDBB(),
-            )
-            viewModel.buscarProductosTicket(
-                fechaIni.value.formatoDDBB(),
-                fechaFin.value.formatoDDBB(),
-            )
+            when (identificador.value) {
+                "FechaIni" -> fechaIni.value = datePickerState.selectedDateMillis.formatearFecha()
+                "FechaFin" -> fechaFin.value = datePickerState.selectedDateMillis.formatearFecha()
+            }
+            when (selected.value) {
+                "Ventas" -> {
+                    viewModel.buscarProductosVenta(
+                        fecha_inicio = fechaIni.value.formatoDDBB(),
+                        fecha_final = fechaFin.value.formatoDDBB(),
+                    )
+                }
+                "Ticket" -> {
+                    viewModel.buscarProductosTicket(
+                        fechaIni = fechaIni.value.formatoDDBB(),
+                        fechaFinal = fechaFin.value.formatoDDBB(),
+                    )
+                }
+            }
             Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
                 .show()
         }
