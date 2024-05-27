@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import java.time.LocalDate
@@ -36,3 +36,4 @@ data class ticket (
     val fecha_final : LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )
+

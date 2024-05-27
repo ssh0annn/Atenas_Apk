@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.solidtype.atenas_apk_2.core.entidades.servicio
+import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
 
 @Entity(foreignKeys = [

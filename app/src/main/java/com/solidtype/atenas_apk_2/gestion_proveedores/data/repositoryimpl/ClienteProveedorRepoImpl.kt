@@ -1,7 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.data.repositoryimpl
 
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

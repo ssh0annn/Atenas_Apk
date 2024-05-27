@@ -2,6 +2,8 @@ package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -18,8 +20,7 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
     var uiState: MutableStateFlow<UserStatesUI> = MutableStateFlow(UserStatesUI())
         private set
 
-    private var recentlyDelete: Map<String, Any?> = emptyMap()
-
+    private var recentlyDelete: usuario? = null
     private var userJob: Job? = null
 
     init {
@@ -57,25 +58,30 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
                 EditarUsuario(evento.usuario)
             }
 
-            else -> {
-
+           is UserEvent.GetRoles -> {
+               getRoles()
+           }
+            is UserEvent.RolSelecionado -> {
+                rolSelecionado(evento.rol)
             }
         }
     }
-
-    private fun AgregarUsuario(usuario: Map<String, Any?>) {
+   private fun rolSelecionado(rol : roll_usuarios){
+       uiState.update { it.copy(rolSelecionado = rol) }
+   }
+    private fun AgregarUsuario(usuario: usuario) {
         viewModelScope.launch {
             casos.agregar(usuario = usuario)
         }
     }
 
-    private fun EditarUsuario(usuario: Map<String, Any?>) {
+    private fun EditarUsuario(usuario:usuario) {
         viewModelScope.launch {
             casos.actualizar(usuario = usuario)
         }
     }
 
-    private fun borrarUsuario(usuario: Map<String, Any?>) {
+    private fun borrarUsuario(usuario: usuario) {
         viewModelScope.launch {
             casos.eliminar(usuario)
             recentlyDelete = usuario
@@ -84,10 +90,8 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
 
     private fun restaurarUsuario() {
         viewModelScope.launch {
-            if (recentlyDelete.isNotEmpty()) {
-                casos.agregar(recentlyDelete)
-                recentlyDelete = emptyMap()
-            }
+            recentlyDelete?.let { casos.agregar(it) }
+            recentlyDelete = null
         }
     }
 
@@ -107,6 +111,13 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
 
         }.launchIn(viewModelScope)
 
+    }
+    private fun getRoles() {
+        viewModelScope.launch {
+            casos.getRoles().collect{ roles ->
+                uiState.update { it.copy(roles = roles) }
+            }
+        }
     }
 
 }
