@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.util.ui.Components
 
 import android.graphics.Color.parseColor
 import androidx.compose.foundation.background
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun InputDetalle(
     label: String,
-    corto: Boolean = false,
     valor: String,
+    corto: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
     Box(
@@ -83,5 +83,5 @@ fun PruebaInput() {
     var valor by remember {
         mutableStateOf("")
     }
-    InputDetalle("Texto", false, "") { valor = it }
+    InputDetalle("Texto", "") { valor = it }
 }

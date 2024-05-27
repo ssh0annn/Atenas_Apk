@@ -32,7 +32,7 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
+import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Detalles
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoV2
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro

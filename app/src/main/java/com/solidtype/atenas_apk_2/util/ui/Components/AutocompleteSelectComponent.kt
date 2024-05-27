@@ -1,9 +1,8 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.util.ui.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,13 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
-import com.solidtype.atenas_apk_2.ui.theme.Negro
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutocompleteSelect(
     text: String,
-    categoria: String,
+    variableStr: String,
     items: List<String>,
     corto: Boolean = false,
     onSelectionChange: (String) -> Unit
@@ -50,7 +48,7 @@ fun AutocompleteSelect(
     var searchText: String by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    searchText = categoria
+    searchText = variableStr
 
     ExposedDropdownMenuBox(
         expanded = expanded,

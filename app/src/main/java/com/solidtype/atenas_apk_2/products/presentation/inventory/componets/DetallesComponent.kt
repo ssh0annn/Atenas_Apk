@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
+import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
+import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
@@ -87,7 +89,7 @@ fun Detalles(
                                 categoria.value = it
                             }
                             InputDetalle(
-                                "Nombre", true, nombre.value
+                                "Nombre", nombre.value, true
                             ) { nombre.value = it }
                         }
                     }
@@ -97,25 +99,24 @@ fun Detalles(
                     ) {// Codigo, Descripción, Precio y Cantidad
                         InputDetalle(
                             "Código",
-                            false,
                             idInventario.value
                         ) { idInventario.value = it }
                         InputDetalle(
-                            "Descripción", false, descripcion.value
+                            "Descripción", descripcion.value
                         ) { descripcion.value = it }
-                        InputDetalle("Costo", false, costo.value) {
+                        InputDetalle("Costo", costo.value) {
                             costo.value = it
                         }
-                        InputDetalle("Precio de Venta", false, precio.value) {
+                        InputDetalle("Precio de Venta", precio.value) {
                             precio.value = it
                         }
-                        InputDetalle("Modelo", false, modelo.value) {
+                        InputDetalle("Modelo", modelo.value) {
                             modelo.value = it
                         }
-                        InputDetalle("Marca", false, marca.value) {
+                        InputDetalle("Marca", marca.value) {
                             marca.value = it
                         }
-                        InputDetalle("Cantidad", false, cantidad.value) {
+                        InputDetalle("Cantidad", cantidad.value) {
                             cantidad.value = it
                         }
                     }

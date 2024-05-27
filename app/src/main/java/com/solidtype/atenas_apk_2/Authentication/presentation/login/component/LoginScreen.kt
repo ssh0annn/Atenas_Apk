@@ -55,7 +55,7 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 @Composable
-fun Container(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
     val email: String by viewModel.mail.observeAsState(initial = "")
     val pass: String by viewModel.pass.observeAsState(initial = "")
     val loginEnabled: Boolean by viewModel.login.observeAsState(initial = false)
