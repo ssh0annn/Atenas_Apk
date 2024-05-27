@@ -1,14 +1,23 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -17,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -24,6 +34,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.Negro
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,13 +66,13 @@ fun AutocompleteSelect(
             },
             singleLine = true,
             textStyle = TextStyle(
-                color = Color.Black,
+                color = AzulGris,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             ),label = {
                 Text(
                     text = text,
-                    color = Color(android.graphics.Color.parseColor("#343341")),
+                    color = AzulGris,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -70,8 +83,8 @@ fun AutocompleteSelect(
                 )
             },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White,
+                focusedBorderColor = Blanco,
+                unfocusedBorderColor = Blanco,
             ),
             modifier = Modifier
                 .menuAnchor()
@@ -79,7 +92,6 @@ fun AutocompleteSelect(
                     when (corto) {
                         true -> 250.dp
                         false -> 300.dp
-
                     }
                 )
                 .background(Color(0xFFFFFFFF), RoundedCornerShape(15.dp))
@@ -102,7 +114,31 @@ fun AutocompleteSelect(
                         onSelectionChange(item)
                     })
                 }
-                //Si le dan al botón Atrás, debe cerrarse
+                //Agregar texto clickeable y centrado
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
+                        .clickable(onClick = {
+                            //Viewmodel.agregarCategoria() <- Esto debería ir en el ViewModel
+                        }),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        tint = AzulGris
+                    )
+                    Text(
+                        text = "Agregar",
+                        color = AzulGris,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        modifier = Modifier
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
             }
         }
     }
