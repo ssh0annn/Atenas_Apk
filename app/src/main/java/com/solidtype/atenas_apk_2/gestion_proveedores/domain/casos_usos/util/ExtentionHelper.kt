@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util
 
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 
 
 fun persona.toMap(): Map<String, Any?> {
@@ -17,6 +18,27 @@ fun persona.toMap(): Map<String, Any?> {
     )
 }
 
+fun persona.toClienteUI():Personastodas.ClienteUI{
+    return Personastodas.ClienteUI(
+        id_cliente = this.id_persona,
+        nombre = this.nombre,
+        documento = this.documento,
+        telefono = this.telefono,
+        email = this.email
+         )
+
+}
+fun persona.toProveedor():Personastodas.Proveedor{
+    return Personastodas.Proveedor(
+        id_proveedor = this.id_persona,
+         nombre= this.nombre,
+         tipo_documento = this.tipo_documento,
+         documento = this.documento,
+         direccion = this.direccion,
+         telefono = this.telefono,
+         email = this.email
+    )
+}
 fun Map<String, Any?>.toPersona(nuevo: Boolean = false): persona {
     if(!nuevo) {
         return persona(

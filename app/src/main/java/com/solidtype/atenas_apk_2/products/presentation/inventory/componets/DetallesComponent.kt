@@ -84,7 +84,8 @@ fun Detalles(
                                 "Categoría",
                                 categoria.value,
                                 categoriaList,
-                                true
+                                true,
+                                onClickAgregar = {},
                             ) {
                                 categoria.value = it
                             }

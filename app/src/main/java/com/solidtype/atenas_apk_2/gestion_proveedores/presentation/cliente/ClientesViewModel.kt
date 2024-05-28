@@ -3,8 +3,7 @@ package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CasosClientes
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,13 +12,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : ViewModel() {
 
-    var uiState: MutableStateFlow<UserStatesUI> = MutableStateFlow(UserStatesUI())
+    var uiState: MutableStateFlow<ClienteStateUI> = MutableStateFlow(ClienteStateUI())
         private set
 
-    private var recentlyDelete: Map<String, Any?> = emptyMap()
+    private var recentlyDelete: Personastodas.ClienteUI? = null
 
     private var userJob: Job? = null
 
@@ -61,19 +61,19 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
         }
     }
 
-    private fun AgregarUsuario(usuario: Map<String, Any?>) {
+    private fun AgregarUsuario(cliente: Personastodas.ClienteUI) {
         viewModelScope.launch {
-            casos.crearClientes(usuario)
+            casos.crearClientes(cliente)
         }
     }
 
-    private fun EditarUsuario(usuario: Map<String, Any?>) {
+    private fun EditarUsuario(usuario: Personastodas.ClienteUI) {
         viewModelScope.launch {
             // casos.actualizar(usuario = usuario)
         }
     }
 
-    private fun borrarUsuario(usuario: Map<String, Any?>) {
+    private fun borrarUsuario(usuario: Personastodas.ClienteUI) {
         viewModelScope.launch {
             casos.eliminarPersona(usuario)
             recentlyDelete = usuario
@@ -82,17 +82,16 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
     private fun restaurarUsuario() {
         viewModelScope.launch {
-            if (recentlyDelete.isNotEmpty()) {
-                casos.crearClientes(recentlyDelete)
-                recentlyDelete = emptyMap()
-            }
+            recentlyDelete?.let { casos.crearClientes(it) }
+            recentlyDelete = null
+
         }
     }
 
     private fun getUsuarios() {
         userJob?.cancel()
         userJob = casos.getClientes().onEach { users ->
-            uiState.update { it.copy(usuarios = users) }
+            uiState.update { it.copy(clientes = users) }
 
         }.launchIn(viewModelScope)
     }
@@ -101,7 +100,7 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
         userJob?.cancel()
         userJob = casos.buscarClientes(any).onEach { users ->
-            uiState.update { it.copy(usuarios = users) }
+            uiState.update { it.copy(clientes = users) }
         }.launchIn(viewModelScope)
 
     }

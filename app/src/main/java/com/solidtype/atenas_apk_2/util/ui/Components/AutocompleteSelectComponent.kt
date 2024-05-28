@@ -43,6 +43,7 @@ fun AutocompleteSelect(
     variableStr: String,
     items: List<String>,
     corto: Boolean = false,
+    onClickAgregar: () -> Unit,
     onSelectionChange: (String) -> Unit
 ) {
     var searchText: String by rememberSaveable { mutableStateOf("") }
@@ -117,9 +118,7 @@ fun AutocompleteSelect(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)
-                        .clickable(onClick = {
-                            //Viewmodel.agregarCategoria() <- Esto debería ir en el ViewModel
-                        }),
+                        .clickable(onClick = onClickAgregar),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

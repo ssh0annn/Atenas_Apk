@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository
 
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import kotlinx.coroutines.flow.Flow
 
 interface ClienteProveedorRepository {

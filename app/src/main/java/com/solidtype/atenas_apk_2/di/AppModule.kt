@@ -36,7 +36,7 @@ import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
-import com.solidtype.atenas_apk_2.core.daos.servicioDao
+import com.solidtype.atenas_apk_2.servicios.data.servicioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
 import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao

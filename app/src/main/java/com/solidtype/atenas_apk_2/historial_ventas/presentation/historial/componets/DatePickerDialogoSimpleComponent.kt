@@ -39,8 +39,8 @@ fun DatePickerDialogoSimple(
             when (selected.value) {
                 "Ventas" -> {
                     viewModel.buscarProductosVenta(
-                        fecha_inicio = fechaIni.value.formatoDDBB(),
-                        fecha_final = fechaFin.value.formatoDDBB(),
+                        fechaInicio = fechaIni.value.formatoDDBB(),
+                        fechaFinal = fechaFin.value.formatoDDBB(),
                     )
                 }
                 "Ticket" -> {

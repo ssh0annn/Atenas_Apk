@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -63,19 +64,17 @@ fun GestionUsuariosScreen(navController: NavController, viewModel: UsuariosViewm
 
     val busqueda = rememberSaveable { mutableStateOf("") }
 
-    val roll = rememberSaveable { mutableStateOf("") }
+    val rol = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
     val apellido = rememberSaveable { mutableStateOf("") }
     val correo = rememberSaveable { mutableStateOf("") }
     val clave = rememberSaveable { mutableStateOf("") }
     val telefono = rememberSaveable { mutableStateOf("") }
 
-    val rollList = listOf(
-        "Vendedor",
-        "Técnico"
-    )//Esto debería venir del ViewModel
+    if (uiState.roles.isEmpty())
+        viewModel.onUserEvent(UserEvent.GetRoles)
 
-    val prueba = viewModel.onUserEvent(UserEvent.MostrarUserEvent)
+    //val prueba = viewModel.onUserEvent(UserEvent.MostrarUserEvent)
 
     if (false) {
         navController.navigate(Screens.Login.route)
@@ -160,13 +159,18 @@ fun GestionUsuariosScreen(navController: NavController, viewModel: UsuariosViewm
                                             color = Blanco,
                                             textAlign = TextAlign.Center
                                         )
+                                        Text(
+                                            text = "Rol",
+                                            modifier = Modifier.weight(1f),
+                                            color = Blanco,
+                                            textAlign = TextAlign.Center
+                                        )
                                     }
                                     LazyColumn(
                                         modifier = Modifier
                                             .padding(start = 0.dp, end = 10.dp, bottom = 10.dp)
                                             .fillMaxSize()
-                                            .clip(RoundedCornerShape(5.dp))
-                                            .background(GrisOscuro)
+                                            .background(GrisOscuro, RoundedCornerShape(5.dp))
                                     ) { //buscar componente para agregar filas de cards
                                         if(uiState.usuarios.isNotEmpty())
                                         items(uiState.usuarios) { usuario ->
@@ -178,8 +182,7 @@ fun GestionUsuariosScreen(navController: NavController, viewModel: UsuariosViewm
                                                         top = 10.dp,
                                                         bottom = 10.dp
                                                     )
-                                                    .clip(RoundedCornerShape(10.dp))
-                                                    .background(GrisClaro)
+                                                    .background(GrisClaro, RoundedCornerShape(10.dp))
                                                     .clickable {
                                                     },
                                                 verticalAlignment = Alignment.CenterVertically
@@ -199,17 +202,22 @@ fun GestionUsuariosScreen(navController: NavController, viewModel: UsuariosViewm
                                                     )
                                                 }// Aquí debería ir la imagen del Usuario
                                                 Text(
-                                                    text = "Johan Martines",
+                                                    text = usuario.nombre,
                                                     modifier = Modifier.weight(1f),
                                                     textAlign = TextAlign.Center
                                                 )
                                                 Text(
-                                                    text = "johan@gmail.com",
+                                                    text = usuario.email,
                                                     modifier = Modifier.weight(1f),
                                                     textAlign = TextAlign.Center
                                                 )
                                                 Text(
-                                                    text = "+18298849382",
+                                                    text = usuario.telefono,
+                                                    modifier = Modifier.weight(1f),
+                                                    textAlign = TextAlign.Center
+                                                )
+                                                Text(
+                                                    text = uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre ?: "",
                                                     modifier = Modifier.weight(1f),
                                                     textAlign = TextAlign.Center
                                                 )
@@ -255,9 +263,10 @@ fun GestionUsuariosScreen(navController: NavController, viewModel: UsuariosViewm
                                         }
                                         AutocompleteSelect(
                                             "Roll",
-                                            roll.value,
-                                            rollList
-                                        ) { roll.value = it }
+                                            rol.value,
+                                            if(uiState.roles.isNotEmpty()) uiState.roles.map { it.nombre } else listOf(""),
+                                            onClickAgregar = {}
+                                        ) { rol.value = it }
                                     }
                                 }
                             }

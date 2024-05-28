@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.core.entidades
+package com.solidtype.atenas_apk_2.servicios.modelo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
