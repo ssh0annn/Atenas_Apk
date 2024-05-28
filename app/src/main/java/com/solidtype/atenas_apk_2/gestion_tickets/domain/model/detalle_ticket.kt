@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.facturacion.domain.model
+package com.solidtype.atenas_apk_2.gestion_tickets.domain.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 
 @Entity(foreignKeys = [
     ForeignKey(entity = servicio::class, parentColumns = ["id_servicio"], childColumns = ["tipo_servicio"]),

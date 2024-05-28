@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion
+package com.solidtype.atenas_apk_2.gestion_tickets.data
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 

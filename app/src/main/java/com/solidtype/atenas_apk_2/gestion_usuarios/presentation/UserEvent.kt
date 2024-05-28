@@ -12,6 +12,9 @@ sealed class UserEvent{
 
    data class EditarUsuario(val usuario: usuario) : UserEvent()
 
+   data class AgregarNuevoRol(val rol: roll_usuarios) : UserEvent()
+
+   data class EditarRol(val rol:roll_usuarios):UserEvent()
    data class RolSelecionado(val rol : roll_usuarios) : UserEvent()
    object RestaurarUsuario : UserEvent()
 
