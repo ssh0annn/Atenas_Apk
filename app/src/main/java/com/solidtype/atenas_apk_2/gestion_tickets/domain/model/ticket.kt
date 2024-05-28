@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion
+package com.solidtype.atenas_apk_2.gestion_tickets.domain.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -17,7 +17,7 @@ import java.time.LocalDate
     ForeignKey(entity = Dispositivo::class, parentColumns = ["id_dispositivo"], childColumns = ["id_dispositivo"])
 ])
 data class ticket (
-    @PrimaryKey(autoGenerate = true) val id_ticket :Long,
+   @PrimaryKey(autoGenerate = false) var id_ticket :Long= 0 ,
     val id_vendedor :Long,
     val id_cliente :Long,
     val id_tipo_venta :Long,
@@ -28,12 +28,12 @@ data class ticket (
     val nota :String,
     val assesorios :String,
     val total :Double,
-    val abono :Double,
+    var abono :Double,
     val presupuesto :Double,
     val subtotal :Double,
     val impuesto :Double,
-    val fecha_inicio : LocalDate,
-    val fecha_final : LocalDate,
-    @ColumnInfo(defaultValue = "true") val estado :Boolean
+    var fecha_inicio : LocalDate,
+    var fecha_final : LocalDate,
+    @ColumnInfo(defaultValue = "true") var estado :Boolean
 )
 

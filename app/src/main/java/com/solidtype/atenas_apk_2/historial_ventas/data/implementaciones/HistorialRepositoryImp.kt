@@ -1,12 +1,12 @@
 package com.solidtype.atenas_apk_2.historial_ventas.data.implementaciones
 
 import android.net.Uri
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
+import com.solidtype.atenas_apk_2.gestion_tickets.data.ticketDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.intefaces.MediatorHistorialVentas
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteTicketsFB.interfaces.RemoteTicketsFB
 import com.solidtype.atenas_apk_2.historial_ventas.domain.repositories.HistorialRepository
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import com.solidtype.atenas_apk_2.util.ListaTicket
 import com.solidtype.atenas_apk_2.util.XlsManeger
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class HistorialRepositoryImp @Inject constructor(
     private val dao: ventaDao,
     private val excel: XlsManeger,
-    private val daoTickets:ticketDao,
+    private val daoTickets: ticketDao,
     private val sync1: MediatorHistorialVentas,
     private val sync2: RemoteTicketsFB
 ) : HistorialRepository {

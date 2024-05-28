@@ -1,11 +1,11 @@
-package com.solidtype.atenas_apk_2.facturacion.data.local.dao
+package com.solidtype.atenas_apk_2.gestion_tickets.data
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_ticket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.detalle_ticket
 import kotlinx.coroutines.flow.Flow
 @Dao
 interface detalle_ticketDao {

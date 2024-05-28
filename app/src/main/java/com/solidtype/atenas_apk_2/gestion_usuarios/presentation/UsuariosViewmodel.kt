@@ -6,12 +6,14 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +31,14 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
 
     fun onUserEvent(evento: UserEvent) {
         when (evento) {
+            is UserEvent.AgregarNuevoRol -> {
+                agregarRol(evento.rol)
+
+            }
+            is UserEvent.EditarRol -> {
+                editarRol(evento.rol)
+
+            }
             is UserEvent.MostrarUserEvent -> {
                 getUsuarios()
             }
@@ -66,6 +76,17 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             }
         }
     }
+
+    private fun agregarRol(rol:roll_usuarios){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                casos.crearRoles(rol)
+            }
+        }
+    }
+    private fun editarRol(rol:roll_usuarios){
+       TODO("Aun no se define si usara rol")
+            }
    private fun rolSelecionado(rol : roll_usuarios){
        uiState.update { it.copy(rolSelecionado = rol) }
    }

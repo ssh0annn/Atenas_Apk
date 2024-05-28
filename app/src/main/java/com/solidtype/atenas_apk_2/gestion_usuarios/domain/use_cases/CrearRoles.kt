@@ -8,6 +8,5 @@ class CrearRoles @Inject constructor(private val repo: GestionUserRepository) {
 
     suspend operator fun invoke(rol: roll_usuarios) {
         repo.crearRol(rol)
-
     }
 }
