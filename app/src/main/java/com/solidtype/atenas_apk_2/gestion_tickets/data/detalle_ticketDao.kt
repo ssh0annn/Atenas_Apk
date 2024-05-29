@@ -16,7 +16,11 @@ interface detalle_ticketDao {
     @Query("select * from detalle_ticket")
     fun getDetalleTickets(): Flow<List<detalle_ticket>>
     @Query("select * from detalle_ticket where id_detalle_ticket ==:id")
-    fun getDetalleTicketById(id :Int): detalle_ticket
+    fun getDetalleTicketById(id :Long): detalle_ticket
+    @Query("select * from detalle_ticket where id_ticket ==:id")
+    fun getDetalleTicketByIdTicket(id:Long): detalle_ticket
+    @Query("select * from detalle_ticket where tipo_servicio ==:id")
+    fun getDetalleTicketByIdServicio(id:Long): detalle_ticket
     @Update
     fun updateDetalleTicket(detalleTicket: detalle_ticket)
     @Delete

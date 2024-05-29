@@ -24,6 +24,9 @@ interface servicioDao {
 
     @Query("select * from servicio where id_servicio ==:id")
     suspend fun getServiciosById(id :Int): servicio
+    @Query("""select * from servicio where lower(nombre) like '%' || lower(:any) || '%'
+        or lower(descripcion) like '%' || lower(:any) || '%'""")
+    fun getServicioByNombreDescripcion(any:String):Flow<List<servicio>>
     @Update
     suspend fun updateServicio(servicio: servicio)
     @Delete
