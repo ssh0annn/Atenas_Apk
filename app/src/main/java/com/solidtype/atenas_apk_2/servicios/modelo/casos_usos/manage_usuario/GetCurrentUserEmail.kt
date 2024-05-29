@@ -11,14 +11,14 @@ class GetCurrentUserEmail @Inject constructor(private val usuarioCasos: UsuarioU
     Aqui debemos espesificar el usuario logeado
     Esta funcion es temporal para resolver u problema, Pero debe ser refactorizada.
      */
-    suspend fun getUser():Long {
+    suspend fun getUser(): Long {
         val usuarios = usuarioCasos.buscarUsuario("adderlis@yahoo.com")
 
         var usuario: usuario? = null
-            usuarios.collect{ lista ->
+        usuarios.collect { lista ->
             lista.forEach {
-                if(it.email == "adderlis@yahoo.com") {
-                usuario = it
+                if (it.email == "adderlis@yahoo.com") {
+                    usuario = it
                 }
             }
         }

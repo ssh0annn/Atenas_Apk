@@ -13,7 +13,9 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket){
     suspend fun completarPago(ticket: ticket) {
         casosTicket.completarPago(ticket)
     }
-    fun getTickets()= casosTicket.getTickets()
+    fun getTickets()= casosTicket.getDetallesTicket()
+
+    fun getDetalleTicket() = casosTicket.getTickets()
 
     fun buscarTickets(any:String) =
          casosTicket.buscarTickets(any)

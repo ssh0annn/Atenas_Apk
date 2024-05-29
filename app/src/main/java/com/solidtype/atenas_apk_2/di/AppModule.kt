@@ -126,6 +126,12 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
+import com.solidtype.atenas_apk_2.servicios.data.repositoryImpl.ServicioRepositoryImpl
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.BuscarTipoServicio
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CasosTipoServicios
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CrearTiposServicios
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.GetTipoServicio
+import com.solidtype.atenas_apk_2.servicios.modelo.repository.ServicioRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -462,5 +468,21 @@ object AppModule {
         buscarTickets= buscarTickets(repo),
         buscarDetallesTicket= BuscarDetallesTicket(repo)
     )
+
+    //Servicios y tipos servicios
+
+    @Provides
+    @Singleton
+    fun provideCasosServicios(repo:ServicioRepository) = CasosTipoServicios(
+        buscarTipoServicio = BuscarTipoServicio(repo),
+        crearTiposServicios = CrearTiposServicios(repo),
+        getTipoServicio = GetTipoServicio(repo)
+    )
+
+    @Provides
+    @Singleton
+    fun provideRepositoryServicios(dao : servicioDao):ServicioRepository = ServicioRepositoryImpl(dao)
+
+
 
 }
