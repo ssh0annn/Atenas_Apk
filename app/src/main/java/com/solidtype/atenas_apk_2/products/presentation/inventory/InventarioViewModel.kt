@@ -38,6 +38,7 @@ class InventarioViewModel @Inject constructor(
         cantidad: Int,
         precio_compra: Double,
         precio_venta: Double,
+        impuesto : Double,
         descripcion: String?,
         estado: Boolean
 
@@ -52,6 +53,7 @@ class InventarioViewModel @Inject constructor(
             cantidad=cantidad,
             precio_compra=precio_compra,
             precio_venta=precio_venta,
+            impuesto = impuesto,
             descripcion=descripcion,
             estado =estado
         )
@@ -66,8 +68,6 @@ class InventarioViewModel @Inject constructor(
 
     fun mostrarProductos() {
         val productos = casosInventario.getProductos()
-
-
 
         viewModelScope.launch {
             withContext(Dispatchers.Default) {

@@ -4,16 +4,25 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,10 +34,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ImeiBoton {
+            /*ImeiBoton {
 
 
-            }
+            }*/
+            Navigation()
         }
 
     }
@@ -62,8 +72,6 @@ class MainActivity : ComponentActivity() {
             null
         }
     }
-
-
 }
 
 @Composable

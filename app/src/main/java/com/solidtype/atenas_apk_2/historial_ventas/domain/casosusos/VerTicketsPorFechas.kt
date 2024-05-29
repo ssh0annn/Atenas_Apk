@@ -8,7 +8,7 @@ class VerTicketsPorFechas @Inject constructor(private val repo: HistorialReposit
 
     operator fun invoke(  fechaIni: String,
                           fechaFinal:String,
-                          catego: String)=repo.mostrarTicketsPorFecha(fechaIni, fechaFinal, catego)
+                          )=repo.mostrarTicketsPorFecha(fechaIni, fechaFinal)
 
 
     }

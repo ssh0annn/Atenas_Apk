@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 
 @Entity(foreignKeys = [
     ForeignKey(entity = categoria::class, parentColumns = ["id_categoria"], childColumns = ["id_categoria"]),
@@ -13,13 +13,14 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
 data class inventario (
     @PrimaryKey(autoGenerate = true) val id_inventario :Long = 7000,
     val id_categoria :Long,
-    val id_proveedor :Long,
+    val id_proveedor :Long?,
     val nombre :String,
     val marca :String?,
     val modelo :String?,
     val cantidad :Int,
     val precio_compra :Double,
     val precio_venta :Double,
+    val impuesto : Double,
     val descripcion :String?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
 )

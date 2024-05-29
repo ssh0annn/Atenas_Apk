@@ -32,24 +32,24 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.facturacion.presentation.Factura
-import com.solidtype.atenas_apk_2.facturacion.presentation.sumaTotal
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
+import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoParaUser
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
-fun Tabla(facturas: List<Factura> = listOf()) {
+fun Tabla(facturas: List<FacturaConDetalle?>) {
 
     var desplegar by rememberSaveable { mutableStateOf(List(facturas.size) { false }) }
-    val size = LocalConfiguration.current.screenWidthDp.dp - 780.dp
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(size)
+            .height(Pantalla.ancho - 800.dp)
             .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
@@ -83,19 +83,19 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                     textAlign = TextAlign.Center
                 )
                 Text(
+                    text = "Cantidad",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
                     text = "Total",
                     modifier = Modifier.weight(1f),
                     color = Blanco,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Tipo de Pago",
-                    modifier = Modifier.weight(1f),
-                    color = Blanco,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = "ID",
+                    text = "Estado",
                     modifier = Modifier.weight(1f),
                     color = Blanco,
                     textAlign = TextAlign.Center
@@ -110,7 +110,7 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                     .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
                     .fillMaxSize()
                     .background(GrisOscuro)
-            ) { //buscar componente para agregar filas de cards
+            ) {
                 itemsIndexed(facturas) { i, factura ->
                     Column {
                         Row(
@@ -135,35 +135,39 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = factura.noFactura.toString(),
+                                text = factura?.factura?.id_venta.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = factura.cliente,
+                                text = factura?.factura?.id_cliente.toString(),
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            factura?.factura?.fecha?.let {
+                                Text(
+                                    text = it.formatoParaUser(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Text(
+                                text = factura?.factura?.cantidad.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = factura.fecha.formatoParaUser(),
+                                text = factura?.factura?.total.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
-                            Text(
-                                text = factura.total.toString(),
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                text = factura.tipoPago,
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                text = factura.idVendedor.toString(),
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
+                            factura?.factura?.estado?.let {
+                                Text(
+                                    text = it.formatoActivo(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                             Icon(
                                 imageVector = if (desplegar[i]) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
                                 contentDescription = "",
@@ -184,71 +188,69 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                                 Column {
                                     Row {//Cabecera
                                         Text(
-                                            text = "Cantidad",
+                                            text = "id_detalle_venta",
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center,
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            text = "Nombre",
+                                            text = "id_venta",
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center,
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            text = "Precio",
+                                            text = "id_producto",
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center,
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            text = "ITB",
+                                            text = "cantidad",
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center,
                                             fontWeight = FontWeight.Bold
                                         )
                                         Text(
-                                            text = "Total",
+                                            text = "total",
                                             modifier = Modifier.weight(1f),
                                             textAlign = TextAlign.Center,
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
                                     Divider()
-                                    factura.productos.forEach { Producto -> //Cuerpo
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                        ) {
-                                            Text(
-                                                text = Producto.cantidad.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = Producto.nombre,
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = Producto.precio.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = Producto.ITB.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = Producto.total.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                        }
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        Text(
+                                            text = factura!!.detalle!!.id_detalle_venta.toString(),
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = factura.detalle!!.id_venta.toString(),
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = factura.detalle.id_producto.toString(),
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = factura.detalle.cantidad.toString(),
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Text(
+                                            text = factura.detalle.total.toString(),
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
                                     }
                                     Divider()
-                                    Row { // Pie
+                                    /*Row { // Pie
                                         Text(
                                             text = "Total",
                                             modifier = Modifier.weight(1f),
@@ -267,7 +269,7 @@ fun Tabla(facturas: List<Factura> = listOf()) {
                                             textAlign = TextAlign.Center,
                                             fontWeight = FontWeight.Bold
                                         )
-                                    }
+                                    }*/
                                 }
                             }
                         }

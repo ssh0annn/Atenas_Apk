@@ -5,11 +5,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +28,7 @@ class  FacturaViewModel @Inject constructor(
 ) : ViewModel() {
     var uiState = MutableStateFlow(FacturaUI())
         private set
-    var job: Job? = null
+    private var job: Job? = null
 
     init {
 
@@ -39,15 +43,13 @@ class  FacturaViewModel @Inject constructor(
                 )
             }
             withContext(Dispatchers.IO) {
-                val mostrar = facturacionCasosdeUso.mostrarTodo()
 
-                mostrar.collect { product ->
+                facturacionCasosdeUso.mostrarTodo().helper().collect { product ->
                     uiState.update {
                         it.copy(
-                            facturas = product, isLoading = false
+                            facturaConDetalle = product, isLoading = false
                         )
                     }
-                    println("Facturas $product")
                 }
             }
         }
@@ -71,33 +73,27 @@ class  FacturaViewModel @Inject constructor(
             }
             job?.cancel()
             job = viewModelScope.launch {
-                val buscarf =
-                    facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante)
-
-                buscarf.collect { product ->
-                    uiState.update {
-                        it.copy(buscar = product, isLoading = false)
+                withContext(Dispatchers.IO){
+                    facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante).helper().collect { product ->
+                        uiState.update {
+                            it.copy(facturaConDetalle = product, isLoading = false)
+                        }
                     }
                 }
+
             }
         }
     }
-    fun detealleFactura(
-        NoFactura: Long,
 
-        ) {
-        viewModelScope.launch {
-            uiState.update {
-                it.copy(
-                    isLoading = true
+    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
+
+        return this.map { listaFacturas ->
+            listaFacturas.map { factura->
+                FacturaConDetalle(
+                    factura = factura,
+                    detalle = factura?.let { detalle -> facturacionCasosdeUso.detallesFacturas(detalle.id_venta) }
                 )
             }
-            withContext(Dispatchers.IO) {
-                val detalle = facturacionCasosdeUso.detallesFacturas(NoFactura)
-                uiState.update { it.copy(detalles = detalle, isLoading = false) }
-                println("Facturas $detalle")
-            }
-
         }
     }
 }
