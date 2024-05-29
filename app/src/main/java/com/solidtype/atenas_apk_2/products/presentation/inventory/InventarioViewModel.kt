@@ -69,8 +69,6 @@ class InventarioViewModel @Inject constructor(
     fun mostrarProductos() {
         val productos = casosInventario.getProductos()
 
-
-
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 syncProductos()

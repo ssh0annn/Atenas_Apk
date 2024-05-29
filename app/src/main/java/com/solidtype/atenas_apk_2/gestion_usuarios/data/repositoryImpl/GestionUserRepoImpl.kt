@@ -17,6 +17,7 @@ class GestionUserRepoImpl @Inject constructor(
     }
 
     override fun buscarUsuario(any: String): Flow<List<usuario>> {
+        //NO  esta bien... el dao no permite que le pasen un parametro semejante
         return usuarioDao.getUsuarios()
     }
 
@@ -32,6 +33,10 @@ class GestionUserRepoImpl @Inject constructor(
         usuarioDao.updateUsuario(usuario)
     }
 
+    override suspend fun actualizarRol(rol: roll_usuarios) {
+        rollDao.updateRollUsuario(rol)
+    }
+
     override fun getRolesUsuarios(): Flow<List<roll_usuarios>> {
         return rollDao.getRollUsuarios()
     }
@@ -39,4 +44,5 @@ class GestionUserRepoImpl @Inject constructor(
     override suspend fun crearRol(roll: roll_usuarios) {
         rollDao.addRollUsuario(roll)
     }
+
 }

@@ -2,6 +2,13 @@ package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
+
+data class FacturaConDetalle(
+    val factura: venta,
+    val detalles: detalle_venta?
+)
 
 val facturas = listOf(
     Factura(

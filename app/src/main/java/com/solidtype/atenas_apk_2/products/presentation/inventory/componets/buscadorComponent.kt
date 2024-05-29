@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.graphics.Color.parseColor
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
 
 @Composable
 fun Buscador(busqueda: String, onBusquedaChange: (String) -> Unit) {
@@ -30,15 +33,14 @@ fun Buscador(busqueda: String, onBusquedaChange: (String) -> Unit) {
         modifier = Modifier
             .width(500.dp)
             .height(66.dp)
-            .padding(start = 25.dp, end = 25.dp, top = 4.dp, bottom = 4.dp)
-            .background(Color(parseColor("#FFFFFF"))),
+            .padding(start = 25.dp, end = 25.dp, top = 4.dp, bottom = 4.dp),
         shape = RoundedCornerShape(50),
         placeholder = {
             Text(
                 text = "Buscar...",
                 style = TextStyle(
                     textAlign = TextAlign.Start,
-                    color = Color(parseColor("#FFFFFF")),
+                    color = Blanco,
                     fontSize = 16.sp,
                     fontWeight = Bold
                 )
@@ -46,23 +48,69 @@ fun Buscador(busqueda: String, onBusquedaChange: (String) -> Unit) {
         },
         textStyle = TextStyle(
             textAlign = TextAlign.Start,
-            color = Color(parseColor("#FFFFFF")),
+            color = Blanco,
             fontSize = 16.sp
         ),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = "Search Icon",
-                modifier = Modifier.background(Color(parseColor("#343341")))
+                contentDescription = "",
+                modifier = Modifier.background(AzulGris)
                     .width(25.dp)
                     .height(25.dp),
-                tint = Color(parseColor("#FFFFFF"))
+                tint = Blanco
             )
         },
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color(parseColor("#343341")),
-            unfocusedContainerColor = Color(parseColor("#343341")),
-            disabledContainerColor = Color(parseColor("#343341")),
+            focusedContainerColor = AzulGris,
+            unfocusedContainerColor = AzulGris,
+            disabledContainerColor = AzulGris,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
+    )
+}
+
+@Composable
+fun Buscador2(busqueda: String, onBusquedaChange: (String) -> Unit) {
+    TextField(
+        value = busqueda,
+        onValueChange = onBusquedaChange,
+        singleLine = true,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        shape = RoundedCornerShape(50),
+        placeholder = {
+            Text(
+                text = "Buscar...",
+                style = TextStyle(
+                    textAlign = TextAlign.Start,
+                    color = Blanco,
+                    fontSize = 16.sp,
+                    fontWeight = Bold
+                )
+            )
+        },
+        textStyle = TextStyle(
+            textAlign = TextAlign.Start,
+            color = Blanco,
+            fontSize = 16.sp
+        ),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Search,
+                contentDescription = "",
+                modifier = Modifier.background(AzulGris)
+                    .width(25.dp)
+                    .height(25.dp),
+                tint = Blanco
+            )
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = AzulGris,
+            unfocusedContainerColor = AzulGris,
+            disabledContainerColor = AzulGris,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         ),

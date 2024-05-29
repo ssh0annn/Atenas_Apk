@@ -1,8 +1,13 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
+
 data class UserStatesUI(
 
-    val usuarios: List<Map<String, Any?>> = emptyList(),
+    val usuarios: List<usuario> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String = ""
+    val error: String = "",
+    val roles: List<roll_usuarios> = emptyList(),
+    val rolSelecionado: roll_usuarios? = null
 )
