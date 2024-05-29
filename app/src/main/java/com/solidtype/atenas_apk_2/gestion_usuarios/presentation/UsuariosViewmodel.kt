@@ -84,9 +84,13 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             }
         }
     }
-    private fun editarRol(rol:roll_usuarios){
-        casos
+    private fun editarRol(rol:roll_usuarios) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                casos.actualizarRoll(rol)
             }
+        }
+    }
    private fun rolSelecionado(rol : roll_usuarios){
        uiState.update { it.copy(rolSelecionado = rol) }
    }
