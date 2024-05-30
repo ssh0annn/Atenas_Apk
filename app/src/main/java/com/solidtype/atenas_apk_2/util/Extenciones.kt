@@ -122,3 +122,7 @@ fun LocalDate.formatoParaUser(): String {
 fun Boolean.formatoActivo(): String {
     return if (this) "Activo" else "Inactivo"
 }
+
+fun String.formatoActivoDDBB(): Boolean {
+    return this == "Activo"
+}

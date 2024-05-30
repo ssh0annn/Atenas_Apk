@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,12 +33,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,12 +48,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.R
-import com.solidtype.atenas_apk_2.Authentication.presentation.login.LoginViewModel
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.Authentication.presentation.login.LoginViewModel
+import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
+import com.solidtype.atenas_apk_2.ui.theme.Transparente
 
 @Composable
 fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
@@ -89,11 +93,7 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                 Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
-                    .background(
-                        color = Color(
-                            android.graphics.Color.parseColor("#ffffff")
-                        )
-                    ),
+                    .background(Blanco),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
@@ -107,23 +107,21 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                             text = "Hola!",
                             fontSize = 50.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(android.graphics.Color.parseColor("#343341"))
+                            color = AzulGris
                         )
                         Text(
                             text = "Bienvenido",
                             fontSize = 50.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(android.graphics.Color.parseColor("#343341"))
+                            color = AzulGris
                         )
                         Text(
                             text = "Ingresa tus datos aqui.",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(android.graphics.Color.parseColor("#343341"))
+                            color = AzulGris
                         )
                     }
-
-                    val containerColor = Color(android.graphics.Color.parseColor("#F0F0F0"))
                     TextField(
                         value = email,
                         onValueChange = { viewModel.onLoginChange(it, pass) },
@@ -132,12 +130,12 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                             .width(500.dp)
                             .height(66.dp)
                             .padding(start = 34.dp, end = 34.dp, top = 8.dp, bottom = 8.dp)
-                            .background(Color(android.graphics.Color.parseColor("#FFFFFF"))),
+                            .background(Blanco),
                         shape = RoundedCornerShape(20),
                         label = { Text(text = "Username") },
                         textStyle = TextStyle(
                             textAlign = TextAlign.Start,
-                            color = Color(android.graphics.Color.parseColor("#343341")),
+                            color = AzulGris,
                             fontSize = 14.sp
                         ),
                         leadingIcon = {
@@ -147,14 +145,13 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                             )
                         },
                         colors = TextFieldDefaults.colors(
-                            focusedContainerColor = containerColor,
-                            unfocusedContainerColor = containerColor,
-                            disabledContainerColor = containerColor,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedContainerColor = BlancoOpaco,
+                            unfocusedContainerColor = BlancoOpaco,
+                            disabledContainerColor = BlancoOpaco,
+                            focusedIndicatorColor = Transparente,
+                            unfocusedIndicatorColor = Transparente
                         ),
                     )
-                    val containerColor1 = Color(android.graphics.Color.parseColor("#F0F0F0"))
                     TextField(
                         value = pass,
                         onValueChange = { viewModel.onLoginChange(email, it) },
@@ -163,12 +160,12 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                             .width(500.dp)
                             .height(66.dp)
                             .padding(start = 34.dp, end = 34.dp, top = 8.dp, bottom = 8.dp)
-                            .background(Color(android.graphics.Color.parseColor("#FFFFFF"))),
+                            .background(Blanco),
                         shape = RoundedCornerShape(20),
                         label = { Text(text = "Password") },
                         textStyle = TextStyle(
                             textAlign = TextAlign.Start,
-                            color = Color(android.graphics.Color.parseColor("#343341")),
+                            color = AzulGris,
                             fontSize = 14.sp
                         ),
                         leadingIcon = {
@@ -188,11 +185,11 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                             }
                         },
                         colors = TextFieldDefaults.colors(
-                            focusedContainerColor = containerColor1,
-                            unfocusedContainerColor = containerColor1,
-                            disabledContainerColor = containerColor1,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedContainerColor = BlancoOpaco,
+                            unfocusedContainerColor = BlancoOpaco,
+                            disabledContainerColor = BlancoOpaco,
+                            focusedIndicatorColor = Transparente,
+                            unfocusedIndicatorColor = Transparente
                         ),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
@@ -207,13 +204,16 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                     {
                         Checkbox(
                             checked = checked,
-                            onCheckedChange = { checked = it }
+                            onCheckedChange = { checked = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = AzulGris,
+                            )
                         )
                         Text(
                             text = "Recordar",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(android.graphics.Color.parseColor("#343341"))
+                            color = AzulGris
                         )
                     }
                     Button(
@@ -222,8 +222,8 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                                                    },
                         shape = RoundedCornerShape(25.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF343341),
-                            contentColor = Color.White,
+                            containerColor = AzulGris,
+                            contentColor = Blanco,
 
                             ),
                         modifier = Modifier
@@ -249,7 +249,7 @@ fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel 
                             text = "¿No tienes cuenta?",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(android.graphics.Color.parseColor("#343341"))
+                            color = AzulGris
                         )
                         /*Button(
                             onClick = {

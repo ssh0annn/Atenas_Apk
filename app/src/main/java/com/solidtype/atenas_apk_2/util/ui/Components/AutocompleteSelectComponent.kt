@@ -1,5 +1,7 @@
 package com.solidtype.atenas_apk_2.util.ui.Components
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,14 +23,20 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,25 +51,27 @@ fun AutocompleteSelect(
     variableStr: String,
     items: List<String>,
     corto: Boolean = false,
-    onClickAgregar: () -> Unit,
+    expanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+    onClickAgregar: (() -> Unit)? = null,
     onSelectionChange: (String) -> Unit
 ) {
-    var searchText: String by rememberSaveable { mutableStateOf("") }
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var searchText: String by rememberSaveable { mutableStateOf(variableStr) }
 
-    searchText = variableStr
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val focusRequester = remember { FocusRequester() }
 
     ExposedDropdownMenuBox(
-        expanded = expanded,
+        expanded = expanded.value,
         onExpandedChange = {
-            expanded = !expanded
+            expanded.value = !expanded.value
         }
     ) {
         TextField(
             value = searchText,
             onValueChange = {
                 searchText = it
-                expanded = true
+                expanded.value = true
             },
             singleLine = true,
             textStyle = TextStyle(
@@ -78,7 +88,7 @@ fun AutocompleteSelect(
             },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
+                    expanded = expanded.value
                 )
             },
             colors = OutlinedTextFieldDefaults.colors(
@@ -86,6 +96,12 @@ fun AutocompleteSelect(
                 unfocusedBorderColor = Blanco,
             ),
             modifier = Modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState ->
+                    if (!focusState.isFocused) {
+                        expanded.value = false
+                    }
+                }
                 .menuAnchor()
                 .width(
                     when (corto) {
@@ -101,7 +117,7 @@ fun AutocompleteSelect(
         val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
         if (filteredItems.isNotEmpty()) {
             ExposedDropdownMenu(
-                expanded = expanded,
+                expanded = expanded.value,
                 onDismissRequest = {
                     // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
                 }
@@ -109,16 +125,21 @@ fun AutocompleteSelect(
                 for (item in filteredItems) {
                     DropdownMenuItem(text = { Text(item) }, onClick = {
                         searchText = item
-                        expanded = false
+                        expanded.value = false
                         onSelectionChange(item)
                     })
                 }
-                //Agregar texto clickeable y centrado
+                if (onClickAgregar != null)
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)
-                        .clickable(onClick = onClickAgregar),
+                        .clickable(onClick = {
+                            onClickAgregar()
+                            expanded.value = false
+                            //Debería hacer un back
+                            keyboardController?.hide()
+                        }),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

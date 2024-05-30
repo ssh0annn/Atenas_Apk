@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
@@ -24,20 +27,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Detalles
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoV2
+import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -136,7 +143,18 @@ fun InventoryScreen(navController: NavController, viewModel: InventarioViewModel
                 AvatarConBotones(context, viewModel, showSnackbarIni, mostrar)
             }
         }
-        DialogoV2(mostrar.value) { mostrar.value = false }
+        Dialogo("Ejemplar de Excel", mostrar.value, { mostrar.value = false }){
+            Image(
+                painter = painterResource(id = R.drawable.ejemplar),
+                contentDescription = "Ejemplar de Excel",
+                modifier = Modifier
+                    .size(
+                        width = Pantalla.ancho - 100.dp,
+                        height = Pantalla.alto - 410.dp
+                    )
+                    .shadow(16.dp, shape = RoundedCornerShape(16.dp))
+            )
+        }
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
 }
