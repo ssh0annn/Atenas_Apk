@@ -42,6 +42,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
+import com.solidtype.atenas_apk_2.servicios.servicios
 import com.solidtype.atenas_apk_2.util.MyScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,7 +58,8 @@ class MainActivity : ComponentActivity() {
             //TestAutocompleteSelect()
             // Demo_SearchableExposedDropdownMenuBox()
             //InventoryScreen()
-             Navigation()
+             servicios()
+            //Navigation()
             //HistorialScreen()
            // FireManeger()
         }
