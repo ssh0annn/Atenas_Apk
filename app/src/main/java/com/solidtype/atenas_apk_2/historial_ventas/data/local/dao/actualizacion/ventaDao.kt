@@ -18,15 +18,20 @@ interface ventaDao {
     suspend fun addVentas(venta : List<venta>)
     @Query("select * from venta")
     fun getVentas(): Flow<List<venta>>
+    @Query("select * from venta where id_vendedor ==:id")
+     fun getVentasByIdUsuario(id :Long): Flow<List<venta>>
+    @Query("select * from venta where id_cliente ==:id")
+     fun getVentasByIdPersona(id :Long): Flow<List<venta>>
+    @Query("select * from venta where id_tipo_venta ==:id")
+     fun getVentasByIdTipoVenta(id :Long): Flow<List<venta>>
     @Query("select * from venta where id_venta ==:id")
     suspend fun getVentasById(id :Int): venta
-    @Query("""select * from venta 
-             where id_venta like'%' || :any || '%' 
-             or id_vendedor like '%' || :any || '%'
-             or id_cliente like '%' || :any || '%'
-             or id_tipo_venta like '%' || :any || '%'
-             and fecha between :fechaInicial and :fechaFinal
-            """)
+    @Query("select * from venta " +
+            "where id_venta like'%' || :any || '%' " +
+            "or id_vendedor like '%' || :any || '%'" +
+            "or id_cliente like '%' || :any || '%'" +
+            "or id_tipo_venta like '%' || :any || '%'" +
+            "and fecha between :fechaInicial and :fechaFinal")
     fun getVentasByIdsAndFecha(any : String, fechaInicial : LocalDate, fechaFinal : LocalDate):Flow<List<venta>>
 
     @Query("SELECT * FROM venta WHERE fecha BETWEEN :fechaI AND :fechaF")

@@ -78,12 +78,23 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_pr
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
+import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.BuscarDetallesTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CasosTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CloseTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CompletarPago
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CrearTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetDetallesTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetTickets
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.buscarTickets
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.repository.GestionUserRepository
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Actualizar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Agregar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Buscar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.CrearRoles
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EditarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Eliminar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.GetRoles
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.MostrarUsuario
@@ -115,6 +126,12 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
+import com.solidtype.atenas_apk_2.servicios.data.repositoryImpl.ServicioRepositoryImpl
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.BuscarTipoServicio
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CasosTipoServicios
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CrearTiposServicios
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.GetTipoServicio
+import com.solidtype.atenas_apk_2.servicios.modelo.repository.ServicioRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -373,7 +390,8 @@ object AppModule {
         mostrarUsuarios = MostrarUsuario(repo),
         buscarUsuario = Buscar(repo),
         getRoles = GetRoles(repo),
-        crearRoles = CrearRoles(repo)
+        crearRoles = CrearRoles(repo),
+        actualizarRoll = EditarRoll(repo)
     )
     //Injectando Personas y tipos de personas.
 
@@ -432,4 +450,39 @@ object AppModule {
     fun provideDispositivoRepository(dao:DispositivoDao) : DispositivosRepository {
         return DispositivosRepositoryImpl(dao)
     }
+
+    //Tickets Manejador
+    @Provides
+    @Singleton
+    fun provideTicketRepository(ticket:ticketDao, detalle:detalle_ticketDao):TicketRepository =
+        TicketRepositoryImpl(ticket, detalle)
+
+    @Provides
+    @Singleton
+    fun providesCasosTickets(repo:TicketRepository) = CasosTicket(
+        getTickets= GetTickets(repo),
+        getDetallesTicket= GetDetallesTicket(repo),
+        crearTicket= CrearTicket(repo),
+        completarPago= CompletarPago(repo),
+        closeTicket= CloseTicket(repo),
+        buscarTickets= buscarTickets(repo),
+        buscarDetallesTicket= BuscarDetallesTicket(repo)
+    )
+
+    //Servicios y tipos servicios
+
+    @Provides
+    @Singleton
+    fun provideCasosServicios(repo:ServicioRepository) = CasosTipoServicios(
+        buscarTipoServicio = BuscarTipoServicio(repo),
+        crearTiposServicios = CrearTiposServicios(repo),
+        getTipoServicio = GetTipoServicio(repo)
+    )
+
+    @Provides
+    @Singleton
+    fun provideRepositoryServicios(dao : servicioDao):ServicioRepository = ServicioRepositoryImpl(dao)
+
+
+
 }

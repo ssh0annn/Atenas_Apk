@@ -60,12 +60,12 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             }
 
             is UserEvent.AgregarUsuario -> {
-                AgregarUsuario(evento.usuario)
+                agregarUsuario(evento.usuario)
 
             }
 
             is UserEvent.EditarUsuario -> {
-                EditarUsuario(evento.usuario)
+                editarUsuario(evento.usuario)
             }
 
            is UserEvent.GetRoles -> {
@@ -84,19 +84,23 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             }
         }
     }
-    private fun editarRol(rol:roll_usuarios){
-       TODO("Aun no se define si usara rol")
+    private fun editarRol(rol:roll_usuarios) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                casos.actualizarRoll(rol)
             }
+        }
+    }
    private fun rolSelecionado(rol : roll_usuarios){
        uiState.update { it.copy(rolSelecionado = rol) }
    }
-    private fun AgregarUsuario(usuario: usuario) {
+    private fun agregarUsuario(usuario: usuario) {
         viewModelScope.launch {
             casos.agregar(usuario = usuario)
         }
     }
 
-    private fun EditarUsuario(usuario:usuario) {
+    private fun editarUsuario(usuario:usuario) {
         viewModelScope.launch {
             casos.actualizar(usuario = usuario)
         }
