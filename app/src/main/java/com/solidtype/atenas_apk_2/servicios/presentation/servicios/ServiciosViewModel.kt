@@ -1,8 +1,7 @@
-package com.solidtype.atenas_apk_2.servicios.presentation
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
