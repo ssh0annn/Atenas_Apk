@@ -60,8 +60,9 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 @Composable
 fun ClienteScreen(
 
+     viewModel: ClientesViewModel = hiltViewModel()
 ){
-    val viewModel: ClientesViewModel = hiltViewModel()
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var busqueda by rememberSaveable { mutableStateOf("") }
@@ -72,6 +73,12 @@ fun ClienteScreen(
     } else {
         viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
     }
+
+    if (uiState.clientes.isEmpty()){
+        viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
+    }
+
+
 
     Column(
         //All

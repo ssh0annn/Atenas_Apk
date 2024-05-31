@@ -90,6 +90,9 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
  @Composable
     fun TableClients(Clients: List<Personastodas.ClienteUI>) {
 
+     println("tabla Cliente")
+     println(Clients)
+     println("")
 
         Box(
             modifier = Modifier

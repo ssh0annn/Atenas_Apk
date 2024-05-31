@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -27,7 +28,7 @@ fun bottonAddClient(
             .widthIn(min = 52.dp)
             .background(MaterialTheme.colorScheme.primary)
     ) {
-        Icon(imageVector = Icons.Outlined.AddCircle, contentDescription = "Add")
+        Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add")
 
     }
 
