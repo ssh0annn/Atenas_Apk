@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
@@ -17,10 +18,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun bottonAddClient(
     modifier:Modifier,
-    onFabClicked: () -> Unit
+    onFabClicked: () -> Unit = { }
 ){
     FloatingActionButton(
-        onClick = { onFabClicked},
+       onClick = { onFabClicked},
         modifier = modifier
             .height(52.dp)
             .widthIn(min = 52.dp)

@@ -15,34 +15,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.modelo.persona
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 
 
 @Composable
 fun TableContent(
   
     modifier: Modifier = Modifier,
-    onDeleteUser: () -> Unit,
-    onEditUser: () -> Unit,
-    ListClient: List<Map<String,Any>> = emptyList()
+    onDeleteUser: (cliente:Personastodas.ClienteUI) -> Unit,
+    onEditUser: (cliente:Personastodas.ClienteUI) -> Unit,
+    Clients: List<Personastodas.ClienteUI> = emptyList()
 ){
 
-    val list: persona = persona(
-        1,
-        "dsfds",
-        "Johan",
-        "ffg",
-        "655-552-55",
-        "calle 3",
-        "45456465",
-        "therealdiaz",
-        true,
-    )
 
 
 
@@ -84,11 +75,7 @@ fun TableContent(
             }
         }
         
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = modifier
-        ) {
-            
+
             LazyColumn(
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
@@ -96,19 +83,10 @@ fun TableContent(
                     .clip(RoundedCornerShape(5.dp))
                     .background(Color(android.graphics.Color.parseColor("#737A8C")))
             ) {
+                items(Clients){cliente ->
 
-
+                }
             }
-            
-        }
-        
-       
-
-
-
-
-
-
     }
 }
 

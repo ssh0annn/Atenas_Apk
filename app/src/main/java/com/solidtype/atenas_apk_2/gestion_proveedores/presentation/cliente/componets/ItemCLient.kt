@@ -22,13 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 
 @Composable
-fun ItemClient(
+fun MyClientItem(
     modifier: Modifier = Modifier,
-    Client: Map<String,Any>,
-    onEditUser: () -> Unit,
-    onDeleteUser: () -> Unit
+    Client: Personastodas.ClienteUI,
+
 ){
     Card(
         modifier = modifier
@@ -40,7 +40,9 @@ fun ItemClient(
     ){
 
         Row(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
 
 
@@ -51,39 +53,31 @@ fun ItemClient(
             ) {
 
                 Text(
-                    text = Client["nombre"].toString(),
+                    text = Client.nombre.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f), maxLines = 1
                 )
                 Text(
-                    text = Client["documento"].toString(),
+                    text = Client.documento.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f),
                     maxLines = 1
                 )
                 Text(
-                    text = Client["direccion"].toString(),
+                    text = Client.email.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f),
                     maxLines = 1
                 )
                 Text(
-                    text = Client["email"].toString(),
+                    text = Client.telefono.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f),
                     maxLines = 1
                 )
-                Text(
-                    text = Client["telefono"].toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f),
-                    maxLines = 1
-                )
-
-
 
                 Row {
-                    IconButton(onClick = onEditUser) {
+                    IconButton(onClick = {  }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = null,
@@ -91,7 +85,7 @@ fun ItemClient(
                         )
                     }
 
-                    IconButton(onClick = onDeleteUser) {
+                    IconButton(onClick = {  }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = null,
@@ -107,23 +101,20 @@ fun ItemClient(
 
 
 
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewClient() {
 
-    val mapClient = mapOf(
-        "nombre" to "Johan Diaz",
-        "documento" to "84864",
-        "direccion" to "calle 4",
-        "email" to "therealdiaz@live,com",
-        "telefono" to "8096134992",
+    val cliente : Personastodas.ClienteUI = Personastodas.ClienteUI(
+        1,
+        "Johan Diaz",
+        "4848-+84",
+        "809-659-8452",
+        "therealdiaz@live.com",
     )
 
     MaterialTheme {
-        ItemClient(
-            Client = mapClient,
-            onEditUser = {},
-            onDeleteUser = {}
-        )
+
     }
 }
