@@ -99,7 +99,7 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
                 )
             }
 
-            if (!listaTiket.isEmpty()) {
+
             LazyColumn(
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
@@ -160,4 +160,3 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
 }
 
 
-}

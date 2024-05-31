@@ -36,7 +36,7 @@ import com.solidtype.atenas_apk_2.ui.theme.PurpleGrey80
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
 @Composable
-fun selector(){
+fun selector() {
 
     //modal
     val openDialog = remember { mutableStateOf(false) }
@@ -45,77 +45,81 @@ fun selector(){
 
     //cuerpo del modal
     if (openDialog.value) {
-        Box (modifier = Modifier
-            .fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
 
-        ){
-            Box (modifier = Modifier
-                .fillMaxWidth()){
-        AlertDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            },
-            text = {
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog.value = false
+                    },
+                    text = {
 
-                Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))){
-                    if (!mostrar.value) {
-                        imprimir()
-                        altura.value = 400.dp
-                    } else {
-                        cuerpo()
-                        altura.value = 600.dp
-                    }
-                }
-           },
-
-            confirmButton = {
-                TextButton(
-                    modifier = Modifier
-                        .background(AzulGris, shape = RoundedCornerShape(20.dp))
-                        .padding(5.dp),
-
-                    onClick = {
-                        mostrar.value = true
-                    }
-                )  {   if (!mostrar.value) {
-                    Text("Siguiente", color = Blanco)
-                } else {
-                    Text("Acceptar", color = Blanco)
-                }
-
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    modifier = Modifier
-                        .background(Rojo, shape = RoundedCornerShape(20.dp))
-                        .padding(5.dp),
-                    onClick = {
-                        if (!mostrar.value) {
-                            openDialog.value = false
-                        } else {
-                            mostrar.value = false
+                        Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))) {
+                            if (!mostrar.value) {
+                                cuerpo2()
+                                altura.value = 400.dp
+                            } else {
+                                cuerpo()
+                                altura.value = 600.dp
+                            }
                         }
+                    },
+
+                    confirmButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(AzulGris, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+
+                            onClick = {
+                                mostrar.value = true
+                            }
+                        ) {
+                            if (!mostrar.value) {
+                                Text("Siguiente", color = Blanco)
+                            } else {
+                                Text("Acceptar", color = Blanco)
+                            }
+
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                if (!mostrar.value) {
+                                    openDialog.value = false
+                                } else {
+                                    mostrar.value = false
+                                }
 //                        openDialog.value = false
 //                        mostrar.value = false
+                            },
+                        ) {
+                            if (!mostrar.value) {
+                                Text("Salir", color = Blanco)
+                            } else {
+                                Text("Atras", color = Blanco)
+
+                            }
+
+                        }
                     },
-                ) {
-                    if (!mostrar.value) {
-                        Text("Salir", color = Blanco)
-                    } else {
-                        Text("Atras", color = Blanco)
 
-                    }
-
-                }
-            },
-
-            modifier = Modifier
-                .width(800.dp)
-                .background(GrisOscuro)
-                .height(altura.value),
-        )
-    }
+                    modifier = Modifier
+                        .width(800.dp)
+                        .background(GrisOscuro)
+                        .height(altura.value),
+                )
+            }
         }
     }
 
@@ -126,18 +130,21 @@ fun selector(){
 
     //cuerpo del modal
     if (openDialog1.value) {
-        Box (modifier = Modifier
-            .fillMaxWidth()
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
 
-        ){
-            Box (modifier = Modifier
-                .fillMaxWidth()){
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
                 AlertDialog(
                     onDismissRequest = {
                         openDialog1.value = false
                     },
                     text = {
-                        Box(modifier = Modifier){
+                        Box(modifier = Modifier) {
                             cuerpo3()
                         }
                     },
@@ -151,7 +158,7 @@ fun selector(){
                             onClick = {
                                 mostrar1.value = true
                             }
-                        )  {
+                        ) {
                             Text("Guardar", color = Blanco)
                         }
                     },
@@ -164,7 +171,7 @@ fun selector(){
                                 openDialog1.value = false
                             },
                         ) {
-                            Text("Salir", color = Blanco )
+                            Text("Salir", color = Blanco)
                         }
                     },
 
@@ -179,11 +186,11 @@ fun selector(){
 
 
 
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 1200.dp, top = 530.dp)
-    ){
+    ) {
 
         Icon(
             imageVector = Icons.Filled.SupervisedUserCircle,

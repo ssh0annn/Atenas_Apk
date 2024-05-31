@@ -74,12 +74,10 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
             Tituloserv()
             Column {
                 Spacer(modifier = Modifier.height(70.dp))
-                if (!state.listaTickets.isEmpty()){
+
                 tablaserv(listaTiket = state.listaTickets)
 
-                 }else{
-                     print("ya funciono  :$state " )
-                 }
+
             }
         }
       //primera opcion

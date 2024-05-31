@@ -434,7 +434,6 @@ fun cuerpo(
 @Composable
 
 fun cuerpo3(
-
 ){
 
     //formulario cliente
