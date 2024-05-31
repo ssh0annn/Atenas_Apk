@@ -89,14 +89,26 @@ class ServiciosViewModel @Inject constructor(
     private fun getTickets(){
         viewModelScope.launch {
           casosTicket.getTickets().map { listaTicket ->
-               listaTicket.map {
-                   TicketVista(
-                     numeroFactura =  it.id_detalle_ticket,
-                     iDservicio = it.tipo_servicio,
-                     subtotal= it.total,
-                     Estado= it.estado
-                   )
+               if(listaTicket.isNotEmpty()){
+                   listaTicket.map {
+                       TicketVista(
+                           numeroFactura =  it.id_detalle_ticket,
+                           iDservicio = it.tipo_servicio,
+                           subtotal= it.total,
+                           Estado= it.estado
+                       )
+                   }
+               }else{
+                   listaTicket.map {
+                       TicketVista(
+                           numeroFactura = 0,
+                           iDservicio = 0,
+                           subtotal = 0.0,
+                           Estado= false
+                       )
+                   }
                }
+
            }.collect{ listaVistaTicket ->
                uiStates.update {
                    it.copy(listaTickets =listaVistaTicket )
