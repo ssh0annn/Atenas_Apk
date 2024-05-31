@@ -14,8 +14,8 @@ data class ServicesUIStates(
 )
 
 data class TicketVista(
-   val numeroFactura: Long?,
-   val iDservicio:Long?,
-   val subtotal:Double?,
-   val Estado :Boolean?
-)
+   val numeroFactura: Long? =0,
+   val iDservicio:Long? = 0,
+   val subtotal:Double? = 0.0,
+   val Estado :Boolean? =false
+       )

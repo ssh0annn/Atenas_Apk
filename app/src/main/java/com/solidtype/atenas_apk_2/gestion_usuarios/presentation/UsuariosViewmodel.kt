@@ -129,7 +129,6 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
     }
 
     private fun buscarUsuarios(any: String) {
-
         userJob?.cancel()
         userJob = casos.buscarUsuario(any).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
