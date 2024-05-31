@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -36,9 +37,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             /*ImeiBoton {
 
-
             }*/
-            Navigation()
+            EjemploNey()
         }
 
     }
