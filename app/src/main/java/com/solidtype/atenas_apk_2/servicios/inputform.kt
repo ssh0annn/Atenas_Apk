@@ -92,7 +92,7 @@ fun Inputlargo(
             onValueChange = onValueChange,
             singleLine = true,
             textStyle = TextStyle(
-                color = Blanco,
+                color = Negro,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             ),

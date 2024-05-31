@@ -10,7 +10,7 @@ data class ServicesUIStates(
     val isLoading:Boolean = false,
     val listaClientes: List<Personastodas.ClienteUI?> = emptyList(),
     val listaDispositivos: List<Dispositivo?> = emptyList(),
-    val listaServicios: List<servicio?> = emptyList(),
+    val listaServicios: List<servicio> = emptyList(),
 )
 
 data class TicketVista(

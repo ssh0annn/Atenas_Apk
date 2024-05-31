@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.servicios
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +21,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -34,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,10 +57,10 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.ui.theme.PurpleGrey80
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
-@OptIn(ExperimentalMultiplatform::class)
+@OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
 fun selector(
-  viewmodel: ServiciosViewModel
+    viewmodel: ServiciosViewModel, listaSericios: List<servicio>
 ) {
 
     //modal
@@ -61,16 +68,37 @@ fun selector(
     val mostrar = remember { mutableStateOf(false) }
     val altura = remember { mutableStateOf(400.dp) }
 
+
+    //formulario cliente
+    var nombre by rememberSaveable { mutableStateOf("") }
+    var modelo by rememberSaveable { mutableStateOf("") }
+    var telefono by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var falla by rememberSaveable { mutableStateOf("") }
+    var estado by rememberSaveable { mutableStateOf("") }
+    var marca by rememberSaveable { mutableStateOf("") }
+    var abono by rememberSaveable { mutableStateOf("") }
+    var nota by rememberSaveable { mutableStateOf("") }
+    var restante by rememberSaveable { mutableStateOf("") }
+    var total by rememberSaveable { mutableStateOf("") }
+
+    //formulario servicio
+    val context = LocalContext.current
+    val coffeeDrinks:List<servicio?> = listaSericios
+    var expanded by remember { mutableStateOf(true) }
+    var selectedText by remember { mutableStateOf("") }
+    var dia by rememberSaveable { mutableStateOf("") }
+    var precio by rememberSaveable { mutableStateOf("") }
+    var descrp by rememberSaveable { mutableStateOf("") }
+
     //cuerpo del modal
     if (openDialog.value) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
 
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 AlertDialog(
                     onDismissRequest = {
@@ -79,34 +107,325 @@ fun selector(
                     text = {
 
 
-                Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))){
-                    if (!mostrar.value) {
-                        cuerpo2()
-                        altura.value = 400.dp
-                    } else {
-                        cuerpo()
-                        altura.value = 600.dp
-                    }
-                }
-           },
+                        Box(modifier = Modifier.clip(RoundedCornerShape(10.dp))) {
+                            if (!mostrar.value) {
+                                //seleccionar servicio  <----
+                                Column() {
+                                    Row() {
+                                        Box(
+                                            modifier = Modifier
+                                                .width(220.dp)
+                                                .padding(0.dp)
+                                                .clip(RoundedCornerShape(10.dp))
+                                        ) {
+                                            ExposedDropdownMenuBox(expanded = expanded,
+                                                onExpandedChange = {
+                                                    expanded = !expanded
 
-            confirmButton = {
-                TextButton(
-                    modifier = Modifier
-                        .background(AzulGris, shape = RoundedCornerShape(20.dp))
-                        .padding(5.dp),
 
-                    onClick = {
-                        mostrar.value = true
-                    }
-                )  {   if (!mostrar.value) {
-                    Text("Siguiente", color = Blanco)
-                } else {
-                    Text("Acceptar", color = Blanco)
-                }
 
-                }
-            },
+                                                }) {
+                                                TextField(
+                                                    value = selectedText,
+                                                    onValueChange = {},
+                                                    readOnly = true,
+                                                    trailingIcon = {
+                                                        ExposedDropdownMenuDefaults.TrailingIcon(
+                                                            expanded = expanded
+                                                        )
+                                                    },
+                                                    modifier = Modifier.menuAnchor()
+                                                )
+
+                                                ExposedDropdownMenu(modifier = Modifier.height(300.dp),
+                                                    expanded = expanded,
+                                                    onDismissRequest = { expanded = false }) {
+                                                    coffeeDrinks.forEach { item ->
+                                                        DropdownMenuItem(text = { Text(text = item!!.nombre) },
+                                                            onClick = {
+                                                                selectedText = item?.nombre ?: ""
+                                                                expanded = false
+                                                                Toast.makeText(
+                                                                    context,
+                                                                    item!!.nombre,
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
+                                                            })
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        Column(
+                                            modifier = Modifier
+                                                .padding(top = 30.dp)
+                                                .fillMaxWidth()
+                                                .verticalScroll(rememberScrollState()),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.Center
+                                        ) {
+
+                                            Text(
+                                                text = "Detalles",
+                                                color = AzulGris,
+                                                fontWeight = FontWeight.ExtraBold,
+                                                fontSize = 30.sp,
+
+                                                )
+                                            Spacer(modifier = Modifier.padding(top = 10.dp))
+                                            Box() {
+                                                Inputmed(
+                                                    label = "Servicio",
+                                                    valor = selectedText,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {}
+                                            }
+
+                                            Row {
+                                                Box {
+                                                    Inputpeq(
+                                                        label = "Dias", valor = dia,
+//                                        derecho = true,
+                                                        modifier = Modifier
+                                                    ) {
+                                                        dia = it
+                                                    }
+                                                }
+                                                Box {
+                                                    Inputt(
+                                                        label = "Precio", valor = precio,
+//                                        derecho = true,
+                                                        modifier = Modifier
+                                                    ) {
+                                                        precio = it
+                                                    }
+                                                }
+                                            }
+                                            Box() {
+                                                Inputmed(
+                                                    label = "Descripcion",
+                                                    valor = descrp,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    descrp = it
+                                                }
+                                            }
+                                        }
+
+                                        Spacer(modifier = Modifier.padding(top = 20.dp))
+
+                                    }
+                                }
+                                altura.value = 400.dp
+                            } else {
+
+                                //formulario cliente  <---
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .verticalScroll(rememberScrollState())
+                                ) {
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        //titulo
+                                        Spacer(modifier = Modifier.padding(top = 15.dp))
+                                        Text(
+                                            text = "Cliente",
+                                            color = AzulGris,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            fontSize = 35.sp,
+                                        )
+
+                                        //cuerpo1
+                                        Row(
+                                            modifier = Modifier.padding(top = 25.dp)
+                                        ) {
+
+                                            Box() {
+                                                Input(
+                                                    label = "Nombre",
+                                                    valor = nombre,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    nombre = it
+                                                }
+                                            }
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box() {
+                                                Input(
+                                                    label = "Modelo",
+                                                    valor = modelo,
+                                                    derecho = true,
+                                                    modifier = Modifier
+
+                                                ) {
+                                                    modelo = it
+                                                }
+                                            }
+                                        }
+                                        //cuerpo2
+                                        Row(
+                                            modifier = Modifier.padding(top = 10.dp)
+                                        ) {
+
+                                            Box() {
+                                                Input(
+                                                    label = "Telefono",
+                                                    valor = telefono,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    telefono = it
+                                                }
+                                            }
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box() {
+                                                Input(
+                                                    label = "Email",
+                                                    valor = email,
+                                                    derecho = true,
+                                                    modifier = Modifier
+
+                                                ) {
+                                                    email = it
+                                                }
+                                            }
+                                        }
+                                        //cuerpo3
+                                        Row(
+                                            modifier = Modifier.padding(top = 0.dp)
+                                        ) {
+
+                                            Box() {
+                                                Inputlargo(
+                                                    label = "Falla del equipo",
+                                                    valor = falla,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    falla = it
+                                                }
+                                            }
+                                        }
+                                        //cuerpo4
+                                        Row(
+                                            modifier = Modifier.padding()
+                                        ) {
+
+                                            Box() {
+                                                Inputlargo(
+                                                    label = "Estado del equipo",
+                                                    valor = estado,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    estado = it
+                                                }
+                                            }
+                                        }
+                                        //cuerpo5
+                                        Row(
+                                            modifier = Modifier.padding(top = 0.dp)
+                                        ) {
+
+                                            Box() {
+                                                Input(
+                                                    label = "Marca",
+                                                    valor = marca,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    marca = it
+                                                }
+                                            }
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box() {
+                                                Input(
+                                                    label = "Abono",
+                                                    valor = abono,
+                                                    derecho = true,
+                                                    modifier = Modifier
+
+                                                ) {
+                                                    abono = it
+                                                }
+                                            }
+                                        }
+                                        //cuerpo6
+                                        Row(
+                                            modifier = Modifier.padding()
+                                        ) {
+
+                                            Box() {
+                                                Inputlargo(
+                                                    label = "Nota",
+                                                    valor = nota,
+                                                    derecho = true,
+                                                    modifier = Modifier.padding(top = 50.dp)
+                                                ) {
+                                                    nota = it
+                                                }
+                                            }
+                                        }
+                                        //cuerpo7
+                                        Row(
+                                            modifier = Modifier.padding(top = 0.dp)
+                                        ) {
+
+                                            Box() {
+                                                Input(
+                                                    label = "Restante",
+                                                    valor = restante,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    restante = it
+                                                }
+                                            }
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box() {
+                                                Input(
+                                                    label = "Total",
+                                                    valor = total,
+                                                    derecho = true,
+                                                    modifier = Modifier
+
+                                                ) {
+                                                    total = it
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                altura.value = 600.dp
+                            }
+                        }
+                    },
+
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+
+                            onClick = {
+                                mostrar.value = true
+                            }) {
+                            if (!mostrar.value) {
+                                Text("Siguiente", color = Blanco)
+                            } else {
+                                Text("Acceptar", color = Blanco)
+                            }
+
+                        }
+                    },
                     dismissButton = {
                         TextButton(
                             modifier = Modifier
@@ -151,13 +470,11 @@ fun selector(
     //cuerpo del modal
     if (openDialog1.value) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
 
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 AlertDialog(
                     onDismissRequest = {
@@ -165,17 +482,18 @@ fun selector(
                     },
                     text = {
 
-                        Box(modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())){
-                            Column (
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
-                            ){
+                            ) {
                                 //titulo
-                                Spacer(modifier = Modifier .padding(top = 15.dp))
+                                Spacer(modifier = Modifier.padding(top = 15.dp))
                                 Text(
                                     text = "Nuevo Servicio",
                                     color = AzulGris,
@@ -184,12 +502,11 @@ fun selector(
                                 )
 
                                 //cuerpo1
-                                Row (
-                                    modifier = Modifier
-                                        .padding(top = 25.dp)
-                                ){
+                                Row(
+                                    modifier = Modifier.padding(top = 25.dp)
+                                ) {
 
-                                    Box (){
+                                    Box() {
                                         Input(
                                             label = "Servico",
                                             valor = nuevoServicio,
@@ -205,25 +522,27 @@ fun selector(
                     },
 
                     confirmButton = {
-                        TextButton(
-                            modifier = Modifier
-                                .background(AzulGris, shape = RoundedCornerShape(20.dp))
-                                .padding(5.dp),
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
 
                             onClick = {
-                                if(!nuevoServicio.isNullOrEmpty()){
-                                    viewmodel.onEvent(ServiceEvent.CreateServicio(
-                                        servicio(
-                                            nombre = nuevoServicio,
-                                            descripcion = nuevoServicio,
-                                            estado = true
+                                if (!nuevoServicio.isNullOrEmpty()) {
+                                    viewmodel.onEvent(
+                                        ServiceEvent.CreateServicio(
+                                            servicio(
+                                                nombre = nuevoServicio,
+                                                descripcion = nuevoServicio,
+                                                estado = true
+                                            )
                                         )
-                                    ))
+                                    )
                                     openDialog1.value = false
                                 }
 
-                            }
-                        ) {
+                            }) {
                             Text("Guardar", color = Blanco)
                         }
                     },
@@ -257,8 +576,7 @@ fun selector(
             .padding(start = 1200.dp, top = 530.dp)
     ) {
 
-        Icon(
-            imageVector = Icons.Filled.SupervisedUserCircle,
+        Icon(imageVector = Icons.Filled.SupervisedUserCircle,
             contentDescription = "",
             tint = AzulGris,
             modifier = Modifier
@@ -266,10 +584,8 @@ fun selector(
                 .size(60.dp)
                 .clickable {
                     openDialog1.value = true
-                }
-        )
-        Icon(
-            imageVector = Icons.Filled.AddCircle,
+                })
+        Icon(imageVector = Icons.Filled.AddCircle,
             contentDescription = "",
             tint = AzulGris,
             modifier = Modifier
@@ -278,7 +594,6 @@ fun selector(
                 //abrir modal
                 .clickable {
                     openDialog.value = true
-                }
-        )
+                })
     }
 }
