@@ -36,9 +36,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Servicios
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.InputBlanco
 import com.solidtype.atenas_apk_2.facturacion.presentation.facturas
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -84,7 +86,7 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     }
 
-    selector()
+    selector(viewmodel)
     //NavPlato("Servicios")
 
 }
