@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class servicio (
-    @PrimaryKey(autoGenerate = true) val id_servicio : Long,
+    @PrimaryKey(autoGenerate = true) val id_servicio : Long =0,
     val nombre :String,
     val descripcion :String?,
     @ColumnInfo(defaultValue = "true") val estado :Boolean

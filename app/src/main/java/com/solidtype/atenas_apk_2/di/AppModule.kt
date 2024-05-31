@@ -217,7 +217,7 @@ object AppModule {
         app,
         ProductDataBase::class.java,
         "tabla_producto"
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton

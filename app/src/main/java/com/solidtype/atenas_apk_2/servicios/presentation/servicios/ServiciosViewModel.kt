@@ -1,8 +1,7 @@
-package com.solidtype.atenas_apk_2.servicios.presentation
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
@@ -90,14 +89,26 @@ class ServiciosViewModel @Inject constructor(
     private fun getTickets(){
         viewModelScope.launch {
           casosTicket.getTickets().map { listaTicket ->
-               listaTicket.map {
-                   TicketVista(
-                     numeroFactura =  it.id_detalle_ticket,
-                     iDservicio = it.tipo_servicio,
-                     subtotal= it.total,
-                     Estado= it.estado
-                   )
+               if(listaTicket.isNotEmpty()){
+                   listaTicket.map {
+                       TicketVista(
+                           numeroFactura =  it.id_detalle_ticket,
+                           iDservicio = it.tipo_servicio,
+                           subtotal= it.total,
+                           Estado= it.estado
+                       )
+                   }
+               }else{
+                   listaTicket.map {
+                       TicketVista(
+                           numeroFactura = 0,
+                           iDservicio = 0,
+                           subtotal = 0.0,
+                           Estado= false
+                       )
+                   }
                }
+
            }.collect{ listaVistaTicket ->
                uiStates.update {
                    it.copy(listaTickets =listaVistaTicket )

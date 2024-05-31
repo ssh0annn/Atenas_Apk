@@ -42,7 +42,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
     persona::class, roll_usuarios::class, servicio::class, ticket::class,
     tipo_venta::class, usuario::class, venta::class, administrador::class,
     Dispositivo::class
-], version = 18, exportSchema = false)
+], version = 9, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao

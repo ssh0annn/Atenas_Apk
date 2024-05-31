@@ -25,6 +25,13 @@ import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
+import com.solidtype.atenas_apk_2.servicios.servicios
+import com.solidtype.atenas_apk_2.util.MyScreen
+
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
+
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -35,12 +42,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+
+            //Navigation()
+            //Demo_ExposedDropdownMenuBox()
+            // FireManeger()
+            //TestAutocompleteSelect()
+            // Demo_SearchableExposedDropdownMenuBox()
+            //InventoryScreen()
+             servicios()
+            //Navigation()
+            //HistorialScreen()
+           // FireManeger()
+
             /*ImeiBoton {
 
-
             }*/
-            ClienteScreen()
-            //Navigation()
+
+           // Navigation()
+
+
+
         }
 
     }
