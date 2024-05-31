@@ -56,6 +56,9 @@ import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
 fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
+    if(state.listaServicios.isEmpty()){
+        viewmodel.onEvent(ServiceEvent.GetServicios)
+    }
 
     Column(
         //To.do
@@ -86,7 +89,8 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     }
 
-    selector(viewmodel)
+
+    selector(viewmodel, state.listaServicios)
     //NavPlato("Servicios")
 
 }
