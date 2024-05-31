@@ -34,9 +34,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.InputBlanco
 import com.solidtype.atenas_apk_2.facturacion.presentation.facturas
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.formatearFecha
@@ -48,16 +51,9 @@ import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class)
-fun complementari() {
+fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
-    val configuration = LocalConfiguration.current
-
-    val context = LocalContext.current
-
-    val datePickerState: DatePickerState = rememberDatePickerState()
-    var showDatePicker by rememberSaveable { mutableStateOf(false) }
-
-    var fecha by rememberSaveable { mutableStateOf("") }
+    val state by viewmodel.uiStates.collectAsStateWithLifecycle()
 
     Column(
         //To.do
@@ -78,8 +74,12 @@ fun complementari() {
             Tituloserv()
             Column {
                 Spacer(modifier = Modifier.height(70.dp))
-                tablaserv(servicio = servicio)
+                if (!state.listaTickets.isEmpty()){
+                tablaserv(listaTiket = state.listaTickets)
 
+                 }else{
+                     print("ya funciono  :$state " )
+                 }
             }
         }
       //primera opcion

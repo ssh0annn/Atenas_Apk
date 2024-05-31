@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.facturacion.presentation.Factura
 import com.solidtype.atenas_apk_2.facturacion.presentation.sumaTotal
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.TicketVista
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
@@ -42,10 +43,13 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoParaUser
 
 @Composable
-fun tablaserv(servicio: List<servicioss> = listOf()) {
+fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
 
     var desplegar by rememberSaveable { mutableStateOf(List(servicio.size) { false }) }
     val size = LocalConfiguration.current.screenWidthDp.dp - 750.dp
+
+
+
 
     Box(
         modifier = Modifier
@@ -94,13 +98,15 @@ fun tablaserv(servicio: List<servicioss> = listOf()) {
                     fontSize = 20.sp,
                 )
             }
+
+            if (!listaTiket.isEmpty()) {
             LazyColumn(
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
                     .fillMaxSize()
                     .background(GrisOscuro)
             ) { //buscar componente para agregar filas de cards
-                itemsIndexed(servicio) { i, servicioss ->
+                itemsIndexed(listaTiket) { i, servicio ->
                     Column {
                         Row(
                             modifier = Modifier
@@ -124,22 +130,22 @@ fun tablaserv(servicio: List<servicioss> = listOf()) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = servicioss.nombres,
+                                text = servicio?.numeroFactura.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = servicioss.servicio,
+                                text = servicio?.iDservicio.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = servicioss.total.toString(),
+                                text = servicio?.subtotal.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = servicioss.estado,
+                                text = servicio?.Estado.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
@@ -148,5 +154,10 @@ fun tablaserv(servicio: List<servicioss> = listOf()) {
                 }
             }
         }
-    }
+
+
+        }
+}
+
+
 }
