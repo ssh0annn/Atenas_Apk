@@ -2,8 +2,7 @@ package com.solidtype.atenas_apk_2.util.ui.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCartCheckout
@@ -17,11 +16,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Carrito(fondoBlanco: Boolean){
+fun Carrito(
+    fondoBlanco: Boolean = false,
+    chiquito: Boolean = false
+){
     Box(
         modifier = Modifier
-            .width(80.dp)
-            .height(80.dp)
+            .size(
+                when (chiquito) {
+                    true -> 50.dp
+                    false -> 80.dp
+                }
+            )
             .clip(RoundedCornerShape(50.dp))
             .background(
                 Color(android.graphics.Color.parseColor(when (fondoBlanco) {
@@ -41,14 +47,18 @@ fun Carrito(fondoBlanco: Boolean){
                     false -> "#343341"
                 }))
                 )
-                .width(70.dp)
-                .height(70.dp),
+                .size(
+                    when (chiquito) {
+                        true -> 30.dp
+                        false -> 70.dp
+                    }
+                ),
             tint = Color(android.graphics.Color.parseColor("#1C7558"))
         )
     }
 }
 @Composable
 @Preview(showSystemUi = true)
-fun pruebaCarrito(){
+fun PruebaCarrito(){
     Carrito(false)
 }

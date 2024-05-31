@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,9 +28,11 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 @ExperimentalMultiplatform
 @Composable
 fun InputBlanco(
-    label: String,
+    label: String = "",
+    placeholder: String = "",
     valor: String,
     derecho: Boolean = false,
+    largo: Boolean = false,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ) {
@@ -50,7 +53,7 @@ fun InputBlanco(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
-                .width(200.dp)
+                .width(if (largo) 320.dp else 200.dp)
                 .background(Blanco, RoundedCornerShape(15.dp))
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp))
@@ -59,9 +62,21 @@ fun InputBlanco(
                     color = AzulGris,
                     shape = RoundedCornerShape(15.dp)
                 ),
-            label = {
+            label = if (label.isNotEmpty()) {
+                {
+                    Text(
+                        text = label,
+                        color = AzulGris,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            } else {
+                null
+            },
+            placeholder = {
                 Text(
-                    text = label,
+                    text = placeholder,
                     color = AzulGris,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold

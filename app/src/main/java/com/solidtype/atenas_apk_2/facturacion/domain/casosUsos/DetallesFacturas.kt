@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class DetallesFacturas @Inject constructor(private val repo: FacturaRepository) {
 
-    operator fun invoke(NoFactura:Long)=repo.DetalleFactura(NoFactura)
+    suspend operator fun invoke(NoFactura:Long)=repo.DetalleFactura(NoFactura)
 }

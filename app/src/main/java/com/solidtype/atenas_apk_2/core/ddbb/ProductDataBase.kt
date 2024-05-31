@@ -3,6 +3,32 @@ package com.solidtype.atenas_apk_2.core.ddbb
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
+import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
+import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
+import com.solidtype.atenas_apk_2.gestion_tickets.data.detalle_ticketDao
+import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
+import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
+import com.solidtype.atenas_apk_2.servicios.data.servicioDao
+import com.solidtype.atenas_apk_2.gestion_tickets.data.ticketDao
+import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
+import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
+import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.detalle_ticket
+import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
+import com.solidtype.atenas_apk_2.servicios.modelo.servicio
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
@@ -10,10 +36,30 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEn
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
-@Database(entities = [ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class], version = 7, exportSchema = false)
+@Database(entities = [
+    ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class,
+    categoria::class, detalle_ticket::class, detalle_venta::class, inventario::class,
+    persona::class, roll_usuarios::class, servicio::class, ticket::class,
+    tipo_venta::class, usuario::class, venta::class, administrador::class,
+    Dispositivo::class
+], version = 18, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
     abstract val HistorialVentaDao :HistorialVentaDAO
     abstract val HistorialTicketDao :HistorialTicketDAO
+    //nuevas bases de datos oficiales y centradas en el proyecto completas (version 1 de ellas)
+    abstract val categoriaDAO: categoriaDao
+    abstract val detalleTicketDAO: detalle_ticketDao
+    abstract val detalleVentaDAO: detalle_ventaDao
+    abstract val inventarioDAO: inventarioDao
+    abstract val personaDAO: personaDao
+    abstract val rollUsuarioDAO: roll_usuarioDao
+    abstract val servicioDAO: servicioDao
+    abstract val ticketDAO: ticketDao
+    abstract val tipoVentaDAO: tipo_ventaDao
+    abstract val usuarioDAO: usuarioDao
+    abstract val ventaDAO: ventaDao
+    abstract val adminDao: administradorDao
+    abstract val dispositivoDao: DispositivoDao
 }

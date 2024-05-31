@@ -1,10 +1,15 @@
 package com.solidtype.atenas_apk_2.facturacion.presentation
 
-data class FacturaUI(
+import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
+
+data class  FacturaUI(
     val isLoading: Boolean = false,
-    val facturas: List<List<String>> = listOf(),
-    val buscar: List<List<String>> = listOf(),
-    val detalles: List<List<String>> = listOf(),
-    val error: String=""
+    val facturas: List<venta> = listOf(),
+    val buscar: List<venta> = listOf(),
+    val detalles: detalle_venta? = null,
+    val error: String="",
+    val facturaConDetalle: List<FacturaConDetalle?> = emptyList()
 
 )

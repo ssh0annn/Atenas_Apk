@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Titulo
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.InputBlanco
 import com.solidtype.atenas_apk_2.facturacion.presentation.facturas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -88,7 +87,7 @@ fun complementari() {
     }
 
     selector()
-    NavPlato("Servicios")
+    //NavPlato("Servicios")
 
 }
 

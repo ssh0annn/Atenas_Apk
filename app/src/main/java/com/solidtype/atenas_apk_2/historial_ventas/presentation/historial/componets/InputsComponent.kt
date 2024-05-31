@@ -1,0 +1,55 @@
+package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
+import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Inputs(
+    datePickerState1: DatePickerState,
+    fechaIni: MutableState<String>,
+    showDatePicker1: MutableState<Boolean>,
+    datePickerState2: DatePickerState,
+    fechaFin: MutableState<String>,
+    showDatePicker2: MutableState<Boolean>,
+    selected: MutableState<String>,
+    ventasTickerTitulo: MutableState<String>,
+    viewModel: HistorailViewModel,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .padding(top = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        SelecionarFecha(
+            "Fecha Inicial",
+            datePickerState1.selectedDateMillis,
+            fechaIni.value
+        ) {
+            showDatePicker1.value = true
+        }
+        Spacer(modifier = Modifier.width(16.dp))
+        SelecionarFecha(
+            "Fecha Final",
+            datePickerState2.selectedDateMillis,
+            fechaFin.value
+        ) {
+            showDatePicker2.value = true
+        }
+        Spacer(modifier = Modifier.width(Pantalla.ancho * 0.17f))
+        SelectorVentaTicket(selected, ventasTickerTitulo, viewModel)
+    }
+}

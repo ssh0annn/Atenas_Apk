@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.util.Date
@@ -17,8 +18,8 @@ interface HistorialVentaDAO {
     @Query("SELECT * FROM HistorialVenta_Table")
     fun getHistorialVenta(): Flow<List<HistorialVentaEntidad>>
 
-    @Query("SELECT * FROM HistorialVenta_Table WHERE (FechaIni >= :fechaI) AND (FechaIni <= :fechaF)")
-    fun getHistorialVentaFechaCategoria(fechaI : LocalDate, fechaF: LocalDate): Flow<List<HistorialVentaEntidad>>
+    @Query("SELECT * FROM HistorialVenta_Table WHERE categoria == :categoria AND (FechaIni BETWEEN :fechaI AND :fechaF)")
+    fun getHistorialVentaFechaCategoria(categoria: Long, fechaI : LocalDate, fechaF: LocalDate): Flow<List<HistorialVentaEntidad>>
 
     //funciones usadas para las operacions aysnc de firebase
     @Insert(onConflict = OnConflictStrategy.REPLACE)

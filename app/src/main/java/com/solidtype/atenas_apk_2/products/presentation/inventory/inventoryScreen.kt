@@ -60,6 +60,7 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boto
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dialogo
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoV2
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.InputDetalle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -320,7 +321,7 @@ fun InventoryScreen(
                                                 }*/
 
                                         }
-                                        items(productos) {
+                                        items(productos) {/*
                                             Row(
                                                 modifier = Modifier
                                                     .padding(10.dp)
@@ -365,6 +366,7 @@ fun InventoryScreen(
                                                     textAlign = TextAlign.Center
                                                 )
                                             }
+                                            */
                                         }
                                     }
                                 }
@@ -444,7 +446,7 @@ fun InventoryScreen(
                                 BotonIconCircular(
                                     true,
                                     onClick = {//Boton X para borrar productos
-                                        try {
+                                        try {/*
                                             viewModel.eliminarProductos(
                                                 ProductEntity(
                                                     codigo.toInt(),
@@ -457,7 +459,9 @@ fun InventoryScreen(
                                                     marca,
                                                     cantidad.toInt()
                                                 )
+
                                             )
+                                            */
                                             codigo = ""
                                             categoria = ""
                                             nombre = ""
@@ -479,6 +483,7 @@ fun InventoryScreen(
                                 Spacer(modifier = Modifier.width(60.dp))
                                 BotonIconCircular(false, onClick = {
                                     try {
+                                        /*
                                         viewModel.crearProductos(
                                             Code_Product = codigo,
                                             Name_Product = nombre,
@@ -490,6 +495,8 @@ fun InventoryScreen(
                                             Tracemark_Product = marca,
                                             Count_Product = cantidad
                                         )
+
+                                         */
                                     } catch (e: Exception) {
                                         Toast.makeText(
                                             context,
@@ -531,7 +538,7 @@ fun InventoryScreen(
                 }
             }
         }
-        Dialogo(mostrar = mostrar) {
+        DialogoV2(mostrar) {
             mostrar = false
         }
         AnimatedVisibility(

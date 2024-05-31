@@ -23,8 +23,6 @@ class FirestoreConnect @Inject constructor(
     private val auth: FirebaseAuth
 ){
 
-
-
     //esta registrando el correo como ICCID arreglen eso, resulta que no funcionaba por que no estaba haciendo la operacion asincrona
     //y devolvia un valor antes de ejecutarse por completo la operacion
     //por eso devuelvo el task con el boolean en la funcion de iccidInvalited para que espere que haga la tarea y luego que finaliza devuelve la tarea con su estado en false o true
@@ -61,9 +59,6 @@ class FirestoreConnect @Inject constructor(
             return@withContext false
         }
     }
-
-
-
 
     suspend fun fechaExpirada(iCCID: String): Boolean {
         val fechaActual = obtenerFechaActual()

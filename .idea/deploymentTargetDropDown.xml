@@ -2,10 +2,14 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+<<<<<<< HEAD
       <entry key="InventoryScreenPreview">
+=======
+      <entry key="MainActivity">
+>>>>>>> 4cdcf0355a091cf1a5dc8f3b80ed0468f9e74655
         <State />
       </entry>
-      <entry key="app">
+      <entry key="Splash">
         <State />
       </entry>
     </value>
