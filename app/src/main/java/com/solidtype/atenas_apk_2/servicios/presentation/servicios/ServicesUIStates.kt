@@ -6,16 +6,16 @@ import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 
 data class ServicesUIStates(
     val usuario: Long? = null,
-    val listaTickets:List<TicketVista> = emptyList(),
+    val listaTickets:List<TicketVista?> = emptyList(),
     val isLoading:Boolean = false,
-    val listaClientes: List<Personastodas.ClienteUI> = emptyList(),
-    val listaDispositivos: List<Dispositivo> = emptyList(),
+    val listaClientes: List<Personastodas.ClienteUI?> = emptyList(),
+    val listaDispositivos: List<Dispositivo?> = emptyList(),
     val listaServicios: List<servicio> = emptyList(),
 )
 
 data class TicketVista(
-   val numeroFactura: Long?,
-   val iDservicio:Long?,
-   val subtotal:Double?,
-   val Estado :Boolean?
-)
+   var numeroFactura: Long? =0,
+   var iDservicio:Long? = 0,
+   var subtotal:Double? = 0.0,
+   var Estado :Boolean? =false
+       )

@@ -107,7 +107,6 @@ dependencies {
     implementation ("androidx.compose.material:material-icons-core:1.6.4")
 
 
-
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
