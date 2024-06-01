@@ -16,12 +16,14 @@ import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestiondeTi
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.HomeScreen
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Inventario
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.PerfilAdministrador
-import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Servicios
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ticket
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ventas
+import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
+import com.solidtype.atenas_apk_2.servicios.servicios
+
 //import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreenV2
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +83,7 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route ) {
-            Servicios(navController)
+            servicios(/*navController*/)
         }
         composable(route = Screens.Ticket.route ) {
             Ticket(navController)
@@ -89,11 +91,12 @@ fun Navigation() {
         composable(route = Screens.Ventas.route ) {
             Ventas(navController)
         }
-
         composable(route = Screens.Productos.route ) {
             InventoryScreen(navController)
         }
-
+        composable(route = Screens.Factura.route ) {
+            FacturacionScreen(navController)
+        }
     }
 
 }
