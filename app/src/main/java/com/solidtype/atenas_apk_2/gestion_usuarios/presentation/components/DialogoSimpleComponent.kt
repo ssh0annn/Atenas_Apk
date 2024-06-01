@@ -89,32 +89,31 @@ fun DialogoSimple(
                         }
 
                         if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
-                            /*Log.i("GestionUsuariosScreen", "Editar Rol")
-                                viewModel.onUserEvent(
-                                    UserEvent.EditarRol(
-                                        roll_usuarios(
-                                            id_roll_usuario = idRollUsuario.value.toLong(),
-                                            nombre = nombreRollUsuario.value,
-                                            descripcion = descripcion.value,
-                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
-                                        )
+//                            Log.i("GestionUsuariosScreen", "Editar Rol")
+                            viewModel.onUserEvent(
+                                UserEvent.EditarRol(
+                                    roll_usuarios(
+                                        id_roll_usuario = idRollUsuario.value.toLong(),
+                                        nombre = nombreRollUsuario.value,
+                                        descripcion = descripcion.value,
+                                        estado = estadoRollUsuario.value.formatoActivoDDBB()
                                     )
-                                )*/
-                            //Error: No se puede editar un rol
-                            throw Exception("No se puede editar un rol.")
-                        }
-//                            else {
-                        viewModel.onUserEvent(
-                            UserEvent.AgregarNuevoRol(
-                                roll_usuarios(
-                                    id_roll_usuario = idRollUsuario.value.toLong(),
-                                    nombre = nombreRollUsuario.value,
-                                    descripcion = descripcion.value,
-                                    estado = estadoRollUsuario.value.formatoActivoDDBB()
                                 )
                             )
-                        )
-//                            }
+                            //Error: No se puede editar un rol
+                            //throw Exception("No se puede editar un rol.")
+                        } else {
+                            viewModel.onUserEvent(
+                                UserEvent.AgregarNuevoRol(
+                                    roll_usuarios(
+                                        id_roll_usuario = idRollUsuario.value.toLong(),
+                                        nombre = nombreRollUsuario.value,
+                                        descripcion = descripcion.value,
+                                        estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                    )
+                                )
+                            )
+                        }
 
                         idRollUsuario.value = ""
                         nombreRollUsuario.value = ""

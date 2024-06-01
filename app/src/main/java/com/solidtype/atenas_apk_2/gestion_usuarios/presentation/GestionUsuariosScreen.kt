@@ -67,6 +67,9 @@ fun GestionUsuariosScreen(
     if(busqueda.value.isNotBlank()) {
         viewModel.onUserEvent(UserEvent.BuscarUsuario(busqueda.value))
         Log.i("GestionUsuariosScreen", "Buscando usuario")
+    }else{
+        viewModel.onUserEvent(UserEvent.MostrarUserEvent)
+        Log.i("GestionUsuariosScreen", "Todos los usuarios")
     }
 
     if (uiState.roles.isEmpty())
