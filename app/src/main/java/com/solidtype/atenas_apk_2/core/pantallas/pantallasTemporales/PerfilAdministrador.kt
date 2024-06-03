@@ -109,7 +109,7 @@ fun PerfilAdministrador(navController: NavController){
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {//Aqui el codigo para moverse a otra ventana
-                    navController.navigate(Screens.Servicio.route)
+                    navController.navigate(Screens.Factura.route)
                 },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -123,6 +123,25 @@ fun PerfilAdministrador(navController: NavController){
             ) {
                 Text(
                     "Facturar",
+                    fontSize = 24.sp
+                )
+            }
+            Button(
+                onClick = {//Aqui el codigo para moverse a otra ventana
+                    navController.navigate(Screens.GestionUsuarios.route)
+                },
+                shape = RoundedCornerShape(25.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF343341),
+                    contentColor = Color.White,
+                ),
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(100.dp)
+                    .padding(top = 30.dp)
+            ) {
+                Text(
+                    "Gestor de Usuarios",
                     fontSize = 24.sp
                 )
             }

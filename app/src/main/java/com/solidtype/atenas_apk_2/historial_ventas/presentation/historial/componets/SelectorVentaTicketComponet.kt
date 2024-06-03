@@ -13,6 +13,8 @@ fun SelectorVentaTicket(
     selected: MutableState<String>,
     ventasTickerTitulo: MutableState<String>,
     viewModel: HistorailViewModel,
+    fechaIni: MutableState<String>,
+    fechaFin: MutableState<String>,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -26,11 +28,15 @@ fun SelectorVentaTicket(
             when (selected.value) {
                 "Ventas" -> {
                     ventasTickerTitulo.value = "Ventas"
-                    viewModel.MostrarHistoriar()//Se debe lanzar un evento
+                    fechaIni.value = ""
+                    fechaFin.value = ""
+                    viewModel.MostrarHistoriar()
                 }
                 "Ticket" -> {
                     ventasTickerTitulo.value = "Cuenta x Cobrar"
-                    viewModel.mostrarTicket()// se debe lanzar un evento de consulta
+                    fechaIni.value = ""
+                    fechaFin.value = ""
+                    viewModel.mostrarTicket()
                 }
             }
         }

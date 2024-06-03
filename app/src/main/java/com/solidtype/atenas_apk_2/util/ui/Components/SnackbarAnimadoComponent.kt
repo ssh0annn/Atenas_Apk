@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets
+package com.solidtype.atenas_apk_2.util.ui.Components
 
 import android.content.Context
 import android.content.Intent
@@ -19,16 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialUIState
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.RojoPalido
 import com.solidtype.atenas_apk_2.ui.theme.VerdePalido
-import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
 
 @Composable
 fun SnackbarAnimado(
     showSnackbar: Boolean,
-    uiState: HistorialUIState,
+    // uiState: HistorialUIState o ProductosViewStates
+    uriPath: String,
     context: Context
 ) {
     AnimatedVisibility(
@@ -44,10 +43,10 @@ fun SnackbarAnimado(
         ) {
             Snackbar(
                 action = {
-                    if (uiState.uriPath.isNotBlank()) {
+                    if (uriPath.isNotBlank()) {
                         Row {
                             BotonBlanco("Compartir") {
-                                val fileUri = Uri.parse(uiState.uriPath)
+                                val fileUri = Uri.parse(uriPath)
                                 val shareIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_SEND
                                     putExtra(Intent.EXTRA_STREAM, fileUri)
@@ -60,7 +59,7 @@ fun SnackbarAnimado(
                             }
                             Spacer(modifier = Modifier.width(10.dp))
                             BotonBlanco("Ver") {
-                                val fileUri = Uri.parse(uiState.uriPath)
+                                val fileUri = Uri.parse(uriPath)
                                 val openIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_VIEW
                                     setDataAndType(
@@ -87,8 +86,8 @@ fun SnackbarAnimado(
                 containerColor = AzulGris
             ) {
                 Text(
-                    text = if (uiState.uriPath.isNotBlank()) "El archivo se guardó en: ${uiState.uriPath}" else "Hubo un error al exportar",
-                    color = if (uiState.uriPath.isNotBlank()) VerdePalido else RojoPalido
+                    text = if (uriPath.isNotBlank()) "El archivo se guardó en: $uriPath" else "Hubo un error al exportar",
+                    color = if (uriPath.isNotBlank()) VerdePalido else RojoPalido
                 )
             }
         }
