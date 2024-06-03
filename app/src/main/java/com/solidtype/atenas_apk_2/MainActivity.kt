@@ -10,27 +10,8 @@ import androidx.activity.viewModels
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.servicios.servicios
-import com.solidtype.atenas_apk_2.util.MyScreen
-
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
-
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -56,9 +37,8 @@ class MainActivity : ComponentActivity() {
 
             }*/
 
+
            Navigation()
-
-
 
         }
 

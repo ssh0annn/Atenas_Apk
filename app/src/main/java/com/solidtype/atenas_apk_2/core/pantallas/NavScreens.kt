@@ -12,7 +12,6 @@ import com.solidtype.atenas_apk_2.authentication.presentation.login.component.Lo
 import com.solidtype.atenas_apk_2.authentication.presentation.register.OutlinedTextFieldExample
 
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestionProductos
-import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestionUsuarios
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestiondeTicket
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.HomeScreen
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Inventario
@@ -23,10 +22,7 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-
 import com.solidtype.atenas_apk_2.servicios.servicios
-
-//import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreenV2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
