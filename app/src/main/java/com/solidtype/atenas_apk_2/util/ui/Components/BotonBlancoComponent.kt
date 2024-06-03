@@ -9,6 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
 
 @Composable
 fun BotonBlanco(
@@ -23,7 +25,7 @@ fun BotonBlanco(
             defaultElevation = 5.dp
         ),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFFFFF), contentColor = Color(0xFF000000)
+            containerColor = Blanco, contentColor = AzulGris
         ),
         modifier = modifier
     ) {

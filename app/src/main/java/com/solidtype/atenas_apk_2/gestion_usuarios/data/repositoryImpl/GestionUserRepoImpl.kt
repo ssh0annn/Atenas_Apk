@@ -13,12 +13,13 @@ class GestionUserRepoImpl @Inject constructor(
     private val usuarioDao: usuarioDao
 ) : GestionUserRepository {
     override suspend fun agregarUsuario(usuario: usuario) {
+        //Pendiende conectar con el remote para que el usuario se registre en la nube.
         usuarioDao.addUsuario(usuario)
     }
 
     override fun buscarUsuario(any: String): Flow<List<usuario>> {
         //NO  esta bien... el dao no permite que le pasen un parametro semejante
-        return usuarioDao.getUsuarios()
+        return usuarioDao.getUsuariosBySimilar(any)
     }
 
     override fun mosstrarUsuarios(): Flow<List<usuario>> {

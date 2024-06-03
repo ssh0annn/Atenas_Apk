@@ -24,4 +24,15 @@ interface usuarioDao {
     suspend fun updateUsuario(usuario : usuario)
     @Delete
     suspend fun deleteUsuario(usuario : usuario)
+    @Query("""
+        SELECT * FROM usuario WHERE 
+            id_usuario LIKE '%' || :any ||   '%' OR 
+         id_roll_usuario  LIKE '%' || :any ||   '%' OR
+         nombre  LIKE '%' || :any ||   '%' OR
+         apellido  LIKE '%' || :any ||   '%' OR
+         email  LIKE '%' || :any ||   '%' OR
+         clave  LIKE '%' || :any ||   '%' OR
+         telefono  LIKE '%' || :any ||   '%'
+        """)
+    fun getUsuariosBySimilar(any :String): Flow<List<usuario>>
 }

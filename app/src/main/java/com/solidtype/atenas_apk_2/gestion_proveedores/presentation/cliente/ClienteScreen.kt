@@ -50,9 +50,9 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.compo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.bottonAddClient
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.listClients
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Buscador2
+
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.Components.Buscador2
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 
 
