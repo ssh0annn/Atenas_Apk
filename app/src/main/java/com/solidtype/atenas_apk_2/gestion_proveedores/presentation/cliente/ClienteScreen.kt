@@ -59,24 +59,9 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ClienteScreen(
-
-     viewModel: ClientesViewModel = hiltViewModel()
 ){
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var busqueda by rememberSaveable { mutableStateOf("") }
-    var mostrar by rememberSaveable { mutableStateOf(false) }
-
-    if (busqueda.isNotBlank()) {
-        viewModel.onUserEvent(ClienteEvent.BuscarClientes(busqueda))
-    } else {
-        viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
-    }
-
-    if (uiState.clientes.isEmpty()){
-        viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
-    }
 
 
 
@@ -100,17 +85,15 @@ fun ClienteScreen(
                         Titulo("Clientes", Icons.AutoMirrored.Outlined.FactCheck)
                     }
                     Row(Modifier.padding(start = 400.dp, top = 50.dp, end = 20.dp)) {
-                        Buscador2(busqueda = busqueda) {
-                            busqueda = it
+                        Buscador2("") {
                         }
                     }
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
-                TableClients(uiState.clientes)
-                Spacer(modifier = Modifier.height(40.dp))
-                bottonAddClient(Modifier,{})
 
+                TableClients(listClients)
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
     }
@@ -124,7 +107,7 @@ fun ClienteScreen(
 @Composable
 fun previewTable(){
     MaterialTheme {
-
+        ClienteScreen()
     }
 }
 

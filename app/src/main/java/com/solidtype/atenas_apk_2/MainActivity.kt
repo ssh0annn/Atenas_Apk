@@ -49,11 +49,11 @@ class MainActivity : ComponentActivity() {
             //TestAutocompleteSelect()
             // Demo_SearchableExposedDropdownMenuBox()
             //InventoryScreen()
-             //servicios()
+             servicios()
             //Navigation()
             //HistorialScreen()
            // FireManeger()
-            ClienteScreen()
+            //ClienteScreen()
             /*ImeiBoton {
 
             }*/

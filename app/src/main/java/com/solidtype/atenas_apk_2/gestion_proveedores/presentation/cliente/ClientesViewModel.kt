@@ -90,8 +90,11 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
     private fun getUsuarios() {
         userJob?.cancel()
+        println("En el viewModel")
+        println(casos.getClientes)
+        println("")
         userJob = casos.getClientes().onEach { users ->
-            uiState.update { it.copy(clientes = users) }
+         uiState.update { it.copy(clientes = users) }
 
         }.launchIn(viewModelScope)
     }
