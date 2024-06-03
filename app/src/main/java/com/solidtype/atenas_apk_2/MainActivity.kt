@@ -52,12 +52,11 @@ class MainActivity : ComponentActivity() {
             //Navigation()
             //HistorialScreen()
            // FireManeger()
-
             /*ImeiBoton {
 
             }*/
 
-           // Navigation()
+            //Navigation()
 
 
         }

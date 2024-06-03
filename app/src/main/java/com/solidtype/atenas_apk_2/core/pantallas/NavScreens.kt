@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.solidtype.atenas_apk_2.Authentication.presentation.login.component.Container
-import com.solidtype.atenas_apk_2.Authentication.presentation.register.OutlinedTextFieldExample
+import com.solidtype.atenas_apk_2.authentication.presentation.login.component.Container
+import com.solidtype.atenas_apk_2.authentication.presentation.register.OutlinedTextFieldExample
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestionProductos
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestionUsuarios
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestiondeTicket
