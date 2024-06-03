@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 
 @Composable
-fun Servicios(navController: NavController){
+fun ServiciosFalso (navController: NavController){
 
     FacturacionScreen(navController = navController)
 

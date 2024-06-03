@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,17 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.Screen
-import org.apache.commons.io.StandardLineSeparator
 
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController) {
 
 
     LazyColumn(
@@ -42,16 +38,15 @@ fun HomeScreen(navController: NavController){
     ) {
         item {
             Text(
-                text = "Pantalla Factura ",
+                text = "Pantallas",
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(android.graphics.Color.parseColor("#343341"))
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = {navController.navigate(Screens.Servicio.route)
-
-
+                onClick = {
+                    navController.navigate(Screens.Servicio.route)
                 },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -64,7 +59,7 @@ fun HomeScreen(navController: NavController){
                     .padding(top = 30.dp)
             ) {
                 Text(
-                    "Facturación",
+                    "Servicios (Ney)",
                     fontSize = 24.sp
                 )
             }
@@ -112,7 +107,7 @@ fun HomeScreen(navController: NavController){
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {//Aqui el codigo para moverse a otra ventana
-                        navController.navigate(Screens.PerfilAdministrador.route)
+                    navController.navigate(Screens.PerfilAdministrador.route)
                 },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(

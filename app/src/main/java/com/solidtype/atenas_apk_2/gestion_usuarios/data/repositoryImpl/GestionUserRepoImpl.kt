@@ -19,7 +19,7 @@ class GestionUserRepoImpl @Inject constructor(
 
     override fun buscarUsuario(any: String): Flow<List<usuario>> {
         //NO  esta bien... el dao no permite que le pasen un parametro semejante
-        return usuarioDao.getUsuarios()
+        return usuarioDao.getUsuariosBySimilar(any)
     }
 
     override fun mosstrarUsuarios(): Flow<List<usuario>> {
