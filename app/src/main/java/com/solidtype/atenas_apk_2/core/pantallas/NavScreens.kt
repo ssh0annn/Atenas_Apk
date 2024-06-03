@@ -24,7 +24,6 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.Histor
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
 import com.solidtype.atenas_apk_2.servicios.servicios
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation() {
