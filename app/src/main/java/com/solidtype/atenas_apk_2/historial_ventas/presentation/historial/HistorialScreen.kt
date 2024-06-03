@@ -37,9 +37,9 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.compon
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.AvatarConBotones
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogoSimple
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.Inputs
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.SnackbarAnimado
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.Tabla
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -54,8 +54,8 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val ventasTickerTitulo = rememberSaveable { mutableStateOf("Ventas") } //Inmutable
-    val selected = rememberSaveable { mutableStateOf("Ventas") }//Inmutable
+    val ventasTickerTitulo = rememberSaveable { mutableStateOf("Ventas") }
+    val selected = rememberSaveable { mutableStateOf("Ventas") }
 
     val datePickerState1: DatePickerState = rememberDatePickerState()
     val showDatePicker1 = rememberSaveable { mutableStateOf(false) }
@@ -65,7 +65,9 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
     val showDatePicker2 = rememberSaveable { mutableStateOf(false) }
     val fechaFin = rememberSaveable { mutableStateOf("") }
 
-    var showSnackbar by rememberSaveable { mutableStateOf(false) }
+    val identificador = rememberSaveable { mutableStateOf("") }
+
+    val showSnackbar = rememberSaveable { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
     var snackbarJob: Job by remember { mutableStateOf(Job()) }
@@ -86,10 +88,10 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
         if (showSnackbarIni.value) {
             showSnackbarIni.value = false
             snackbarJob.cancel() //Cancela el job anterior si existe
-            showSnackbar = true
+            showSnackbar.value = true
             snackbarJob = coroutineScope.launch {
                 delay(10000L)
-                showSnackbar = false
+                showSnackbar.value = false
             }
         }
         Column(
@@ -109,17 +111,17 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
             ) {
                 Titulo("Reporte", Icons.Outlined.HistoryEdu)
                 Row {
-                    Inputs(datePickerState1, fechaIni, showDatePicker1, datePickerState2, fechaFin, showDatePicker2, selected, ventasTickerTitulo, viewModel, modifier = Modifier.weight(4f))
-                    AreaVentas(ventasTickerTitulo, selected, uiState, Modifier.weight(3f))
+                    Inputs(identificador, datePickerState1, fechaIni, showDatePicker1, datePickerState2, fechaFin, showDatePicker2, selected, ventasTickerTitulo, viewModel, modifier = Modifier.weight(10f))
+                    AreaVentas(ventasTickerTitulo, selected, uiState, Modifier.weight(6f))
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Tabla(selected, uiState)
                 Spacer(modifier = Modifier.height(12.dp))
                 AvatarConBotones(viewModel, fechaIni, fechaFin, context, showSnackbarIni)
             }
-            DatePickerDialogoSimple(showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin, context)
-            DatePickerDialogoSimple(showDatePicker2, datePickerState2, fechaFin, viewModel, fechaIni, context)
+            DatePickerDialogoSimple(identificador, selected, showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin, context)
+            DatePickerDialogoSimple(identificador, selected, showDatePicker2, datePickerState2, fechaIni, viewModel, fechaFin, context)
         }
-        SnackbarAnimado(showSnackbar, uiState, context)
+        SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
 }

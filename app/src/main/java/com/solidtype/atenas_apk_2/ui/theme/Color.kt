@@ -11,7 +11,9 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 //Carlos's colors
+val Transparente = Color(0x00000000)
 val Blanco = Color(0xFFFFFFFF)
+val BlancoOpaco = Color(0xFFF0F0F0)
 val Negro = Color(0xFF000000)
 val Rojo = Color(0xFFFF0000)
 val AzulGris = Color(0xFF343341)
