@@ -7,9 +7,9 @@ import android.net.NetworkCapabilities
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -23,47 +23,81 @@ import javax.inject.Inject
 class AuthViewmodel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val casosAuth: AuthCasos
-):ViewModel(){
+) : ViewModel() {
 
-    var uiStates:MutableStateFlow<AuthUIStates> = MutableStateFlow(AuthUIStates())
+    var uiStates: MutableStateFlow<AuthUIStates> = MutableStateFlow(AuthUIStates())
         private set
 
     init {
 
-        uiStates.update { it.copy(network = isNetworkAvailable())}
+        uiStates.update { it.copy(network = isNetworkAvailable()) }
         isAutenticated()
     }
 
-    fun onEvent(event:AuthEvent){
-        when(event){
+    fun onEvent(event: AuthEvent) {
+        when (event) {
             AuthEvent.IsAutenticatedEvent -> {
                 isAutenticated()
             }
+
             is AuthEvent.LoginEvent -> {
                 login(event.email, event.password)
             }
+
             else -> {
 
             }
         }
     }
 
-    private fun login(email:String, pass:String){
+    private fun login(email: String, pass: String) {
         viewModelScope.launch {
-            uiStates.update { it.copy(isLoading = true)}
-                withContext(Dispatchers.IO) {
-                if(casosAuth.login(email, pass, getDeviceId())){
-                    uiStates.update { it.copy(isAutenticated = casosAuth.whoIs(), isLoading = false) }
-                }else{
-                    uiStates.update { it.copy(isAutenticated = casosAuth.whoIs(), isLoading = false) }
-                }
+            uiStates.update { it.copy(isLoading = true) }
+            withContext(Dispatchers.IO) {
+                razonesDe(casosAuth.login(email, pass, getDeviceId()))
+                    uiStates.update {
+                        it.copy(
+                            isAutenticated = casosAuth.whoIs(),
+                            isLoading = false
+                        )
+                    }
             }
         }
-
+    }
+    private fun razonesDe(checkListAuth: CheckListAuth): Boolean {
+         when(checkListAuth.autenticado){
+              true -> {
+                  when(checkListAuth.deviceRegistrado){
+                        true -> {
+                            when(checkListAuth.licensiaActiva){
+                                true ->{
+                                    uiStates.update { it.copy(isAutenticated = Usuario(
+                                        correo = checkListAuth.emailUsuario,
+                                        tipoUser = checkListAuth.tipoUser
+                                    ), razones = "Bienvenido usuario: ${checkListAuth.tipoUser}.") }
+                                    return true
+                                }
+                                false -> {
+                                    uiStates.update { it.copy(isAutenticated = null, razones = "Licencia no activa.") }
+                                    return false
+                                }
+                            }
+                        }
+                        false -> {
+                            uiStates.update { it.copy(isAutenticated = null, razones = "Dispositivo no registrado.") }
+                            return false
+                        }
+                    }
+              }
+              false -> {
+                  uiStates.update { it.copy(isAutenticated = null, razones = "Licencia no activa") }
+                  return false
+              }
+          }
     }
 
     @SuppressLint("HardwareIds")
-    private  fun getDeviceId(): String? {
+    private fun getDeviceId(): String? {
         val deviceId: String? = Settings.Secure.getString(
             context.contentResolver,
             Settings.Secure.ANDROID_ID
@@ -71,20 +105,20 @@ class AuthViewmodel @Inject constructor(
 
         return deviceId
     }
-    private fun isAutenticated(){
+
+    private fun isAutenticated() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 uiStates.update {
-                    it.copy(isAutenticated = casosAuth.whoIs() )
+                    it.copy(isAutenticated = casosAuth.whoIs())
                 }
             }
         }
     }
-
-
     private fun isNetworkAvailable(): Boolean {
 
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
         val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
         return when {

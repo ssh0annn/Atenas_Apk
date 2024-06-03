@@ -1,19 +1,32 @@
 package com.solidtype.atenas_apk_2.authentication.actualizacion.data
 
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.AuthRepository
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
+import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor():AuthRepository {
-    override suspend fun signing(user: String, password: String, systemID: String): Boolean {
-        TODO("Not yet implemented")
+class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAutenticacion) : AuthRepository {
+    override suspend fun signing(user: String, password: String, systemID: String): CheckListAuth {
+
+        val caminoFeliz =  autenticacion.signing(user, password, systemID)
+        UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
+        UsuarioActual.tipoUser = caminoFeliz.tipoUser
+        return caminoFeliz
     }
 
     override suspend fun signout() {
-        TODO("Not yet implemented")
+
+        println("Sinout exitoso!! ")
+        autenticacion.signout()
     }
 
-    override suspend fun isAutenticated(): TipoUser {
-        TODO("Not yet implemented")
+    override suspend fun isAutenticated(): Usuario {
+
+        return Usuario(
+            correo = UsuarioActual.emailUsuario,
+            tipoUser = UsuarioActual.tipoUser
+        )
     }
 }

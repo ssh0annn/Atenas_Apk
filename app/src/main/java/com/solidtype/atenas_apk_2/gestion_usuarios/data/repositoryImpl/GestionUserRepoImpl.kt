@@ -13,6 +13,7 @@ class GestionUserRepoImpl @Inject constructor(
     private val usuarioDao: usuarioDao
 ) : GestionUserRepository {
     override suspend fun agregarUsuario(usuario: usuario) {
+        //Pendiende conectar con el remote para que el usuario se registre en la nube.
         usuarioDao.addUsuario(usuario)
     }
 

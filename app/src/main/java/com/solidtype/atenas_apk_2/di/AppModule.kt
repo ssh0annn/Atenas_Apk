@@ -7,6 +7,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.AuthRepositoryImpl
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth.MetodoAutenticacionImpl
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.AuthRepository
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
 import com.solidtype.atenas_apk_2.authentication.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
@@ -50,6 +57,7 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodas
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
+import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
@@ -482,6 +490,23 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRepositoryServicios(dao : servicioDao):ServicioRepository = ServicioRepositoryImpl(dao)
+
+//Actualizacion de la autenticacion
+    @Provides
+    @Singleton
+    fun provideMetodoAutenticacion(firebaseAuth: FirebaseAuth, dataCloud:DataCloud):MetodoAutenticacion  = MetodoAutenticacionImpl(firebaseAuth, dataCloud)
+
+    @Provides
+    @Singleton
+    fun provideCasosdeAutenticacion(repo: AuthRepository) = AuthCasos(
+        login = Login(repo),
+        logout= Logout(repo),
+        whoIs = WhoIs(repo)
+    )
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
 
 
 
