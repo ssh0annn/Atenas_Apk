@@ -109,7 +109,7 @@ fun PerfilAdministrador(navController: NavController){
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {//Aqui el codigo para moverse a otra ventana
-                    navController.navigate(Screens.Servicio.route)
+                    navController.navigate(Screens.Factura.route)
                 },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
