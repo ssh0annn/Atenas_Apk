@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,41 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
-import com.solidtype.atenas_apk_2.facturacion.presentation.facturas
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
-import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoActivo
-import com.solidtype.atenas_apk_2.util.formatoParaUser
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 val listClients : List<Personastodas.ClienteUI> = listOf(
@@ -88,7 +64,17 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
 )
 
  @Composable
-    fun TableClients(Clients: List<Personastodas.ClienteUI>) {
+    fun TableClients(
+     Clients: List<Personastodas.ClienteUI>,
+     mostrarDialogo: MutableState<Boolean>,
+     editar: MutableState<Boolean>,
+     nombre: MutableState<String>,
+     Tipodocumento: MutableState<String>,
+     Numdocumento: MutableState<String>,
+     Email: MutableState<String>,
+     Telefono: MutableState<String>,
+     mostrarConfirmar: MutableState<Boolean>
+ ) {
 
      println("tabla Cliente")
      println(Clients)
@@ -139,17 +125,17 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
 
                     Text(
                         "",
-                        modifier = Modifier.weight(0.2f)
+                        modifier = Modifier.weight(1f)
                     )
                 }
                 LazyColumn(
                     modifier = Modifier
-                        .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                        .padding(5.dp)
                         .fillMaxSize()
                         .background(GrisOscuro)
                 ) {
                    items(Clients){cliente->
-                       MyClientItem(Client = cliente)
+                       MyClientItem(Client = cliente, mostrarDialogo =  mostrarDialogo, editar =  editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar)
 
                    }
                 }
@@ -158,14 +144,4 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
     }
 
 
-
-@Preview(
-    backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560
-)
-@Composable
-fun previewTable(){
-    MaterialTheme {
-        TableClients(listClients)
-    }
-}
 

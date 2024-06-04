@@ -2,9 +2,7 @@ package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.comp
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,12 +25,19 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.model
 
 @Composable
 fun MyClientItem(
-    modifier: Modifier = Modifier,
     Client: Personastodas.ClienteUI,
+    mostrarDialogo: MutableState<Boolean>,
+    editar: MutableState<Boolean>,
+    nombre: MutableState<String>,
+    Tipodocumento: MutableState<String>,
+    Numdocumento: MutableState<String>,
+    Email: MutableState<String>,
+    Telefono: MutableState<String>,
+    mostrarConfirmar: MutableState<Boolean>
 
 ){
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 14.dp, vertical = 12.dp),
 
@@ -55,7 +61,7 @@ fun MyClientItem(
                 Text(
                     text = Client.nombre.toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f), maxLines = 1
+                    modifier = Modifier.weight(1f).padding(start = 40.dp), maxLines = 1
                 )
                 Text(
                     text = Client.documento.toString(),
@@ -77,7 +83,17 @@ fun MyClientItem(
                 )
 
                 Row {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = {
+                        mostrarDialogo.value = true
+                        editar.value = true
+
+                        //formulario onEdit
+                        nombre.value = Client.nombre!!
+                        Numdocumento.value = Client.documento!!
+                        Telefono.value = Client.telefono!!
+                        Email.value = Client.email!!
+
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = null,
@@ -85,7 +101,9 @@ fun MyClientItem(
                         )
                     }
 
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = {
+                        mostrarConfirmar.value = true
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = null,
@@ -115,6 +133,5 @@ fun PreviewClient() {
     )
 
     MaterialTheme {
-
     }
 }

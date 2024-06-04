@@ -40,7 +40,6 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 @Composable
 fun modalAddClient(){
 
-
         //formulario cliente
         var nombre by rememberSaveable { mutableStateOf("") }
         var modelo by rememberSaveable { mutableStateOf("") }
