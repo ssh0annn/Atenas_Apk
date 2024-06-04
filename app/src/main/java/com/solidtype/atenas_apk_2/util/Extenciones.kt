@@ -1,16 +1,12 @@
 package com.solidtype.atenas_apk_2.util
 
 import android.annotation.SuppressLint
-import com.google.firebase.Timestamp
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
-import java.util.Locale
 
 
 fun String.toLocalDate(formato: String = "yyyy-MM-dd"): LocalDate {
@@ -116,4 +112,17 @@ fun usuario.toMap(): Map<String, Any?>{
         "telefono" to telefono,
         "estado" to estado
     )
+}
+
+fun LocalDate.formatoParaUser(): String {
+    val format = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return this.format(format)
+}
+
+fun Boolean.formatoActivo(): String {
+    return if (this) "Activo" else "Inactivo"
+}
+
+fun String.formatoActivoDDBB(): Boolean {
+    return this == "Activo"
 }

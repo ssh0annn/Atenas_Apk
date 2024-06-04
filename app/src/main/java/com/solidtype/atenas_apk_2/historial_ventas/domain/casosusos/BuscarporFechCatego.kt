@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class BuscarporFechCatego @Inject constructor(private val repo: HistorialRepository) {
 
-    operator fun invoke(fecha_inicio:String, fecha_final: String, categoria:String)=repo.buscarPorFechasCategoriasVentas(fecha_inicio, fecha_final, categoria)
+    operator fun invoke(fecha_inicio:String, fecha_final: String)=repo.buscarPorFechasCategoriasVentas(fecha_inicio, fecha_final)
 }

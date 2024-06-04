@@ -21,11 +21,11 @@ import javax.inject.Inject
 
 class DataCloudImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
-    private val  auth: auth
+    autenticador: auth
 ): DataCloud {
 
 
-    private val uidUser: String = auth.getCurrentUser()!!.uid
+    private val uidUser: String = autenticador.getCurrentUser()!!.uid
 
 
     //se convierte el snashopt a json por medio de la

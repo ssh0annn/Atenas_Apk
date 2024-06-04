@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,10 +22,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ImeiBoton {
+
+            //Navigation()
+            //Demo_ExposedDropdownMenuBox()
+            // FireManeger()
+            //TestAutocompleteSelect()
+            // Demo_SearchableExposedDropdownMenuBox()
+            //InventoryScreen()
+             //servicios()
+            //Navigation()
+            //HistorialScreen()
+           // FireManeger()
+            /*ImeiBoton {
+
+            }*/
 
 
-            }
+           Navigation()
+
         }
 
     }

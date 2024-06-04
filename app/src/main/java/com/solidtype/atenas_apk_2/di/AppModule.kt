@@ -7,7 +7,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.solidtype.atenas_apk_2.Authentication.data.remote.RemoteFirebase
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.AuthRepositoryImpl
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth.MetodoAutenticacionImpl
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.AuthRepository
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
+import com.solidtype.atenas_apk_2.authentication.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
@@ -17,27 +24,27 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.UpdateProducto
 import com.solidtype.atenas_apk_2.products.domain.userCases.createProductos
 import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import com.solidtype.atenas_apk_2.products.domain.userCases.getProductosByCodigo
-import com.solidtype.atenas_apk_2.Authentication.data.repository.RepositoryImpl
-import com.solidtype.atenas_apk_2.Authentication.domain.repository.UserRepository
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.AuthUseCases
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.CapturaICCID
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.EstadoLicencia
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.ExisteUsuario
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.Registrarse
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignInUseCase
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.SignOutUseCase
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.VerificaICCIDUseCase
-import com.solidtype.atenas_apk_2.Authentication.domain.userCase.implementados.getCurrentUser
+import com.solidtype.atenas_apk_2.authentication.data.repository.RepositoryImpl
+import com.solidtype.atenas_apk_2.authentication.domain.repository.UserRepository
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.AuthUseCases
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.CapturaICCID
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.EstadoLicencia
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.ExisteUsuario
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.Registrarse
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.SignInUseCase
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.SignOutUseCase
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.VerificaICCIDUseCase
+import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.getCurrentUser
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
-import com.solidtype.atenas_apk_2.core.daos.DispositivoDao
+import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
-import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ticketDao
+import com.solidtype.atenas_apk_2.gestion_tickets.data.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
-import com.solidtype.atenas_apk_2.core.daos.servicioDao
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ticketDao
+import com.solidtype.atenas_apk_2.servicios.data.servicioDao
+import com.solidtype.atenas_apk_2.gestion_tickets.data.ticketDao
 import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
@@ -50,9 +57,18 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodas
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
+import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
+import com.solidtype.atenas_apk_2.dispositivos.data.repository.DispositivosRepositoryImpl
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.ActualizarDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.AgregarDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.BuscarDispositivos
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.CasosDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.EliminarDispositivo
+import com.solidtype.atenas_apk_2.dispositivos.model.casos_usos.GetDispositivos
+import com.solidtype.atenas_apk_2.dispositivos.model.repository.DispositivosRepository
 import com.solidtype.atenas_apk_2.facturacion.data.FacturaRepositoryImpl
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.BuscarFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
@@ -70,12 +86,23 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_pr
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
+import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.BuscarDetallesTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CasosTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CloseTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CompletarPago
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CrearTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetDetallesTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetTickets
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.buscarTickets
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.repository.GestionUserRepository
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Actualizar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Agregar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Buscar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.CrearRoles
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EditarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Eliminar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.GetRoles
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.MostrarUsuario
@@ -107,6 +134,12 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
 import com.solidtype.atenas_apk_2.products.domain.userCases.SyncProductos
+import com.solidtype.atenas_apk_2.servicios.data.repositoryImpl.ServicioRepositoryImpl
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.BuscarTipoServicio
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CasosTipoServicios
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CrearTiposServicios
+import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.GetTipoServicio
+import com.solidtype.atenas_apk_2.servicios.modelo.repository.ServicioRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -192,7 +225,7 @@ object AppModule {
         app,
         ProductDataBase::class.java,
         "tabla_producto"
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton
@@ -365,7 +398,8 @@ object AppModule {
         mostrarUsuarios = MostrarUsuario(repo),
         buscarUsuario = Buscar(repo),
         getRoles = GetRoles(repo),
-        crearRoles = CrearRoles(repo)
+        crearRoles = CrearRoles(repo),
+        actualizarRoll = EditarRoll(repo)
     )
     //Injectando Personas y tipos de personas.
 
@@ -398,11 +432,82 @@ object AppModule {
     @Singleton
     fun provideAdministradorRepository(adminDao: administradorDao): PerfilAdminRepository =
         PerfilAdminRepoImpl(adminDao)
+
     @Provides
     @Singleton
     fun proviteCasosPerfilAdministrador(repo: PerfilAdminRepository) = AdminUseCases(
         getAdminInfo = GetAdminInfo(repo),
         updateAdmin = UpdateAdmin(repo)
     )
+
+    //Dispositivos
+    @Provides
+    @Singleton
+    fun provideCasosDispositivos(repo: DispositivosRepository): CasosDispositivo {
+        return CasosDispositivo(
+            actualizar = ActualizarDispositivo(repo),
+            agregarDispositivo = AgregarDispositivo(repo),
+            buscarDispositivos = BuscarDispositivos(repo),
+            eliminar = EliminarDispositivo(repo),
+            getDispositivos = GetDispositivos(repo)
+        )
+
+    }
+    @Provides
+    @Singleton
+    fun provideDispositivoRepository(dao:DispositivoDao) : DispositivosRepository {
+        return DispositivosRepositoryImpl(dao)
+    }
+
+    //Tickets Manejador
+    @Provides
+    @Singleton
+    fun provideTicketRepository(ticket:ticketDao, detalle:detalle_ticketDao):TicketRepository =
+        TicketRepositoryImpl(ticket, detalle)
+
+    @Provides
+    @Singleton
+    fun providesCasosTickets(repo:TicketRepository) = CasosTicket(
+        getTickets= GetTickets(repo),
+        getDetallesTicket= GetDetallesTicket(repo),
+        crearTicket= CrearTicket(repo),
+        completarPago= CompletarPago(repo),
+        closeTicket= CloseTicket(repo),
+        buscarTickets= buscarTickets(repo),
+        buscarDetallesTicket= BuscarDetallesTicket(repo)
+    )
+
+    //Servicios y tipos servicios
+
+    @Provides
+    @Singleton
+    fun provideCasosServicios(repo:ServicioRepository) = CasosTipoServicios(
+        buscarTipoServicio = BuscarTipoServicio(repo),
+        crearTiposServicios = CrearTiposServicios(repo),
+        getTipoServicio = GetTipoServicio(repo)
+    )
+
+    @Provides
+    @Singleton
+    fun provideRepositoryServicios(dao : servicioDao):ServicioRepository = ServicioRepositoryImpl(dao)
+
+//Actualizacion de la autenticacion
+    @Provides
+    @Singleton
+    fun provideMetodoAutenticacion(firebaseAuth: FirebaseAuth, dataCloud:DataCloud):MetodoAutenticacion  = MetodoAutenticacionImpl(firebaseAuth, dataCloud)
+
+    @Provides
+    @Singleton
+    fun provideCasosdeAutenticacion(repo: AuthRepository) = AuthCasos(
+        login = Login(repo),
+        logout= Logout(repo),
+        whoIs = WhoIs(repo)
+    )
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
+
+
 
 }

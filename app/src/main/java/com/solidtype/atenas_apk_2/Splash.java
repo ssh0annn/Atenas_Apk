@@ -10,6 +10,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
 public class Splash extends AppCompatActivity {
 
     @Override
