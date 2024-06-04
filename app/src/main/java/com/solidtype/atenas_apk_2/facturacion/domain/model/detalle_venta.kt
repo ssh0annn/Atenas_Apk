@@ -19,5 +19,4 @@ data class detalle_venta (
     val cantidad :Int,
     val total :Double,
     @ColumnInfo(defaultValue = "true") val estado :Boolean
-
 )
