@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -31,8 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.TableClients
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.listClients
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -41,19 +47,28 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class,
+    InternalCoroutinesApi::class, InternalCoroutinesApi::class
+)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ClienteScreen(
-    
-){
+    //navController: NavController,
+    viewModel: ClientesViewModel = hiltViewModel()
+
+    ){
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val mostrarDialogo = rememberSaveable { mutableStateOf(false) }
     val editar = rememberSaveable { mutableStateOf(false) }
 
     //formulario cliente
+    val idCliente = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
     val Tipodocumento = rememberSaveable { mutableStateOf("") }
     val Numdocumento = rememberSaveable { mutableStateOf("") }
@@ -67,6 +82,11 @@ fun ClienteScreen(
 
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
 
+    if(Busqueda.value.isNotBlank()) {
+        viewModel.onUserEvent(ClienteEvent.BuscarClientes(Busqueda.value))
+    }else{
+        viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
+    }
 
 
     Column(
@@ -95,7 +115,7 @@ fun ClienteScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                TableClients(listClients, mostrarDialogo, editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar)
+                TableClients(uiState.clientes, mostrarDialogo, editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar,idCliente)
 
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -105,6 +125,7 @@ fun ClienteScreen(
                         mostrarDialogo.value = true
                         editar.value = false
 
+                        idCliente.value = ""
                         nombre.value = ""
                         Numdocumento.value = ""
                         Telefono.value = ""
@@ -138,7 +159,16 @@ fun ClienteScreen(
             ) {
 
 
-                    InputDetalle(
+                InputDetalle(
+
+                    label = "ID",
+                    valor = idCliente.value,
+                ) {
+                    idCliente.value = it
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                InputDetalle(
 
                         label = "Nombre",
                         valor = nombre.value,
@@ -183,9 +213,55 @@ fun ClienteScreen(
                 if (editar.value)
                     Boton("Editar") {
 
+                        try {
+                            if (idCliente.value.isEmpty() || nombre.value.isEmpty() || Email.value.isEmpty() || Telefono.value.isEmpty() || Numdocumento.value.isEmpty()) {
+                                throw Exception("Campos vacios.")
+                            }
+                            viewModel.onUserEvent(
+                                ClienteEvent.EditarClientes(
+                                    Personastodas.ClienteUI(
+                                        idCliente.value.toLong(),
+                                        nombre.value,
+                                        Numdocumento.value,
+                                        Email.value,
+                                        Telefono.value
+                                    )
+                                )
+                            )
+                            mostrarDialogo.value = false
+                            Toast.makeText(context, "El cliente editado con exito", Toast.LENGTH_SHORT).show()
+
+                        }catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        }
+
                     }
                 else
                 Boton("Agregar") {
+                    try {
+                        if (idCliente.value.isEmpty() || nombre.value.isEmpty() || Email.value.isEmpty() || Telefono.value.isEmpty() || Numdocumento.value.isEmpty()) {
+                            throw Exception("Campos vacios.")
+                        }
+                        viewModel.onUserEvent(
+                            ClienteEvent.AgregarClientes(
+                                Personastodas.ClienteUI(
+                                    idCliente.value.toLong(),
+                                    nombre.value,
+                                    Numdocumento.value,
+                                    Email.value,
+                                    Telefono.value
+                                )
+                            )
+                        )
+
+                        idCliente.value = ""
+                        nombre.value = ""
+                        Numdocumento.value = ""
+                        Email.value = ""
+                        Telefono.value = ""
+                    } catch (e: Exception) {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                    }
 
                 }
 
@@ -219,11 +295,19 @@ fun ClienteScreen(
             Row {
                 Boton("Aceptar") {
                     try {
-
-
-
                         mostrarConfirmar.value = false
 
+                            viewModel.onUserEvent(
+                                ClienteEvent.BorrarClientes(
+                                    Personastodas.ClienteUI(
+                                        idCliente.value.toLong(),
+                                        nombre.value,
+                                        Numdocumento.value,
+                                        Email.value,
+                                        Telefono.value
+                                    )
+                                )
+                            )
                         Toast.makeText(
                             context,
                             "Se eliminó el cliente",
@@ -258,7 +342,7 @@ fun ClienteScreen(
 @Composable
 fun previewTable(){
     MaterialTheme {
-        ClienteScreen()
+       // ClienteScreen()
     }
 }
 
