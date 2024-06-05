@@ -82,6 +82,87 @@ fun selector(
     var dia by rememberSaveable { mutableStateOf("") }
     var precio by rememberSaveable { mutableStateOf("") }
     var descrp by rememberSaveable { mutableStateOf("") }
+    val mostrar1 = remember { mutableStateOf(false) }
+
+
+    //modal cliente existente
+
+    if (mostrar1.value) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        mostrar1.value = false
+                    },
+                    text = {
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                //titulo
+                                Spacer(modifier = Modifier.padding(top = 15.dp))
+                                Text(
+                                    text = "Cliente existentes",
+                                    color = AzulGris,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 35.sp,
+                                )
+                                //cuerpo-------------------------------------
+                                cliente(clien = servicio)
+
+                            }
+                        }
+                    },
+
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+
+                            onClick = {
+
+
+                            }) {
+                            Text("Guardar", color = Blanco)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                mostrar1.value = false
+                                openDialog.value = true
+                            },
+                        ) {
+                            Text("Atras", color = Blanco)
+                        }
+                    },
+
+                    modifier = Modifier
+                        .width(800.dp)
+//                        .background(GrisOscuro)
+                )
+            }
+        }
+    }
+
+
 
     //cuerpo del modal
     if (openDialog.value) {
@@ -400,6 +481,8 @@ fun selector(
                         }
                     },
 
+
+
                     confirmButton = {
                         TextButton(modifier = Modifier
                             .background(
@@ -415,9 +498,9 @@ fun selector(
                             } else {
                                 Text("Acceptar", color = Blanco)
                             }
-
                         }
                     },
+
                     dismissButton = {
                         TextButton(
                             modifier = Modifier
@@ -435,11 +518,26 @@ fun selector(
                         ) {
                             if (!mostrar.value) {
                                 Text("Salir", color = Blanco)
+
                             } else {
                                 Text("Atras", color = Blanco)
 
                             }
+                        }
 
+                        if (!mostrar.value) {
+                        } else {
+                            Spacer(modifier = Modifier .padding(horizontal = 140.dp))
+                            Icon(imageVector = Icons.Filled.SupervisedUserCircle,
+                                contentDescription = "",
+                                tint = AzulGris,
+                                modifier = Modifier
+                                    .padding(bottom = 0.dp)
+                                    .size(60.dp)
+                                    .clickable {
+                                        openDialog.value = false
+                                        mostrar1.value = true
+                                    })
                         }
                     },
 
@@ -454,7 +552,7 @@ fun selector(
 
     //modal
     val openDialog1 = remember { mutableStateOf(false) }
-    val mostrar1 = remember { mutableStateOf(false) }
+//    val mostrar1 = remember { mutableStateOf(false) }
     val altura1 = remember { mutableStateOf(300.dp) }
 
     var nuevoServicio by rememberSaveable { mutableStateOf("") }
