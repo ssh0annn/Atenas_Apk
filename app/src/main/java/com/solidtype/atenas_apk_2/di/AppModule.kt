@@ -80,10 +80,12 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.Eliminar
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CasosClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CrearClientes
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.EditarCliente
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.GetClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.BuscarProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.EditarProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
@@ -415,7 +417,8 @@ object AppModule {
         buscarClientes = BuscarClientes(repo),
         getClientes = GetClientes(repo),
         crearClientes = CrearClientes(repo),
-        eliminarPersona = EliminarPersona(repo)
+        eliminarPersona = EliminarPersona(repo),
+        editarCliente = EditarCliente(repo)
     )
 
     @Provides
@@ -424,7 +427,8 @@ object AppModule {
         buscarProveedores = BuscarProveedores(repo),
         getProveedores = GetProveedores(repo),
         crearProveedor = CrearProveedor(repo),
-        eliminarPersona = EliminarPersona(repo)
+        eliminarPersona = EliminarPersona(repo),
+        editarProveedores = EditarProveedores(repo)
     )
 
     //Perfil admnistrador
