@@ -39,8 +39,8 @@ class MainActivity : ComponentActivity() {
             /*ImeiBoton {
 
             }*/
-           ClienteScreen()
-          //Navigation()
+           //ClienteScreen()
+          Navigation()
 
 
         }
