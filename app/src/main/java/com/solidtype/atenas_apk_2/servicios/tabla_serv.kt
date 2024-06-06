@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.facturacion.presentation.Factura
 import com.solidtype.atenas_apk_2.facturacion.presentation.sumaTotal
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.TicketVista
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -145,7 +146,7 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
 
 
 @Composable
-fun cliente(clien: List<servicioss> = listOf()) {
+fun cliente(listacliente: List<Personastodas.ClienteUI?> = listOf()) {
 
     Box(
         modifier = Modifier
@@ -196,7 +197,7 @@ fun cliente(clien: List<servicioss> = listOf()) {
                     .fillMaxSize()
                     .background(GrisOscuro)
             ) { //buscar componente para agregar filas de cards
-              itemsIndexed(clien) { i, servicioss ->
+              itemsIndexed(listacliente) { i, clientes ->
                     Column {
                         Row(
                             modifier = Modifier
@@ -208,20 +209,20 @@ fun cliente(clien: List<servicioss> = listOf()) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = servicioss.nombres,
+                                text = clientes?.nombre.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text =servicioss.telefono,
+                                text = clientes?.telefono.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
+
                             Icon(imageVector = Icons.Filled.TaskAlt,
                                 contentDescription = "",
                                 tint = Color.Green,
                                 modifier = Modifier
-
                                     .padding(bottom = 0.dp)
                                     .size(60.dp)
                                     .weight(1f)
@@ -235,3 +236,12 @@ fun cliente(clien: List<servicioss> = listOf()) {
     }
 }
 
+@Composable
+fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
+
+    Box(
+        modifier = Modifier.clickable(onClick = onclick)
+    ) {
+        Text(text = clienteUI.nombre.toString())
+    }
+}

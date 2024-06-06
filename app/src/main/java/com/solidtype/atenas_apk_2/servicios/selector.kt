@@ -41,6 +41,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
@@ -52,9 +54,9 @@ import com.solidtype.atenas_apk_2.ui.theme.Rojo
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
 fun selector(
-    viewmodel: ServiciosViewModel, listaSericios: List<servicio>
+    viewmodel: ServiciosViewModel = hiltViewModel(), listaSericios: List<servicio>,
 ) {
-
+    val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     //modal
     val openDialog = remember { mutableStateOf(false) }
     val mostrar = remember { mutableStateOf(false) }
@@ -119,8 +121,9 @@ fun selector(
                                     fontWeight = FontWeight.ExtraBold,
                                     fontSize = 35.sp,
                                 )
+
                                 //cuerpo-------------------------------------
-                                cliente(clien = servicio)
+                                cliente(listacliente = state.listaClientes)
 
                             }
                         }
@@ -524,7 +527,7 @@ fun selector(
 
                             }
                         }
-
+                        // boton cliente------------------------------
                         if (!mostrar.value) {
                         } else {
                             Spacer(modifier = Modifier .padding(horizontal = 140.dp))
@@ -535,6 +538,7 @@ fun selector(
                                     .padding(bottom = 0.dp)
                                     .size(60.dp)
                                     .clickable {
+                                        viewmodel.onEvent(ServiceEvent.GetClientes)
                                         openDialog.value = false
                                         mostrar1.value = true
                                     })
@@ -543,7 +547,7 @@ fun selector(
 
                     modifier = Modifier
                         .width(800.dp)
-                        .background(GrisOscuro)
+//                        .background(GrisOscuro)
                         .height(altura.value),
                 )
             }
@@ -651,7 +655,7 @@ fun selector(
 
                     modifier = Modifier
                         .width(800.dp)
-                        .background(GrisOscuro)
+//                        .background(GrisOscuro)
                         .height(altura1.value),
                 )
             }

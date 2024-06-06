@@ -161,6 +161,10 @@ class ServiciosViewModel @Inject constructor(
             ServiceEvent.GetCurrentUser -> {
                 getCurrentUser()
             }
+
+            is ServiceEvent.prueva -> {
+                println(event.clienteUI)
+            }
         }
 
     }

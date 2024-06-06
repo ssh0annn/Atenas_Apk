@@ -7,6 +7,7 @@ import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 
 sealed class ServiceEvent {
     object GetClientes : ServiceEvent()
+    data class prueva(val clienteUI: Personastodas.ClienteUI): ServiceEvent()
     object GetServicios : ServiceEvent()
     object GetDispositivos : ServiceEvent()
     object GetTickets : ServiceEvent()
