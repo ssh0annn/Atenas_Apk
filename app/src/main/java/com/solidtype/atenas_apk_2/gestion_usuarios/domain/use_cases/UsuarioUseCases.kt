@@ -9,5 +9,6 @@ data class UsuarioUseCases(
     val buscarUsuario: Buscar,
     val getRoles: GetRoles,
     val crearRoles: CrearRoles,
-    val actualizarRoll: EditarRoll
+    val actualizarRoll: EditarRoll,
+    val eliminarRol: EliminarRoll
     )

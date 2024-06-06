@@ -19,4 +19,6 @@ interface GestionUserRepository {
     fun getRolesUsuarios(): Flow<List<roll_usuarios>>
 
     suspend fun crearRol(roll: roll_usuarios)
+
+    suspend fun eliminarRol(roll: roll_usuarios)
 }

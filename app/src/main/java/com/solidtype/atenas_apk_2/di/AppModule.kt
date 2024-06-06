@@ -106,6 +106,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Buscar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.CrearRoles
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EditarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Eliminar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EliminarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.GetRoles
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.MostrarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
@@ -401,7 +402,8 @@ object AppModule {
         buscarUsuario = Buscar(repo),
         getRoles = GetRoles(repo),
         crearRoles = CrearRoles(repo),
-        actualizarRoll = EditarRoll(repo)
+        actualizarRoll = EditarRoll(repo),
+        eliminarRol = EliminarRoll(repo)
     )
     //Injectando Personas y tipos de personas.
 
