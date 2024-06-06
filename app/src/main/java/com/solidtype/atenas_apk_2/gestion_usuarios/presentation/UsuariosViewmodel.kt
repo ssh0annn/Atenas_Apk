@@ -2,8 +2,10 @@ package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EliminarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -74,6 +76,18 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             is UserEvent.RolSelecionado -> {
                 rolSelecionado(evento.rol)
             }
+
+            is UserEvent.ElimnarRoll -> {
+                elimanarRoll(evento.rol)
+
+            }
+        }
+    }
+
+    private fun elimanarRoll(roll: roll_usuarios){
+        viewModelScope.launch {
+         casos.eliminarRol(roll)
+
         }
     }
 
