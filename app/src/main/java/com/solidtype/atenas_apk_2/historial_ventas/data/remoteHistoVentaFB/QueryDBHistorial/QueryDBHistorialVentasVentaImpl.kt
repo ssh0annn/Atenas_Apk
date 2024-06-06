@@ -120,6 +120,8 @@ class QueryDBHistorialVentasVentaImpl @Inject constructor(
         }
         coroutineScope {
             println("Aqui veamos la lista: $lista y siez ${lista.size}")
+            Log.e("EntreHitorial","DATOS DE FIRESTORE A DB LOCAL SON: $lista")
+
             val response = async { dao.insertAllHistorialVenta(lista) }
             response.await()
         }
