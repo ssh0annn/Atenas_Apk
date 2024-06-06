@@ -73,7 +73,8 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
      Numdocumento: MutableState<String>,
      Email: MutableState<String>,
      Telefono: MutableState<String>,
-     mostrarConfirmar: MutableState<Boolean>
+     mostrarConfirmar: MutableState<Boolean>,
+     idCliente: MutableState<String>
  ) {
 
      println("tabla Cliente")
@@ -98,6 +99,13 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
                         .fillMaxWidth()
 
                 ) {
+                    Text(
+                        text = "ID",
+                        modifier = Modifier.weight(1f),
+                        color = Blanco,
+                        textAlign = TextAlign.Center
+                    )
+
                     Text(
                         text = "Nombre",
                         modifier = Modifier.weight(1f),
@@ -135,7 +143,7 @@ val listClients : List<Personastodas.ClienteUI> = listOf(
                         .background(GrisOscuro)
                 ) {
                    items(Clients){cliente->
-                       MyClientItem(Client = cliente, mostrarDialogo =  mostrarDialogo, editar =  editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar)
+                       MyClientItem(Client = cliente, mostrarDialogo =  mostrarDialogo, editar =  editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar,idCliente)
 
                    }
                 }

@@ -33,7 +33,8 @@ fun MyClientItem(
     Numdocumento: MutableState<String>,
     Email: MutableState<String>,
     Telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>
+    mostrarConfirmar: MutableState<Boolean>,
+    idCliente: MutableState<String>
 
 ){
     Card(
@@ -57,11 +58,16 @@ fun MyClientItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Text(
+                    text = Client.id_cliente.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.weight(1f).padding(start = 40.dp), maxLines = 1
+                )
 
                 Text(
                     text = Client.nombre.toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f).padding(start = 40.dp), maxLines = 1
+                    modifier = Modifier.weight(1f), maxLines = 1
                 )
                 Text(
                     text = Client.documento.toString(),
@@ -88,6 +94,7 @@ fun MyClientItem(
                         editar.value = true
 
                         //formulario onEdit
+                        idCliente.value = Client.id_cliente.toString()
                         nombre.value = Client.nombre!!
                         Numdocumento.value = Client.documento!!
                         Telefono.value = Client.telefono!!
@@ -103,6 +110,13 @@ fun MyClientItem(
 
                     IconButton(onClick = {
                         mostrarConfirmar.value = true
+
+                        //formulario onDelete
+                        idCliente.value = Client.id_cliente.toString()
+                        nombre.value = Client.nombre!!
+                        Numdocumento.value = Client.documento!!
+                        Telefono.value = Client.telefono!!
+                        Email.value = Client.email!!
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
