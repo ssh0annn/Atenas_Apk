@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +55,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class,
     InternalCoroutinesApi::class, InternalCoroutinesApi::class
 )
-@SuppressLint("StateFlowValueCalledInComposition")
+@SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
 @Composable
 fun ClienteScreen(
     //navController: NavController,
@@ -142,7 +143,7 @@ fun ClienteScreen(
     Dialogo(max = false,titulo = if (editar.value)  "Editar Cliente" else  "Nuevo Cliente", mostrar = mostrarDialogo.value, onCerrarDialogo = { mostrarDialogo.value = false }) {
         Column(
             modifier = Modifier
-                .background(GrisClaro, RoundedCornerShape(20.dp))
+                .background(Color(0xFFEEEEEE), RoundedCornerShape(20.dp))
                 .width(400.dp)
                 .height(300.dp)
                 .padding(10.dp)
