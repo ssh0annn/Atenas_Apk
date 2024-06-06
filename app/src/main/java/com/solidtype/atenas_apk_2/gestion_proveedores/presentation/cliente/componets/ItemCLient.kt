@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 
 @Composable
 fun MyClientItem(
@@ -104,7 +105,7 @@ fun MyClientItem(
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = null,
-                            tint = Color.Green
+                            tint = AzulGris
                         )
                     }
 
@@ -121,7 +122,7 @@ fun MyClientItem(
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = null,
-                            tint = Color.Red
+                            tint = AzulGris
                         )
                     }
                 }
