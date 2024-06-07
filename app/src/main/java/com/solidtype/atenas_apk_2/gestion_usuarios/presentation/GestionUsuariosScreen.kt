@@ -1,9 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,13 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,23 +21,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AvatarConBotones
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarRol
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoSimple
-import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
@@ -75,6 +66,7 @@ fun GestionUsuariosScreen(
     val mostrarDialogo = rememberSaveable { mutableStateOf(false) }
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
     val mostrarConfirmarRol = rememberSaveable { mutableStateOf(false) }
+    val mostrarQR = rememberSaveable { mutableStateOf(false) }
 
     if(busqueda.value.isNotBlank()) {
         viewModel.onUserEvent(UserEvent.BuscarUsuario(busqueda.value))
@@ -120,71 +112,17 @@ fun GestionUsuariosScreen(
                     }
                     Detalles(idUsuario, nombre, apellido, correo, clave, telefono, rol, uiState, mostrarDialogo, mostrarConfirmar, estado, viewModel, context)
                 }
-                AvatarConBotones()
+                AvatarConBotones(mostrarQR)
             }
         }
         DialogoSimple(mostrarDialogo, mostrarConfirmarRol, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, uiState, viewModel, context)
         DialogoConfirmarEliminarUsuario(mostrarConfirmar, viewModel, idUsuario, uiState, rol, nombre, apellido, correo, clave, telefono, estado, context)
-        Dialogo(
-            titulo = "Confirma",
-            mostrar = mostrarConfirmarRol.value,
-            onCerrarDialogo = { mostrarConfirmarRol.value = false },
-            max = false,
-            sinBoton = true
-        ) {
-            Column(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+        DialogoConfirmarEliminarRol(mostrarConfirmarRol, viewModel, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, context)
+        Dialogo(titulo = "QR de Técnico", mostrar = mostrarQR.value, onCerrarDialogo = { mostrarQR.value = false }, max = false) {
+            Box(
+                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = "¿Estás seguro que deseas eliminar este rol?",
-                    textAlign = TextAlign.Center,
-                    color = AzulGris,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Row {
-                    Boton("Aceptar") {
-                        try {
-                            viewModel.onUserEvent(
-                                UserEvent.ElimnarRoll(
-                                    roll_usuarios(
-                                        idRollUsuario.value.toLong(),
-                                        nombreRollUsuario.value,
-                                        descripcion.value,
-                                        estadoRollUsuario.value.formatoActivoDDBB()
-                                    )
-                                )
-                            )
-
-                            idRollUsuario.value = ""
-                            nombreRollUsuario.value = ""
-                            descripcion.value = ""
-                            estadoRollUsuario.value = ""
-
-                            mostrarConfirmarRol.value = false
-
-                            Toast.makeText(
-                                context,
-                                "Se eliminó el rol",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "No se pudo eliminar",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Boton("Cancelar") {
-                        mostrarConfirmarRol.value = false
-                    }
-                }
+                //QR
             }
         }
     }
