@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+
 @HiltViewModel
 class AuthViewmodel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -28,9 +29,13 @@ class AuthViewmodel @Inject constructor(
     var uiStates: MutableStateFlow<AuthUIStates> = MutableStateFlow(AuthUIStates())
         private set
 
+   private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
+
     init {
 
-        uiStates.update { it.copy(network = isNetworkAvailable()) }
+        uiStates.update { it.copy(network = isNetworkAvailable(),
+            correoGuardado = recuerdame.getString("correo", "").toString()
+            ) }
         isAutenticated()
     }
 
@@ -44,6 +49,9 @@ class AuthViewmodel @Inject constructor(
             is AuthEvent.LoginEvent -> {
                 uiStates.update { it.copy(network = isNetworkAvailable()) }
                 login(event.email, event.password)
+            }
+            is AuthEvent.Recuerdame -> {
+                recuerdame(event.email)
             }
 
             else -> {
@@ -129,5 +137,13 @@ class AuthViewmodel @Inject constructor(
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
+    }
+
+    private fun recuerdame(correo: String?){
+        recuerdame
+            .edit()
+            .putString("correo", correo)
+            .apply()
+
     }
 }

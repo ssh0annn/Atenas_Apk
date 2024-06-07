@@ -6,5 +6,6 @@ data class AuthUIStates(
     val isAutenticated: Usuario? = null,
     val isLoading:Boolean = false,
     val network:Boolean = false,
-    val razones: String? = ""
+    val razones: String? = "",
+    val correoGuardado: String? = ""
 )
