@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.gestion_tickets.domain.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
@@ -11,10 +12,15 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import java.time.LocalDate
 
 @Entity(foreignKeys = [
-    ForeignKey(entity = usuario::class, parentColumns = ["id_usuario"], childColumns = ["id_vendedor"]),
-    ForeignKey(entity = persona::class, parentColumns = ["id_persona"], childColumns = ["id_cliente"]),
-    ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"]),
-    ForeignKey(entity = Dispositivo::class, parentColumns = ["id_dispositivo"], childColumns = ["id_dispositivo"])
+    ForeignKey(entity = usuario::class, parentColumns = ["id_usuario"], childColumns = ["id_vendedor"], onDelete = ForeignKey.CASCADE),
+    ForeignKey(entity = persona::class, parentColumns = ["id_persona"], childColumns = ["id_cliente"], onDelete = ForeignKey.CASCADE),
+    ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"], onDelete = ForeignKey.CASCADE),
+    ForeignKey(entity = Dispositivo::class, parentColumns = ["id_dispositivo"], childColumns = ["id_dispositivo"], onDelete = ForeignKey.CASCADE)
+], indices = [
+    Index(value = ["id_vendedor"], unique = true),
+    Index(value = ["id_cliente"], unique = true),
+    Index(value = ["id_tipo_venta"], unique = true),
+    Index(value = ["id_dispositivo"], unique = true)
 ])
 data class ticket (
    @PrimaryKey(autoGenerate = false) var id_ticket :Long= 0 ,

@@ -38,15 +38,12 @@
             android:name=".perfil_administrador.presentation.PefilAdministrador"
             android:exported="false" />
         <activity
-            android:name=".PerfilAdministrador"
-            android:exported="false"
-            android:theme="@style/Theme.Atenas_apk_2" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".Splash"
             android:exported="true"
+            android:splitName="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

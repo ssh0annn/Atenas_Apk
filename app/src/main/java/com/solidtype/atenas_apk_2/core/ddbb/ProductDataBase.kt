@@ -1,6 +1,8 @@
 package com.solidtype.atenas_apk_2.core.ddbb
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
@@ -62,4 +64,17 @@ abstract class ProductDataBase : RoomDatabase() {
     abstract val ventaDAO: ventaDao
     abstract val adminDao: administradorDao
     abstract val dispositivoDao: DispositivoDao
+    companion object{
+        @Volatile
+        private var DDBB: ProductDataBase? = null
+        fun getDataBase(context: Context):ProductDataBase {
+            return DDBB ?: synchronized(this) {
+                Room.databaseBuilder(context, ProductDataBase::class.java, "Atenas_Database")
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { DDBB = it }
+            }
+        }
+
+    }
 }

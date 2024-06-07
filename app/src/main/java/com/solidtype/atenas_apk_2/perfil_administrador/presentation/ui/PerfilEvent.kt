@@ -7,5 +7,9 @@ sealed class PerfilEvent {
     data class UpdatePerfil(val perfil:PerfilAdmin): PerfilEvent()
 
     object VerPerfil: PerfilEvent()
+    companion object {
+        lateinit var VerPerfil: PerfilEvent
+        lateinit var UpdatePerfil: PerfilEvent
+    }
 
 }

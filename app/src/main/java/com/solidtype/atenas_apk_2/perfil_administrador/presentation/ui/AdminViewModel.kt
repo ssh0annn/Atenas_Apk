@@ -17,11 +17,9 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
     var uiState:MutableStateFlow<PerfilUIState> = MutableStateFlow(PerfilUIState())
         private set
 
-
     init {
         perfilAdmin()
     }
-
 
     fun onEvent(evento: PerfilEvent){
         when(evento){
