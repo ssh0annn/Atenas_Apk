@@ -1,20 +1,6 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
+
 <?xml version="1.0" encoding="UTF-8"?>
->>>>>>> a8e7902384a4c112f13e7c130e8cdc8d9b8f785d
-<<<<<<< HEAD
->>>>>>> 0f802999f48a5938628f35252f02ce472e6bc50e
-=======
->>>>>>> 0ce00490a2004c05418bc87c630e73ad0d1a0f65
-<<<<<<< HEAD
->>>>>>> 576c4eae258586f099b34b83e5bc8f90a19ff9f8
-=======
->>>>>>> 2a4fffc69d54ff08488c4cf377a5914d96d2971a
->>>>>>> 7593912cc6a9bd6966df9f201d41b33f440ba796
+
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
