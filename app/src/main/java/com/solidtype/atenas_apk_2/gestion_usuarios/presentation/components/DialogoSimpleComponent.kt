@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +40,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
 @OptIn(ExperimentalMultiplatform::class)
 fun DialogoSimple(
     mostrarDialogo: MutableState<Boolean>,
+    mostrarConfirmarRol: MutableState<Boolean>,
     idRollUsuario: MutableState<String>,
     nombreRollUsuario: MutableState<String>,
     descripcion: MutableState<String>,
@@ -82,56 +84,60 @@ fun DialogoSimple(
                         }
                     }
                 }
-                BotonBlanco("Guardar") {
-                    try {
-                        if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
-                            throw Exception("Campos vacios.")
-                        }
+                Row{
+                    BotonBlanco("Guardar") {
+                        try {
+                            if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
+                                throw Exception("Campos vacios.")
+                            }
 
-                        if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
+                            if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
 //                            Log.i("GestionUsuariosScreen", "Editar Rol")
-                            viewModel.onUserEvent(
-                                UserEvent.EditarRol(
-                                    roll_usuarios(
-                                        id_roll_usuario = idRollUsuario.value.toLong(),
-                                        nombre = nombreRollUsuario.value,
-                                        descripcion = descripcion.value,
-                                        estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                viewModel.onUserEvent(
+                                    UserEvent.EditarRol(
+                                        roll_usuarios(
+                                            id_roll_usuario = idRollUsuario.value.toLong(),
+                                            nombre = nombreRollUsuario.value,
+                                            descripcion = descripcion.value,
+                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                        )
                                     )
                                 )
-                            )
-                            //Error: No se puede editar un rol
-                            //throw Exception("No se puede editar un rol.")
-                        } else {
-                            viewModel.onUserEvent(
-                                UserEvent.AgregarNuevoRol(
-                                    roll_usuarios(
-                                        id_roll_usuario = idRollUsuario.value.toLong(),
-                                        nombre = nombreRollUsuario.value,
-                                        descripcion = descripcion.value,
-                                        estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                //Error: No se puede editar un rol
+                                //throw Exception("No se puede editar un rol.")
+                            } else {
+                                viewModel.onUserEvent(
+                                    UserEvent.AgregarNuevoRol(
+                                        roll_usuarios(
+                                            id_roll_usuario = idRollUsuario.value.toLong(),
+                                            nombre = nombreRollUsuario.value,
+                                            descripcion = descripcion.value,
+                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                        )
                                     )
                                 )
-                            )
+                            }
+
+                            idRollUsuario.value = ""
+                            nombreRollUsuario.value = ""
+                            descripcion.value = ""
+                            estadoRollUsuario.value = ""
+
+                            Toast.makeText(
+                                context,
+                                "Rol guardado",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                context,
+                                "error: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-
-                        idRollUsuario.value = ""
-                        nombreRollUsuario.value = ""
-                        descripcion.value = ""
-                        estadoRollUsuario.value = ""
-
-                        Toast.makeText(
-                            context,
-                            "Rol guardado",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "error: ${e.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
+                    Spacer(modifier = Modifier.width(40.dp))
+                    BotonBlanco("Eliminar"){ mostrarConfirmarRol.value = true }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }

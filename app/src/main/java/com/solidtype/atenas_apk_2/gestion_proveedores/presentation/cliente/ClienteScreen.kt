@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.TableClients
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
@@ -58,7 +59,7 @@ import kotlinx.coroutines.delay
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
 @Composable
 fun ClienteScreen(
-    //navController: NavController,
+    navController: NavController,
     viewModel: ClientesViewModel = hiltViewModel()
 
     ){

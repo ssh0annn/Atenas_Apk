@@ -145,6 +145,25 @@ fun PerfilAdministrador(navController: NavController){
                     fontSize = 24.sp
                 )
             }
+            Button(
+                onClick = {//Aqui el codigo para moverse a otra ventana
+                    navController.navigate(Screens.GestionCliente.route)
+                },
+                shape = RoundedCornerShape(25.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF343341),
+                    contentColor = Color.White,
+                ),
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(100.dp)
+                    .padding(top = 30.dp)
+            ) {
+                Text(
+                    "Gestor de Clientes (Joan)",
+                    fontSize = 24.sp
+                )
+            }
         }
     }
 

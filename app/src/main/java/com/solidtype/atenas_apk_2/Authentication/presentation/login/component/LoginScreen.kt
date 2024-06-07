@@ -60,7 +60,7 @@ import com.solidtype.atenas_apk_2.ui.theme.Transparente
 
 
 @Composable
-fun LoginScreen(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreenOld(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
     val email: String by viewModel.mail.observeAsState(initial = "")
     val pass: String by viewModel.pass.observeAsState(initial = "")
     val loginEnabled: Boolean by viewModel.login.observeAsState(initial = false)
