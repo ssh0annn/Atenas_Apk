@@ -3,6 +3,7 @@
   <component name="deploymentTargetSelector">
     <selectionStates>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
 <<<<<<< HEAD
@@ -20,6 +21,13 @@
         <option name="selectionMode" value="DROPDOWN" />
 >>>>>>> 1594407a3db8f8ad7b545adf577062dd4c0b5572
 >>>>>>> 98a714db15f196dd0a5f1a9b43baad134f593171
+=======
+      <SelectionState runConfigName="Atenas_Apk.Atenas_apk_2.app">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="app">
+        <option name="selectionMode" value="DROPDOWN" />
+>>>>>>> b9ec047dfb7abf22ccf7af8113436613e0b1dde3
       </SelectionState>
     </selectionStates>
   </component>

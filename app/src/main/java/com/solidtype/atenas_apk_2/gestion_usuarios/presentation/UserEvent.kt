@@ -22,6 +22,8 @@ sealed class UserEvent{
 
    object GetRoles:UserEvent()
 
+   object GetQr:UserEvent()
+
 
 
 }
