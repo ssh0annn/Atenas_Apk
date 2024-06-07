@@ -38,9 +38,11 @@ class AuthViewmodel @Inject constructor(
         when (event) {
             AuthEvent.IsAutenticatedEvent -> {
                 isAutenticated()
+                uiStates.update { it.copy(network = isNetworkAvailable()) }
             }
 
             is AuthEvent.LoginEvent -> {
+                uiStates.update { it.copy(network = isNetworkAvailable()) }
                 login(event.email, event.password)
             }
 
@@ -69,7 +71,7 @@ class AuthViewmodel @Inject constructor(
               true -> {
                   when(checkListAuth.deviceRegistrado){
                         true -> {
-                            when(checkListAuth.licensiaActiva){
+                            when(checkListAuth.licensiaActiva){//REvision por usuarios de otra tablet.
                                 true ->{
                                     uiStates.update { it.copy(isAutenticated = Usuario(
                                         correo = checkListAuth.emailUsuario,
@@ -90,7 +92,7 @@ class AuthViewmodel @Inject constructor(
                     }
               }
               false -> {
-                  uiStates.update { it.copy(isAutenticated = null, razones = "Licencia no activa") }
+                  uiStates.update { it.copy(isAutenticated = null, razones = "Usuario no identificado") }
                   return false
               }
           }
