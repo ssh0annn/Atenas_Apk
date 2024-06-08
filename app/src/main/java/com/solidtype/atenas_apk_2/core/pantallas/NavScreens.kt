@@ -58,8 +58,8 @@ fun Navigation() {
         composable(route = Screens.PerfilAdministrador.route ) {
             PerfilAdministrador(navController)
         }
-        composable(route = Screens.Home.route ) {
-            HomeScreen(navController)
+        composable(route = Screens.Home.route + "/{usuario}" ) {
+            HomeScreen(navController, it.arguments?.getString("usuario").orEmpty())
         }
         composable(route = Screens.GestiondeTicket.route ) {
             GestiondeTicket(navController)

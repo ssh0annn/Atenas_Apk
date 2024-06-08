@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.Authentication.actualizacion.presentation
 
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -32,10 +33,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -60,7 +61,7 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
 import com.solidtype.atenas_apk_2.ui.theme.Transparente
-
+import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
@@ -68,31 +69,29 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
     val context = LocalContext.current
 
     val uiState by viewModel.uiStates.collectAsStateWithLifecycle()
-    
-    val email = rememberSaveable { mutableStateOf("") }
+
+    val email = rememberSaveable { mutableStateOf(if (!uiState.correoGuardado.isNullOrEmpty()) uiState.correoGuardado!! else "") }
     val pass = rememberSaveable { mutableStateOf("") }
 
-    //val corroutineScope = rememberCoroutineScope()
+    val checked = rememberSaveable { mutableStateOf( if (!uiState.correoGuardado.isNullOrEmpty()) true else false) }
+    val passwordVisible = rememberSaveable { mutableStateOf(false) }
 
-    if(!uiState.network)Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
+    val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
+    else painterResource(id = R.drawable.ic_visibility_true)
+
+    if (!uiState.network) Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
 
     if (uiState.isAutenticated != null) {
-        when (uiState.isAutenticated!!.tipoUser){
-            TipoUser.ADMIN -> {
-                nav.navigate(Screens.Home.route) //Hay que pasar el correo al la navegación que le corresponda
-                Toast.makeText(context, "Bienvenido Administrador!", Toast.LENGTH_SHORT).show()
-            }
-            TipoUser.TECNICO -> {
-                nav.navigate(Screens.Home.route)
-                Toast.makeText(context, "Bienvenido Técnico!", Toast.LENGTH_SHORT).show()
-            }
-            TipoUser.VENDEDOR -> {
-                nav.navigate(Screens.Home.route)
-                Toast.makeText(context, "Bienvenido Vendedor!", Toast.LENGTH_SHORT).show()
-            }
-            TipoUser.UNKNOWN -> {
-                Toast.makeText(context, "Usuario Desconocido. Intente volver a logearse.", Toast.LENGTH_SHORT).show()
-            }
+        when (uiState.isAutenticated!!.tipoUser) {
+            TipoUser.ADMIN -> nav.navigate(Screens.Home.route + "/Administrador")
+            TipoUser.TECNICO -> nav.navigate(Screens.Home.route + "/Técnico")
+            TipoUser.VENDEDOR -> nav.navigate(Screens.Home.route + "/Vendedor")
+            TipoUser.UNKNOWN ->
+                Toast.makeText(
+                    context,
+                    "Usuario Desconocido. Intente volver a logearse.",
+                    Toast.LENGTH_SHORT
+                ).show()
         }
     }
     if (uiState.isLoading) {
@@ -104,12 +103,7 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
             )
         }
 
-    } else
-    {
-        var checked by rememberSaveable { mutableStateOf(false) }
-        var passwordVisible by rememberSaveable { mutableStateOf(false) }
-        val icon = if (passwordVisible) painterResource(id = R.drawable.ic_visibility_false)
-        else painterResource(id = R.drawable.ic_visibility_true)
+    } else {
         LazyColumn(
             Modifier
                 .fillMaxHeight()
@@ -197,7 +191,7 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
                     },
                     trailingIcon = {
                         IconButton(onClick = {
-                            passwordVisible = !passwordVisible
+                            passwordVisible.value = !passwordVisible.value
                         }) {
                             Image(
                                 painter = icon,
@@ -212,7 +206,7 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
                         focusedIndicatorColor = Transparente,
                         unfocusedIndicatorColor = Transparente
                     ),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
                 Row(
@@ -224,8 +218,8 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
                 )
                 {
                     Checkbox(
-                        checked = checked,
-                        onCheckedChange = { checked = it },
+                        checked = checked.value,
+                        onCheckedChange = { checked.value = it },
                         colors = CheckboxDefaults.colors(
                             checkedColor = AzulGris,
                         )
@@ -240,18 +234,19 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
                 Button(
                     onClick = {
                         viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value))
+                        if(checked.value) viewModel.onEvent(AuthEvent.Recuerdame(email.value))
                     },
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = AzulGris,
-                        contentColor = Blanco,
-
-                        ),
+                        contentColor = Blanco
+                    ),
                     modifier = Modifier
                         .width(430.dp)
                         .height(100.dp)
                         .padding(top = 30.dp),
-                    enabled = Patterns.EMAIL_ADDRESS.matcher(email.value).matches() && pass.value.length >= 8
+                    enabled = Patterns.EMAIL_ADDRESS.matcher(email.value)
+                        .matches() && pass.value.length >= 8
                 ) {
                     Text(
                         "Sign in",
