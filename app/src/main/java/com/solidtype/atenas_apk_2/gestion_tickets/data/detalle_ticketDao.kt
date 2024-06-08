@@ -3,15 +3,16 @@ package com.solidtype.atenas_apk_2.gestion_tickets.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.detalle_ticket
 import kotlinx.coroutines.flow.Flow
 @Dao
 interface detalle_ticketDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addDetalleTicket(detalleTicket : detalle_ticket)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addDetalleTickets(detalleTicket : List<detalle_ticket>)
     @Query("select * from detalle_ticket")
     fun getDetalleTickets(): Flow<List<detalle_ticket>>

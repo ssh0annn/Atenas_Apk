@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
@@ -12,9 +13,9 @@ import java.time.LocalDate
 
 @Dao
 interface ventaDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addVenta(venta: venta)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addVentas(venta : List<venta>)
     @Query("select * from venta")
     fun getVentas(): Flow<List<venta>>

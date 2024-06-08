@@ -59,7 +59,7 @@ public class PefilAdministrador extends AppCompatActivity {
         numero_empresa.setText(perfilUI.getValue().getPerfilAdmin().get(0).getTelefono());
 
         viewModel.onEvent(PerfilEvent.VerPerfil);
-        
+
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
