@@ -53,6 +53,9 @@ class AuthViewmodel @Inject constructor(
             is AuthEvent.Recuerdame -> {
                 recuerdame(event.email)
             }
+            is AuthEvent.EliminarRecuerdos -> {
+                eliminarRecuerdos()
+            }
 
             else -> {
 
@@ -138,7 +141,12 @@ class AuthViewmodel @Inject constructor(
             else -> false
         }
     }
-
+    private fun eliminarRecuerdos(){
+        recuerdame
+            .edit()
+            .remove("correo")
+            .apply()
+    }
     private fun recuerdame(correo: String?){
         recuerdame
             .edit()
