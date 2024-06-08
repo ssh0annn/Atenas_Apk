@@ -83,28 +83,15 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
 
     if (uiState.isAutenticated != null) {
         when (uiState.isAutenticated!!.tipoUser) {
-            TipoUser.ADMIN -> {
-                nav.navigate(Screens.Home.route) //Hay que pasar el correo al la navegación que le corresponda
-                Toast.makeText(context, "Bienvenido Administrador!", Toast.LENGTH_SHORT).show()
-            }
-
-            TipoUser.TECNICO -> {
-                nav.navigate(Screens.Home.route)
-                Toast.makeText(context, "Bienvenido Técnico!", Toast.LENGTH_SHORT).show()
-            }
-
-            TipoUser.VENDEDOR -> {
-                nav.navigate(Screens.Home.route)
-                Toast.makeText(context, "Bienvenido Vendedor!", Toast.LENGTH_SHORT).show()
-            }
-
-            TipoUser.UNKNOWN -> {
+            TipoUser.ADMIN -> nav.navigate(Screens.Home.route + "/Administrador")
+            TipoUser.TECNICO -> nav.navigate(Screens.Home.route + "/Técnico")
+            TipoUser.VENDEDOR -> nav.navigate(Screens.Home.route + "/Vendedor")
+            TipoUser.UNKNOWN ->
                 Toast.makeText(
                     context,
                     "Usuario Desconocido. Intente volver a logearse.",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
         }
     }
     if (uiState.isLoading) {
