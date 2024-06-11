@@ -522,7 +522,7 @@ fun selector(
 
                             onClick = {
                                 if (!nuevoServicio.isNullOrEmpty()) {
-                                    viewmodel.onEvent(
+                                    viewmodel.onServiceEvent(
                                         ServiceEvent.CreateServicio(
                                             servicio(
                                                 nombre = nuevoServicio,

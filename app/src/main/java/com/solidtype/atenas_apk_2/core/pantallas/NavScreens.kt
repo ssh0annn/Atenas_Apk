@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.solidtype.atenas_apk_2.Authentication.actualizacion.presentation.LoginScreen
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.LoginScreen
 import com.solidtype.atenas_apk_2.authentication.presentation.register.OutlinedTextFieldExample
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestionProductos
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestiondeTicket
@@ -20,6 +20,7 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.Clien
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 import com.solidtype.atenas_apk_2.servicios.servicios
 
 @Composable
@@ -77,7 +78,7 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route ) {
-            servicios(/*navController*/)
+            EjemploNey()
         }
         composable(route = Screens.Ticket.route ) {
             Ticket(navController)

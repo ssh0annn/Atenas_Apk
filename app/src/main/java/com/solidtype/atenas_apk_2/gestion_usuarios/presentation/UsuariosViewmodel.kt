@@ -105,7 +105,12 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases
     }
     private fun elimanarRoll(roll: roll_usuarios){
         viewModelScope.launch {
-         casos.eliminarRol(roll)
+            try{
+                casos.eliminarRol(roll)
+            }catch (_ : Exception){
+                uiState.update { it.copy(error = "No es posible elminar este rol") }
+            }
+
 
         }
     }

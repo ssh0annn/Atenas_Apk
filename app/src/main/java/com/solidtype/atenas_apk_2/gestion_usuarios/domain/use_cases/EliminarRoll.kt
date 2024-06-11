@@ -6,5 +6,11 @@ import javax.inject.Inject
 
 class EliminarRoll @Inject constructor(private val repo: GestionUserRepository) {
 
-    suspend operator fun invoke(rol: roll_usuarios) = repo.eliminarRol(rol)
+    suspend operator fun invoke(rol: roll_usuarios){
+        try{
+           repo.eliminarRol(rol)
+        }catch (_:Exception){
+            throw Exception("bobo")
+        }
+    }
 }

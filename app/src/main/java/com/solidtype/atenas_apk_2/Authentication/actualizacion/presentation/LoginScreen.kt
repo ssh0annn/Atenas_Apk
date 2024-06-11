@@ -1,6 +1,5 @@
-package com.solidtype.atenas_apk_2.Authentication.actualizacion.presentation
+package com.solidtype.atenas_apk_2.authentication.actualizacion.presentation
 
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -33,7 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -54,14 +52,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.AuthEvent
-import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.AuthViewmodel
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
 import com.solidtype.atenas_apk_2.ui.theme.Transparente
-import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
