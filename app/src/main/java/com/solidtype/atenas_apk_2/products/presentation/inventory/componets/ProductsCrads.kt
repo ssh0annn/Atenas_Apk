@@ -12,12 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProductsCard(modifier: Modifier = Modifier, producto:ProductEntity, onClickGetProducto:() -> Unit){
+fun ProductsCard(modifier: Modifier = Modifier, producto:ProductEntity, onClickGetClient:() -> Unit){
     Card(modifier =modifier,
         shape = RoundedCornerShape(30.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
@@ -29,7 +30,8 @@ fun ProductsCard(modifier: Modifier = Modifier, producto:ProductEntity, onClickG
             /*
             Aqui iria la logica de la imagen
              */
-            Spacer(modifier = Modifier.height(5.dp))
+
+            Spacer(modifier = Modifier.height(40.dp))
             Text(text = "Nombre: ${producto.Name_Product}")
             Text(text = "Stock: ${producto.Count_Product}")
             Text(text = "Precio: ${producto.Price_Vending_Product}")
@@ -40,3 +42,7 @@ fun ProductsCard(modifier: Modifier = Modifier, producto:ProductEntity, onClickG
     }
 
 }
+
+
+
+

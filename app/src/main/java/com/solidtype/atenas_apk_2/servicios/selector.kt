@@ -55,6 +55,8 @@ import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoServicio
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -69,23 +71,12 @@ fun selector(
     viewmodel: ServiciosViewModel = hiltViewModel(), listaSericios: List<servicio>,
     listaCliente: List<Personastodas.ClienteUI?>, listaDispositivos: List<Dispositivo?>
 
-//    nombre: MutableState<String>,
-//    modelo: MutableState<String>,
-//    telefono: MutableState<String>,
-//    email: MutableState<String>,
-//    falla: MutableState<String>,
-//    estado: MutableState<String>,
-//    marca: MutableState<String>,
-//    abono: MutableState<String>,
-//    nota: MutableState<String>,
-//    restante: MutableState<String>,
-//    total: MutableState<String>,
-//    selectedText: MutableState<String>,
-//    dia: MutableState<String>,
-//    precio: MutableState<String>,
-//    descrp: MutableState<String>,
 
 ) {
+
+    var search by rememberSaveable { mutableStateOf("") }
+    var nuevoServicios by rememberSaveable { mutableStateOf(false) }
+
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     val listacliente = state.listaClientes
     //modal
@@ -149,7 +140,13 @@ fun selector(
     var expande2 by remember { mutableStateOf(false) }
 
     //modal cliente existente
+    if (nuevoServicios){
+        NuevoServicio {
+            viewmodel.onServiceEvent(ServiceEvent.CreateServicio(it))
+            nuevoServicios = !nuevoServicios
+        }
 
+    }
     if (mostrar1.value) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -158,6 +155,7 @@ fun selector(
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
+
                 AlertDialog(
                     onDismissRequest = {
                         mostrar1.value = false
@@ -208,6 +206,7 @@ fun selector(
                                                 .fillMaxWidth()
 
                                         ) {
+
                                             Text(
                                                 text = "Cliente",
                                                 modifier = Modifier.weight(1f),
@@ -350,40 +349,15 @@ fun selector(
                                                 .padding(0.dp)
                                                 .clip(RoundedCornerShape(10.dp))
                                         ) {
-                                            ExposedDropdownMenuBox(expanded = expanded,
-                                                onExpandedChange = {
-                                                    expanded = !expanded
+                                            SelectorMio("Vendedor", search, listOf(state.usuario.toString()), true) {
+                                            }
+                                            SelectorMio("Servicio", search, state.listaServicios.let {
+                                                it.map { dato -> dato.nombre }
+                                            }, false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
+                                                    selecion ->
+                                                val service = state.listaServicios.find { it.nombre == selecion }
+                                                service?.let { viewmodel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
 
-
-                                                }) {
-                                                TextField(
-                                                    value = selectedText,
-                                                    onValueChange = {},
-                                                    readOnly = true,
-                                                    trailingIcon = {
-                                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                                            expanded = expanded
-                                                        )
-                                                    },
-                                                    modifier = Modifier.menuAnchor()
-                                                )
-
-                                                ExposedDropdownMenu(modifier = Modifier.height(300.dp),
-                                                    expanded = expanded,
-                                                    onDismissRequest = { expanded = false }) {
-                                                    coffeeDrinks.forEach { item ->
-                                                        DropdownMenuItem(text = { Text(text = item!!.nombre) },
-                                                            onClick = {
-                                                                selectedText = item?.nombre ?: ""
-                                                                expanded = false
-                                                                Toast.makeText(
-                                                                    context,
-                                                                    item!!.nombre,
-                                                                    Toast.LENGTH_SHORT
-                                                                ).show()
-                                                            })
-                                                    }
-                                                }
                                             }
                                         }
 
@@ -769,31 +743,31 @@ fun selector(
                                 mostrar.value = true
 
                                 //--------------------------555
-                                if (!nota.isNullOrEmpty()) {
-                                    viewmodel.onEvent(
-                                        ServiceEvent.CrearTicket(
-                                            ticket(
-                                                id_vendedor = 1,
-                                                id_cliente = 1,
-                                                id_tipo_venta = 1,
-                                                id_dispositivo = 1,
-                                                imei = email,
-                                                falla = falla,
-                                                descripcion = descrp,
-                                                nota = nota,
-                                                assesorios = accesorios,
-                                                total = total.toDouble(),
-                                                abono = abono.toDouble(),
-                                                presupuesto = precio.toDouble(),
-                                                subtotal = sub.toDouble(),
-                                                impuesto = impuesto.toDouble(),
-                                                fecha_inicio = LocalDate.now(),
-                                                fecha_final = LocalDate.now(),
-                                                estado = true
-                                            )
-                                        )
-                                    )
-                                }
+//                                if (!nota.isNullOrEmpty()) {
+//                                    viewmodel.onEvent(
+//                                        ServiceEvent.CrearTicket(
+//                                            ticket(
+//                                                id_vendedor = 1,
+//                                                id_cliente = 1,
+//                                                id_tipo_venta = 1,
+//                                                id_dispositivo = 1,
+//                                                imei = email,
+//                                                falla = falla,
+//                                                descripcion = descrp,
+//                                                nota = nota,
+//                                                assesorios = accesorios,
+//                                                total = total.toDouble(),
+//                                                abono = abono.toDouble(),
+//                                                presupuesto = precio.toDouble(),
+//                                                subtotal = sub.toDouble(),
+//                                                impuesto = impuesto.toDouble(),
+//                                                fecha_inicio = LocalDate.now(),
+//                                                fecha_final = LocalDate.now(),
+//                                                estado = true
+//                                            )
+//                                        )
+//                                    )
+//                                }
 
 
                             }) {
@@ -841,7 +815,7 @@ fun selector(
                                     .padding(bottom = 0.dp)
                                     .size(60.dp)
                                     .clickable {
-                                        viewmodel.onEvent(ServiceEvent.GetClientes)
+//                                        viewmodel.onEvent(ServiceEvent.GetClientes)
                                         openDialog.value = false
                                         mostrar1.value = true
                                     })
@@ -927,7 +901,7 @@ fun selector(
 
                             onClick = {
                                 if (!nuevoServicio.isNullOrEmpty()) {
-                                    viewmodel.onEvent(
+                                    viewmodel.onServiceEvent(
                                         ServiceEvent.CreateServicio(
                                             servicio(
                                                 nombre = nuevoServicio,
@@ -1045,21 +1019,21 @@ fun selector(
                             .padding(5.dp),
 
                             onClick = {
-                                if (!nom_comercial.isNullOrEmpty()) {
-                                    viewmodel.onEvent(
-                                        ServiceEvent.CrearDispositivo(
-                                            Dispositivo(
-                                                nombre_comercial = nom_comercial,
-                                                modelo = agra_modelo,
-                                                marca = agra_marca,
-                                            )
-                                        )
-                                    )
+//                                if (!nom_comercial.isNullOrEmpty()) {
+//                                    viewmodel.onEvent(
+//                                        ServiceEvent.CrearDispositivo(
+//                                            Dispositivo(
+//                                                nombre_comercial = nom_comercial,
+//                                                modelo = agra_modelo,
+//                                                marca = agra_marca,
+//                                            )
+//                                        )
+//                                    )
                                     openDialog2.value = false
 //                                    Toast.makeText(
 //                                       Text(text = "Guardado Existoxamente")
 //                                    )
-                             }
+                           //  }
 
                             }) {
                             Text("Guardar", color = Blanco)

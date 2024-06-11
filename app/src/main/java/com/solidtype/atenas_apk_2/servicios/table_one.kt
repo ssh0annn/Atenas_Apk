@@ -15,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -25,17 +28,18 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
-    if(state.listaServicios.isEmpty() ){
-        viewmodel.onEvent(ServiceEvent.GetServicios)
+
+    if(state.listaTickets.isEmpty()){
+        viewmodel.onTicket(OnTicket.GetTickets)
+    }
+    if(state.listaServicios.isEmpty()){
+        viewmodel.onServiceEvent(ServiceEvent.GetServicios)
     }
     if(state.listaClientes.isEmpty()){
-        viewmodel.onEvent(ServiceEvent.GetClientes)
+        viewmodel.onCliente(ClientEvents.GetClientes)
     }
     if(state.listaDispositivos.isEmpty()){
-        viewmodel.onEvent(ServiceEvent.GetDispositivos)
-    }
-    if (state.listaTickets.isEmpty()){
-        viewmodel.onEvent(ServiceEvent.GetTickets)
+        viewmodel.onDevice(DeviceEvent.GetDispositivos)
     }
     Column(
         //To.do

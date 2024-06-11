@@ -6,5 +6,6 @@ data class CasosClientes(
     val buscarClientes: BuscarClientes,
     val getClientes: GetClientes,
     val crearClientes: CrearClientes,
-    val eliminarPersona: EliminarPersona
+    val eliminarPersona: EliminarPersona,
+    val editarCliente: EditarCliente
 )

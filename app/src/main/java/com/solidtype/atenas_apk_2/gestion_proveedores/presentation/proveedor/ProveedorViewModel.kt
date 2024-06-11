@@ -70,7 +70,7 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
 
     private fun EditarUsuario(usuario: Personastodas.Proveedor) {
         viewModelScope.launch {
-           // casos.actualizar(usuario = usuario)
+            casos.editarProveedores(proveedor = usuario)
         }
     }
 
