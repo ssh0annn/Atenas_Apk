@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.TaskAlt
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -147,6 +148,8 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
 
 @Composable
 fun cliente(listacliente: List<Personastodas.ClienteUI?> = listOf()) {
+    var nombre by rememberSaveable { mutableStateOf("") }
+    var telefono by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -210,28 +213,31 @@ fun cliente(listacliente: List<Personastodas.ClienteUI?> = listOf()) {
                         ) {
                             Text(
                                 text = clientes?.nombre.toString(),
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(0.5f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
                                 text = clientes?.telefono.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
+
                             )
 
-                            Icon(imageVector = Icons.Filled.TaskAlt,
-                                contentDescription = "",
-                                tint = Color.Green,
-                                modifier = Modifier
-                                    .padding(bottom = 0.dp)
-                                    .size(60.dp)
-                                    .weight(1f)
-                                    .clickable {},
-                            )
+
+
+                                Box (modifier = Modifier
+                                .weight(0.5f)){
+
+                                card(clienteUI = clientes!!) {
+                                    nombre = clientes.nombre.toString()
+                                    telefono = clientes.telefono.toString()
+                                }
+                            }
                         }
                     }
                 }
             }
+            println(nombre + telefono)
         }
     }
 }
@@ -239,9 +245,17 @@ fun cliente(listacliente: List<Personastodas.ClienteUI?> = listOf()) {
 @Composable
 fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
 
-    Box(
+    Row(
         modifier = Modifier.clickable(onClick = onclick)
     ) {
-        Text(text = clienteUI.nombre.toString())
+        Icon(imageVector = Icons.Filled.TaskAlt,
+            contentDescription = "",
+            tint = AzulGris,
+            modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .size(60.dp),
+
+
+        )
     }
 }

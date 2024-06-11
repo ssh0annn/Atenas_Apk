@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.authentication.data.remote.Modelo
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
@@ -46,12 +47,13 @@ class ServiciosViewModel @Inject constructor(
 
     private fun createDispositivo(dispositivo: Dispositivo) {
         viewModelScope.launch {
-
+            dispositivo.id_dispositivo = System.currentTimeMillis()
             casosDispositivo.crearDispositivo(dispositivo)
         }
     }
 
-    private fun crearTicket(ticket: ticket) {
+    private fun crearTicket(
+        ticket: ticket) {
         viewModelScope.launch {
             casosTicket.crearTicket(ticket)
         }
