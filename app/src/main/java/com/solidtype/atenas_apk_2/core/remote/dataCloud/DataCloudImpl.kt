@@ -1,6 +1,8 @@
 package com.solidtype.atenas_apk_2.core.remote.dataCloud
 
 import android.util.Log
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
@@ -25,7 +27,21 @@ class DataCloudImpl @Inject constructor(
 ): DataCloud {
 
 
-    private val uidUser: String = autenticador.getCurrentUser()!!.uid
+//    private val uidUser: String = autenticador.getCurrentUser()!!.uid
+
+    private val user = Firebase.auth.currentUser
+    private var uidUser: String = ""
+
+    init {
+        setUserUid()
+    }
+
+    private fun setUserUid() {
+        user?.let {
+            uidUser = it.uid
+        }
+    }
+
 
 
     //se convierte el snashopt a json por medio de la
