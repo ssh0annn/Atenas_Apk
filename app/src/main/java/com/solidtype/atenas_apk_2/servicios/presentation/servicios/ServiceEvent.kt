@@ -31,6 +31,7 @@ sealed class DeviceEvent{
  * Eventos y actividades de pagos.
  */
 sealed class PagosEvent{
+    data class Impuestos(val impuestos:Boolean):PagosEvent()
 
     data class TipoDePago(val formaPagos: FormaPagos):PagosEvent()
 

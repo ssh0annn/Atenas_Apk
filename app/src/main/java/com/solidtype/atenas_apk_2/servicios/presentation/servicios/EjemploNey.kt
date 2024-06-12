@@ -207,7 +207,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
         Button(onClick = { /*TODO*/ }) {
             Text(text = "datos del equipo")
         }
-   
+
     }
     }
 

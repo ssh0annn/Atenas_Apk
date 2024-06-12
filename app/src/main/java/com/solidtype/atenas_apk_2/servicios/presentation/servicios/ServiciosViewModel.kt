@@ -204,10 +204,25 @@ class ServiciosViewModel @Inject constructor(
     fun onPayment(event: PagosEvent) {
         when (event) {
             is PagosEvent.DatosDelPago -> {
-                ticket.update { it.copy(datosFinance = event.finaciero) }
+                val datosRealeas = event.finaciero
+                if(uiStates.value.impuestos){
+                    datosRealeas.impuesto = datosRealeas.presupuesto * 0.18
+                    datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
+                    datosRealeas.total = datosRealeas.subtotal + datosRealeas.impuesto
+
+                }else{
+                    datosRealeas.impuesto = 0.0
+                    datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
+                    datosRealeas.total = datosRealeas.subtotal + datosRealeas.impuesto
+                }
+                ticket.update { it.copy(datosFinance = datosRealeas ) }
             }
             is PagosEvent.TipoDePago -> {
                 ticket.update { it.copy(tipoVenta = event.formaPagos)}
+            }
+
+            is PagosEvent.Impuestos -> {
+                uiStates.update { it.copy(impuestos = event.impuestos) }
             }
         }
     }
