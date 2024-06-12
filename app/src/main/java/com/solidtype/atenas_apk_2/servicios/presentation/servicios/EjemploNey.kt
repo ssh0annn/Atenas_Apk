@@ -55,14 +55,20 @@ import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.util.toLocalDate
 
 @Composable
 fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     val state by viewModel.uiStates.collectAsStateWithLifecycle()
+    val stateTicket by viewModel.ticket.collectAsStateWithLifecycle()
     var nuevoCliente by rememberSaveable { mutableStateOf(false) }
     var nuevoDispositivo by rememberSaveable { mutableStateOf(false) }
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
     var nuevoTicket by rememberSaveable { mutableStateOf(false) }
+    var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
+    var vendedor by rememberSaveable { mutableStateOf("") }
+
+
     var search by rememberSaveable {
         mutableStateOf("")
     }
@@ -82,6 +88,13 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
         NuevoServicio {
             viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
             nuevoServicios = !nuevoServicios
+        }
+
+    }
+   else if(nuevoDatosDelTicket){
+        NuevoDatosDelTicket{
+            viewModel.onTicket(OnTicket.InforTicket(it))
+            nuevoDatosDelTicket = !nuevoDatosDelTicket
         }
 
     }
@@ -111,7 +124,12 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(ScrollState(1))) {
-        SelectorMio("Vendedor", search, listOf(state.usuario.toString()), true) {
+        SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "", listOf(state.usuario).let {
+         it.map { user ->
+             user?.nombre.toString()
+         }
+
+        }, true) {
 
 
         }
@@ -159,26 +177,37 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             selecionado ->
             when(selecionado){
                 FormaPagos.CREDITO.toString() -> {
-                    //viewModel.onPayment(PagosEvent)
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDITO))
                 }
+                FormaPagos.EFECTIVO.toString()-> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.EFECTIVO))
+                }
+                FormaPagos.CREDIT_CARD.toString() -> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_CARD))
+                }
+                FormaPagos.TRANSATIONS.toString() -> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.TRANSATIONS))
+                }
+                FormaPagos.CREDIT_DEBIT.toString() -> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_DEBIT))
+                }
+
             }
         }
 
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Realizar Pago")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Datos del Ticket")
+        Button(onClick = { nuevoDatosDelTicket = true}) {
+            Text(text = "Detalles del Ticket")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Crear Tickets")
+        Button(onClick = { viewModel.onTicket(OnTicket.CrearTicket(viewModel.ticket.value)) }) {
+            Text(text = "Imprimir Tickets")
         }
         Button(onClick = { /*TODO*/ }) {
             Text(text = "datos del equipo")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Forma de Pago")
-        }
+   
     }
     }
 
@@ -428,15 +457,12 @@ fun NuevoServicio(onSubmit: (servicio) -> Unit) {
 }
 
 @Composable
-fun NuevoDatosDelTicket(onSubmit: (servicio) -> Unit) {
-    var nombre by remember { mutableStateOf("") }
-    var modelo by remember { mutableStateOf("") }
-    var marca by remember { mutableStateOf(true) }
+fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
     var imei by remember { mutableStateOf("") }
-    val falla by remember { mutableStateOf("") }
-    val descripcion by remember { mutableStateOf("") }
-    val nota by remember { mutableStateOf("") }
-    val assesorios by remember { mutableStateOf("") }
+    var falla by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var nota by remember { mutableStateOf("") }
+    var assesorios by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.padding(16.dp)) {
         TextField(
@@ -449,24 +475,40 @@ fun NuevoDatosDelTicket(onSubmit: (servicio) -> Unit) {
 
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
-            value = modelo,
-            onValueChange = { modelo = it },
+            value = falla,
+            onValueChange = { falla = it },
             label = { Text("Teléfono") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
-            value = marca.toString(),
-            onValueChange = { marca = true },
+            value = descripcion,
+            onValueChange = { descripcion = it },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = nota,
+            onValueChange = { nota = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = assesorios,
+            onValueChange = { assesorios = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
+            val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
             onSubmit(dispositivo)
         }) {
             Text("Crear Cliente")
+            "".toLocalDate()
         }
     }
 }

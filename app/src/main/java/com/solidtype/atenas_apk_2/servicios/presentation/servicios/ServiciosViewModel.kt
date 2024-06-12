@@ -134,7 +134,8 @@ class ServiciosViewModel @Inject constructor(
     private fun getCurrentUser() {
         viewModelScope.launch {
             casoCurrentUser.getUser().collect{ lista ->
-                uiStates.update { it.copy(usuario =lista.first().id_usuario) }
+                uiStates.update { it.copy(usuario =lista.first()) }
+                ticket.update { it.copy(vendedor =lista.first() ) }
             }
         }
     }
@@ -172,8 +173,8 @@ class ServiciosViewModel @Inject constructor(
                 viewModelScope.launch {
                     val usuario = casoCurrentUser.getUser().collect{  usuarioss ->
                        usuarioss.forEach {  user ->
-                           uiStates.update { it.copy(usuario = user.id_usuario) }
-                           ticket.update { it.copy(vendedor = user.id_usuario) } }
+                           uiStates.update { it.copy(usuario = user) }
+                           ticket.update { it.copy(vendedor = user) } }
                     }
 
                 }
@@ -230,9 +231,15 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             is OnTicket.CrearTicket -> {
                 println("Este es el ticket creado: ${event.ticket}")
+                ticket.update { it.copy(cliente = null, dispositivo = null,
+                    tipoVenta = null, servicio = null, detalles = null, datosFinance = null) }
             }
             OnTicket.GetTickets -> {
                 getTickets()
+            }
+
+            is OnTicket.InforTicket -> {
+                ticket.update { it.copy(detalles = event.infoTicket) }
             }
         }
     }

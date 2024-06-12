@@ -25,7 +25,6 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
         perfilAdmin()
     }
 
-
     fun onEvent(evento: PerfilEvent){
         when(evento){
             PerfilEvent.VerPerfil -> {
@@ -45,6 +44,5 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
                 _uiState.update { it.copy(perfilAdmin = administradores, isLoading = false) }
             }
         }
-
         }
     }

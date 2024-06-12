@@ -13,7 +13,9 @@ sealed class ServiceEvent {
 }
 sealed class OnTicket{
     object GetTickets : OnTicket()
+    data class InforTicket(val infoTicket: InfoTicket):OnTicket()
     data class CrearTicket(val ticket: ServicioTicket) : OnTicket()
+
 }
 sealed class ClientEvents{
     data class CrearCliente(val clienteUI: Personastodas.ClienteUI) : ClientEvents()
