@@ -142,7 +142,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             cliente?.let {
                 viewModel.onCliente(ClientEvents.ClienteSelecionado(it))
             }
-
+          
         }
         SelectorMio("Servicio", search, state.listaServicios.let {
                                                                  it.map { dato -> dato.nombre }
@@ -163,7 +163,6 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
                 }
             }
         }
-
 
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Realizar Pago")
@@ -400,6 +399,50 @@ fun NuevoServicio(onSubmit: (servicio) -> Unit) {
             value = nombre,
             onValueChange = { nombre = it },
             label = { Text("Nombre") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = modelo,
+            onValueChange = { modelo = it },
+            label = { Text("Teléfono") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = marca.toString(),
+            onValueChange = { marca = true },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
+            onSubmit(dispositivo)
+        }) {
+            Text("Crear Cliente")
+        }
+    }
+}
+
+@Composable
+fun NuevoDatosDelTicket(onSubmit: (servicio) -> Unit) {
+    var nombre by remember { mutableStateOf("") }
+    var modelo by remember { mutableStateOf("") }
+    var marca by remember { mutableStateOf(true) }
+    var imei by remember { mutableStateOf("") }
+    val falla by remember { mutableStateOf("") }
+    val descripcion by remember { mutableStateOf("") }
+    val nota by remember { mutableStateOf("") }
+    val assesorios by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        TextField(
+            value = imei,
+            onValueChange = { imei = it },
+            label = { Text("imei") },
             modifier = Modifier.fillMaxWidth()
         )
 
