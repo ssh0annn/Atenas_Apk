@@ -20,8 +20,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import kotlinx.coroutines.flow.MutableStateFlow;
 
+@AndroidEntryPoint
 public class PefilAdministrador extends AppCompatActivity {
     private EditText nombre_admin,correo_admin,clave_admin,nombre_empresa,direccion_empresa,numero_empresa;
     private Button btn_guardar, btn_cancelar;
@@ -41,14 +43,14 @@ public class PefilAdministrador extends AppCompatActivity {
         MutableStateFlow<PerfilUIState> perfilUI = viewModel.getUiState();
 
         // INICIACION DE CAMPOS EN VIEW
-        nombre_admin.findViewById(R.id.txt_perfil_nombre_admin);
-        correo_admin.findViewById(R.id.txt_perfil_correo_admin);
-        clave_admin.findViewById(R.id.txt_perfil_clave_admin);
-        nombre_empresa.findViewById(R.id.txt_perfil_nombre_empresa_admin);
-        direccion_empresa.findViewById(R.id.txt_perfil_direccion_empresa_admin);
-        numero_empresa.findViewById(R.id.txt_perfil_numero_telefono_admin);
-        btn_guardar.findViewById(R.id.perfil_config_btnguardar);
-        btn_cancelar.findViewById(R.id.perfil_config_btncancelar);
+        nombre_admin = findViewById(R.id.txt_perfil_nombre_admin);
+        correo_admin = findViewById(R.id.txt_perfil_correo_admin);
+        clave_admin = findViewById(R.id.txt_perfil_clave_admin);
+        nombre_empresa = findViewById(R.id.txt_perfil_nombre_empresa_admin);
+        direccion_empresa = findViewById(R.id.txt_perfil_direccion_empresa_admin);
+        numero_empresa = findViewById(R.id.txt_perfil_numero_telefono_admin);
+        btn_guardar = findViewById(R.id.perfil_config_btnguardar);
+        btn_cancelar = findViewById(R.id.perfil_config_btncancelar);
 
         // RELLENADO DE CAMPOS
         nombre_admin.setText(perfilUI.getValue().getPerfilAdmin().get(0).getNombre());

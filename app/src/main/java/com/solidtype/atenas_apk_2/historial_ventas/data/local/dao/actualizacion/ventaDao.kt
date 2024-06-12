@@ -23,8 +23,6 @@ interface ventaDao {
      fun getVentasByIdUsuario(id :Long): Flow<List<venta>>
     @Query("select * from venta where id_cliente ==:id")
      fun getVentasByIdPersona(id :Long): Flow<List<venta>>
-    @Query("select * from venta where id_tipo_venta ==:id")
-     fun getVentasByIdTipoVenta(id :Long): Flow<List<venta>>
     @Query("select * from venta where id_venta ==:id")
     suspend fun getVentasById(id :Int): venta
     @Query("select * from venta " +
@@ -34,10 +32,8 @@ interface ventaDao {
             "or id_tipo_venta like '%' || :any || '%'" +
             "and fecha between :fechaInicial and :fechaFinal")
     fun getVentasByIdsAndFecha(any : String, fechaInicial : LocalDate, fechaFinal : LocalDate):Flow<List<venta>>
-
     @Query("SELECT * FROM venta WHERE fecha BETWEEN :fechaI AND :fechaF")
     fun getHistorialVentaFechaCategoria(fechaI : LocalDate, fechaF: LocalDate): Flow<List<venta>>
-
     @Update
     suspend fun updateVenta(venta : venta)
     @Delete
