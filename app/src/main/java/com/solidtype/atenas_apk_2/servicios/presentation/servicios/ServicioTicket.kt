@@ -10,7 +10,7 @@ import java.time.LocalDate
 data class ServicioTicket(
     val cliente: Personastodas.ClienteUI?  = null,
     val dispositivo: Dispositivo? = null,
-    val vendedor: Long? = null,
+    val vendedor: usuario? = null,
     val tipoVenta: FormaPagos? = null,
     val detalles: InfoTicket? = null,
     val servicio: servicio? = null,
@@ -27,9 +27,9 @@ data class InfoTicket(
 )
 
 data class DatoFinancieros(
-    val presupuesto: Double = 0.0,
-    var abono: Double = 0.0,
-    val subtotal: Double = 0.0,
-    val impuesto: Double = 0.18,
-    val total: Double =0.0
+    val presupuesto: Double,
+    var abono: Double,
+    var subtotal: Double = 0.0,
+    var impuesto: Double = 0.18,
+    var total: Double =0.0
 )

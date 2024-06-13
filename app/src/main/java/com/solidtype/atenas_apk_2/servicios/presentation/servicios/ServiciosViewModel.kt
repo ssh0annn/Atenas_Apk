@@ -130,17 +130,16 @@ class ServiciosViewModel @Inject constructor(
                 }
 
             }
-
         }
     }
 
     private fun getCurrentUser() {
         viewModelScope.launch {
-        //    casoCurrentUser.getUser().collect{ lista ->
-              //  println(lista)
+            casoCurrentUser.getUser().collect{ lista ->
+//                uiStates.update { it.copy(usuario =lista.first()) }
+//                ticket.update { it.copy(vendedor =lista.first() ) }
+            }
 
-        //                uiStates.update { it.copy(usuario =lista.first().id_usuario) }
-           // }
         }
     }
 
@@ -177,8 +176,8 @@ class ServiciosViewModel @Inject constructor(
                 viewModelScope.launch {
                     val usuario = casoCurrentUser.getUser().collect{  usuarioss ->
                        usuarioss.forEach {  user ->
-                           uiStates.update { it.copy(usuario = user.id_usuario) }
-                           ticket.update { it.copy(vendedor = user.id_usuario) } }
+                           uiStates.update { it.copy(usuario = user) }
+                           ticket.update { it.copy(vendedor = user) } }
                     }
 
                 }
@@ -208,10 +207,25 @@ class ServiciosViewModel @Inject constructor(
     fun onPayment(event: PagosEvent) {
         when (event) {
             is PagosEvent.DatosDelPago -> {
-                ticket.update { it.copy(datosFinance = event.finaciero) }
+                val datosRealeas = event.finaciero
+                if(uiStates.value.impuestos){
+                    datosRealeas.impuesto = datosRealeas.presupuesto * 0.18
+                    datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
+                    datosRealeas.total = datosRealeas.subtotal + datosRealeas.impuesto
+
+                }else{
+                    datosRealeas.impuesto = 0.0
+                    datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
+                    datosRealeas.total = datosRealeas.subtotal + datosRealeas.impuesto
+                }
+                ticket.update { it.copy(datosFinance = datosRealeas ) }
             }
             is PagosEvent.TipoDePago -> {
                 ticket.update { it.copy(tipoVenta = event.formaPagos)}
+            }
+
+            is PagosEvent.Impuestos -> {
+                uiStates.update { it.copy(impuestos = event.impuestos) }
             }
         }
     }
@@ -235,9 +249,15 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             is OnTicket.CrearTicket -> {
                 println("Este es el ticket creado: ${event.ticket}")
+                ticket.update { it.copy(cliente = null, dispositivo = null,
+                    tipoVenta = null, servicio = null, detalles = null, datosFinance = null) }
             }
             OnTicket.GetTickets -> {
                 getTickets()
+            }
+
+            is OnTicket.InforTicket -> {
+                ticket.update { it.copy(detalles = event.infoTicket) }
             }
         }
     }

@@ -60,15 +60,24 @@ import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
+
+import com.solidtype.atenas_apk_2.util.toLocalDate
+
 
 @Composable
 fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     val state by viewModel.uiStates.collectAsStateWithLifecycle()
+    val stateTicket by viewModel.ticket.collectAsStateWithLifecycle()
     var nuevoCliente by rememberSaveable { mutableStateOf(false) }
     var nuevoDispositivo by rememberSaveable { mutableStateOf(false) }
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
     var nuevoTicket by rememberSaveable { mutableStateOf(false) }
+    var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
+    var vendedor by rememberSaveable { mutableStateOf("") }
+
+
     var search by rememberSaveable {
         mutableStateOf("")
     }
@@ -84,13 +93,21 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     if(state.listaDispositivos.isEmpty()){
         viewModel.onDevice(DeviceEvent.GetDispositivos)
     }
-//    if (nuevoServicios){
-//        NuevoServicio {
-//            viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
-//            nuevoServicios = !nuevoServicios
-//        }
-//
-//    }
+
+    if (nuevoServicios){
+        NuevoServicio {
+            viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
+            nuevoServicios = !nuevoServicios
+        }
+
+    }
+   else if(nuevoDatosDelTicket){
+        NuevoDatosDelTicket{
+            viewModel.onTicket(OnTicket.InforTicket(it))
+            nuevoDatosDelTicket = !nuevoDatosDelTicket
+        }
+
+    }
    else if (nuevoTicket){
        TODO()
 
@@ -117,7 +134,12 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(ScrollState(1))) {
-        SelectorMio("Vendedor", search, listOf(state.usuario.toString()), true) {
+        SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "", listOf(state.usuario).let {
+         it.map { user ->
+             user?.nombre.toString()
+         }
+
+        }, true) {
 
 
         }
@@ -147,7 +169,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             cliente?.let {
                 viewModel.onCliente(ClientEvents.ClienteSelecionado(it))
             }
-
+          
         }
         SelectorMio("Servicio", search, state.listaServicios.let {
             it.map { dato -> dato.nombre }
@@ -164,27 +186,37 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             selecionado ->
             when(selecionado){
                 FormaPagos.CREDITO.toString() -> {
-                    //viewModel.onPayment(PagosEvent)
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDITO))
                 }
+                FormaPagos.EFECTIVO.toString()-> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.EFECTIVO))
+                }
+                FormaPagos.CREDIT_CARD.toString() -> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_CARD))
+                }
+                FormaPagos.TRANSATIONS.toString() -> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.TRANSATIONS))
+                }
+                FormaPagos.CREDIT_DEBIT.toString() -> {
+                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_DEBIT))
+                }
+
             }
         }
-
 
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Realizar Pago")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Datos del Ticket")
+        Button(onClick = { nuevoDatosDelTicket = true}) {
+            Text(text = "Detalles del Ticket")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Crear Tickets")
+        Button(onClick = { viewModel.onTicket(OnTicket.CrearTicket(viewModel.ticket.value)) }) {
+            Text(text = "Imprimir Tickets")
         }
         Button(onClick = { /*TODO*/ }) {
             Text(text = "datos del equipo")
         }
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Forma de Pago")
-        }
+
     }
     }
 
@@ -771,4 +803,61 @@ fun NuevoServicio(onSubmit: (servicio) -> Unit) {
 //            Text("Crear Cliente")
 //        }
 //    }
+}
+
+@Composable
+fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
+    var imei by remember { mutableStateOf("") }
+    var falla by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var nota by remember { mutableStateOf("") }
+    var assesorios by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        TextField(
+            value = imei,
+            onValueChange = { imei = it },
+            label = { Text("imei") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = falla,
+            onValueChange = { falla = it },
+            label = { Text("Teléfono") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = descripcion,
+            onValueChange = { descripcion = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = nota,
+            onValueChange = { nota = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = assesorios,
+            onValueChange = { assesorios = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
+            onSubmit(dispositivo)
+        }) {
+            Text("Crear Cliente")
+            "".toLocalDate()
+        }
+    }
 }

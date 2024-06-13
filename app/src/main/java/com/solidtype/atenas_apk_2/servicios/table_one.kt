@@ -41,6 +41,7 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
     if(state.listaDispositivos.isEmpty()){
         viewmodel.onDevice(DeviceEvent.GetDispositivos)
     }
+
     Column(
         //To.do
         modifier = Modifier

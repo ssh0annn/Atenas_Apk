@@ -55,11 +55,13 @@ import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
+import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClienteForm
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoDevice
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoServicio
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.PagosEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
@@ -368,8 +370,10 @@ fun selector(
 //                                            }
                                             SelectorMio("Seleccinar Servicio", search, state.listaServicios.let {
                                                 it.map { dato -> dato.nombre
+
+
                                                 }
-                                            }, false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
+                                            },false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
                                                     selecion ->
                                                 val service = state.listaServicios.find { it.nombre == selecion }
                                                 service?.let {
@@ -643,6 +647,44 @@ fun selector(
 
                                                 ) {
                                                     total = it
+                                                }
+                                            }
+                                        }
+                                        Box(modifier = Modifier
+                                            .width(240.dp)
+                                            .padding(0.dp)
+                                            .clip(RoundedCornerShape(20.dp))){
+                                            SelectorMio("Forma de pago", search,
+                                                FormaPagos.entries.map {
+                                                    it.toString()
+                                                }, false) {
+                                                    selecionado ->
+                                                when(selecionado){
+                                                    FormaPagos.CREDITO.toString() -> {
+                                                        viewmodel.onPayment(
+                                                            PagosEvent.TipoDePago(
+                                                                FormaPagos.CREDITO))
+                                                    }
+                                                    FormaPagos.EFECTIVO.toString()-> {
+                                                        viewmodel.onPayment(
+                                                            PagosEvent.TipoDePago(
+                                                                FormaPagos.EFECTIVO))
+                                                    }
+                                                    FormaPagos.CREDIT_CARD.toString() -> {
+                                                        viewmodel.onPayment(
+                                                            PagosEvent.TipoDePago(
+                                                                FormaPagos.CREDIT_CARD))
+                                                    }
+                                                    FormaPagos.TRANSATIONS.toString() -> {
+                                                        viewmodel.onPayment(
+                                                            PagosEvent.TipoDePago(
+                                                                FormaPagos.TRANSATIONS))
+                                                    }
+                                                    FormaPagos.CREDIT_DEBIT.toString() -> {
+                                                        viewmodel.onPayment(
+                                                            PagosEvent.TipoDePago(
+                                                                FormaPagos.CREDIT_DEBIT))
+                                                    }
                                                 }
                                             }
                                         }
