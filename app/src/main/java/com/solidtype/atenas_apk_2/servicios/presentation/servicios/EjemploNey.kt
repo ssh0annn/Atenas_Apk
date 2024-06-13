@@ -4,6 +4,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +28,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -51,10 +55,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.servicios.Input
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
 @Composable
 fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
@@ -78,13 +84,13 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     if(state.listaDispositivos.isEmpty()){
         viewModel.onDevice(DeviceEvent.GetDispositivos)
     }
-    if (nuevoServicios){
-        NuevoServicio {
-            viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
-            nuevoServicios = !nuevoServicios
-        }
-
-    }
+//    if (nuevoServicios){
+//        NuevoServicio {
+//            viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
+//            nuevoServicios = !nuevoServicios
+//        }
+//
+//    }
    else if (nuevoTicket){
        TODO()
 
@@ -128,8 +134,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             }
 
         }
-        SelectorMio(
-            "Cliente", search,
+        SelectorMio("Seleccionar Cliente", search,
             state.listaClientes.let {
                 it.map { persona ->
                     persona?.nombre.toString()
@@ -203,12 +208,14 @@ fun SelectorMio(
     val focusRequester = remember { FocusRequester() }
 
     ExposedDropdownMenuBox(
+        modifier = Modifier .background(Blanco),
         expanded = expanded.value,
         onExpandedChange = {
             expanded.value = !expanded.value
         }
     ) {
         TextField(
+
             value = searchText,
             onValueChange = {
                 searchText = it
@@ -258,6 +265,7 @@ fun SelectorMio(
         val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
         if (filteredItems.isNotEmpty()) {
             ExposedDropdownMenu(
+                modifier = Modifier .background(Blanco),
                 expanded = expanded.value,
                 onDismissRequest = {
                     // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
@@ -309,121 +317,458 @@ fun <T> componente(data:T, onClick:() ->Unit ){
 
 }
 
+@OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
     var nombre by remember { mutableStateOf("") }
     var documento by remember { mutableStateOf("") }
     var telefono by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var openDialog = remember { mutableStateOf( false) }
 
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre") },
+    if (!openDialog.value) {
+        Box(
             modifier = Modifier.fillMaxWidth()
-        )
 
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog.value = false
+                    },
+                    text = {
 
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = telefono,
-            onValueChange = { telefono = it },
-            label = { Text("Teléfono") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
-            onSubmit(cliente)
-        }) {
-            Text("Crear Cliente")
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                //titulo
+                                Spacer(modifier = Modifier.padding(top = 15.dp))
+                                Text(
+                                    text = "Nuevo Cliente",
+                                    color = AzulGris,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 35.sp,
+                                )
+
+                                //cuerpo1
+//                        Column(
+//                            modifier = Modifier.padding(top = 25.dp)
+//                        ) {
+                                Spacer(modifier = Modifier.height(30.dp))
+                                Input(
+                                    label = "Nombre",
+                                    valor = nombre,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    nombre = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Telefono",
+                                    valor = telefono,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    telefono = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Email",
+                                    valor = email,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    email = it
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                            //}
+                        }
+                    },
+
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+
+                            onClick = {
+                                    val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
+                                  onSubmit(cliente)
+
+                            }) {
+                            Text("Guardar", color = Blanco)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                openDialog.value = true
+                            },
+                        ) {
+                            Text("Salir", color = Blanco)
+                        }
+                    },
+
+                    modifier = Modifier
+                        .width(400.dp)
+                        .height(450.dp)
+                )
+            }
         }
     }
+
+
+
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        TextField(
+//            value = nombre,
+//            onValueChange = { nombre = it },
+//            label = { Text("Nombre") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//        TextField(
+//            value = telefono,
+//            onValueChange = { telefono = it },
+//            label = { Text("Teléfono") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(8.dp))
+//        TextField(
+//            value = email,
+//            onValueChange = { email = it },
+//            label = { Text("Email") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Button(onClick = {
+//            val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
+//            onSubmit(cliente)
+//        }) {
+//            Text("Crear Cliente")
+//        }
+//    }
 }
+@OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
     var nombre by remember { mutableStateOf("") }
     var modelo by remember { mutableStateOf("") }
     var marca by remember { mutableStateOf("") }
+    var openDialog = remember { mutableStateOf( false) }
 
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre") },
+    if (!openDialog.value) {
+        Box(
             modifier = Modifier.fillMaxWidth()
-        )
 
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog.value = false
+                    },
+                    text = {
 
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = modelo,
-            onValueChange = { modelo = it },
-            label = { Text("Teléfono") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = marca,
-            onValueChange = { marca = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
-            onSubmit(dispositivo)
-        }) {
-            Text("Crear Cliente")
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                //titulo
+                                Spacer(modifier = Modifier.padding(top = 15.dp))
+                                Text(
+                                    text = "Nuevo Dipositivo",
+                                    color = AzulGris,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 35.sp,
+                                )
+
+                                //cuerpo1
+//                        Column(
+//                            modifier = Modifier.padding(top = 25.dp)
+//                        ) {
+                                Spacer(modifier = Modifier.height(30.dp))
+                                Input(
+                                    label = "Dipositivo",
+                                    valor = nombre,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    nombre = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Modelo",
+                                    valor = modelo,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    modelo = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Marca",
+                                    valor = marca,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    marca = it
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                            //}
+                        }
+                    },
+
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+
+                            onClick = {
+                                val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
+                                 onSubmit(dispositivo)
+
+                            }) {
+                            Text("Guardar", color = Blanco)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                openDialog.value = true
+                            },
+                        ) {
+                            Text("Salir", color = Blanco)
+                        }
+                    },
+
+                    modifier = Modifier
+                        .width(400.dp)
+                        .height(450.dp)
+                )
+            }
         }
     }
+
+
+
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        TextField(
+//            value = nombre,
+//            onValueChange = { nombre = it },
+//            label = { Text("Nombre") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//        TextField(
+//            value = modelo,
+//            onValueChange = { modelo = it },
+//            label = { Text("Teléfono") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(8.dp))
+//        TextField(
+//            value = marca,
+//            onValueChange = { marca = it },
+//            label = { Text("Email") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Button(onClick = {
+//            val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
+//            onSubmit(dispositivo)
+//        }) {
+//            Text("Crear Cliente")
+//        }
+//    }
 }
+@OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun NuevoServicio(onSubmit: (servicio) -> Unit) {
     var nombre by remember { mutableStateOf("") }
     var modelo by remember { mutableStateOf("") }
     var marca by remember { mutableStateOf(true) }
+    var openDialog1 = remember { mutableStateOf( false) }
 
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre") },
+    if (!openDialog1.value) {
+        Box(
             modifier = Modifier.fillMaxWidth()
-        )
 
+        ) {
+        Box(
+        modifier = Modifier.fillMaxWidth()
+        ) {
+        AlertDialog(
+            onDismissRequest = {
+                openDialog1.value = false
+            },
+            text = {
 
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = modelo,
-            onValueChange = { modelo = it },
-            label = { Text("Teléfono") },
-            modifier = Modifier.fillMaxWidth()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        //titulo
+                        Spacer(modifier = Modifier.padding(top = 15.dp))
+                        Text(
+                            text = "Nuevo Servicio",
+                            color = AzulGris,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 35.sp,
+                        )
+
+                        //cuerpo1
+//                        Column(
+//                            modifier = Modifier.padding(top = 25.dp)
+//                        ) {
+                        Spacer(modifier = Modifier.height(30.dp))
+                            Input(
+                                label = "Nombre",
+                                valor = nombre,
+                                derecho = true,
+                                modifier = Modifier
+                            ){
+                                nombre = it
+                            }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Input(
+                            label = "Descripcion",
+                            valor = modelo,
+                            derecho = true,
+                            modifier = Modifier
+                        ){
+                            modelo = it
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Input(
+                            label = "Estado",
+                            valor = marca.toString(),
+                            derecho = true,
+                            modifier = Modifier
+                        ){
+                            marca = true
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    //}
+                }
+            },
+
+            confirmButton = {
+                TextButton(modifier = Modifier
+                    .background(
+                        AzulGris, shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(5.dp),
+
+                    onClick = {
+                        val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
+                        onSubmit(dispositivo)
+
+                    }) {
+                    Text("Guardar", color = Blanco)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    modifier = Modifier
+                        .background(Rojo, shape = RoundedCornerShape(20.dp))
+                        .padding(5.dp),
+                    onClick = {
+                        openDialog1.value = true
+                    },
+                ) {
+                    Text("Salir", color = Blanco)
+                }
+            },
+
+            modifier = Modifier
+                .width(400.dp)
+                .height(450.dp)
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = marca.toString(),
-            onValueChange = { marca = true },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
-            onSubmit(dispositivo)
-        }) {
-            Text("Crear Cliente")
+    }
         }
     }
+
+
+
+
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        TextField(
+//            value = nombre,
+//            onValueChange = { nombre = it },
+//            label = { Text("Nombre") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//        TextField(
+//            value = modelo,
+//            onValueChange = { modelo = it },
+//            label = { Text("Teléfono") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(8.dp))
+//        TextField(
+//            value = marca.toString(),
+//            onValueChange = { marca = true },
+//            label = { Text("Email") },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Button(onClick = {
+//            val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
+//            onSubmit(dispositivo)
+//        }) {
+//            Text("Crear Cliente")
+//        }
+//    }
 }

@@ -138,7 +138,8 @@ class ServiciosViewModel @Inject constructor(
         viewModelScope.launch {
         //    casoCurrentUser.getUser().collect{ lista ->
               //  println(lista)
-//                uiStates.update { it.copy(usuario =lista.first().id_usuario) }
+
+        //                uiStates.update { it.copy(usuario =lista.first().id_usuario) }
            // }
         }
     }

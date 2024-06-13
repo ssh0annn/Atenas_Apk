@@ -55,6 +55,10 @@ import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClienteForm
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoDevice
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoServicio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
@@ -76,6 +80,8 @@ fun selector(
 
     var search by rememberSaveable { mutableStateOf("") }
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
+    var nuevoCliente by rememberSaveable { mutableStateOf(false) }
+    var nuevoDispositivo by rememberSaveable { mutableStateOf(false) }
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     val listacliente = state.listaClientes
@@ -145,6 +151,15 @@ fun selector(
             viewmodel.onServiceEvent(ServiceEvent.CreateServicio(it))
             nuevoServicios = !nuevoServicios
         }
+    }
+    else if(nuevoCliente){
+        ClienteForm(onSubmit ={cliente -> viewmodel.onCliente(ClientEvents.CrearCliente(cliente))
+            nuevoCliente = !nuevoCliente
+        })
+    }
+    else if (nuevoDispositivo){
+        NuevoDevice(){dispositivo -> viewmodel.onDevice(DeviceEvent.CrearDispositivo(dispositivo))
+            nuevoDispositivo = !nuevoDispositivo}
 
     }
     if (mostrar1.value) {
@@ -349,14 +364,16 @@ fun selector(
                                                 .padding(0.dp)
                                                 .clip(RoundedCornerShape(10.dp))
                                         ) {
-                                            SelectorMio("Vendedor", search, listOf(state.usuario.toString()), true) {
-                                            }
-                                            SelectorMio("Servicio", search, state.listaServicios.let {
-                                                it.map { dato -> dato.nombre }
+//                                            SelectorMio("Vendedor", search, listOf(state.usuario.toString()), true) {
+//                                            }
+                                            SelectorMio("Seleccinar Servicio", search, state.listaServicios.let {
+                                                it.map { dato -> dato.nombre
+                                                }
                                             }, false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
                                                     selecion ->
                                                 val service = state.listaServicios.find { it.nombre == selecion }
-                                                service?.let { viewmodel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
+                                                service?.let {
+                                                    viewmodel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
 
                                             }
                                         }
@@ -384,7 +401,9 @@ fun selector(
                                                     valor = selectedText,
                                                     derecho = true,
                                                     modifier = Modifier
-                                                ) {}
+                                                ) {
+                                                    selectedText = it
+                                                }
                                             }
 
                                             Row {
@@ -456,140 +475,43 @@ fun selector(
                                             modifier = Modifier.padding(top = 25.dp)
                                         ) {
 
-                                            Box() {
+                                            Box(modifier = Modifier
+                                                .width(240.dp)
+                                                .padding(0.dp)
+                                                .clip(RoundedCornerShape(20.dp))) {
                                                 //------------->selector cliente<-----------------
-                                                ExposedDropdownMenuBox(
-                                                    expanded = expande,
-                                                    onExpandedChange = {
-                                                        expande = !expande
+                                                SelectorMio(
+                                                    "Seleccionar Cliente", search, state.listaClientes.let {
+                                                        it.map { persona -> persona?.nombre.toString()
+                                                        }
+                                                    },
+                                                    false,onClickAgregar = {nuevoCliente= !nuevoCliente
+
                                                     }
                                                 ) {
-                                                    TextField(
-                                                        modifier = Modifier
-                                                            .width(240.dp)
-                                                            .padding(0.dp)
-                                                            .menuAnchor()
-                                                            .clip(RoundedCornerShape(15.dp)),
-                                                        value = nombre,
-                                                        onValueChange = { nombre = it },
-                                                        label = {
-                                                            Text(
-                                                                text = "Selecionar cliente",
-                                                                color = Color.Black,
-                                                                fontSize = 16.sp,
-                                                            )
-                                                        },
-                                                        trailingIcon = {
-                                                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                                                expanded = expande
-                                                            )
-                                                        },
-                                                    )
+                                                        selecion ->
+                                                    val cliente = state.listaClientes.find { it?.nombre == selecion }
+                                                    cliente?.let {
+                                                        viewmodel.onCliente(ClientEvents.ClienteSelecionado(it))
+                                                    }
 
-                                                    val filteredOptions = coffee.filter {
-                                                        it?.nombre?.contains(
-                                                            nombre,
-                                                            ignoreCase = true
-                                                        ) == true
-                                                    }
-                                                    if (filteredOptions.isNotEmpty()) {
-                                                        ExposedDropdownMenu(
-                                                            expanded = expande,
-                                                            onDismissRequest = {
-                                                                // We shouldn't hide the menu when the user enters/removes any character
-                                                            }
-                                                        ) {
-                                                            filteredOptions.forEach { item ->
-                                                                DropdownMenuItem(text = {
-                                                                    item!!.nombre?.let {
-                                                                        Text(
-                                                                            text = it
-                                                                        )
-                                                                    }
-                                                                },
-                                                                    onClick = {
-                                                                        nombre = item?.nombre ?: ""
-                                                                        telefono = item?.telefono.toString()
-                                                                        email = item?.email.toString()
-                                                                        expande = false
-                                                                        Toast.makeText(
-                                                                            contex,
-                                                                            item!!.nombre,
-                                                                            Toast.LENGTH_SHORT
-                                                                        ).show()
-                                                                    }
-                                                                )
-                                                            }
-                                                        }
-                                                    }
                                                 }
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
-                                            Box() {
+                                            Box(modifier = Modifier
+                                                .width(240.dp)
+                                                .padding(0.dp)
+                                                .clip(RoundedCornerShape(20.dp))) {
                                                 //------------------seleccion modeo------------------
-                                                ExposedDropdownMenuBox(
-                                                    expanded = expande1,
-                                                    onExpandedChange = {
-                                                        expande1 = !expande1
-                                                    }
-                                                ) {
-                                                    TextField(
-                                                        modifier = Modifier
-                                                            .width(240.dp)
-                                                            .padding(0.dp)
-                                                            .menuAnchor()
-                                                            .clip(RoundedCornerShape(15.dp)),
-                                                        value = modelo,
-                                                        onValueChange = { modelo = it },
-                                                        label = {
-                                                            Text(
-                                                                text = "Selecionar modelo",
-                                                                color = Color.Black,
-                                                                fontSize = 16.sp,
-                                                            )
-                                                        },
-                                                        trailingIcon = {
-                                                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                                                expanded = expande1
-                                                            )
-                                                        },
-                                                    )
+                                                SelectorMio("Servicio", search, state.listaServicios.let {
+                                                    it.map { dato -> dato.nombre }
+                                                }, false, onClickAgregar = {nuevoServicios = !nuevoServicios
 
-                                                    val filteredOptions = coffee1.filter {
-                                                        it?.modelo?.contains(
-                                                            modelo,
-                                                            ignoreCase = true
-                                                        ) == true
-                                                    }
-                                                    if (filteredOptions.isNotEmpty()) {
-                                                        ExposedDropdownMenu(
-                                                            expanded = expande1,
-                                                            onDismissRequest = {
-                                                                // We shouldn't hide the menu when the user enters/removes any character
-                                                            }
-                                                        ) {
-                                                            filteredOptions.forEach { item ->
-                                                                DropdownMenuItem(text = {
-                                                                    item!!.modelo.let {
-                                                                        Text(
-                                                                            text = it
-                                                                        )
-                                                                    }
-                                                                },
-                                                                    onClick = {
-                                                                        modelo = item?.modelo ?: ""
-                                                                        marca = item?.marca.toString()
-                                                                        expande1 = false
-                                                                        Toast.makeText(
-                                                                            contex1,
-                                                                            item!!.modelo,
-                                                                            Toast.LENGTH_SHORT
-                                                                        ).show()
-                                                                    }
-                                                                )
-                                                            }
-                                                        }
-                                                    }
+                                                }  ) {
+                                                        selecion ->
+                                                    val service = state.listaServicios.find { it.nombre == selecion }
+                                                    service?.let { viewmodel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
+
                                                 }
                                             }
                                         }
