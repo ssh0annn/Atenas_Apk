@@ -650,6 +650,7 @@ fun selector(
                                                 }
                                             }
                                         }
+                                        Spacer(modifier = Modifier.padding(top = 20.dp))
                                         Box(modifier = Modifier
                                             .width(240.dp)
                                             .padding(0.dp)
