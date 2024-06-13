@@ -49,6 +49,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -320,23 +321,9 @@ fun ClienteScreen(
             }
         }
     }
-
+    MenuLateral(navController)
 }
 
-
-
-
-
-
-@Preview(
-    backgroundColor = 0xFFFFFFFF, showBackground = true, widthDp = 1080, heightDp = 560
-)
-@Composable
-fun previewTable(){
-    MaterialTheme {
-       // ClienteScreen()
-    }
-}
 
 
 
