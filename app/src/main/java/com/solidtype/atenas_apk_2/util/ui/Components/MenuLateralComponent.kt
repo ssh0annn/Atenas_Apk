@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +47,8 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 @Composable
 fun MenuLateral(navController: NavController) {
     val mostrarMenu = rememberSaveable { mutableStateOf(false) }
-    AnimatedVisibility(
+    val noHoverInteractionSource = remember { MutableInteractionSource() }
+        AnimatedVisibility(
         visible = mostrarMenu.value,
         enter = fadeIn(tween(500)),
         exit = fadeOut(tween(500))
@@ -53,6 +56,10 @@ fun MenuLateral(navController: NavController) {
         Box( //Fondo
             modifier = Modifier
                 .fillMaxSize()
+                .clickable (
+                    interactionSource = noHoverInteractionSource,
+                    indication = null
+                ) { if (mostrarMenu.value) mostrarMenu.value = false }
                 .background(semiTransparente)
         )
     }
@@ -96,7 +103,7 @@ fun MenuLateral(navController: NavController) {
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                         Boton("Inventario", anchoTotal = true) {
-                            navController.navigate(Screens.Inventario.route)
+                            navController.navigate(Screens.Productos.route)
                             mostrarMenu.value = false
                         }
                         Boton("Gestor de Usuario", anchoTotal = true) {
@@ -105,6 +112,14 @@ fun MenuLateral(navController: NavController) {
                         }
                         Boton("Historial", anchoTotal = true) {
                             navController.navigate(Screens.HistorialVentasTickets.route)
+                            mostrarMenu.value = false
+                        }
+                        Boton("Facturas", anchoTotal = true) {
+                            navController.navigate(Screens.Factura.route)
+                            mostrarMenu.value = false
+                        }
+                        Boton("Gestion de Usuarios", anchoTotal = true) {
+                            navController.navigate(Screens.GestionUsuarios.route)
                             mostrarMenu.value = false
                         }
                     }

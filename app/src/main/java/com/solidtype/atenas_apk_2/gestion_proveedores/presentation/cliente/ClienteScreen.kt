@@ -143,7 +143,7 @@ fun ClienteScreen(
             }
         }
     }
-    Dialogo(max = false,titulo = if (editar.value)  "Editar Cliente" else  "Nuevo Cliente", mostrar = mostrarDialogo.value, onCerrarDialogo = { mostrarDialogo.value = false }) {
+    Dialogo(max = false,titulo = if (editar.value)  "Editar Cliente" else  "Nuevo Cliente", mostrar = mostrarDialogo.value, onCerrarDialogo = { mostrarDialogo.value = false }, clickable = true) {
         Column(
             modifier = Modifier
                 .background(Color(0xFFEEEEEE), RoundedCornerShape(20.dp))
