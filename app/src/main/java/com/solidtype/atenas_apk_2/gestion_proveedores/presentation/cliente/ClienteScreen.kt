@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.internal.enableLiveLiterals
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -162,25 +163,12 @@ fun ClienteScreen(
 
                 InputDetalle(
 
-                    label = "ID",
-                    valor = idCliente.value,
-                ) {
-                    idCliente.value = it
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-
-                InputDetalle(
-
                         label = "Nombre",
                         valor = nombre.value,
                     ) {
                         nombre.value = it
                     }
 
-               /* Spacer(modifier = Modifier.height(10.dp))
-                AutocompleteSelect(text = "Tipo de Documento", variableStr = Tipodocumento.value, items = DocumetSelector) {
-                    Tipodocumento.value = it
-                }*/
                 Spacer(modifier = Modifier.height(10.dp))
                 InputDetalle(
                     label = "Numero de documento",
@@ -211,11 +199,14 @@ fun ClienteScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                val camposCompletos = nombre.value.isNotEmpty() && Numdocumento.value.isNotEmpty() && Email.value.isNotEmpty() && Telefono.value.isNotEmpty()
+
+
                 if (editar.value)
                     Boton("Editar") {
 
                         try {
-                            if (idCliente.value.isEmpty() || nombre.value.isEmpty() || Email.value.isEmpty() || Telefono.value.isEmpty() || Numdocumento.value.isEmpty()) {
+                            if (!camposCompletos) {
                                 throw Exception("Campos vacios.")
                             }
                             viewModel.onUserEvent(
@@ -238,15 +229,15 @@ fun ClienteScreen(
 
                     }
                 else
-                Boton("Agregar") {
+                Boton("Agregar", habilitar = camposCompletos) {
                     try {
-                        if (idCliente.value.isEmpty() || nombre.value.isEmpty() || Email.value.isEmpty() || Telefono.value.isEmpty() || Numdocumento.value.isEmpty()) {
+                        if (!camposCompletos) {
                             throw Exception("Campos vacios.")
                         }
                         viewModel.onUserEvent(
                             ClienteEvent.AgregarClientes(
                                 Personastodas.ClienteUI(
-                                    idCliente.value.toLong(),
+                                    0,
                                     nombre.value,
                                     Numdocumento.value,
                                     Email.value,
@@ -255,7 +246,6 @@ fun ClienteScreen(
                             )
                         )
 
-                        idCliente.value = ""
                         nombre.value = ""
                         Numdocumento.value = ""
                         Email.value = ""
