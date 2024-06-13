@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.util.ui.Components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -40,23 +40,15 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
-import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun MenuLateral(navController: NavController) {
     val mostrarMenu = rememberSaveable { mutableStateOf(false) }
     AnimatedVisibility(
-        //Aparecer (opacity)
         visible = mostrarMenu.value,
-        enter = fadeIn(
-            animationSpec = tween(500)
-        ),
-        exit = fadeOut(
-            animationSpec = tween(500)
-        )
+        enter = fadeIn(tween(500)),
+        exit = fadeOut(tween(500))
     ) {
         Box( //Fondo
             modifier = Modifier
