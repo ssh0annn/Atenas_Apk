@@ -18,7 +18,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ventas
 import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.HistorialScreen
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 import com.solidtype.atenas_apk_2.servicios.servicios

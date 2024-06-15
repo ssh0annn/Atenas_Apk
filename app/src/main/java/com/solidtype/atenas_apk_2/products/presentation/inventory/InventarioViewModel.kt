@@ -60,7 +60,9 @@ class InventarioViewModel @Inject constructor(
         viewModelScope.launch {
             casosInventario.createProductos(entidad)
             withContext(Dispatchers.Default) {
+
                // syncProductos()
+
             }
         }
 
@@ -71,7 +73,9 @@ class InventarioViewModel @Inject constructor(
 
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
+
                 //syncProductos()
+
             }
             productos.collect { product ->
                 uiState.update {
@@ -134,7 +138,9 @@ class InventarioViewModel @Inject constructor(
     fun syncProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
+
                // casosInventario.syncProductos()
+
             }
         }
     }

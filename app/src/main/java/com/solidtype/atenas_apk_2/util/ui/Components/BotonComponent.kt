@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.util.ui.Components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +20,7 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 fun Boton(
     text: String = "",
     habilitar: Boolean = true,
+    anchoTotal: Boolean = false,
     icon: @Composable (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
@@ -32,6 +34,12 @@ fun Boton(
         if(icon != null) Modifier
             .size(80.dp)
             .padding(5.dp)
+        else if(anchoTotal)
+            Modifier
+                .padding(10.dp)
+                .height(50.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
         else Modifier
             .padding(10.dp)
             .width(120.dp)

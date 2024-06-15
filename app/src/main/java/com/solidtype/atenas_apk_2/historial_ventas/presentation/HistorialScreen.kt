@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial
+package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -32,13 +32,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.AreaVentas
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.AvatarConBotones
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.DatePickerDialogoSimple
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.Inputs
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets.Tabla
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AreaVentas
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AvatarConBotones
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.DatePickerDialogoSimple
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Inputs
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Tabla
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 import kotlinx.coroutines.Job
@@ -122,6 +122,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
             DatePickerDialogoSimple(identificador, selected, showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin, context)
             DatePickerDialogoSimple(identificador, selected, showDatePicker2, datePickerState2, fechaIni, viewModel, fechaFin, context)
         }
+        MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
 }
