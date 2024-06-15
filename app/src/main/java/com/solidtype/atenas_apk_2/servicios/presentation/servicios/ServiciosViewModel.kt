@@ -5,15 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.authentication.data.remote.Modelo
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
+
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_cliente.ClientesManage
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_dispositivos.DispositivosManger
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets.TicketsManeger
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servicios.CasosTipoServicios
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_usuario.GetCurrentUserEmail
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
-import com.solidtype.atenas_apk_2.servicios.presentation.ticket.TicketEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -174,7 +172,7 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             VendedorEvent.GetCurrentUser -> {
                 viewModelScope.launch {
-                    val usuario = casoCurrentUser.getUser().collect{  usuarioss ->
+                   casoCurrentUser.getUser().collect{  usuarioss ->
                        usuarioss.forEach {  user ->
                            uiStates.update { it.copy(usuario = user) }
                            ticket.update { it.copy(vendedor = user) } }

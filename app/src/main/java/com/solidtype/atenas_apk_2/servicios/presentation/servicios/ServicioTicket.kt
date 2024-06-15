@@ -28,7 +28,7 @@ data class InfoTicket(
 
 data class DatoFinancieros(
     val presupuesto: Double,
-    var abono: Double,
+    var abono: Double = 0.0,
     var subtotal: Double = 0.0,
     var impuesto: Double = 0.18,
     var total: Double =0.0
