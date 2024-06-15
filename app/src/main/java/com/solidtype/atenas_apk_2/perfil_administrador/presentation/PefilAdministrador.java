@@ -8,11 +8,12 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.compose.ui.platform.ComposeView;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import com.solidtype.atenas_apk_2.R;
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel;
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent;
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilUIState;
-import javax.inject.Inject;
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateralComponentKt;
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlinx.coroutines.flow.StateFlow;
 
@@ -30,6 +31,9 @@ public class PefilAdministrador extends AppCompatActivity {
 
         // OBJETO COMPOSEBLE INICADO Y ACTUANDO
         ComposeView hello = findViewById(R.id.jetpack);
+        hello.setContent(
+                PerfilAdminKtKt.MenuLateralSinParametro();
+        );
 
         // INICIO DE VIEWMODEL Y UISTATE
         viewModel = new ViewModelProvider(this).get(AdminViewModel.class);

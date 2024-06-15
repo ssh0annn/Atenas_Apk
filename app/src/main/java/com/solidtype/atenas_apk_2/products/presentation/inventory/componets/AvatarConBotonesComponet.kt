@@ -26,11 +26,11 @@ fun AvatarConBotones(
         modifier = Modifier.padding(top = 10.dp)
     ) { //Avatar y Botones
         //Avatar
-        if (true) { // si no hay imagen de perfil
+        /*if (true) { // si no hay imagen de perfil
             Avatar()
         } else {//Mostrar foto de perfil
             //Image(painter = , contentDescription = )
-        }
+        }*/
         Spacer(modifier = Modifier.width(400.dp))
         Row {
             //Botones para Importar, Exportar y Ver

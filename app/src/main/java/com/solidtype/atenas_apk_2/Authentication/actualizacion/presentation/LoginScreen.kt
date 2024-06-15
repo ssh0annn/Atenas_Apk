@@ -230,6 +230,7 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
                     onClick = {
                         viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value))
                         if(checked.value) viewModel.onEvent(AuthEvent.Recuerdame(email.value))
+                        else viewModel.onEvent(AuthEvent.EliminarRecuerdos)
                     },
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
