@@ -8,7 +8,6 @@ import androidx.room.TypeConverters
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
-import com.solidtype.atenas_apk_2.gestion_tickets.data.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
@@ -21,7 +20,6 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.detalle_ticket
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona

@@ -24,7 +24,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, usuario: String) {
 
 
     LazyColumn(
@@ -38,7 +38,7 @@ fun HomeScreen(navController: NavController) {
     ) {
         item {
             Text(
-                text = "Pantallas",
+                text = "Pantallas $usuario",
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(android.graphics.Color.parseColor("#343341"))

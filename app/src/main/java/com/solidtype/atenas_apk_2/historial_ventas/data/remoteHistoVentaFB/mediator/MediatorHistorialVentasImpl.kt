@@ -19,13 +19,13 @@ class MediatorHistorialVentasImpl @Inject constructor(
     private val colletionName = "Historial_Ventas"
 
     override suspend operator fun invoke()  {
-        Log.e("Entre","Entre a la funcion Historial asyc" +
+        Log.e("EntreHitorial","Entre a la funcion Historial asyc" +
                 " async")
         val querySnapshotDesdeFireStore = caputarDatosFirebaseEnSnapshot()
         val listaDeFireStore = querySnapshotToList(querySnapshotDesdeFireStore!!)
         val baseLocal = capturarDatosDB()
-        Log.d("TEstSnapToList","Esta es la lista de SnapShot a List lo convertimos$listaDeFireStore")
-        Log.d("TEstSnapToList","Estos son los datos de la base local $baseLocal")
+        Log.d("TEstSnapToListHitorial","Esta es la lista de SnapShot a List lo convertimos$listaDeFireStore")
+        Log.d("TEstSnapToListHitorial","Estos son los datos de la base local $baseLocal")
         println("Esta es la lista de productos actual de firebase --> $listaDeFireStore <--")
 
 
@@ -70,9 +70,11 @@ class MediatorHistorialVentasImpl @Inject constructor(
             coroutineScope {
                 val response = async {
                     try {
+                        Log.e("EntreHitorial","DATOS DE FIRESTORE A DB LOCAL SON: $listaDeFireStore")
                         insertaInDbLocal(listaDeFireStore)
                     } catch (e: Exception) {
-                        println("Mediador asyscPro:No se inserto en db local: $e <--")
+                        println("Mediador asyscHistorial:No se inserto en db local: $e <--")
+
                     }
                 }
                 response.await()

@@ -1,11 +1,17 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EliminarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +23,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) : ViewModel() {
+class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases
+,
+    @ApplicationContext private val context: Context) : ViewModel() {
 
     var uiState: MutableStateFlow<UserStatesUI> = MutableStateFlow(UserStatesUI())
         private set
@@ -27,6 +35,7 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
 
     init {
         getUsuarios()
+        uiState.update { it.copy(qr = getDeviceId())}
     }
 
     fun onUserEvent(evento: UserEvent) {
@@ -74,6 +83,35 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             is UserEvent.RolSelecionado -> {
                 rolSelecionado(evento.rol)
             }
+
+            is UserEvent.ElimnarRoll -> {
+                elimanarRoll(evento.rol)
+
+            }
+
+            UserEvent.GetQr -> {
+                uiState.update { it.copy(qr = getDeviceId()) }
+            }
+        }
+    }
+    @SuppressLint("HardwareIds")
+    private fun getDeviceId(): String? {
+        val deviceId: String? = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+
+        return deviceId
+    }
+    private fun elimanarRoll(roll: roll_usuarios){
+        viewModelScope.launch {
+            try{
+                casos.eliminarRol(roll)
+            }catch (_ : Exception){
+                uiState.update { it.copy(error = "No es posible elminar este rol") }
+            }
+
+
         }
     }
 
@@ -143,5 +181,4 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases) 
             }
         }
     }
-
 }

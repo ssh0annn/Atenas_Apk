@@ -38,7 +38,6 @@ import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.g
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
-import com.solidtype.atenas_apk_2.gestion_tickets.data.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
@@ -80,10 +79,12 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.Eliminar
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CasosClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CrearClientes
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.EditarCliente
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.GetClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.BuscarProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.EditarProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
@@ -104,6 +105,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Buscar
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.CrearRoles
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EditarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.Eliminar
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EliminarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.GetRoles
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.MostrarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
@@ -399,7 +401,8 @@ object AppModule {
         buscarUsuario = Buscar(repo),
         getRoles = GetRoles(repo),
         crearRoles = CrearRoles(repo),
-        actualizarRoll = EditarRoll(repo)
+        actualizarRoll = EditarRoll(repo),
+        eliminarRol = EliminarRoll(repo)
     )
     //Injectando Personas y tipos de personas.
 
@@ -415,7 +418,8 @@ object AppModule {
         buscarClientes = BuscarClientes(repo),
         getClientes = GetClientes(repo),
         crearClientes = CrearClientes(repo),
-        eliminarPersona = EliminarPersona(repo)
+        eliminarPersona = EliminarPersona(repo),
+        editarCliente = EditarCliente(repo)
     )
 
     @Provides
@@ -424,7 +428,8 @@ object AppModule {
         buscarProveedores = BuscarProveedores(repo),
         getProveedores = GetProveedores(repo),
         crearProveedor = CrearProveedor(repo),
-        eliminarPersona = EliminarPersona(repo)
+        eliminarPersona = EliminarPersona(repo),
+        editarProveedores = EditarProveedores(repo)
     )
 
     //Perfil admnistrador

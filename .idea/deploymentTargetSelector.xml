@@ -5,20 +5,6 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-<<<<<<< HEAD
-      <SelectionState runConfigName="Atenas_Apk.Atenas_apk_2.app">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-31T23:18:46.978210700Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\adder\.android\avd\Medium_Tablet_API_VanillaIceCream.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
-=======
->>>>>>> df9144438c22359ec1b778a4bfc10d18b0f0b212
     </selectionStates>
   </component>
 </project>

@@ -56,7 +56,7 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     if(state.listaServicios.isEmpty()){
-        viewmodel.onEvent(ServiceEvent.GetServicios)
+        viewmodel.onServiceEvent(ServiceEvent.GetServicios)
     }
 
     Column(

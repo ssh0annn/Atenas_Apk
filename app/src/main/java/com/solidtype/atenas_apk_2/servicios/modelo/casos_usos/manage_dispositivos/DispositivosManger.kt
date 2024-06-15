@@ -11,6 +11,7 @@ class DispositivosManger @Inject constructor(private val casosDispositivo: Casos
         return casosDispositivo.getDispositivos()
     }
     suspend fun crearDispositivo(dispositivo: Dispositivo) {
+        dispositivo.id_dispositivo = System.currentTimeMillis()
         casosDispositivo.agregarDispositivo(dispositivo)
     }
     fun buscarDispositivos(any:String):Flow<List<Dispositivo>> {

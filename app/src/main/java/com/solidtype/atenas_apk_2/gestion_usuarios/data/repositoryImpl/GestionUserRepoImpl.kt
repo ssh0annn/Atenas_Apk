@@ -46,4 +46,9 @@ class GestionUserRepoImpl @Inject constructor(
         rollDao.addRollUsuario(roll)
     }
 
+    override suspend fun eliminarRol(roll: roll_usuarios) {
+        rollDao.deleteRollUsuario(roll)
+    }
+
+
 }

@@ -9,6 +9,7 @@ import javax.inject.Inject
 class CrearProveedor @Inject constructor(private val repo: ClienteProveedorRepository) {
 
     suspend operator fun invoke(proveedor: Personastodas.Proveedor){
+        proveedor.id_proveedor = System.currentTimeMillis()
 
         repo.crearPersona(PersonaDirector.createPersona(proveedor))
     }

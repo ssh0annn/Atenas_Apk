@@ -10,12 +10,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.compose.runtime.State
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(private val casos: AdminUseCases): ViewModel() {
 
-    var uiState:MutableStateFlow<PerfilUIState> = MutableStateFlow(PerfilUIState())
-        private set
+    private val _uiState:MutableStateFlow<PerfilUIState> = MutableStateFlow(PerfilUIState())
+    val uiState: StateFlow<PerfilUIState> = _uiState.asStateFlow()
 
     init {
         perfilAdmin()
@@ -23,21 +26,23 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
 
     fun onEvent(evento: PerfilEvent){
         when(evento){
-            is PerfilEvent.VerPerfil -> {
+            PerfilEvent.VerPerfil -> {
                 perfilAdmin()
             }
             is PerfilEvent.UpdatePerfil -> {
                 viewModelScope.launch {casos.updateAdmin(evento.perfil)  }
+            }else->{
+
             }
         }
     }
     private fun perfilAdmin(){
-        uiState.update { it.copy(isLoading = true) }
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-           casos.getAdminInfo().collect{ administradores ->
-                uiState.update { it.copy(perfilAdmin = administradores, isLoading = false)}
+            casos.getAdminInfo().collect { administradores ->
+                _uiState.update { it.copy(perfilAdmin = administradores, isLoading = false) }
             }
+        }
 
         }
     }
-}

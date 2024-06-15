@@ -1,9 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl
 
-import com.solidtype.atenas_apk_2.gestion_tickets.data.detalle_ticketDao
 import com.solidtype.atenas_apk_2.gestion_tickets.data.ticketDao
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.detalle_ticket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
