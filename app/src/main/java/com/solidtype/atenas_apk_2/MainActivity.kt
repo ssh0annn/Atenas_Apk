@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
             //TestAutocompleteSelect()
             // Demo_SearchableExposedDropdownMenuBox()
             //InventoryScreen()
-servicios()
+//servicios()
             //Navigation()
             //HistorialScreen()
            // FireManeger()
@@ -44,7 +44,7 @@ servicios()
 
             }*/
            //ClienteScreen()
-      //  Navigation()
+       Navigation()
 
 
 

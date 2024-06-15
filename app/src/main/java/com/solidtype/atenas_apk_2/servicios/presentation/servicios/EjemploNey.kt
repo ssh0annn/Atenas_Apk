@@ -134,14 +134,13 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(ScrollState(1))) {
-        SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "", listOf(state.usuario).let {
-         it.map { user ->
-             user?.nombre.toString()
-         }
+        SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "",
+            listOf(state.usuario).let {
+             it.map { user ->
+                 user?.nombre.toString()
+             }
 
-        }, true) {
-
-
+            }, true) {
         }
         SelectorMio(" Seleccionar Dispos", search, state.listaDispositivos.let {
             it.map { persona ->
@@ -259,7 +258,6 @@ fun SelectorMio(
         }
     ) {
         TextField(
-
             value = searchText,
             onValueChange = {
                 searchText = it
