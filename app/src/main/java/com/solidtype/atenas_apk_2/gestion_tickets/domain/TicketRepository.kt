@@ -7,16 +7,11 @@ interface TicketRepository {
 
     fun getTickets(): Flow<List<ticket>>
 
-    fun getDetallesTicket():Flow<List<detalle_ticket>>
 
     fun buscarTickets(any:String): Flow<List<ticket>>
 
-    fun buscarDetalles(any:String):Flow<List<detalle_ticket>>
 
-    suspend fun crearTicket(ticket: ticket) : detalle_ticket
-
-    suspend fun crearDetalles(ticket:detalle_ticket)
-
+    suspend fun crearTicket(ticket: ticket)
 
     suspend fun closeTicket(ticket:ticket)
 

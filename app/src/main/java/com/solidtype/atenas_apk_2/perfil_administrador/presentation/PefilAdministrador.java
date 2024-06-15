@@ -30,8 +30,8 @@ public class PefilAdministrador extends AppCompatActivity {
 
 
         // OBJETO COMPOSEBLE INICADO Y ACTUANDO
-        ComposeView hello = findViewById(R.id.jetpack);
-        PerfilAdminKtKt.setMenuLateralContent(hello);
+        ComposeView Menu = findViewById(R.id.jetpack);
+        PerfilAdminKtKt.setMenuLateralContent(Menu);
 
         // INICIO DE VIEWMODEL Y UISTATE
         viewModel = new ViewModelProvider(this).get(AdminViewModel.class);

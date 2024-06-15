@@ -89,12 +89,10 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_pr
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.BuscarDetallesTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CasosTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CloseTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CompletarPago
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CrearTicket
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetDetallesTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetTickets
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.buscarTickets
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
@@ -461,19 +459,17 @@ object AppModule {
     //Tickets Manejador
     @Provides
     @Singleton
-    fun provideTicketRepository(ticket:ticketDao, detalle:detalle_ticketDao):TicketRepository =
-        TicketRepositoryImpl(ticket, detalle)
+    fun provideTicketRepository(ticket:ticketDao):TicketRepository =
+        TicketRepositoryImpl(ticket)
 
     @Provides
     @Singleton
     fun providesCasosTickets(repo:TicketRepository) = CasosTicket(
         getTickets= GetTickets(repo),
-        getDetallesTicket= GetDetallesTicket(repo),
         crearTicket= CrearTicket(repo),
         completarPago= CompletarPago(repo),
         closeTicket= CloseTicket(repo),
         buscarTickets= buscarTickets(repo),
-        buscarDetallesTicket= BuscarDetallesTicket(repo)
     )
 
     //Servicios y tipos servicios

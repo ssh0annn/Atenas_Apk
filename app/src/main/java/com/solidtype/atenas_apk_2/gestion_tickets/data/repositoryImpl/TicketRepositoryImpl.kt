@@ -7,32 +7,24 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TicketRepositoryImpl @Inject constructor(
-    private val miticket:ticketDao,
-    private val detalle:detalle_ticketDao
+    private val miticket:ticketDao
 ):TicketRepository {
     override fun getTickets(): Flow<List<ticket>> {
         return miticket.getTickets()
     }
 
-    override fun getDetallesTicket(): Flow<List<detalle_ticket>> {
-        return detalle.getDetalleTickets()
-    }
+
 
     override fun buscarTickets(any: String): Flow<List<ticket>> {
         TODO("Not yet implemented")
     }
 
-    override fun buscarDetalles(any: String): Flow<List<detalle_ticket>> {
+
+
+    override suspend fun crearTicket(ticket: ticket) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun crearTicket(ticket: ticket): detalle_ticket {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun crearDetalles(ticket: detalle_ticket) {
-         detalle.addDetalleTicket(ticket)
-    }
 
     override suspend fun closeTicket(ticket: ticket) {
         miticket.updateTicket(ticket)
