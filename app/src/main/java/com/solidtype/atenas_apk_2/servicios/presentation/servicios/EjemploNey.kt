@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,13 +48,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.Input
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
@@ -64,6 +63,7 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
 import com.solidtype.atenas_apk_2.util.toLocalDate
+import com.solidtype.atenas_apk_2.util.ui.theme.PurpleGrey80
 
 
 @Composable
@@ -143,9 +143,10 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
 
 
         }
-        SelectorMio("Dispositivo", search, state.listaDispositivos.let {
+        SelectorMio(" Seleccionar Dispos", search, state.listaDispositivos.let {
             it.map { persona ->
                 persona?.nombre_comercial.toString()
+
             }
         }, false, onClickAgregar = {nuevoDispositivo = !nuevoDispositivo}) {
                 selectedName ->
@@ -156,10 +157,12 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             }
 
         }
+
         SelectorMio("Seleccionar Cliente", search,
             state.listaClientes.let {
                 it.map { persona ->
                     persona?.nombre.toString()
+
                 }
             },
             false,onClickAgregar = {nuevoCliente= !nuevoCliente}
@@ -169,8 +172,19 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
             cliente?.let {
                 viewModel.onCliente(ClientEvents.ClienteSelecionado(it))
             }
-          
+
         }
+
+        @Composable
+fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
+
+    Box(
+        modifier = Modifier.clickable(onClick = onclick)
+    ) {
+        Text(text = clienteUI.nombre.toString())
+    }
+}
+
         SelectorMio("Servicio", search, state.listaServicios.let {
             it.map { dato -> dato.nombre }
         }, false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
@@ -234,9 +248,7 @@ fun SelectorMio(
     onSelectionChange: (String) -> Unit
 ) {
     var searchText: String by rememberSaveable { mutableStateOf(variableStr) }
-
     val keyboardController = LocalSoftwareKeyboardController.current
-
     val focusRequester = remember { FocusRequester() }
 
     ExposedDropdownMenuBox(
@@ -296,50 +308,129 @@ fun SelectorMio(
         )
         val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
         if (filteredItems.isNotEmpty()) {
-            ExposedDropdownMenu(
-                modifier = Modifier .background(Blanco),
-                expanded = expanded.value,
-                onDismissRequest = {
-                    // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
-                }
+            Box(
+
             ) {
-                for (item in filteredItems) {
-                    DropdownMenuItem(text = { Text(item) }, onClick = {
-                        searchText = item
-                        expanded.value = false
-                        onSelectionChange(item)
-                    })
-                }
-                if (onClickAgregar != null)
-                    Row(
+                Column {
+                    // Este es el Dropdown Menu
+                    ExposedDropdownMenu(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .clickable(onClick = {
-                                onClickAgregar()
-                                expanded.value = false
-                                //Debería hacer un back
-                                keyboardController?.hide()
-                            }),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                            .height(200.dp)
+                            .background(Blanco),
+                        expanded = expanded.value,
+                        onDismissRequest = {
+                            // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
+                        }
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Add",
-                            tint = AzulGris
-                        )
-                        Text(
-                            text = "Agregar",
-                            color = AzulGris,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            modifier = Modifier
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
+                        for (item in filteredItems) {
+                            DropdownMenuItem(
+                                text = { Text(item) }, onClick = {
+                                    searchText = item
+                                    expanded.value = false
+                                    onSelectionChange(item)
+                                })
+                        }
                     }
+                    Spacer(modifier = Modifier.padding(top=55.dp))
+                    // Este es el Box que queremos que esté fijo en la parte inferior
+                    if (onClickAgregar != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                 // Asegúrate de que tenga un fondo para que sea visible
+               .border(width = 1.dp, color = PurpleGrey80)
+                                .padding(bottom = 10.dp, top = 10.dp)
+                                .clickable(onClick = {
+                                    onClickAgregar()
+                                    expanded.value = false
+                                    keyboardController?.hide()
+                                })
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add",
+                                    tint = AzulGris
+                                )
+                                Text(
+                                    text = "Agregar",
+                                    color = AzulGris,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.ExtraBold
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                            }
+                        }
+                    }
+                }
             }
+
+
+//            Box {
+//                ExposedDropdownMenu(
+//                    modifier = Modifier
+//                        .height(200.dp)
+//                        .background(Blanco),
+//                    expanded = expanded.value,
+//                    onDismissRequest = {
+//                        // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
+//                    }
+//                ) {
+//                    for (item in filteredItems) {
+//                        DropdownMenuItem(
+//                            text = { Text(item) }, onClick = {
+//                                searchText = item
+//                                expanded.value = false
+//                                onSelectionChange(item)
+//                            })
+//                    }
+//
+//                    Box(
+//                       modifier = Modifier
+//
+//
+//
+//                    ) {
+//                        if (onClickAgregar != null)
+//                            Row(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .padding(5.dp)
+//                                    .clickable(onClick = {
+//                                        onClickAgregar()
+//                                        expanded.value = false
+//                                        //Debería hacer un back
+//                                        keyboardController?.hide()
+//                                    }),
+//                                horizontalArrangement = Arrangement.Center,
+//                                verticalAlignment = Alignment.CenterVertically
+//                            ) {
+//                                Icon(
+//                                    imageVector = Icons.Default.Add,
+//                                    contentDescription = "Add",
+//                                    tint = AzulGris
+//                                )
+//                                Text(
+//                                    text = "Agregar",
+//                                    color = AzulGris,
+//                                    fontSize = 15.sp,
+//                                    fontWeight = FontWeight.ExtraBold,
+//                                    modifier = Modifier
+//                                )
+//                                Spacer(modifier = Modifier.width(10.dp))
+//                            }
+//                    }
+//                }
+//            }
+
         }
+
+
     }
 }
 

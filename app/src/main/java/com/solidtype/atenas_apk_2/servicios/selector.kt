@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.servicios
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,19 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.MapsUgc
-import androidx.compose.material.icons.filled.ProductionQuantityLimits
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.Support
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,7 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
@@ -69,7 +60,6 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
-import java.time.LocalDate
 
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -384,7 +374,7 @@ fun selector(
 
                                         Column(
                                             modifier = Modifier
-                                                .padding(top = 30.dp)
+                                                .padding(top = 5.dp)
                                                 .fillMaxWidth()
                                                 .verticalScroll(rememberScrollState()),
                                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -442,11 +432,11 @@ fun selector(
                                             }
                                         }
 
-                                        Spacer(modifier = Modifier.padding(top = 20.dp))
+                                        Spacer(modifier = Modifier.padding(top = 30.dp))
 
                                     }
                                 }
-                                altura.value = 400.dp
+                                altura.value = 420.dp
                             } else {
 
                                 //formulario cliente  <---
@@ -507,46 +497,24 @@ fun selector(
                                                 .padding(0.dp)
                                                 .clip(RoundedCornerShape(20.dp))) {
                                                 //------------------seleccion modeo------------------
-                                                SelectorMio("Servicio", search, state.listaServicios.let {
-                                                    it.map { dato -> dato.nombre }
-                                                }, false, onClickAgregar = {nuevoServicios = !nuevoServicios
+                                                SelectorMio(" Seleccionar Disp", search, state.listaDispositivos.let {
+                                                    it.map { persona ->
+                                                        persona?.nombre_comercial.toString()
 
-                                                }  ) {
-                                                        selecion ->
-                                                    val service = state.listaServicios.find { it.nombre == selecion }
-                                                    service?.let { viewmodel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
+                                                    }
+                                                }, false, onClickAgregar = {nuevoDispositivo = !nuevoDispositivo}) {
+                                                        selectedName ->
+                                                    val dispositivo = state.listaDispositivos.find { it?.nombre_comercial == selectedName }
+                                                    dispositivo?.let {
+                                                        viewmodel.onDevice(DeviceEvent.DispositivoSelecionado(it))
+                                                        println("Esto fue lo que se seleciono: $it")
+                                                    }
 
                                                 }
                                             }
                                         }
                                         //cuerpo2
-                                        Row(
-                                            modifier = Modifier.padding(top = 10.dp)
-                                        ) {
 
-                                            Box() {
-                                                Input(
-                                                    label = "Telefono",
-                                                    valor = telefono,
-                                                    derecho = true,
-                                                    modifier = Modifier
-                                                ) {
-                                                    telefono = it
-                                                }
-                                            }
-                                            Spacer(modifier = Modifier.padding(20.dp))
-                                            Box() {
-                                                Input(
-                                                    label = "Email",
-                                                    valor = email,
-                                                    derecho = true,
-                                                    modifier = Modifier
-
-                                                ) {
-                                                    email = it
-                                                }
-                                            }
-                                        }
                                         //cuerpo3
                                         Row(
                                             modifier = Modifier.padding(top = 0.dp)
@@ -583,17 +551,8 @@ fun selector(
                                         Row(
                                             modifier = Modifier.padding(top = 0.dp)
                                         ) {
-                                            Box() {
-                                                Input(
-                                                    label = "Marca",
-                                                    valor = marca,
-                                                    derecho = true,
-                                                    modifier = Modifier
-                                                ) {
-                                                    marca = it
-                                                }
-                                            }
-                                            Spacer(modifier = Modifier.padding(20.dp))
+
+
                                             Box() {
                                                 Input(
                                                     label = "Abono",
@@ -605,6 +564,18 @@ fun selector(
                                                     abono = it
                                                 }
                                             }
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box() {
+                                                Input(
+                                                    label = "Subtotal",
+                                                    valor = restante,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    restante = it
+                                                }
+                                            }
+
                                         }
                                         //cuerpo6
                                         Row(
@@ -627,17 +598,7 @@ fun selector(
                                             modifier = Modifier.padding(top = 0.dp)
                                         ) {
 
-                                            Box() {
-                                                Input(
-                                                    label = "Restante",
-                                                    valor = restante,
-                                                    derecho = true,
-                                                    modifier = Modifier
-                                                ) {
-                                                    restante = it
-                                                }
-                                            }
-                                            Spacer(modifier = Modifier.padding(20.dp))
+
                                             Box() {
                                                 Input(
                                                     label = "Total",
@@ -649,42 +610,42 @@ fun selector(
                                                     total = it
                                                 }
                                             }
-                                        }
-                                        Spacer(modifier = Modifier.padding(top = 20.dp))
-                                        Box(modifier = Modifier
-                                            .width(240.dp)
-                                            .padding(0.dp)
-                                            .clip(RoundedCornerShape(20.dp))){
-                                            SelectorMio("Forma de pago", search,
-                                                FormaPagos.entries.map {
-                                                    it.toString()
-                                                }, false) {
-                                                    selecionado ->
-                                                when(selecionado){
-                                                    FormaPagos.CREDITO.toString() -> {
-                                                        viewmodel.onPayment(
-                                                            PagosEvent.TipoDePago(
-                                                                FormaPagos.CREDITO))
-                                                    }
-                                                    FormaPagos.EFECTIVO.toString()-> {
-                                                        viewmodel.onPayment(
-                                                            PagosEvent.TipoDePago(
-                                                                FormaPagos.EFECTIVO))
-                                                    }
-                                                    FormaPagos.CREDIT_CARD.toString() -> {
-                                                        viewmodel.onPayment(
-                                                            PagosEvent.TipoDePago(
-                                                                FormaPagos.CREDIT_CARD))
-                                                    }
-                                                    FormaPagos.TRANSATIONS.toString() -> {
-                                                        viewmodel.onPayment(
-                                                            PagosEvent.TipoDePago(
-                                                                FormaPagos.TRANSATIONS))
-                                                    }
-                                                    FormaPagos.CREDIT_DEBIT.toString() -> {
-                                                        viewmodel.onPayment(
-                                                            PagosEvent.TipoDePago(
-                                                                FormaPagos.CREDIT_DEBIT))
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box(modifier = Modifier
+                                                .width(240.dp)
+                                                .padding(top = 10.dp)
+                                                .clip(RoundedCornerShape(20.dp))){
+                                                SelectorMio("Forma de pago", search,
+                                                    FormaPagos.entries.map {
+                                                        it.toString()
+                                                    }, false) {
+                                                        selecionado ->
+                                                    when(selecionado){
+                                                        FormaPagos.CREDITO.toString() -> {
+                                                            viewmodel.onPayment(
+                                                                PagosEvent.TipoDePago(
+                                                                    FormaPagos.CREDITO))
+                                                        }
+                                                        FormaPagos.EFECTIVO.toString()-> {
+                                                            viewmodel.onPayment(
+                                                                PagosEvent.TipoDePago(
+                                                                    FormaPagos.EFECTIVO))
+                                                        }
+                                                        FormaPagos.CREDIT_CARD.toString() -> {
+                                                            viewmodel.onPayment(
+                                                                PagosEvent.TipoDePago(
+                                                                    FormaPagos.CREDIT_CARD))
+                                                        }
+                                                        FormaPagos.TRANSATIONS.toString() -> {
+                                                            viewmodel.onPayment(
+                                                                PagosEvent.TipoDePago(
+                                                                    FormaPagos.TRANSATIONS))
+                                                        }
+                                                        FormaPagos.CREDIT_DEBIT.toString() -> {
+                                                            viewmodel.onPayment(
+                                                                PagosEvent.TipoDePago(
+                                                                    FormaPagos.CREDIT_DEBIT))
+                                                        }
                                                     }
                                                 }
                                             }
