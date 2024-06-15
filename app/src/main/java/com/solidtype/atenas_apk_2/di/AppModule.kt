@@ -38,7 +38,6 @@ import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.g
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
-import com.solidtype.atenas_apk_2.gestion_tickets.data.detalle_ticketDao
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
@@ -90,12 +89,10 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_pr
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.BuscarDetallesTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CasosTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CloseTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CompletarPago
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CrearTicket
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetDetallesTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetTickets
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.buscarTickets
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
@@ -305,11 +302,6 @@ object AppModule {
         return db.detalleVentaDAO
     }
 
-    @Provides
-    @Singleton
-    fun provideDetalleTicketDao(db: ProductDataBase): detalle_ticketDao {
-        return db.detalleTicketDAO
-    }
 
     @Provides
     @Singleton
@@ -468,19 +460,17 @@ object AppModule {
     //Tickets Manejador
     @Provides
     @Singleton
-    fun provideTicketRepository(ticket:ticketDao, detalle:detalle_ticketDao):TicketRepository =
-        TicketRepositoryImpl(ticket, detalle)
+    fun provideTicketRepository(ticket:ticketDao):TicketRepository =
+        TicketRepositoryImpl(ticket)
 
     @Provides
     @Singleton
     fun providesCasosTickets(repo:TicketRepository) = CasosTicket(
         getTickets= GetTickets(repo),
-        getDetallesTicket= GetDetallesTicket(repo),
         crearTicket= CrearTicket(repo),
         completarPago= CompletarPago(repo),
         closeTicket= CloseTicket(repo),
-        buscarTickets= buscarTickets(repo),
-        buscarDetallesTicket= BuscarDetallesTicket(repo)
+        buscarTickets= buscarTickets(repo)
     )
 
     //Servicios y tipos servicios

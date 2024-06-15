@@ -99,12 +99,12 @@ class ServiciosViewModel @Inject constructor(
     private fun getTickets() {
         viewModelScope.launch {
 
-            casosTicket.getTickets().map { listaTicket ->
+           /* casosTicket.getDetalleTicket().map { listaTicket ->
                 if (listaTicket.isNotEmpty()) {
                     listaTicket.map {
                         TicketVista(
-                            numeroFactura = it.id_detalle_ticket,
-                            iDservicio = it.tipo_servicio,
+                            numeroFactura = it.id_ticket,
+                            iDservicio = it.,
                             subtotal = it.total,
                             Estado = it.estado
                         )
@@ -126,6 +126,8 @@ class ServiciosViewModel @Inject constructor(
                 }
 
             }
+
+            */
         }
     }
 
