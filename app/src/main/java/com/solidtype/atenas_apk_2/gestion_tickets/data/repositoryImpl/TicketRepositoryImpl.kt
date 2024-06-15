@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TicketRepositoryImpl @Inject constructor(
-    private val miticket:ticketDao
+
+    private val miticket:ticketDao,
 ):TicketRepository {
     override fun getTickets(): Flow<List<ticket>> {
         return miticket.getTickets()
