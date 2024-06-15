@@ -9,6 +9,6 @@ class CrearTicket@Inject constructor(private val repo: TicketRepository)  {
     suspend operator fun invoke(ticket:ticket) {
         ticket.id_ticket = System.currentTimeMillis()
 
-        repo.crearDetalles(repo.crearTicket(ticket))
+        repo.crearTicket(ticket)
     }
 }
