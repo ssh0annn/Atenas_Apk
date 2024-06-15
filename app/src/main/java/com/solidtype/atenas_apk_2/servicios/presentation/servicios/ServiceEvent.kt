@@ -13,7 +13,9 @@ sealed class ServiceEvent {
 }
 sealed class OnTicket{
     object GetTickets : OnTicket()
+    data class InforTicket(val infoTicket: InfoTicket):OnTicket()
     data class CrearTicket(val ticket: ServicioTicket) : OnTicket()
+
 }
 sealed class ClientEvents{
     data class CrearCliente(val clienteUI: Personastodas.ClienteUI) : ClientEvents()
@@ -29,6 +31,7 @@ sealed class DeviceEvent{
  * Eventos y actividades de pagos.
  */
 sealed class PagosEvent{
+    data class Impuestos(val impuestos:Boolean):PagosEvent()
 
     data class TipoDePago(val formaPagos: FormaPagos):PagosEvent()
 

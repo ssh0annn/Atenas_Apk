@@ -43,6 +43,5 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
                 _uiState.update { it.copy(perfilAdmin = administradores, isLoading = false) }
             }
         }
-
         }
     }
