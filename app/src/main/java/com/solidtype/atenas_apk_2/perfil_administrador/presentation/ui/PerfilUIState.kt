@@ -7,5 +7,4 @@ data class PerfilUIState(
     val perfilAdmin: List<VerInfoAdmin?> = emptyList(),
     val error:String? = "",
     val isLoading:Boolean = false
-
 )

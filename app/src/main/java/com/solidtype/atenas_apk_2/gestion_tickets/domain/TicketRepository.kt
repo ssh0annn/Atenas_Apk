@@ -7,11 +7,8 @@ interface TicketRepository {
 
     fun getTickets(): Flow<List<ticket>>
     fun buscarTickets(any:String): Flow<List<ticket>>
-
     suspend fun crearTicket(ticket: ticket)
-
     suspend fun closeTicket(ticket:ticket)
-
     suspend fun completarPagoPendiente(ticket: ticket)
 
 }

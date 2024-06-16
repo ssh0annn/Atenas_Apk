@@ -6,5 +6,5 @@ data class CasosTicket (
     val crearTicket: CrearTicket ,
     val completarPago: CompletarPago,
     val closeTicket: CloseTicket,
-    val buscarTickets: buscarTickets,
+    val buscarTickets: buscarTickets
 )

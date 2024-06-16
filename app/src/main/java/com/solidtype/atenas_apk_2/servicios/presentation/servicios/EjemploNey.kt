@@ -409,7 +409,7 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
+            val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca, estado = true)
             onSubmit(dispositivo)
         }) {
             Text("Crear Cliente")

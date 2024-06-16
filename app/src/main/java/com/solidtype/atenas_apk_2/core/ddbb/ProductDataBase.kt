@@ -1,6 +1,8 @@
 package com.solidtype.atenas_apk_2.core.ddbb
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
@@ -36,11 +38,10 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
 @Database(entities = [
     ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class,
-    categoria::class, detalle_venta::class, inventario::class,
-    persona::class, roll_usuarios::class, servicio::class, ticket::class,
-    tipo_venta::class, usuario::class, venta::class, administrador::class,
-    Dispositivo::class
-], version = 9, exportSchema = false)
+    categoria::class, detalle_venta::class, inventario::class, persona::class,
+    roll_usuarios::class, servicio::class, ticket::class, tipo_venta::class,
+    usuario::class, venta::class, administrador::class, Dispositivo::class
+], version = 19, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
@@ -59,4 +60,16 @@ abstract class ProductDataBase : RoomDatabase() {
     abstract val ventaDAO: ventaDao
     abstract val adminDao: administradorDao
     abstract val dispositivoDao: DispositivoDao
+    companion object{
+        @Volatile
+        private var DDBB: ProductDataBase? = null
+        fun getDataBase(context: Context):ProductDataBase {
+            return DDBB ?: synchronized(this) {
+                Room.databaseBuilder(context, ProductDataBase::class.java, "Atenas_Database")
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { DDBB = it }
+            }
+        }
+    }
 }

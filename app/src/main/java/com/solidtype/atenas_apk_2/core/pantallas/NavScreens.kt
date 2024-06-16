@@ -1,6 +1,8 @@
 package com.solidtype.atenas_apk_2.core.pantallas
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,10 +25,16 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScree
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 import com.solidtype.atenas_apk_2.servicios.servicios
 
+@SuppressLint("StaticFieldLeak")
+object NavigationSingleton{
+    lateinit var navController: NavController
+}
+
 @Composable
 fun Navigation() {
 
     val navController = rememberNavController()
+    NavigationSingleton.navController = navController
 
     NavHost(
 

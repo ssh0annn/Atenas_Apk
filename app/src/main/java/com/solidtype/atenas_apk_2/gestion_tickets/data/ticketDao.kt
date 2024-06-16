@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.gestion_tickets.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
@@ -11,9 +12,9 @@ import java.time.LocalDate
 
 @Dao
 interface ticketDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addTicket(ticket : ticket)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addTickets(ticket : List<ticket>)
     @Query("select * from ticket")
     fun getTickets(): Flow<List<ticket>>

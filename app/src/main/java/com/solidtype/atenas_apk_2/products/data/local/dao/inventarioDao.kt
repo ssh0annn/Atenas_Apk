@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.products.data.local.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface inventarioDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addInventario(inventario : inventario)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addInventarios(inventario : List<inventario>)
     @Query("select * from inventario")
     fun getInventario(): Flow<List<inventario>>

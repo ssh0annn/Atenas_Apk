@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.gestion_usuarios.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface usuarioDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUsuario(usuario : usuario)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUsuarios(usuario : List<usuario>)
     @Query("select * from usuario")
     fun getUsuarios(): Flow<List<usuario>>

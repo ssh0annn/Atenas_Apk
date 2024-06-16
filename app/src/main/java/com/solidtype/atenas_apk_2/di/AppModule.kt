@@ -302,7 +302,6 @@ object AppModule {
         return db.detalleVentaDAO
     }
 
-
     @Provides
     @Singleton
     fun provideInventarioDao(db: ProductDataBase): inventarioDao {
