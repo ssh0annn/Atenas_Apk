@@ -51,6 +51,7 @@ import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClienteForm
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DatoFinancieros
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.InfoTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoDevice
@@ -94,6 +95,25 @@ fun selector(
     //formulario cliente
     var nombre by rememberSaveable { mutableStateOf("") }
     var mystate by rememberSaveable { mutableStateOf(false) }
+
+//    if(mystate){
+//        viewmodel.onPayment(
+//            PagosEvent.Impuestos(
+//                impuestos = mystate
+//            )
+//        )
+//    }else{
+//        viewmodel.onPayment(
+//            PagosEvent.Impuestos(
+//                impuestos = mystate
+//            )
+//        )
+//    }
+
+
+
+
+
     var telefono by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var falla by rememberSaveable { mutableStateOf("") }
@@ -199,7 +219,6 @@ fun selector(
 
                                 //cuerpo-------------------------------------
 //                                cliente(listacliente = state.listaClientes)
-
 
                                 Box(
                                     modifier = Modifier
@@ -408,7 +427,7 @@ fun selector(
                                                 Box {
                                                     NumericTextField(
                                                         label = "Dias",
-                                                        valor = dia,
+                                                        valor = dia.toString(),
 
 //                                        derecho = true,
 //                                                        modifier = Modifier
@@ -594,11 +613,11 @@ fun selector(
                                             Box() {
                                                 Input(
                                                     label = "Subtotal",
-                                                    valor = restante,
+                                                    valor = stateTicket.datosFinance?.subtotal.toString(),
                                                     derecho = true,
                                                     modifier = Modifier
                                                 ) {
-                                                    restante = it
+
                                                 }
                                             }
 
@@ -628,12 +647,11 @@ fun selector(
                                             Box() {
                                                 Input(
                                                     label = "Total",
-                                                    valor = total,
-                                                    derecho = true,
+                                                    valor = stateTicket.datosFinance?.total.toString(),                                                   derecho = true,
                                                     modifier = Modifier
 
                                                 ) {
-                                                    total = it
+
                                                 }
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
@@ -719,6 +737,13 @@ fun selector(
 
                                     }else{
                                         mostrar.value = true
+                                        viewmodel.onPayment(
+                                            PagosEvent.DatosDelPago(
+                                                DatoFinancieros(
+                                                    presupuesto = precio.toDouble()
+                                                )
+                                            )
+                                        )
                                     }
 
                                     if(imei.isEmpty() || accesorio.isEmpty() || falla.isEmpty() || estado.isEmpty() || abono.isEmpty() || nota.isEmpty() || total.isEmpty()){
