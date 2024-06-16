@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.util.ui.Components
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
@@ -56,7 +58,7 @@ fun MenuLateral(navController: NavController) {
         Box( //Fondo
             modifier = Modifier
                 .fillMaxSize()
-                .clickable (
+                .clickable(
                     interactionSource = noHoverInteractionSource,
                     indication = null
                 ) { if (mostrarMenu.value) mostrarMenu.value = false }
@@ -121,6 +123,9 @@ fun MenuLateral(navController: NavController) {
                         Boton("Gestion de Usuarios", anchoTotal = true) {
                             navController.navigate(Screens.GestionUsuarios.route)
                             mostrarMenu.value = false
+                        }
+                        Boton("Configuración del Perfil") {
+                            navController.context.startActivity(Intent(navController.context, PefilAdministrador::class.java))
                         }
                     }
                     Row(
