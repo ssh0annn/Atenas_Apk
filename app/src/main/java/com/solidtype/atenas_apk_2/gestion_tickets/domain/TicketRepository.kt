@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.gestion_tickets.domain
 
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.detalle_ticket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import kotlinx.coroutines.flow.Flow
 

@@ -12,7 +12,6 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket){
             val id: Long = System.currentTimeMillis()
             ticket.vendedor?.let {
                 //Pendiente de actualizacion
-            
 
             }
            // casosTicket.crearTicket()

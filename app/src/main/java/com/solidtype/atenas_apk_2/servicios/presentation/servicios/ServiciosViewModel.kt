@@ -37,12 +37,7 @@ class ServiciosViewModel @Inject constructor(
 
     init {
         getCurrentUser()
-//        getTickets()
-//        getServicios()
-//        getClientes()
-//        getDispositivos()
 
-        
     }
 
     private fun createCliente(cliente: Personastodas.ClienteUI) {
@@ -99,15 +94,10 @@ class ServiciosViewModel @Inject constructor(
     private fun getTickets() {
         viewModelScope.launch {
 
-           /* casosTicket.getDetalleTicket().map { listaTicket ->
+          casosTicket.getDetalleTicket().map { listaTicket ->
                 if (listaTicket.isNotEmpty()) {
                     listaTicket.map {
-                        TicketVista(
-                            numeroFactura = it.id_ticket,
-                            iDservicio = it.,
-                            subtotal = it.total,
-                            Estado = it.estado
-                        )
+
                     }
                 } else {
                     listaTicket.map {
@@ -121,13 +111,10 @@ class ServiciosViewModel @Inject constructor(
                 }
 
             }.collect { listaVistaTicket ->
-                uiStates.update {
-                    it.copy(listaTickets = listaVistaTicket)
-                }
+
 
             }
 
-            */
         }
     }
 
