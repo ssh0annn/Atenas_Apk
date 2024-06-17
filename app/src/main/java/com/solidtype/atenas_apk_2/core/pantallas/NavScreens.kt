@@ -27,7 +27,7 @@ import com.solidtype.atenas_apk_2.servicios.servicios
 
 @SuppressLint("StaticFieldLeak")
 object NavigationSingleton{
-    lateinit var navController: NavController
+     var navController: NavController? = null
 }
 
 @Composable

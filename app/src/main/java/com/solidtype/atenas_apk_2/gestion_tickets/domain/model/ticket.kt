@@ -38,11 +38,6 @@ data class ticket (
     val descripcion :String,
     val nota :String,
     val assesorios :String,
-    val total :Double,
-    var abono :Double,
-    val presupuesto :Double,
-    val subtotal :Double,
-    val impuesto :Double,
     var fecha_inicio : LocalDate,
     var fecha_final : LocalDate,
     @ColumnInfo(defaultValue = "true") var estado :Boolean

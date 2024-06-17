@@ -1,5 +1,7 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,17 +43,21 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.MainActivity
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.PerfilAdmin
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -66,6 +73,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
     var nuevoTicket by rememberSaveable { mutableStateOf(false) }
     var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
+    var tipoPago by rememberSaveable { mutableStateOf("") }
     var vendedor by rememberSaveable { mutableStateOf("") }
 
 
@@ -175,24 +183,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
                 it.toString()
         }, false) {
             selecionado ->
-            when(selecionado){
-                FormaPagos.CREDITO.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDITO))
-                }
-                FormaPagos.EFECTIVO.toString()-> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.EFECTIVO))
-                }
-                FormaPagos.CREDIT_CARD.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_CARD))
-                }
-                FormaPagos.TRANSATIONS.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.TRANSATIONS))
-                }
-                FormaPagos.CREDIT_DEBIT.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_DEBIT))
-                }
-
-            }
+                tipoPago = selecionado
         }
 
         Button(onClick = { /*TODO*/ }) {
@@ -204,7 +195,15 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
         Button(onClick = { viewModel.onTicket(OnTicket.CrearTicket(viewModel.ticket.value)) }) {
             Text(text = "Imprimir Tickets")
         }
-        Button(onClick = { /*TODO*/ }) {
+        val contex = LocalContext.current
+        Button(onClick = {
+            val intent = Intent(
+                contex,
+                PefilAdministrador::class.java
+            )
+            contex.startActivity(intent)
+
+        }) {
             Text(text = "datos del equipo")
         }
 
@@ -212,6 +211,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     }
 
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

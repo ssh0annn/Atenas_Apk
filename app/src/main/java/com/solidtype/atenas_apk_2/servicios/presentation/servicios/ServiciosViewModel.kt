@@ -2,8 +2,10 @@ package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.TicketwithRelation
 
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_cliente.ClientesManage
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_dispositivos.DispositivosManger
@@ -96,33 +98,45 @@ class ServiciosViewModel @Inject constructor(
 
           casosTicket.getDetalleTicket().map { listaTicket ->
                 if (listaTicket.isNotEmpty()) {
-                    listaTicket.map {
+                    listaTicket.map { tic ->
+                        TicketVista(
+                            numeroFactura = tic.ticket.id_ticket,
+                            iDservicio =tic.servicio.nombre,
+                            dispositivo = tic.dispositivo.modelo,
+                            subtotal = tic.tipo_venta.subtotal,
+                            total = tic.tipo_venta.total,
+                            Estado = tic.ticket.estado,
+
+                        )
 
                     }
                 } else {
-                    listaTicket.map {
+                    listaTicket.map {  tic ->
                         TicketVista(
                             numeroFactura = 0,
-                            iDservicio = 0,
+                            iDservicio = "",
+                            dispositivo = "",
                             subtotal = 0.0,
+                            total = 0.0,
                             Estado = false
-                        )
+                            )
                     }
                 }
 
             }.collect { listaVistaTicket ->
-
-
+                uiStates.update { it.copy(listaTickets = listaVistaTicket) }
             }
-
         }
     }
 
     private fun getCurrentUser() {
         viewModelScope.launch {
             casoCurrentUser.getUser().collect{ lista ->
-                uiStates.update { it.copy(usuario =lista.first()) }
-                ticket.update { it.copy(vendedor =lista.first() ) }
+                if(lista.isNotEmpty()){
+
+                    uiStates.update { it.copy(usuario =lista.first()) }
+                    ticket.update { it.copy(vendedor =lista.first() ) }
+                }
             }
         }
     }
@@ -162,6 +176,7 @@ class ServiciosViewModel @Inject constructor(
                        usuarioss.forEach {  user ->
                            uiStates.update { it.copy(usuario = user) }
                            ticket.update { it.copy(vendedor = user) } }
+
                     }
 
                 }
@@ -192,6 +207,7 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             is PagosEvent.DatosDelPago -> {
                 val datosRealeas = event.finaciero
+                datosRealeas.id_tipo_venta = System.currentTimeMillis()
                 if(uiStates.value.impuestos){
                     datosRealeas.impuesto = datosRealeas.presupuesto * 0.18
                     datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
@@ -204,12 +220,12 @@ class ServiciosViewModel @Inject constructor(
                 }
                 ticket.update { it.copy(datosFinance = datosRealeas ) }
             }
-            is PagosEvent.TipoDePago -> {
-                ticket.update { it.copy(tipoVenta = event.formaPagos)}
-            }
 
             is PagosEvent.Impuestos -> {
                 uiStates.update { it.copy(impuestos = event.impuestos) }
+                ticket.value.datosFinance?.let {
+                    onPayment(PagosEvent.DatosDelPago(it))
+                }
             }
         }
     }
@@ -233,8 +249,11 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             is OnTicket.CrearTicket -> {
                 println("Este es el ticket creado: ${event.ticket}")
+
+                crearTicket(event.ticket)
+
                 ticket.update { it.copy(cliente = null, dispositivo = null,
-                    tipoVenta = null, servicio = null, detalles = null, datosFinance = null) }
+                    servicio = null, detalles =InfoTicket(), datosFinance = null) }
             }
             OnTicket.GetTickets -> {
                 getTickets()
