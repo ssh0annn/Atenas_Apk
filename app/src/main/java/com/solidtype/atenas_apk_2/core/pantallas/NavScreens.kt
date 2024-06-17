@@ -23,11 +23,10 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosS
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
-import com.solidtype.atenas_apk_2.servicios.servicios
 
 @SuppressLint("StaticFieldLeak")
 object NavigationSingleton{
-    lateinit var navController: NavController
+    var navController: NavController? = null
 }
 
 @Composable

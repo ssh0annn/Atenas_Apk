@@ -8,6 +8,6 @@ import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
 fun setMenuLateralContent(view: ComposeView) {
     view.setContent {
-        MenuLateral(NavigationSingleton.navController)
+        NavigationSingleton.navController?.let { MenuLateral(it) }
     }
 }

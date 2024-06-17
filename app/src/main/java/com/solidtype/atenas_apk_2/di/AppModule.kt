@@ -469,7 +469,7 @@ object AppModule {
         crearTicket= CrearTicket(repo),
         completarPago= CompletarPago(repo),
         closeTicket= CloseTicket(repo),
-        buscarTickets= buscarTickets(repo),
+        buscarTickets= buscarTickets(repo)
     )
 
     //Servicios y tipos servicios
