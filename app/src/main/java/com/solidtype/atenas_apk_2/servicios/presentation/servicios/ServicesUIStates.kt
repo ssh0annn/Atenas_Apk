@@ -13,6 +13,7 @@ data class ServicesUIStates(
     val listaDispositivos: List<Dispositivo?> = emptyList(),
     val listaServicios: List<servicio> = emptyList(),
     val impuestos: Boolean = false,
+    val abono: Double = 0.0,
     val subtotal: Double = 0.0,
     val total: Double = 0.0
 )

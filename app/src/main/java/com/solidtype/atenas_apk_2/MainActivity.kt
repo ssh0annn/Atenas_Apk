@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 
 
 import com.solidtype.atenas_apk_2.servicios.servicios
@@ -27,7 +28,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-
 
             Navigation()
 

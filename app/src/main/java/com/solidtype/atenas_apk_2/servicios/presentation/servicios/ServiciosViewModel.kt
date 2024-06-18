@@ -203,7 +203,9 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             is PagosEvent.DatosDelPago -> {
                 val datosRealeas = event.finaciero
-                datosRealeas.id_tipo_venta = System.currentTimeMillis()
+
+                datosRealeas.id_tipo_venta = System.currentTimeMillis()//Para revision
+                datosRealeas.abono = uiStates.value.abono
                 if(uiStates.value.impuestos){
                     datosRealeas.impuesto = datosRealeas.presupuesto * 0.18
                     datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
@@ -222,6 +224,16 @@ class ServiciosViewModel @Inject constructor(
                 ticket.value.datosFinance?.let {
                     onPayment(PagosEvent.DatosDelPago(it))
                 }
+            }
+
+            is PagosEvent.Abono -> {
+                uiStates.update { it.copy(abono = event.abono) }
+                ticket.value.datosFinance?.let {
+                    onPayment(PagosEvent.DatosDelPago(it))
+                }
+
+
+
             }
         }
     }

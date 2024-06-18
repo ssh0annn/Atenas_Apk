@@ -606,9 +606,11 @@ fun selector(
                                             Box() {
                                                 NumericTextField3(
                                                     label = "Abono",
-                                                    valor = abono,
+                                                    valor = state.abono.toString(),
                                                 ) {
-                                                    abono = it
+                                                    viewmodel.onPayment(PagosEvent.Abono(
+                                                        it.toDouble()
+                                                    ))
                                                 }
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
