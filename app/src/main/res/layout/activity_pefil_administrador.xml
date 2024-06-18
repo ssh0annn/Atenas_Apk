@@ -30,10 +30,6 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/jetpack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <FrameLayout
@@ -160,6 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="350dp"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -275,13 +272,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/perfil_config_framelayout">
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/jetpack"
+            android:layout_width="138dp"
+            android:layout_height="48dp" />
+
         <ImageView
             android:id="@+id/perfil_config_imgicon"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="370dp"
             android:layout_gravity="start"
-            android:src="@drawable/ic_person"/>
+            android:layout_marginEnd="370dp"
+            android:src="@drawable/ic_person" />
+
         <Button
             android:id="@+id/perfil_config_btnguardar"
             android:layout_width="wrap_content"

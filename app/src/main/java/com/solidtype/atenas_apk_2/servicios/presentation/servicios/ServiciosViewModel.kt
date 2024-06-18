@@ -2,11 +2,8 @@ package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.TicketwithRelation
-
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_cliente.ClientesManage
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_dispositivos.DispositivosManger
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets.TicketsManeger
@@ -39,7 +36,6 @@ class ServiciosViewModel @Inject constructor(
 
     init {
         getCurrentUser()
-
     }
 
     private fun createCliente(cliente: Personastodas.ClienteUI) {
@@ -53,6 +49,7 @@ class ServiciosViewModel @Inject constructor(
             casosDispositivo.crearDispositivo(dispositivo)
         }
     }
+
 
     private fun crearTicket(ticket: ServicioTicket) {
         viewModelScope.launch {
@@ -133,11 +130,11 @@ class ServiciosViewModel @Inject constructor(
         viewModelScope.launch {
             casoCurrentUser.getUser().collect{ lista ->
                 if(lista.isNotEmpty()){
-
                     uiStates.update { it.copy(usuario =lista.first()) }
                     ticket.update { it.copy(vendedor =lista.first() ) }
                 }
             }
+
         }
     }
 
