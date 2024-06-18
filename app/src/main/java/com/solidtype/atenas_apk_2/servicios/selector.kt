@@ -969,7 +969,7 @@ fun selector(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 1160.dp, top = 530.dp)
+            .padding(start = 800.dp, top = 400.dp)
     ) {
 
         Icon(imageVector = Icons.Filled.Support,

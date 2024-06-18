@@ -86,7 +86,7 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route ) {
-            EjemploNey()
+            servicios()
         }
         composable(route = Screens.Ticket.route ) {
             Ticket(navController)

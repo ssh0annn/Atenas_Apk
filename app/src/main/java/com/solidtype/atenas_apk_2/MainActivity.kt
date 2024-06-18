@@ -28,9 +28,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-       Navigation()
-
-
+            Navigation()
 
 
         }
@@ -69,9 +67,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ImeiBoton(imei: () -> Unit){
+fun ImeiBoton(imei: () -> Unit) {
 
-    Button(onClick = {imei()}) {
+    Button(onClick = { imei() }) {
         Text(text = "Imprime IMEI")
     }
 
