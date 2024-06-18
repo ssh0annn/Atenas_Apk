@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.Support
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
@@ -50,14 +53,17 @@ import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClienteForm
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.InfoTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoDevice
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoServicio
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.PagosEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
@@ -74,6 +80,8 @@ fun selector(
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
     var nuevoCliente by rememberSaveable { mutableStateOf(false) }
     var nuevoDispositivo by rememberSaveable { mutableStateOf(false) }
+    val stateTicket by viewmodel.ticket.collectAsStateWithLifecycle()
+    var back = Color(0xFF343341)
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     val listacliente = state.listaClientes
@@ -81,6 +89,7 @@ fun selector(
     val openDialog = remember { mutableStateOf(false) }
     val mostrar = remember { mutableStateOf(false) }
     val altura = remember { mutableStateOf(400.dp) }
+    
 
     //Dato de pagos
 
@@ -89,12 +98,32 @@ fun selector(
 
     //formulario cliente
     var nombre by rememberSaveable { mutableStateOf("") }
-    var modelo by rememberSaveable { mutableStateOf("") }
+    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
+
+//    if(mystate){
+//        viewmodel.onPayment(
+//            PagosEvent.Impuestos(
+//                impuestos = mystate
+//            )
+//        )
+//    }else{
+//        viewmodel.onPayment(
+//            PagosEvent.Impuestos(
+//                impuestos = mystate
+//            )
+//        )
+//    }
+
+
+
+
+
     var telefono by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var falla by rememberSaveable { mutableStateOf("") }
     var estado by rememberSaveable { mutableStateOf("") }
-    var marca by rememberSaveable { mutableStateOf("") }
+    var imei by rememberSaveable { mutableStateOf("") }
+    var accesorio by rememberSaveable { mutableStateOf("") }
     var abono by rememberSaveable { mutableStateOf("0.0") }
     var nota by rememberSaveable { mutableStateOf("") }
     var restante by rememberSaveable { mutableStateOf("0.0") }
@@ -194,7 +223,6 @@ fun selector(
 
                                 //cuerpo-------------------------------------
 //                                cliente(listacliente = state.listaClientes)
-
 
                                 Box(
                                     modifier = Modifier
@@ -360,19 +388,14 @@ fun selector(
                                                 .padding(0.dp)
                                                 .clip(RoundedCornerShape(10.dp))
                                         ) {
-//                                            SelectorMio("Vendedor", search, listOf(state.usuario.toString()), true) {
-//                                            }
                                             SelectorMio("Seleccinar Servicio", search, state.listaServicios.let {
                                                 it.map { dato -> dato.nombre
-
-
                                                 }
                                             },false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
                                                     selecion ->
                                                 val service = state.listaServicios.find { it.nombre == selecion }
                                                 service?.let {
                                                     viewmodel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
-
                                             }
                                         }
 
@@ -406,19 +429,19 @@ fun selector(
 
                                             Row {
                                                 Box {
-                                                    Inputpeq(
-                                                        label = "Dias", valor = dia,
+                                                    NumericTextField(
+                                                        label = "Dias",
+                                                        valor = dia.toString(),
+
 //                                        derecho = true,
-                                                        modifier = Modifier
+//                                                        modifier = Modifier
                                                     ) {
                                                         dia = it
                                                     }
                                                 }
                                                 Box {
-                                                    Inputt(
+                                                    NumericTextField1(
                                                         label = "Precio", valor = precio,
-//                                        derecho = true,
-                                                        modifier = Modifier
                                                     ) {
                                                         precio = it
                                                     }
@@ -432,6 +455,16 @@ fun selector(
                                                     modifier = Modifier
                                                 ) {
                                                     descrp = it
+                                                }
+                                            }
+                                            Spacer(modifier = Modifier .padding(top = 8.dp))
+                                            Box(){
+                                                SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "", listOf(state.usuario).let {
+                                                    it.map { user ->
+                                                        user?.nombre.toString()
+                                                    }
+
+                                                }, true) {
                                                 }
                                             }
                                         }
@@ -456,7 +489,6 @@ fun selector(
                                     ) {
                                         //titulo
                                         Spacer(modifier = Modifier.padding(top = 15.dp))
-
                                         Text(
                                             text = "Cliente",
                                             color = AzulGris,
@@ -479,16 +511,13 @@ fun selector(
                                                         it.map { persona -> persona?.nombre.toString()
                                                         }
                                                     },
-                                                    false,onClickAgregar = {nuevoCliente= !nuevoCliente
-
-                                                    }
+                                                    false,onClickAgregar = {nuevoCliente= !nuevoCliente}
                                                 ) {
                                                         selecion ->
                                                     val cliente = state.listaClientes.find { it?.nombre == selecion }
                                                     cliente?.let {
                                                         viewmodel.onCliente(ClientEvents.ClienteSelecionado(it))
                                                     }
-
                                                 }
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
@@ -514,7 +543,30 @@ fun selector(
                                             }
                                         }
                                         //cuerpo2
+                                        Row(
+                                            modifier = Modifier.padding(top = 5.dp)
+                                        ) {
+                                            Box() {
+                                                NumericTextField3(
+                                                    label = "Imei",
+                                                    valor = imei,
+                                                ) {
+                                                    imei = it
+                                                }
+                                            }
+                                            Spacer(modifier = Modifier.padding(20.dp))
+                                            Box() {
+                                                Input(
+                                                    label = "Accesorios",
+                                                    valor = accesorio,
+                                                    derecho = true,
+                                                    modifier = Modifier
+                                                ) {
+                                                    accesorio = it
+                                                }
+                                            }
 
+                                        }
                                         //cuerpo3
                                         Row(
                                             modifier = Modifier.padding(top = 0.dp)
@@ -551,28 +603,25 @@ fun selector(
                                         Row(
                                             modifier = Modifier.padding(top = 0.dp)
                                         ) {
-
-
                                             Box() {
-                                                Input(
+                                                NumericTextField3(
                                                     label = "Abono",
-                                                    valor = abono,
-                                                    derecho = true,
-                                                    modifier = Modifier
-
+                                                    valor = state.abono.toString(),
                                                 ) {
-                                                    abono = it
+                                                    viewmodel.onPayment(PagosEvent.Abono(
+                                                        it.toDouble()
+                                                    ))
                                                 }
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
                                             Box() {
                                                 Input(
                                                     label = "Subtotal",
-                                                    valor = restante,
+                                                    valor = stateTicket.datosFinance?.subtotal.toString(),
                                                     derecho = true,
                                                     modifier = Modifier
                                                 ) {
-                                                    restante = it
+
                                                 }
                                             }
 
@@ -602,12 +651,11 @@ fun selector(
                                             Box() {
                                                 Input(
                                                     label = "Total",
-                                                    valor = total,
-                                                    derecho = true,
+                                                    valor = stateTicket.datosFinance?.total.toString(),                                                   derecho = true,
                                                     modifier = Modifier
 
                                                 ) {
-                                                    total = it
+
                                                 }
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
@@ -624,6 +672,24 @@ fun selector(
                                                 }
                                             }
                                         }
+                                        Box(
+                                            modifier = Modifier .padding(start = 150.dp)
+                                        ){
+                                            Row() {
+                                                   Checkbox(
+                                                       checked = state.impuestos,
+                                                       onCheckedChange = {
+                                                          viewmodel.onPayment(PagosEvent.Impuestos(
+                                                              it
+                                                          ))
+                                                       })
+                                                Box(modifier = Modifier .padding(top = 15.dp)){
+                                                    Text(text = "Impuesto")
+                                                }
+
+
+                                            }
+                                        }
                                     }
                                 }
                                 altura.value = 600.dp
@@ -633,14 +699,57 @@ fun selector(
 
 
                     confirmButton = {
+                        if(precio.isEmpty() || dia.isEmpty() || descrp.isEmpty()){
+                            back = Color(0xFF8285A5)
+                        }else{
+//                                    mostrar.value = true
+                            back = Color(0xFF343341)
+                        }
                         TextButton(modifier = Modifier
                             .background(
-                                AzulGris, shape = RoundedCornerShape(20.dp)
+                                back, shape = RoundedCornerShape(20.dp)
                             )
                             .padding(5.dp),
 
                             onClick = {
-                                mostrar.value = true
+                                    if(precio.isEmpty() || dia.isEmpty() || descrp.isEmpty()){
+
+                                    }else{
+                                        viewmodel.onPayment(
+                                            PagosEvent.DatosDelPago(
+                                                tipo_venta(
+                                                    presupuesto = precio.toDouble(),
+                                                )
+                                            )
+                                        )
+
+                                        mostrar.value = true
+
+
+                                    }
+
+                                    if(imei.isEmpty() || accesorio.isEmpty() || falla.isEmpty() || estado.isEmpty() || abono.isEmpty() || nota.isEmpty() || total.isEmpty()){
+                                        viewmodel.onTicket(
+                                            OnTicket.InforTicket(
+                                                InfoTicket(
+                                                    imei = imei,
+                                                    falla = falla,
+                                                    descripcion = descrp,
+                                                    nota = nota,
+                                                    assesorios = accesorio
+                                                )
+                                            )
+                                        )
+                                        
+                                        
+                                        
+                                        
+                                        
+                                    }else{
+
+                                    }
+
+
 
                                 //--------------------------555
 //                                if (!nota.isNullOrEmpty()) {
@@ -674,9 +783,7 @@ fun selector(
                             if (!mostrar.value) {
                                 Text("Siguiente", color = Blanco)
                             } else {
-
                                 Text("Guardar", color = Blanco)
-
                             }
                         }
                     },

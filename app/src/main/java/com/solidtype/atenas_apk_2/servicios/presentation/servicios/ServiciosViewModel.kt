@@ -1,5 +1,4 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo

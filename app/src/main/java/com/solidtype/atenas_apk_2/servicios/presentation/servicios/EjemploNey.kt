@@ -62,6 +62,7 @@ import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.servicios.Input
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
@@ -146,14 +147,13 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(ScrollState(1))) {
-        SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "", listOf(state.usuario).let {
-         it.map { user ->
-             user?.nombre.toString()
-         }
+        SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "",
+            listOf(state.usuario).let {
+             it.map { user ->
+                 user?.nombre.toString()
+             }
 
-        }, true) {
-
-
+            }, true) {
         }
         SelectorMio(" Seleccionar Dispos", search, state.listaDispositivos.let {
             it.map { persona ->
@@ -263,7 +263,6 @@ fun SelectorMio(
         }
     ) {
         TextField(
-
             value = searchText,
             onValueChange = {
                 searchText = it
@@ -709,8 +708,10 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
                         .height(450.dp)
                 )
             }
+
         }
     }
+
 
 
 
@@ -907,51 +908,52 @@ fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
     var nota by remember { mutableStateOf("") }
     var assesorios by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = imei,
-            onValueChange = { imei = it },
-            label = { Text("imei") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        Column(modifier = Modifier.padding(16.dp)) {
+            TextField(
+                value = imei,
+                onValueChange = { imei = it },
+                label = { Text("imei") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
 
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = falla,
-            onValueChange = { falla = it },
-            label = { Text("Teléfono") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = descripcion,
-            onValueChange = { descripcion = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = nota,
-            onValueChange = { nota = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = assesorios,
-            onValueChange = { assesorios = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            TextField(
+                value = falla,
+                onValueChange = { falla = it },
+                label = { Text("Teléfono") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = descripcion,
+                onValueChange = { descripcion = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = nota,
+                onValueChange = { nota = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = assesorios,
+                onValueChange = { assesorios = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
-            onSubmit(dispositivo)
-        }) {
-            Text("Crear Cliente")
-            "".toLocalDate()
-        }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
+                onSubmit(dispositivo)
+            }) {
+                Text("Crear Cliente")
+                "".toLocalDate()
+            }
     }
 }
+
