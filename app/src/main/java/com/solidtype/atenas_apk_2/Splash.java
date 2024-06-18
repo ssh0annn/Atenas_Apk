@@ -3,18 +3,9 @@ package com.solidtype.atenas_apk_2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel;
-
-import javax.inject.Inject;
-
-import dagger.hilt.android.lifecycle.HiltViewModel;
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador;
 
 public class Splash extends AppCompatActivity {
 

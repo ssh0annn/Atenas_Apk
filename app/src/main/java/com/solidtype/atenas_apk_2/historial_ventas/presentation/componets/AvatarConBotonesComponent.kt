@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets
+package com.solidtype.atenas_apk_2.historial_ventas.presentation.componets
 
 import android.content.Context
 import android.widget.Toast
@@ -23,12 +23,12 @@ fun AvatarConBotones(
 ) {
     Row {
         //Avatar
-        if (true) { // si no hay imagen de perfil
+        /*if (true) { // si no hay imagen de perfil
             Avatar()
         } else {//Mostrar foto de perfil
             //Image(painter = , contentDescription = )
-        }
-        Spacer(modifier = Modifier.width(400.dp))
+        }*/
+        Spacer(modifier = Modifier.width(500.dp))
         Row {
             Boton("Ver Todo") {
                 viewModel.MostrarHistoriar()

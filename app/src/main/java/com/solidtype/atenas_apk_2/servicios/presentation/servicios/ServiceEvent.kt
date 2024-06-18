@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
@@ -32,10 +33,7 @@ sealed class DeviceEvent{
  */
 sealed class PagosEvent{
     data class Impuestos(val impuestos:Boolean):PagosEvent()
-
-    data class TipoDePago(val formaPagos: FormaPagos):PagosEvent()
-
-    data class DatosDelPago(val finaciero:DatoFinancieros):PagosEvent()
+    data class DatosDelPago(val finaciero:tipo_venta):PagosEvent()
 
 }
 

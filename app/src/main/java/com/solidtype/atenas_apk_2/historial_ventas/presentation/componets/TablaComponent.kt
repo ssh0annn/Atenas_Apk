@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.historial_ventas.presentation.historial.componets
+package com.solidtype.atenas_apk_2.historial_ventas.presentation.componets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -213,24 +213,24 @@ fun Tabla(
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
-                            Text(
-                                uiState.Ticket[i].subtotal.toString(),
-                                fontSize = 16.sp,
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                uiState.Ticket[i].impuesto.toString(),
-                                fontSize = 16.sp,
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                uiState.Ticket[i].total.toString(),
-                                fontSize = 16.sp,
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
+//                            Text(
+//                                uiState.Ticket[i].subtotal.toString(),
+//                                fontSize = 16.sp,
+//                                modifier = Modifier.weight(1f),
+//                                textAlign = TextAlign.Center
+//                            )
+//                            Text(
+//                                uiState.Ticket[i].impuesto.toString(),
+//                                fontSize = 16.sp,
+//                                modifier = Modifier.weight(1f),
+//                                textAlign = TextAlign.Center
+//                            )
+//                            Text(
+//                                uiState.Ticket[i].total.toString(),
+//                                fontSize = 16.sp,
+//                                modifier = Modifier.weight(1f),
+//                                textAlign = TextAlign.Center
+//                            )
                             Text(
                                 uiState.Ticket[i].id_cliente.toString(),
                                 fontSize = 16.sp,

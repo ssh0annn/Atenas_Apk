@@ -1,5 +1,7 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,6 +35,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,16 +48,21 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.MainActivity
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.Input
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -75,6 +83,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
     var nuevoTicket by rememberSaveable { mutableStateOf(false) }
     var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
+    var tipoPago by rememberSaveable { mutableStateOf("") }
     var vendedor by rememberSaveable { mutableStateOf("") }
 
 
@@ -197,24 +206,7 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
                 it.toString()
         }, false) {
             selecionado ->
-            when(selecionado){
-                FormaPagos.CREDITO.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDITO))
-                }
-                FormaPagos.EFECTIVO.toString()-> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.EFECTIVO))
-                }
-                FormaPagos.CREDIT_CARD.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_CARD))
-                }
-                FormaPagos.TRANSATIONS.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.TRANSATIONS))
-                }
-                FormaPagos.CREDIT_DEBIT.toString() -> {
-                    viewModel.onPayment(PagosEvent.TipoDePago(FormaPagos.CREDIT_DEBIT))
-                }
-
-            }
+                tipoPago = selecionado
         }
 
         Button(onClick = { /*TODO*/ }) {
@@ -226,7 +218,15 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
         Button(onClick = { viewModel.onTicket(OnTicket.CrearTicket(viewModel.ticket.value)) }) {
             Text(text = "Imprimir Tickets")
         }
-        Button(onClick = { /*TODO*/ }) {
+        val contex = LocalContext.current
+        Button(onClick = {
+            val intent = Intent(
+                contex,
+                PefilAdministrador::class.java
+            )
+            contex.startActivity(intent)
+
+        }) {
             Text(text = "datos del equipo")
         }
 
@@ -234,6 +234,7 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
     }
 
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -612,7 +613,6 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
                         openDialog.value = false
                     },
                     text = {
-
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -679,7 +679,7 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
                             .padding(5.dp),
 
                             onClick = {
-                                val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
+                                val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca, estado = true)
                                  onSubmit(dispositivo)
 
                             }) {
@@ -704,8 +704,7 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
                         .height(450.dp)
                 )
             }
-        }
-    }
+
 
 
 
@@ -902,51 +901,52 @@ fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
     var nota by remember { mutableStateOf("") }
     var assesorios by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = imei,
-            onValueChange = { imei = it },
-            label = { Text("imei") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        Column(modifier = Modifier.padding(16.dp)) {
+            TextField(
+                value = imei,
+                onValueChange = { imei = it },
+                label = { Text("imei") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
 
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = falla,
-            onValueChange = { falla = it },
-            label = { Text("Teléfono") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = descripcion,
-            onValueChange = { descripcion = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = nota,
-            onValueChange = { nota = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = assesorios,
-            onValueChange = { assesorios = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            TextField(
+                value = falla,
+                onValueChange = { falla = it },
+                label = { Text("Teléfono") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = descripcion,
+                onValueChange = { descripcion = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = nota,
+                onValueChange = { nota = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = assesorios,
+                onValueChange = { assesorios = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
-            onSubmit(dispositivo)
-        }) {
-            Text("Crear Cliente")
-            "".toLocalDate()
-        }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
+                onSubmit(dispositivo)
+            }) {
+                Text("Crear Cliente")
+                "".toLocalDate()
+            }
     }
 }
+

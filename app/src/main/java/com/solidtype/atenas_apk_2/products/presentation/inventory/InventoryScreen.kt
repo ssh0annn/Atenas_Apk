@@ -2,25 +2,19 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,28 +24,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Detalles
-import com.solidtype.atenas_apk_2.ui.theme.Blanco
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.ui.theme.Transparente
-import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
-import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
+import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
-import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -185,58 +172,8 @@ fun InventoryScreen(
                 AvatarConBotones(context, viewModel, showSnackbarIni, mostrar)
             }
         }
-        Dialogo("Ejemplar de Excel", mostrar.value, { mostrar.value = false }) {
-            Image(
-                painter = painterResource(id = R.drawable.ejemplar),
-                contentDescription = "Ejemplar de Excel",
-                modifier = Modifier
-                    .size(
-                        width = Pantalla.ancho - 100.dp,
-                        height = Pantalla.alto - 410.dp
-                    )
-                    .shadow(16.dp, shape = RoundedCornerShape(16.dp))
-            )
-        }
-        if (true) {
-            Box {
-                Box( //Fondo
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(semiTransparente)
-                )
-                Box( //Menú Lateral
-                    modifier = Modifier
-                        .width(Pantalla.ancho * 0.3f)
-                        .fillMaxHeight()
-                        .background(Blanco)
-                ){
-                    Column(){
-                        Column{//Botones
-
-                        }
-                        Row(){
-                            if (true) { // si no hay imagen de perfil
-                                Avatar()
-                            } else {//Mostrar foto de perfil
-                                //Image(painter = , contentDescription = )
-                            }
-                            Spacer(modifier = Modifier.width(50.dp))
-                            Text("Cerrar Sesión")
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            Box {
-                Box( //Fondo
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Transparente)
-                )
-            }
-        }
+        DialogoExcel(mostrar)
+        MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
 }
-
