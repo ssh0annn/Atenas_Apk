@@ -457,10 +457,6 @@ fun selector(
                                         //titulo
                                         Spacer(modifier = Modifier.padding(top = 15.dp))
 
-
-
-
-
                                         Text(
                                             text = "Cliente",
                                             color = AzulGris,
