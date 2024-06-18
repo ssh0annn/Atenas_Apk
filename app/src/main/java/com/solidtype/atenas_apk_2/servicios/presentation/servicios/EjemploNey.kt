@@ -61,8 +61,9 @@ import com.solidtype.atenas_apk_2.MainActivity
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.servicios.Input
+
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
+import com.solidtype.atenas_apk_2.servicios.Input
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -704,6 +705,9 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
                         .height(450.dp)
                 )
             }
+
+        }
+    }
 
 
 

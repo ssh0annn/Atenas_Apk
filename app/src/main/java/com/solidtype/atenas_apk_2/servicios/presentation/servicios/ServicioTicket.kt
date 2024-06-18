@@ -24,3 +24,4 @@ data class InfoTicket(
     val assesorios: String = "",
 )
 
+

@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
@@ -54,6 +55,7 @@ import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClienteForm
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.InfoTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoDevice
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoServicio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.PagosEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
@@ -89,10 +91,14 @@ fun selector(
     val altura = remember { mutableStateOf(400.dp) }
     
 
+    //Dato de pagos
+
+
+    var tipoPago by rememberSaveable { mutableStateOf("") }
 
     //formulario cliente
     var nombre by rememberSaveable { mutableStateOf("") }
-    var mystate by rememberSaveable { mutableStateOf(false) }
+    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
 
 //    if(mystate){
 //        viewmodel.onPayment(
@@ -505,9 +511,7 @@ fun selector(
                                                         it.map { persona -> persona?.nombre.toString()
                                                         }
                                                     },
-                                                    false,onClickAgregar = {nuevoCliente= !nuevoCliente
-
-                                                    }
+                                                    false,onClickAgregar = {nuevoCliente= !nuevoCliente}
                                                 ) {
                                                         selecion ->
                                                     val cliente = state.listaClientes.find { it?.nombre == selecion }
@@ -662,34 +666,7 @@ fun selector(
                                                         it.toString()
                                                     }, false) {
                                                         selecionado ->
-                                                    when(selecionado){
-                                                        FormaPagos.CREDITO.toString() -> {
-                                                            viewmodel.onPayment(
-                                                                PagosEvent.TipoDePago(
-                                                                    FormaPagos.CREDITO))
-                                                        }
-                                                        FormaPagos.EFECTIVO.toString()-> {
-                                                            viewmodel.onPayment(
-                                                                PagosEvent.TipoDePago(
-                                                                    FormaPagos.EFECTIVO))
-                                                        }
-                                                        FormaPagos.CREDIT_CARD.toString() -> {
-                                                            viewmodel.onPayment(
-                                                                PagosEvent.TipoDePago(
-                                                                    FormaPagos.CREDIT_CARD))
-                                                        }
-                                                        FormaPagos.TRANSATIONS.toString() -> {
-                                                            viewmodel.onPayment(
-                                                                PagosEvent.TipoDePago(
-                                                                    FormaPagos.TRANSATIONS))
-                                                        }
-
-                                                        FormaPagos.CREDIT_DEBIT.toString() -> {
-                                                            viewmodel.onPayment(
-                                                                PagosEvent.TipoDePago(
-                                                                    FormaPagos.CREDIT_DEBIT))
-                                                        }
-                                                    }
+                                                            tipoPago = selecionado
                                                 }
                                             }
                                         }
@@ -698,11 +675,13 @@ fun selector(
                                         ){
                                             Row() {
                                                    Checkbox(
-                                                       checked = mystate,
+                                                       checked = state.impuestos,
                                                        onCheckedChange = {
-                                                           mystate = it
+                                                          viewmodel.onPayment(PagosEvent.Impuestos(
+                                                              it
+                                                          ))
                                                        })
-                                                Box(modifier = Modifier .padding(top = 12.dp)){
+                                                Box(modifier = Modifier .padding(top = 15.dp)){
                                                     Text(text = "Impuesto")
                                                 }
 
@@ -734,14 +713,17 @@ fun selector(
                                     if(precio.isEmpty() || dia.isEmpty() || descrp.isEmpty()){
 
                                     }else{
-                                        mostrar.value = true
                                         viewmodel.onPayment(
                                             PagosEvent.DatosDelPago(
-                                                DatoFinancieros(
-                                                    presupuesto = precio.toDouble()
+                                                tipo_venta(
+                                                    presupuesto = precio.toDouble(),
                                                 )
                                             )
                                         )
+
+                                        mostrar.value = true
+
+
                                     }
 
                                     if(imei.isEmpty() || accesorio.isEmpty() || falla.isEmpty() || estado.isEmpty() || abono.isEmpty() || nota.isEmpty() || total.isEmpty()){
@@ -1088,7 +1070,7 @@ fun selector(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 1160.dp, top = 530.dp)
+            .padding(start = 800.dp, top = 400.dp)
     ) {
 
         Icon(imageVector = Icons.Filled.Support,
