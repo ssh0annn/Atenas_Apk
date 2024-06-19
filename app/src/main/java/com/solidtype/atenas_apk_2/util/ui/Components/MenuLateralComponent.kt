@@ -131,6 +131,11 @@ fun MenuLateral(navController: NavController) {
                             navController.context.startActivity(Intent(navController.context, PefilAdministrador::class.java))
                             mostrarMenu.value = false
                         }
+                        Boton("Gestion de Clientes", anchoTotal = true) {
+                            navController.navigate(Screens.GestionCliente.route)
+                            mostrarMenu.value = false
+                            PefilAdministrador.instancia?.finish()
+                        }
                     }
                     Row(
                         modifier = Modifier
