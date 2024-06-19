@@ -81,7 +81,7 @@ fun MenuLateral(navController: NavController) {
         Box {
             Box( //Menú Lateral
                 modifier = Modifier
-                    .width(Pantalla.ancho * 0.3f)
+                    .width(Pantalla.ancho * 0.35f)
                     .fillMaxHeight()
                     .background(Blanco)
             ) {
@@ -110,11 +110,6 @@ fun MenuLateral(navController: NavController) {
                             mostrarMenu.value = false
                             PefilAdministrador.instancia?.finish()
                         }
-                        Boton("Gestor de Usuario", anchoTotal = true) {
-                            navController.navigate(Screens.GestionUsuarios.route)
-                            mostrarMenu.value = false
-                            PefilAdministrador.instancia?.finish()
-                        }
                         Boton("Historial", anchoTotal = true) {
                             navController.navigate(Screens.HistorialVentasTickets.route)
                             mostrarMenu.value = false
@@ -132,6 +127,7 @@ fun MenuLateral(navController: NavController) {
                         }
                         //Este botón es especial
                         Boton("Configuración del Perfil", anchoTotal = true) {
+                            PefilAdministrador.instancia?.finish()
                             navController.context.startActivity(Intent(navController.context, PefilAdministrador::class.java))
                             mostrarMenu.value = false
                         }

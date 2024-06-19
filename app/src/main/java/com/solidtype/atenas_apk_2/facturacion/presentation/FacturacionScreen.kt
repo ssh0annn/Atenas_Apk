@@ -84,7 +84,6 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
                     Titulo("Facturas", Icons.AutoMirrored.Outlined.FactCheck)
                     Inputs(noFacturaCliente, datePickerState1, fechaIni.value, showDatePicker1, datePickerState2, fechaFin.value, showDatePicker2)
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (uiState.facturaConDetalle.isNotEmpty())
                     Tabla(facturas = uiState.facturaConDetalle)
                     BotonesFinales(viewModel, fechaFin, fechaIni, noFacturaCliente)
                 }
