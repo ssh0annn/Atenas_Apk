@@ -39,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.tipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -104,37 +106,45 @@ fun MenuLateral(navController: NavController) {
                         ) {
                             Titulo("Menú", Icons.Outlined.Inventory2)
                         }
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Boton("Inventario", anchoTotal = true) {
-                            navController.navigate(Screens.Productos.route)
-                            mostrarMenu.value = false
-                            PefilAdministrador.instancia?.finish()
-                        }
-                        Boton("Historial", anchoTotal = true) {
-                            navController.navigate(Screens.HistorialVentasTickets.route)
-                            mostrarMenu.value = false
-                            PefilAdministrador.instancia?.finish()
-                        }
-                        Boton("Facturas", anchoTotal = true) {
-                            navController.navigate(Screens.Factura.route)
-                            mostrarMenu.value = false
-                            PefilAdministrador.instancia?.finish()
-                        }
-                        Boton("Gestion de Usuarios", anchoTotal = true) {
-                            navController.navigate(Screens.GestionUsuarios.route)
-                            mostrarMenu.value = false
-                            PefilAdministrador.instancia?.finish()
-                        }
-                        //Este botón es especial
-                        Boton("Configuración del Perfil", anchoTotal = true) {
-                            PefilAdministrador.instancia?.finish()
-                            navController.context.startActivity(Intent(navController.context, PefilAdministrador::class.java))
-                            mostrarMenu.value = false
-                        }
-                        Boton("Gestion de Clientes", anchoTotal = true) {
-                            navController.navigate(Screens.GestionCliente.route)
-                            mostrarMenu.value = false
-                            PefilAdministrador.instancia?.finish()
+
+                        if (tipoUserSingleton.tipoUser == TipoUser.ADMIN) {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Boton("Inventario", anchoTotal = true) {
+                                navController.navigate(Screens.Productos.route)
+                                mostrarMenu.value = false
+                                PefilAdministrador.instancia?.finish()
+                            }
+                            Boton("Historial", anchoTotal = true) {
+                                navController.navigate(Screens.HistorialVentasTickets.route)
+                                mostrarMenu.value = false
+                                PefilAdministrador.instancia?.finish()
+                            }
+                            Boton("Facturas", anchoTotal = true) {
+                                navController.navigate(Screens.Factura.route)
+                                mostrarMenu.value = false
+                                PefilAdministrador.instancia?.finish()
+                            }
+                            Boton("Gestion de Usuarios", anchoTotal = true) {
+                                navController.navigate(Screens.GestionUsuarios.route)
+                                mostrarMenu.value = false
+                                PefilAdministrador.instancia?.finish()
+                            }
+                            //Este botón es especial
+                            Boton("Configuración del Perfil", anchoTotal = true) {
+                                PefilAdministrador.instancia?.finish()
+                                navController.context.startActivity(
+                                    Intent(
+                                        navController.context,
+                                        PefilAdministrador::class.java
+                                    )
+                                )
+                                mostrarMenu.value = false
+                            }
+                            Boton("Gestion de Clientes", anchoTotal = true) {
+                                navController.navigate(Screens.GestionCliente.route)
+                                mostrarMenu.value = false
+                                PefilAdministrador.instancia?.finish()
+                            }
                         }
                     }
                     Row(

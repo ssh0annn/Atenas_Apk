@@ -58,6 +58,10 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
 import com.solidtype.atenas_apk_2.ui.theme.Transparente
 
+object tipoUserSingleton {
+    var tipoUser: TipoUser? = null
+}
+
 @Composable
 fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
 
@@ -77,6 +81,7 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
     if (!uiState.network) Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
 
     if (uiState.isAutenticated != null) {
+        tipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
             TipoUser.ADMIN -> nav.navigate(Screens.Home.route + "/Administrador")
             TipoUser.TECNICO -> nav.navigate(Screens.Home.route + "/Técnico")
