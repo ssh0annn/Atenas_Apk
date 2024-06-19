@@ -50,7 +50,8 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 fun MenuLateral(navController: NavController) {
     val mostrarMenu = rememberSaveable { mutableStateOf(false) }
     val noHoverInteractionSource = remember { MutableInteractionSource() }
-        AnimatedVisibility(
+
+    AnimatedVisibility(
         visible = mostrarMenu.value,
         enter = fadeIn(tween(500)),
         exit = fadeOut(tween(500))
@@ -107,25 +108,32 @@ fun MenuLateral(navController: NavController) {
                         Boton("Inventario", anchoTotal = true) {
                             navController.navigate(Screens.Productos.route)
                             mostrarMenu.value = false
+                            PefilAdministrador.instancia?.finish()
                         }
                         Boton("Gestor de Usuario", anchoTotal = true) {
                             navController.navigate(Screens.GestionUsuarios.route)
                             mostrarMenu.value = false
+                            PefilAdministrador.instancia?.finish()
                         }
                         Boton("Historial", anchoTotal = true) {
                             navController.navigate(Screens.HistorialVentasTickets.route)
                             mostrarMenu.value = false
+                            PefilAdministrador.instancia?.finish()
                         }
                         Boton("Facturas", anchoTotal = true) {
                             navController.navigate(Screens.Factura.route)
                             mostrarMenu.value = false
+                            PefilAdministrador.instancia?.finish()
                         }
                         Boton("Gestion de Usuarios", anchoTotal = true) {
                             navController.navigate(Screens.GestionUsuarios.route)
                             mostrarMenu.value = false
+                            PefilAdministrador.instancia?.finish()
                         }
-                        Boton("Configuración del Perfil") {
+                        //Este botón es especial
+                        Boton("Configuración del Perfil", anchoTotal = true) {
                             navController.context.startActivity(Intent(navController.context, PefilAdministrador::class.java))
+                            mostrarMenu.value = false
                         }
                     }
                     Row(

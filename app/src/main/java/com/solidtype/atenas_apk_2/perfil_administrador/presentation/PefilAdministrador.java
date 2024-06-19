@@ -19,12 +19,20 @@ import kotlinx.coroutines.flow.StateFlow;
 
 @AndroidEntryPoint
 public class PefilAdministrador extends AppCompatActivity {
+
+    // No borres esto, es necesario para el MenuLateral
+    public static PefilAdministrador instancia = null;
+
     private EditText nombre_admin,correo_admin,clave_admin,nombre_empresa,direccion_empresa,numero_empresa;
     private Button btn_guardar, btn_cancelar;
     private AdminViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // No borres esto, es necesario para el MenuLateral
+        instancia = this;
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pefil_administrador);
 
@@ -63,5 +71,12 @@ public class PefilAdministrador extends AppCompatActivity {
                 viewModel.onEvent(PerfilEvent.UpdatePerfil);
             }
         });
+    }
+
+    // No borres esto, es necesario para el MenuLateral
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instancia = null;
     }
 }
