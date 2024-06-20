@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.authentication.actualizacion.presentation
 
+import android.content.Intent
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -52,7 +53,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
@@ -63,7 +66,7 @@ object tipoUserSingleton {
 }
 
 @Composable
-fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
+fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
 
     val context = LocalContext.current
 
@@ -75,6 +78,8 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
     val checked = rememberSaveable { mutableStateOf( if (!uiState.correoGuardado.isNullOrEmpty()) true else false) }
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
 
+    val startedAdmin = rememberSaveable { mutableStateOf(false) }
+
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
     else painterResource(id = R.drawable.ic_visibility_true)
 
@@ -83,9 +88,20 @@ fun LoginScreen(nav: NavController, viewModel: AuthViewmodel = hiltViewModel()) 
     if (uiState.isAutenticated != null) {
         tipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
-            TipoUser.ADMIN -> nav.navigate(Screens.Home.route + "/Administrador")
-            TipoUser.TECNICO -> nav.navigate(Screens.Home.route + "/Técnico")
-            TipoUser.VENDEDOR -> nav.navigate(Screens.Home.route + "/Vendedor")
+            TipoUser.ADMIN -> {
+                if (!startedAdmin.value) { //evita que se abra la pantalla de perfilAdmin varias veces
+                    NavigationSingleton.screen = Screens.PerfilAdministrador.route
+                    navController.context.startActivity(
+                        Intent(
+                            navController.context,
+                            PefilAdministrador::class.java
+                        )
+                    )
+                    startedAdmin.value = true
+                }
+            }
+            TipoUser.TECNICO -> navController.navigate(Screens.Home.route + "/Técnico") //VentaScreen(navController)
+            TipoUser.VENDEDOR -> navController.navigate(Screens.Home.route + "/Vendedor") //VentaScreen(navController)
             TipoUser.UNKNOWN ->
                 Toast.makeText(
                     context,
