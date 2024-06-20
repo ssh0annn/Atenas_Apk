@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.util.ui.Components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,16 +48,19 @@ fun Boton(
             .clip(RoundedCornerShape(20.dp)),
         colors = ButtonDefaults.buttonColors(
             disabledContainerColor = Blanco,
+            disabledContentColor = AzulGris,
+            contentColor = Blanco,
             containerColor = AzulGris
+        ),
+        border = if(habilitar) null else  BorderStroke(
+            width = 3.dp,
+            color = AzulGris
         )
     ) {
         if (icon != null) {
             icon()
         } else {
-            Text(
-                text = text,
-                color = Blanco
-            )
+            Text(text = text)
         }
     }
 }
