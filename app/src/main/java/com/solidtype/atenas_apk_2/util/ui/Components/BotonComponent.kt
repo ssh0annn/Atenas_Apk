@@ -16,6 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
+import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 
 @Composable
 fun Boton(
@@ -47,14 +49,14 @@ fun Boton(
             .height(50.dp)
             .clip(RoundedCornerShape(20.dp)),
         colors = ButtonDefaults.buttonColors(
-            disabledContainerColor = Blanco,
-            disabledContentColor = AzulGris,
             contentColor = Blanco,
-            containerColor = AzulGris
+            containerColor = AzulGris,
+            disabledContainerColor = BlancoOpaco,
+            disabledContentColor = GrisOscuro
         ),
         border = if(habilitar) null else  BorderStroke(
-            width = 3.dp,
-            color = AzulGris
+            width = 2.dp,
+            color = GrisOscuro
         )
     ) {
         if (icon != null) {
