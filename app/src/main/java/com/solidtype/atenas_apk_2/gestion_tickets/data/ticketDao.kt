@@ -16,9 +16,9 @@ import java.time.LocalDate
 @Dao
 interface ticketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addTicket(ticket : ticket)
+   suspend fun addTicket(ticket : ticket)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addTickets(ticket : List<ticket>)
+   suspend fun addTickets(ticket : List<ticket>)
     @Query("select * from ticket WHERE estado == true")
     fun getTickets(): Flow<List<ticket>>
     @Query("select * from ticket WHERE estado == false")
@@ -36,19 +36,19 @@ interface ticketDao {
     @Query("select * from ticket where id_dispositivo ==:id")
     fun getTicketsByIdDispositivo(id :Long): Flow<List<ticket>>
     @Query("select * from ticket where id_ticket ==:id")
-    fun getTicketById(id :Long): ticket
+    suspend fun getTicketById(id :Long): ticket
     @Update
-    fun updateTicket(ticket: ticket)
+    suspend fun updateTicket(ticket: ticket)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertarTipoVenta(tipoVenta: tipo_venta)
     @Transaction
-    fun deleteTicket(ticket: ticket){
+   suspend fun deleteTicket(ticket: ticket){
         ticket.estado = false
         updateTicket(ticket)
     }
     @Transaction
-    fun crearTicket(ticketTransaction: TicketwithRelation){
+    suspend fun crearTicket(ticketTransaction: TicketwithRelation){
         insertarTipoVenta(ticketTransaction.tipo_venta)
         addTicket(ticketTransaction.ticket)
     }

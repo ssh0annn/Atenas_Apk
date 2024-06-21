@@ -14,8 +14,9 @@ sealed class ServiceEvent {
 }
 sealed class OnTicket{
     object GetTickets : OnTicket()
+    object CrearTicket : OnTicket()
     data class InforTicket(val infoTicket: InfoTicket):OnTicket()
-    data class CrearTicket(val ticket: ServicioTicket) : OnTicket()
+    //data class CrearTicket(val ticket: ServicioTicket) : OnTicket()
 
 }
 sealed class ClientEvents{

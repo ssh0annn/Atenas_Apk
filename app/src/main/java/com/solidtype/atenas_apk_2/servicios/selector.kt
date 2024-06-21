@@ -73,7 +73,6 @@ fun selector(
     viewmodel: ServiciosViewModel = hiltViewModel(), listaSericios: List<servicio>,
     listaCliente: List<Personastodas.ClienteUI?>, listaDispositivos: List<Dispositivo?>
 
-
 ) {
 
     var search by rememberSaveable { mutableStateOf("") }
@@ -98,7 +97,6 @@ fun selector(
 
     //formulario cliente
     var nombre by rememberSaveable { mutableStateOf("") }
-    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
 
 //    if(mystate){
 //        viewmodel.onPayment(

@@ -219,7 +219,7 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
         Button(onClick = { nuevoDatosDelTicket = true}) {
             Text(text = "Detalles del Ticket")
         }
-        Button(onClick = { viewModel.onTicket(OnTicket.CrearTicket(viewModel.ticket.value)) }) {
+        Button(onClick = { viewModel.onTicket(OnTicket.CrearTicket) }) {
             Text(text = "Imprimir Tickets")
         }
         val contex = LocalContext.current

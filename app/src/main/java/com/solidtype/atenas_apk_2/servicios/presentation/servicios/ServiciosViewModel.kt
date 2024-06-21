@@ -91,7 +91,6 @@ class ServiciosViewModel @Inject constructor(
 
     private fun getTickets() {
         viewModelScope.launch {
-
           casosTicket.getDetalleTicket().map { listaTicket ->
                 if (listaTicket.isNotEmpty()) {
                     listaTicket.map { tic ->
@@ -157,6 +156,7 @@ class ServiciosViewModel @Inject constructor(
             is ServiceEvent.ServicioSelecionado -> {
                 ticket.update { it.copy(servicio = event.servicio) }
             }
+
         }
     }
 
@@ -231,8 +231,6 @@ class ServiciosViewModel @Inject constructor(
                 ticket.value.datosFinance?.let {
                     onPayment(PagosEvent.DatosDelPago(it))
                 }
-
-
             }
         }
     }
@@ -255,9 +253,9 @@ class ServiciosViewModel @Inject constructor(
 
         when (event) {
             is OnTicket.CrearTicket -> {
-                println("Este es el ticket creado: ${event.ticket}")
+                println("Este es el ticket creado: ${ticket.value}")
 
-                crearTicket(event.ticket)
+                crearTicket(ticket.value)
 
                 ticket.update { it.copy(cliente = null, dispositivo = null,
                     servicio = null, detalles =InfoTicket(), datosFinance = null) }
