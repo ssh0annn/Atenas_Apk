@@ -9,12 +9,13 @@ import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServicioTicket
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import java.time.temporal.TemporalField
 import javax.inject.Inject
 class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
     suspend fun crearTicket(ticket: ServicioTicket) {
         val newTicket = ticket(
-            id_ticket = System.currentTimeMillis(),
+            id_ticket = System.currentTimeMillis()+1,
             id_vendedor = ticket.vendedor!!.id_usuario,
             id_cliente = ticket.cliente!!.id_cliente,
             id_tipo_venta = ticket.datosFinance!!.id_tipo_venta,

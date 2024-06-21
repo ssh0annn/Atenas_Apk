@@ -71,7 +71,7 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
 
             ) {
                 Text(
-                    text = "Nombre",
+                    text = "NO. Factura",
                     modifier = Modifier.weight(1f),
                     color = Blanco,
                     textAlign = TextAlign.Center,

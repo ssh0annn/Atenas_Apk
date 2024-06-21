@@ -20,11 +20,11 @@ import java.time.LocalDate
     ForeignKey(entity = Dispositivo::class, parentColumns = ["id_dispositivo"], childColumns = ["id_dispositivo"], onDelete = ForeignKey.CASCADE),
     ForeignKey(entity = servicio::class, parentColumns = ["id_servicio"], childColumns = ["id_servicio"], onDelete = ForeignKey.CASCADE)
 ], indices = [
-    Index(value = ["id_vendedor"], unique = true),
-    Index(value = ["id_cliente"], unique = true),
-    Index(value = ["id_tipo_venta"], unique = true),
-    Index(value = ["id_dispositivo"], unique = true),
-    Index(value = ["id_servicio"], unique = true)
+    Index(value = ["id_vendedor"], unique = false),
+    Index(value = ["id_cliente"], unique = false),
+    Index(value = ["id_tipo_venta"], unique = false),
+    Index(value = ["id_dispositivo"], unique = false),
+    Index(value = ["id_servicio"], unique = false)
 ])
 data class ticket (
     @PrimaryKey(autoGenerate = true) var id_ticket :Long? = 0,

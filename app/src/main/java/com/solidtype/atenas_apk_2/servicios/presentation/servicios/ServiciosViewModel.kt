@@ -10,11 +10,13 @@ import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servic
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_usuario.GetCurrentUserEmail
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +54,9 @@ class ServiciosViewModel @Inject constructor(
 
     private fun crearTicket(ticket: ServicioTicket) {
         viewModelScope.launch {
-            casosTicket.crearTicket(ticket)
+            withContext(Dispatchers.IO){
+                casosTicket.crearTicket(ticket)
+            }
         }
     }
 
@@ -257,8 +261,8 @@ class ServiciosViewModel @Inject constructor(
 
                 crearTicket(ticket.value)
 
-                ticket.update { it.copy(cliente = null, dispositivo = null,
-                    servicio = null, detalles =InfoTicket(), datosFinance = null) }
+//                ticket.update { it.copy(cliente = null, dispositivo = null,
+//                    servicio = null, detalles =InfoTicket(), datosFinance = null) }
             }
             OnTicket.GetTickets -> {
                 getTickets()

@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TicketRepositoryImpl @Inject constructor(
-
     private val miticket:ticketDao,
 ):TicketRepository {
     override fun getTickets(): Flow<List<TicketwithRelation>> {
@@ -18,8 +17,6 @@ class TicketRepositoryImpl @Inject constructor(
     override fun buscarTickets(any: String): Flow<List<TicketwithRelation>> {
        return miticket.buscarTicketsWithRelation(any)
     }
-
-
 
     override suspend fun crearTicket(ticket: TicketwithRelation) {
         miticket.crearTicket(ticket)
