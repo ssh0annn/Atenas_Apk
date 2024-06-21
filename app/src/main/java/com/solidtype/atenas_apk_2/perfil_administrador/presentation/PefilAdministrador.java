@@ -51,7 +51,7 @@ public class PefilAdministrador extends AppCompatActivity {
         Button btn_guardar = findViewById(R.id.perfil_config_btnguardar);
         Button btn_cancelar = findViewById(R.id.perfil_config_btncancelar);
 
-        if (!perfilUI.getValue().getPerfilAdmin().isEmpty()) {
+        if (perfilUI.getValue().getPerfilAdmin().isEmpty()) {
             // RELLENADO DE CAMPOS
             nombre_admin.setText(perfilUI.getValue().getPerfilAdmin().get(0).getNombre());
             correo_admin.setText(perfilUI.getValue().getPerfilAdmin().get(0).getCorreo());
