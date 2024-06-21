@@ -60,6 +60,7 @@ import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.PagosEvent
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServicioTicket
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -87,6 +88,7 @@ fun selector(
     val listacliente = state.listaClientes
     //modal
     val openDialog = remember { mutableStateOf(false) }
+    val open = remember { mutableStateOf(false) }
     val mostrar = remember { mutableStateOf(false) }
     val altura = remember { mutableStateOf(400.dp) }
     
@@ -98,7 +100,7 @@ fun selector(
 
     //formulario cliente
     var nombre by rememberSaveable { mutableStateOf("") }
-    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
+
 
 //    if(mystate){
 //        viewmodel.onPayment(
@@ -361,6 +363,82 @@ fun selector(
     }
 
 
+
+
+    if (open.value) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        open.value = false
+                    },
+                    text = {
+                        Column {
+                           Box {
+                               Text(text ="confirmae")
+                           }
+                        }
+                    },
+
+
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                back, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+                            onClick = {
+                                viewmodel.onTicket(
+                                    OnTicket.CrearTicket(
+                                        ServicioTicket(
+                                            cliente = stateTicket.cliente,
+                                            dispositivo = stateTicket.dispositivo,
+                                            vendedor = stateTicket.vendedor,
+                                            detalles = stateTicket.detalles,
+                                            servicio = stateTicket.servicio,
+                                            datosFinance = stateTicket.datosFinance
+                                        )
+                                    )
+                                )
+                                open.value = false
+                            }) {
+                            Text("Guardar", color = Blanco)
+                        }
+                    },
+
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                open.value = false
+                            },
+                        ) {
+                            Text("salir", color = Blanco)
+
+                        }
+
+                    },
+
+                    modifier = Modifier
+                        .width(800.dp)
+//                        .background(GrisOscuro)
+                        .height(altura.value),
+                )
+            }
+        }
+    }
+
+
+
+
+
     //cuerpo del modal
     if (openDialog.value) {
         Box(
@@ -416,16 +494,6 @@ fun selector(
 
                                                 )
                                             Spacer(modifier = Modifier.padding(top = 10.dp))
-                                            Box() {
-                                                Inputmed(
-                                                    label = "Servicio",
-                                                    valor = selectedText,
-                                                    derecho = true,
-                                                    modifier = Modifier
-                                                ) {
-                                                    selectedText = it
-                                                }
-                                            }
 
                                             Row {
                                                 Box {
@@ -612,6 +680,8 @@ fun selector(
                                                         it.toDouble()
                                                     ))
                                                 }
+
+
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
                                             Box() {
@@ -722,13 +792,12 @@ fun selector(
                                                 )
                                             )
                                         )
-
                                         mostrar.value = true
-
-
                                     }
 
                                     if(imei.isEmpty() || accesorio.isEmpty() || falla.isEmpty() || estado.isEmpty() || abono.isEmpty() || nota.isEmpty() || total.isEmpty()){
+
+                                    }else{
                                         viewmodel.onTicket(
                                             OnTicket.InforTicket(
                                                 InfoTicket(
@@ -740,12 +809,19 @@ fun selector(
                                                 )
                                             )
                                         )
-                                        
-                                        
-                                        
-                                        
-                                        
-                                    }else{
+                                        open.value = true
+//                                        viewmodel.onTicket(
+//                                            OnTicket.CrearTicket(
+//                                                ServicioTicket(
+//                                                    cliente = stateTicket.cliente,
+//                                                    dispositivo = stateTicket.dispositivo,
+//                                                    vendedor = stateTicket.vendedor,
+//                                                    detalles = stateTicket.detalles,
+//                                                    servicio = stateTicket.servicio,
+//                                                    datosFinance = stateTicket.datosFinance
+//                                                )
+//                                            )
+//                                        )
 
                                     }
 
@@ -887,11 +963,11 @@ fun selector(
                                     Box() {
                                         Input(
                                             label = "Servico",
-                                            valor = nuevoServicio,
+                                            valor = stateTicket.servicio?.nombre.toString() ,
                                             derecho = true,
                                             modifier = Modifier
                                         ) {
-                                            nuevoServicio = it
+//                                            nuevoServicio = it
                                         }
                                     }
                                 }

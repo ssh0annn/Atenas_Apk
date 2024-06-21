@@ -14,7 +14,7 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
     suspend fun crearTicket(ticket: ServicioTicket) {
         val newTicket = ticket(
-            id_ticket = System.currentTimeMillis(),
+
             id_vendedor = ticket.vendedor!!.id_usuario,
             id_cliente = ticket.cliente!!.id_cliente,
             id_tipo_venta = ticket.datosFinance!!.id_tipo_venta,
