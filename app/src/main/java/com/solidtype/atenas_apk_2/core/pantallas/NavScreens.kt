@@ -22,6 +22,7 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.Clien
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdmin
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 
@@ -43,6 +44,9 @@ fun Navigation() {
         startDestination = Screens.Login.route
 
     ){
+        composable("prueba"){
+            PerfilAdmin(navController)
+        }
         composable(route = Screens.Login.route ) {
             LoginScreen(navController)
         }

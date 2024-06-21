@@ -1,49 +1,32 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.presentation;
 
-import android.os.Bundle;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.compose.ui.platform.ComposeView;
+import android.widget.FrameLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
+import androidx.lifecycle.ViewModelStoreOwner;
 import com.solidtype.atenas_apk_2.R;
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel;
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent;
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilUIState;
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateralComponentKt;
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlinx.coroutines.flow.StateFlow;
 
 @AndroidEntryPoint
-public class PefilAdministrador extends AppCompatActivity {
-
-    // No borres esto, es necesario para el MenuLateral
-    public static PefilAdministrador instancia = null;
+public class PefilAdministrador extends FrameLayout {
 
     private EditText nombre_admin,correo_admin,clave_admin,nombre_empresa,direccion_empresa,numero_empresa;
     private Button btn_guardar, btn_cancelar;
-    private AdminViewModel viewModel;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private StateFlow<PerfilUIState> perfilUI;
 
-        // No borres esto, es necesario para el MenuLateral
-        instancia = this;
+    public PefilAdministrador(Context context, AdminViewModel viewModel) {
+        super(context);
 
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_pefil_administrador);
-
-
-        // OBJETO COMPOSEBLE INICADO Y ACTUANDO
-        ComposeView Menu = findViewById(R.id.jetpack);
-        PerfilAdminKtKt.setMenuLateralContent(Menu);
-
-        // INICIO DE VIEWMODEL Y UISTATE
-        viewModel = new ViewModelProvider(this).get(AdminViewModel.class);
-        StateFlow<PerfilUIState> perfilUI = viewModel.getUiState();
+        //Inflar la vista
+        LayoutInflater.from(context).inflate(R.layout.activity_pefil_administrador, this, true);
 
         // INICIACION DE CAMPOS EN VIEW
         nombre_admin = findViewById(R.id.txt_perfil_nombre_admin);
@@ -71,12 +54,5 @@ public class PefilAdministrador extends AppCompatActivity {
                 viewModel.onEvent(PerfilEvent.UpdatePerfil);
             }
         });
-    }
-
-    // No borres esto, es necesario para el MenuLateral
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        instancia = null;
     }
 }
