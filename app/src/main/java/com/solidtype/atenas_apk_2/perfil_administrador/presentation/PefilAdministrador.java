@@ -15,7 +15,6 @@ import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilUIS
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlinx.coroutines.flow.StateFlow;
 
-@AndroidEntryPoint
 public class PefilAdministrador extends FrameLayout {
 
     private EditText nombre_admin,correo_admin,clave_admin,nombre_empresa,direccion_empresa,numero_empresa;
