@@ -116,7 +116,6 @@ fun MenuLateral(navController: NavController) {
                                 habilitar = NavigationSingleton.screen != Screens.Productos.route
                             ) {
                                 NavigationSingleton.screen = Screens.Productos.route
-                                PefilAdministrador.instancia?.finish()
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.Productos.route)
                             }
@@ -126,7 +125,6 @@ fun MenuLateral(navController: NavController) {
                                 habilitar = NavigationSingleton.screen != Screens.HistorialVentasTickets.route
                             ) {
                                 NavigationSingleton.screen = Screens.HistorialVentasTickets.route
-                                PefilAdministrador.instancia?.finish()
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.HistorialVentasTickets.route)
                             }
@@ -136,7 +134,6 @@ fun MenuLateral(navController: NavController) {
                                 habilitar = NavigationSingleton.screen != Screens.Factura.route
                             ) {
                                 NavigationSingleton.screen = Screens.Factura.route
-                                PefilAdministrador.instancia?.finish()
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.Factura.route)
                             }
@@ -146,7 +143,6 @@ fun MenuLateral(navController: NavController) {
                                 habilitar = NavigationSingleton.screen != Screens.GestionUsuarios.route
                             ) {
                                 NavigationSingleton.screen = Screens.GestionUsuarios.route
-                                PefilAdministrador.instancia?.finish()
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionUsuarios.route)
                             }
@@ -157,7 +153,6 @@ fun MenuLateral(navController: NavController) {
                                 habilitar = NavigationSingleton.screen != Screens.PerfilAdministrador.route
                             ) {
                                 NavigationSingleton.screen = Screens.PerfilAdministrador.route
-                                PefilAdministrador.instancia?.finish()
                                 mostrarMenu.value = false
                                 navController.context.startActivity(
                                     Intent(
@@ -172,9 +167,14 @@ fun MenuLateral(navController: NavController) {
                                 habilitar = NavigationSingleton.screen != Screens.GestionCliente.route
                             ) {
                                 NavigationSingleton.screen = Screens.GestionCliente.route
-                                PefilAdministrador.instancia?.finish()
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionCliente.route)
+                            }
+
+                            Boton("Prueba", anchoTotal = true, habilitar = NavigationSingleton.screen != "prueba") {
+                                NavigationSingleton.screen = "prueba"
+                                mostrarMenu.value = false
+                                navController.navigate("prueba")
                             }
                         }
                     }
