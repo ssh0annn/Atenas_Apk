@@ -33,6 +33,7 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Da
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Inputs
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 
 @SuppressLint("MutableCollectionMutableState", "SuspiciousIndentation")
@@ -83,7 +84,6 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
                     Titulo("Facturas", Icons.AutoMirrored.Outlined.FactCheck)
                     Inputs(noFacturaCliente, datePickerState1, fechaIni.value, showDatePicker1, datePickerState2, fechaFin.value, showDatePicker2)
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (uiState.facturaConDetalle.isNotEmpty())
                     Tabla(facturas = uiState.facturaConDetalle)
                     BotonesFinales(viewModel, fechaFin, fechaIni, noFacturaCliente)
                 }
@@ -92,4 +92,5 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
         DatePickerDialogoSimple(showDatePicker1, datePickerState1, fechaIni)
         DatePickerDialogoSimple(showDatePicker2, datePickerState2, fechaFin)
     }
+    MenuLateral(navController)
 }

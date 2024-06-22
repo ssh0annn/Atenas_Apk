@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+
 @HiltViewModel
 class AuthViewmodel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -28,9 +29,13 @@ class AuthViewmodel @Inject constructor(
     var uiStates: MutableStateFlow<AuthUIStates> = MutableStateFlow(AuthUIStates())
         private set
 
+   private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
+
     init {
 
-        uiStates.update { it.copy(network = isNetworkAvailable()) }
+        uiStates.update { it.copy(network = isNetworkAvailable(),
+            correoGuardado = recuerdame.getString("correo", "").toString()
+            ) }
         isAutenticated()
     }
 
@@ -38,12 +43,19 @@ class AuthViewmodel @Inject constructor(
         when (event) {
             AuthEvent.IsAutenticatedEvent -> {
                 isAutenticated()
+                uiStates.update { it.copy(network = isNetworkAvailable()) }
             }
 
             is AuthEvent.LoginEvent -> {
+                uiStates.update { it.copy(network = isNetworkAvailable()) }
                 login(event.email, event.password)
             }
-
+            is AuthEvent.Recuerdame -> {
+                recuerdame(event.email)
+            }
+            is AuthEvent.EliminarRecuerdos -> {
+                eliminarRecuerdos()
+            }
             else -> {
 
             }
@@ -69,7 +81,7 @@ class AuthViewmodel @Inject constructor(
               true -> {
                   when(checkListAuth.deviceRegistrado){
                         true -> {
-                            when(checkListAuth.licensiaActiva){
+                            when(checkListAuth.licensiaActiva){//REvision por usuarios de otra tablet.
                                 true ->{
                                     uiStates.update { it.copy(isAutenticated = Usuario(
                                         correo = checkListAuth.emailUsuario,
@@ -90,7 +102,7 @@ class AuthViewmodel @Inject constructor(
                     }
               }
               false -> {
-                  uiStates.update { it.copy(isAutenticated = null, razones = "Licencia no activa") }
+                  uiStates.update { it.copy(isAutenticated = null, razones = "Usuario no identificado") }
                   return false
               }
           }
@@ -127,5 +139,18 @@ class AuthViewmodel @Inject constructor(
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
+    }
+    private fun eliminarRecuerdos(){
+        recuerdame
+            .edit()
+            .remove("correo")
+            .apply()
+    }
+    private fun recuerdame(correo: String?){
+        recuerdame
+            .edit()
+            .putString("correo", correo)
+            .apply()
+
     }
 }

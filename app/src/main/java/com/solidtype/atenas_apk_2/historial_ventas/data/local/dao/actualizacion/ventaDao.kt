@@ -3,18 +3,18 @@ package com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
 interface ventaDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addVenta(venta: venta)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addVentas(venta : List<venta>)
     @Query("select * from venta")
     fun getVentas(): Flow<List<venta>>
@@ -22,8 +22,6 @@ interface ventaDao {
      fun getVentasByIdUsuario(id :Long): Flow<List<venta>>
     @Query("select * from venta where id_cliente ==:id")
      fun getVentasByIdPersona(id :Long): Flow<List<venta>>
-    @Query("select * from venta where id_tipo_venta ==:id")
-     fun getVentasByIdTipoVenta(id :Long): Flow<List<venta>>
     @Query("select * from venta where id_venta ==:id")
     suspend fun getVentasById(id :Int): venta
     @Query("select * from venta " +
@@ -33,10 +31,8 @@ interface ventaDao {
             "or id_tipo_venta like '%' || :any || '%'" +
             "and fecha between :fechaInicial and :fechaFinal")
     fun getVentasByIdsAndFecha(any : String, fechaInicial : LocalDate, fechaFinal : LocalDate):Flow<List<venta>>
-
     @Query("SELECT * FROM venta WHERE fecha BETWEEN :fechaI AND :fechaF")
     fun getHistorialVentaFechaCategoria(fechaI : LocalDate, fechaF: LocalDate): Flow<List<venta>>
-
     @Update
     suspend fun updateVenta(venta : venta)
     @Delete

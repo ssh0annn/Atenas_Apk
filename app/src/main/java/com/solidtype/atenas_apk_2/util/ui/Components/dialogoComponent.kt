@@ -1,8 +1,14 @@
 package com.solidtype.atenas_apk_2.util.ui.Components
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +21,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -36,13 +44,23 @@ fun MyDialog(
     onCerrarDialogo: () -> Unit,
     max: Boolean = true,
     sinBoton: Boolean = false,
+    clickable: Boolean = false,
     contenido: @Composable () -> Unit
 ) {
-    if (mostrar) {
+    val noHoverInteractionSource = remember { MutableInteractionSource() }
+    AnimatedVisibility (
+        visible = mostrar,
+        enter = fadeIn(tween(500)),
+        exit = fadeOut(tween(500))
+    ) {
         BackHandler { onCerrarDialogo() }
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .clickable(
+                    interactionSource = noHoverInteractionSource,
+                    indication = null
+                ) { if (clickable) onCerrarDialogo() }
                 .background(semiTransparente),
             contentAlignment = Alignment.Center
         ) {
@@ -112,13 +130,15 @@ fun Dialogo(
     onCerrarDialogo: () -> Unit,
     max: Boolean = true,
     sinBoton: Boolean = false,
+    clickable: Boolean = false,
     content: @Composable () -> Unit
 ) {
     MyDialog(
         mostrar = mostrar,
         onCerrarDialogo = onCerrarDialogo,
         max = max,
-        sinBoton = sinBoton
+        sinBoton = sinBoton,
+        clickable = clickable
     ) {
         Text(
             text = titulo,

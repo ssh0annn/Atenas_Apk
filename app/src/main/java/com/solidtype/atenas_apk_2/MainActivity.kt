@@ -11,7 +11,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
+
+
+import com.solidtype.atenas_apk_2.servicios.servicios
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -19,26 +24,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewmodel by viewModels<InventarioViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         setContent {
 
-            //Navigation()
-            //Demo_ExposedDropdownMenuBox()
-            // FireManeger()
-            //TestAutocompleteSelect()
-            // Demo_SearchableExposedDropdownMenuBox()
-            //InventoryScreen()
-             //servicios()
-            //Navigation()
-            //HistorialScreen()
-           // FireManeger()
-            /*ImeiBoton {
-
-            }*/
-
-
-           Navigation()
+            Navigation()
 
         }
 
@@ -76,9 +67,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ImeiBoton(imei: () -> Unit){
+fun ImeiBoton(imei: () -> Unit) {
 
-    Button(onClick = {imei()}) {
+    Button(onClick = { imei() }) {
         Text(text = "Imprime IMEI")
     }
 

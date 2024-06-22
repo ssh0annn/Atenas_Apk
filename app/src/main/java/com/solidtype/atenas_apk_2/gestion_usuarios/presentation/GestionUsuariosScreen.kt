@@ -29,10 +29,13 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AvatarConBotones
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarRol
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoSimple
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 
 @Composable
@@ -63,6 +66,8 @@ fun GestionUsuariosScreen(
 
     val mostrarDialogo = rememberSaveable { mutableStateOf(false) }
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
+    val mostrarConfirmarRol = rememberSaveable { mutableStateOf(false) }
+    val mostrarQR = rememberSaveable { mutableStateOf(false) }
 
     if(busqueda.value.isNotBlank()) {
         viewModel.onUserEvent(UserEvent.BuscarUsuario(busqueda.value))
@@ -108,10 +113,19 @@ fun GestionUsuariosScreen(
                     }
                     Detalles(idUsuario, nombre, apellido, correo, clave, telefono, rol, uiState, mostrarDialogo, mostrarConfirmar, estado, viewModel, context)
                 }
-                AvatarConBotones()
+                AvatarConBotones(mostrarQR)
             }
         }
-        DialogoSimple(mostrarDialogo, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, uiState, viewModel, context)
+        DialogoSimple(mostrarDialogo, mostrarConfirmarRol, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, uiState, viewModel, context)
         DialogoConfirmarEliminarUsuario(mostrarConfirmar, viewModel, idUsuario, uiState, rol, nombre, apellido, correo, clave, telefono, estado, context)
+        DialogoConfirmarEliminarRol(mostrarConfirmarRol, viewModel, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, context)
+        Dialogo(titulo = "QR de Técnico", mostrar = mostrarQR.value, onCerrarDialogo = { mostrarQR.value = false }, max = false) {
+            Box(
+                contentAlignment = Alignment.Center,
+            ) {
+                //QR
+            }
+        }
+        MenuLateral(navController)
     }
 }

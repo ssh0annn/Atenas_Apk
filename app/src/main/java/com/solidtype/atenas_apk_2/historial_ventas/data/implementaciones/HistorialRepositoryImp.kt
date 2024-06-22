@@ -77,9 +77,6 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.id_cliente.toString())
                 temp.add(productos.id_tipo_venta.toString())
                 productos.assesorios?.let { temp.add(it) }
-                temp.add(productos.subtotal.toString())
-                temp.add(productos.impuesto.toString())
-                temp.add(productos.total.toString())
                 temp.add(productos.fecha_inicio.toString())
                 temp.add(productos.fecha_final.toString())
                 temp.add(productos.estado.toString())

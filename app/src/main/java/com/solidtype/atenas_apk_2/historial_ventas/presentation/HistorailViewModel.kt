@@ -121,9 +121,9 @@ class HistorailViewModel @Inject constructor(
                     casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal)
                 var deuda  = 0.0
                 productosRangoticket.collect { product ->
-                    for (i in product) {
-                        deuda += i.total
-                    }
+//                    for (i in product) {
+//                        deuda += i.total
+//                    }
                     uiState.update {
                         it.copy(Ticket = product, isLoading = false, total2 = deuda)
                     }
@@ -169,9 +169,9 @@ class HistorailViewModel @Inject constructor(
         var deuda = 0.0
        job =  viewModelScope.launch {
             mostrarTick.collect { product ->
-                for (i in product) {
-                    deuda += i.total
-                }
+//                for (i in product) {
+//                    deuda += i.total
+//                }
                 uiState.update {
                     it.copy(
                         Ticket = product, isLoading = false, total2 = deuda, ventasOTicket = true

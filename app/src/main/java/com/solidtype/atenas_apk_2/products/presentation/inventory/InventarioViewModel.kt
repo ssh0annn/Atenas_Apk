@@ -60,7 +60,7 @@ class InventarioViewModel @Inject constructor(
         viewModelScope.launch {
             casosInventario.createProductos(entidad)
             withContext(Dispatchers.Default) {
-                syncProductos()
+               // syncProductos()
             }
         }
 
@@ -71,7 +71,7 @@ class InventarioViewModel @Inject constructor(
 
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-                syncProductos()
+                //syncProductos()
             }
             productos.collect { product ->
                 uiState.update {
@@ -88,9 +88,7 @@ class InventarioViewModel @Inject constructor(
                 println("withContext la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 val path = casosInventario.exportarExcel(uiState.value.products)
-
                 println("Se guardo el archivo en: ${path}")
-
                 uiState.update { it.copy(isLoading = false) }
                 println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
@@ -101,7 +99,6 @@ class InventarioViewModel @Inject constructor(
             }
             mostrarProductos()
         }
-
     }
 
     fun eliminarProductos(producto: inventario) {
@@ -110,9 +107,7 @@ class InventarioViewModel @Inject constructor(
                 uiState.update { it.copy(isLoading = true) }
                 casosInventario.deleteProductos(producto)
                 uiState.update { it.copy(isLoading = false) }
-
             }
-
         }
     }
 
@@ -120,21 +115,17 @@ class InventarioViewModel @Inject constructor(
         viewModelScope.launch {
             val busqueda = casosInventario.searchProductos(any)
             busqueda.collect { product ->
-
                 uiState.update {
                     it.copy(products = product)
-
                 }
             }
-
         }
-
     }
 
     fun syncProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-                casosInventario.syncProductos()
+               // casosInventario.syncProductos()
             }
         }
     }

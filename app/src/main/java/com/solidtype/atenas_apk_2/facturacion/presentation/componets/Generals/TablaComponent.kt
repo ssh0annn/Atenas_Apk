@@ -111,170 +111,171 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                     .fillMaxSize()
                     .background(GrisOscuro)
             ) {
-                itemsIndexed(facturas) { i, factura ->
-                    Column {
-                        Row(
-                            modifier = Modifier
-                                .padding(
-                                    bottom = when (desplegar[i]) {
-                                        true -> 0.dp
-                                        false -> 5.dp
-                                    }
-                                )
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .clip(RoundedCornerShape(50.dp))
-                                .background(Blanco)
-                                .clickable {
-                                    desplegar = desplegar
-                                        .toMutableList()
-                                        .also {
-                                            it[i] = !it[i]
+                if (facturas.isNotEmpty())
+                    itemsIndexed(facturas) { i, factura ->
+                        Column {
+                            Row(
+                                modifier = Modifier
+                                    .padding(
+                                        bottom = when (desplegar[i]) {
+                                            true -> 0.dp
+                                            false -> 5.dp
                                         }
-                                },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = factura?.factura?.id_venta.toString(),
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                text = factura?.factura?.id_cliente.toString(),
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            factura?.factura?.fecha?.let {
-                                Text(
-                                    text = it.formatoParaUser(),
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                            Text(
-                                text = factura?.factura?.cantidad.toString(),
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                text = factura?.factura?.total.toString(),
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            factura?.factura?.estado?.let {
-                                Text(
-                                    text = it.formatoActivo(),
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                            Icon(
-                                imageVector = if (desplegar[i]) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
-                                contentDescription = "",
-                                tint = AzulGris,
-                                modifier = Modifier
-                                    .padding(end = 10.dp)
-                                    .size(20.dp)
-                                    .weight(0.2f)
-                            )
-                        }
-                        AnimatedVisibility(desplegar[i]) {
-                            Box(
-                                modifier = Modifier
+                                    )
                                     .fillMaxWidth()
-                                    .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
-                                    .background(GrisAzulado)
+                                    .height(40.dp)
+                                    .clip(RoundedCornerShape(50.dp))
+                                    .background(Blanco)
+                                    .clickable {
+                                        desplegar = desplegar
+                                            .toMutableList()
+                                            .also {
+                                                it[i] = !it[i]
+                                            }
+                                    },
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column {
-                                    Row {//Cabecera
-                                        Text(
-                                            text = "id_detalle_venta",
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        Text(
-                                            text = "id_venta",
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        Text(
-                                            text = "id_producto",
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        Text(
-                                            text = "cantidad",
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        Text(
-                                            text = "total",
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }
-                                    Divider()
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = factura!!.detalle!!.id_detalle_venta.toString(),
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            text = factura.detalle!!.id_venta.toString(),
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            text = factura.detalle.id_producto.toString(),
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            text = factura.detalle.cantidad.toString(),
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            text = factura.detalle.total.toString(),
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                    Divider()
-                                    /*Row { // Pie
-                                        Text(
-                                            text = "Total",
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        for (@Suppress("NAME_SHADOWING") i in 0..2) {
+                                Text(
+                                    text = factura?.factura?.id_venta.toString(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = factura?.factura?.id_cliente.toString(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                factura?.factura?.fecha?.let {
+                                    Text(
+                                        text = it.formatoParaUser(),
+                                        modifier = Modifier.weight(1f),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                                Text(
+                                    text = factura?.factura?.cantidad.toString(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = factura?.factura?.total.toString(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                factura?.factura?.estado?.let {
+                                    Text(
+                                        text = it.formatoActivo(),
+                                        modifier = Modifier.weight(1f),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                                Icon(
+                                    imageVector = if (desplegar[i]) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
+                                    contentDescription = "",
+                                    tint = AzulGris,
+                                    modifier = Modifier
+                                        .padding(end = 10.dp)
+                                        .size(20.dp)
+                                        .weight(0.2f)
+                                )
+                            }
+                            AnimatedVisibility(desplegar[i]) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                                        .background(GrisAzulado)
+                                ) {
+                                    Column {
+                                        Row {//Cabecera
                                             Text(
-                                                text = "",
-                                                modifier = Modifier.weight(1f)
+                                                text = "id_detalle_venta",
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                            Text(
+                                                text = "id_venta",
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                            Text(
+                                                text = "id_producto",
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                            Text(
+                                                text = "cantidad",
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                            Text(
+                                                text = "total",
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
                                             )
                                         }
-                                        Text(
-                                            text = factura.productos.sumaTotal().toString(),
-                                            modifier = Modifier.weight(1f),
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }*/
+                                        Divider()
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                        ) {
+                                            Text(
+                                                text = factura!!.detalle!!.id_detalle_venta.toString(),
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center
+                                            )
+                                            Text(
+                                                text = factura.detalle!!.id_venta.toString(),
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center
+                                            )
+                                            Text(
+                                                text = factura.detalle.id_producto.toString(),
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center
+                                            )
+                                            Text(
+                                                text = factura.detalle.cantidad.toString(),
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center
+                                            )
+                                            Text(
+                                                text = factura.detalle.total.toString(),
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
+                                        Divider()
+                                        /*Row { // Pie
+                                            Text(
+                                                text = "Total",
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                            for (@Suppress("NAME_SHADOWING") i in 0..2) {
+                                                Text(
+                                                    text = "",
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                            }
+                                            Text(
+                                                text = factura.productos.sumaTotal().toString(),
+                                                modifier = Modifier.weight(1f),
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }*/
+                                    }
                                 }
                             }
                         }
                     }
-                }
             }
         }
     }

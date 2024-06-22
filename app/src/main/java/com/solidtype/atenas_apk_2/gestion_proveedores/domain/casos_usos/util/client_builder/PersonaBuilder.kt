@@ -13,6 +13,7 @@ class PersonaBuilder: Builder {
     private var telefono: String? = null
     private var email: String? = null
     private var estado: Boolean = true
+
     override fun id_persona(idPersona: Long): Builder {
         this.id_persona = idPersona
         return this

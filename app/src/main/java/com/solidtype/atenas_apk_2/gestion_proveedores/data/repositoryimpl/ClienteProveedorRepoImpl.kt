@@ -21,10 +21,14 @@ class ClienteProveedorRepoImpl @Inject constructor(private val dao:personaDao) :
 
     override suspend fun eliminarPersona(cliente: persona) {
         dao.deletePersona(cliente)
+    }
 
+    override suspend fun actualizarPersona(cliente: persona) {
+            dao.updatePersona(cliente)
     }
 
     override fun buscarPersonaTipo(tipo: String, any: String): Flow<List<persona>> {
          return dao.getPersonasTipo(tipo, any)
     }
+
 }

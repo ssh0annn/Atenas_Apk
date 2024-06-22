@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.perfil_administrador.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface administradorDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAdministrador(admin : administrador)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAdministradores(admin : List<administrador>)
     @Query("select * from administrador")
     fun getAdministradores(): Flow<List<administrador>>

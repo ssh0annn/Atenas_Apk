@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,10 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, usuario: String) {
 
 
     LazyColumn(
@@ -38,7 +40,7 @@ fun HomeScreen(navController: NavController) {
     ) {
         item {
             Text(
-                text = "Pantallas",
+                text = "Pantallas $usuario",
                 fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(android.graphics.Color.parseColor("#343341"))
@@ -51,7 +53,7 @@ fun HomeScreen(navController: NavController) {
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF343341),
-                    contentColor = androidx.compose.ui.graphics.Color.White,
+                    contentColor = Color.White,
                 ),
                 modifier = Modifier
                     .width(430.dp)
@@ -66,13 +68,33 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {//Aqui el codigo para moverse a otra ventana
+                    navController.context.startActivity(Intent(navController.context, PefilAdministrador::class.java))
+                },
+                shape = RoundedCornerShape(25.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF343341),
+                    contentColor = Color.White,
+                ),
+                modifier = Modifier
+                    .width(430.dp)
+                    .height(100.dp)
+                    .padding(top = 30.dp)
+            ) {
+                Text(
+                    "Config Profile (Maxwell)",
+                    fontSize = 24.sp
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = {//Aqui el codigo para moverse a otra ventana
                     navController.navigate(Screens.Ticket.route)
 
                 },
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF343341),
-                    contentColor = androidx.compose.ui.graphics.Color.White,
+                    contentColor = Color.White,
                 ),
                 modifier = Modifier
                     .width(430.dp)
@@ -92,7 +114,7 @@ fun HomeScreen(navController: NavController) {
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF343341),
-                    contentColor = androidx.compose.ui.graphics.Color.White,
+                    contentColor = Color.White,
                 ),
                 modifier = Modifier
                     .width(430.dp)
@@ -112,7 +134,7 @@ fun HomeScreen(navController: NavController) {
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF343341),
-                    contentColor = androidx.compose.ui.graphics.Color.White,
+                    contentColor = Color.White,
                 ),
                 modifier = Modifier
                     .width(430.dp)
