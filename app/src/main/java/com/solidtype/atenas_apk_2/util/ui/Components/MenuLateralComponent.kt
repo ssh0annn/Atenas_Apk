@@ -150,11 +150,10 @@ fun MenuLateral(navController: NavController) {
                             Boton(
                                 "Configuración del Perfil",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.PerfilAdmin.route || !NavigationSingleton.primerScreen
+                                habilitar = NavigationSingleton.screen != Screens.PerfilAdmin.route
                             ) {
                                 NavigationSingleton.screen = Screens.PerfilAdmin.route
                                 mostrarMenu.value = false
-                                NavigationSingleton.primerScreen = false
                                 navController.navigate(Screens.PerfilAdmin.route)
                             }
                             Boton(
