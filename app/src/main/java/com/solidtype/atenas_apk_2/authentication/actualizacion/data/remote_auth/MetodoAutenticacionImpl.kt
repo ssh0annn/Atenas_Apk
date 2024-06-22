@@ -7,31 +7,27 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 class MetodoAutenticacionImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val dataCloud: DataCloud
 ):MetodoAutenticacion {
     override suspend fun signing(email: String, pass: String, sistemID: String): CheckListAuth {
-        val tipoUsuario= when(email){
-            "adderlis@yahoo.com" -> {
-                TipoUser.ADMIN
-            }
-            "vendedor@solidtype.com" -> {
-                TipoUser.VENDEDOR
-            }
-            else -> {
-                TipoUser.UNKNOWN
+        val check = CheckListAuth()
+        val tipoUsuario= withContext(Dispatchers.IO){
+            val user =firebaseAuth.signInWithEmailAndPassword(email, pass).await()
+            user.user?.email?.let {
+                check.autenticado = true
+                check.deviceRegistrado = dataCloud.validarDispositivo(sistemID)
+                check.licensiaActiva = true
+                check.emailUsuario = it
+                check.tipoUser =dataCloud.autenticacionCloud(it, "")
             }
         }
-        return CheckListAuth(
-            autenticado = true,
-            deviceRegistrado = true,
-            licensiaActiva = true,
-            tipoUser = tipoUsuario,
-            emailUsuario = email
-        )
+        return check
     }
 
     override suspend fun signout() {

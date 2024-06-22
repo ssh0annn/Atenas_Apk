@@ -5,6 +5,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -35,6 +36,7 @@ class DataCloudImpl @Inject constructor(
     init {
         setUserUid()
     }
+
 
     private fun setUserUid() {
         user?.let {
@@ -166,5 +168,20 @@ class DataCloudImpl @Inject constructor(
             println("Este es la puta excepcion: $e")
             throw Exception("No se pudo eliminar los datos de firebase $e")
         }
+    }
+    //Por implementar
+    override suspend fun autenticacionCloud(email: String): TipoUser {
+        return when(email){
+            "adderlis@yahoo.com" -> TipoUser.ADMIN
+            "vendedor@yahoo.com" -> TipoUser.VENDEDOR
+            else -> {
+                TipoUser.UNKNOWN
+            }
+        }
+    }
+
+    //Por implementar
+    override suspend fun validarDispositivo(idDispositivo: String): Boolean {
+        return true
     }
 }
