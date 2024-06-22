@@ -2,8 +2,26 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+<<<<<<< HEAD
       <entry key="app">
         <State />
+=======
+      <entry key="Splash">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\elcap\.android\avd\Pixel_Tablet_API_VanillaIceCream.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-06-21T01:04:54.822041600Z" />
+        </State>
+>>>>>>> f497ba4b526fb3bc252399bd88e6b7d2b2737db7
       </entry>
     </value>
   </component>

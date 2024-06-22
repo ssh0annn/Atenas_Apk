@@ -56,7 +56,6 @@ class AuthViewmodel @Inject constructor(
             is AuthEvent.EliminarRecuerdos -> {
                 eliminarRecuerdos()
             }
-
             else -> {
 
             }
