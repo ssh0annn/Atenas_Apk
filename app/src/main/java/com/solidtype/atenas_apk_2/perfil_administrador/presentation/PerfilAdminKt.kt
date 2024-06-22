@@ -25,6 +25,11 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
             factory = { PefilAdministrador(context, uiState) },
             modifier = Modifier.fillMaxSize()
         )
+    }else{
+        AndroidView(
+            factory = { PefilAdministrador(context, uiState) },
+            modifier = Modifier.fillMaxSize()
+        )
     }
     MenuLateral(navController)
 }

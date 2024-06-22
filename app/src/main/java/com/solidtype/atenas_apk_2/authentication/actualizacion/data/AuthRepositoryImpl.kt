@@ -17,8 +17,9 @@ class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAu
     }
 
     override suspend fun signout() {
-
         println("Sinout exitoso!! ")
+        UsuarioActual.emailUsuario = ""
+        UsuarioActual.tipoUser = TipoUser.UNKNOWN
         autenticacion.signout()
     }
 

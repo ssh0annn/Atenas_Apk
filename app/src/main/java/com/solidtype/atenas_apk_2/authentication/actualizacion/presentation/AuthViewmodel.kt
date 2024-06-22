@@ -57,6 +57,7 @@ class AuthViewmodel @Inject constructor(
                 eliminarRecuerdos()
             }
             else -> {
+                viewModelScope.launch { casosAuth.logout() }
 
             }
         }
