@@ -150,16 +150,12 @@ fun MenuLateral(navController: NavController) {
                             Boton(
                                 "Configuración del Perfil",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.PerfilAdministrador.route
+                                habilitar = NavigationSingleton.screen != Screens.PerfilAdmin.route || !NavigationSingleton.primerScreen
                             ) {
-                                NavigationSingleton.screen = Screens.PerfilAdministrador.route
+                                NavigationSingleton.screen = Screens.PerfilAdmin.route
                                 mostrarMenu.value = false
-                                navController.context.startActivity(
-                                    Intent(
-                                        navController.context,
-                                        PefilAdministrador::class.java
-                                    )
-                                )
+                                NavigationSingleton.primerScreen = false
+                                navController.navigate(Screens.PerfilAdmin.route)
                             }
                             Boton(
                                 "Gestion de Clientes",
@@ -169,12 +165,6 @@ fun MenuLateral(navController: NavController) {
                                 NavigationSingleton.screen = Screens.GestionCliente.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionCliente.route)
-                            }
-
-                            Boton("Prueba", anchoTotal = true, habilitar = NavigationSingleton.screen != "prueba") {
-                                NavigationSingleton.screen = "prueba"
-                                mostrarMenu.value = false
-                                navController.navigate("prueba")
                             }
                         }
                     }

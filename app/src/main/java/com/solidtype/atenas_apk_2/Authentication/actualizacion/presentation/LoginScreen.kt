@@ -91,6 +91,9 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
             TipoUser.ADMIN -> {
                 if (!startedAdmin.value) { //evita que se abra la pantalla de perfilAdmin varias veces
                     navController.navigate(Screens.Home.route + "/Administrador") //PerfilAdmin(navController)
+                    NavigationSingleton.screen = Screens.PerfilAdmin.route
+                    NavigationSingleton.primerScreen = true
+                    navController.navigate(Screens.PerfilAdmin.route)
                 }
             }
             TipoUser.TECNICO -> navController.navigate(Screens.Home.route + "/Técnico") //VentaScreen(navController)

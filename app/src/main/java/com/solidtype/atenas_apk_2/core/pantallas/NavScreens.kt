@@ -30,6 +30,7 @@ import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
 object NavigationSingleton{
     var navController: NavController? = null
     var screen: String = ""
+    var primerScreen: Boolean = false
 }
 
 @Composable
@@ -44,9 +45,6 @@ fun Navigation() {
         startDestination = Screens.Login.route
 
     ){
-        composable("prueba"){
-            PerfilAdmin(navController)
-        }
         composable(route = Screens.Login.route ) {
             LoginScreen(navController)
         }
@@ -62,6 +60,9 @@ fun Navigation() {
             )
         ) {
             OutlinedTextFieldExample(navController)
+        }
+        composable(Screens.PerfilAdmin.route){
+            PerfilAdmin(navController)
         }
         composable(route = Screens.PerfilAdministrador.route ) {
             PerfilAdministrador(navController)
