@@ -14,9 +14,9 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
     ForeignKey(entity = inventario::class, parentColumns = ["id_inventario"], childColumns = ["id_producto"], onDelete = ForeignKey.CASCADE),
     ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"], onDelete = ForeignKey.CASCADE)
 ], indices = [
-    Index(value = ["id_venta"], unique = true),
-    Index(value = ["id_producto"], unique = true),
-    Index(value = ["id_tipo_venta"], unique = true)
+    Index(value = ["id_venta"], unique = false),
+    Index(value = ["id_producto"], unique = false),
+    Index(value = ["id_tipo_venta"], unique = false)
 ])
 data class detalle_venta (
     @PrimaryKey(autoGenerate = true) val id_detalle_venta :Long,

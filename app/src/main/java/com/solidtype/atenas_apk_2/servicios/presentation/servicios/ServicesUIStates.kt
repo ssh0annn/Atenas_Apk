@@ -13,13 +13,16 @@ data class ServicesUIStates(
     val listaDispositivos: List<Dispositivo?> = emptyList(),
     val listaServicios: List<servicio> = emptyList(),
     val impuestos: Boolean = false,
+    val abono: Double = 0.0,
     val subtotal: Double = 0.0,
     val total: Double = 0.0
 )
 
 data class TicketVista(
    var numeroFactura: Long? =0,
-   var iDservicio:Long? = 0,
-   var subtotal:Double? = 0.0,
+   var iDservicio: String ="",
+   var dispositivo: String = "",
+   var subtotal:Double = 0.0,
+   var total :Double = 0.0,
    var Estado :Boolean? =false
        )

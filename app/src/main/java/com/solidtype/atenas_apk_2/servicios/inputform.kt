@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -74,6 +76,45 @@ fun Input(
             )
         )
     }
+}
+
+@Composable
+fun NumericTextField3(
+    label: String,
+    valor: String,
+    onValueChange: (String) -> Unit
+) {
+    TextField(
+        value = valor,
+        onValueChange = onValueChange,
+        singleLine = true,
+        textStyle = TextStyle(
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number
+        ),
+        modifier = Modifier
+            .width(240.dp)
+            .padding(top = 5.dp)
+            .background(Blanco, RoundedCornerShape(20.dp))
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(15.dp)),
+        label = {
+            Text(
+                text = label,
+                color = Negro,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Blanco,
+            unfocusedBorderColor = Blanco,
+        )
+    )
 }
 
 @ExperimentalMultiplatform
@@ -218,6 +259,91 @@ fun Inputt(
 }
 
 
+@Composable
+fun NumericTextField1(
+    label: String,
+    valor: String,
+    onValueChange: (String) -> Unit
+) {
+    TextField(
+        value = valor,
+        onValueChange = onValueChange,
+        singleLine = true,
+        textStyle = TextStyle(
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number
+        ),
+        modifier = Modifier
+            .width(190.dp)
+            .padding(8.dp)
+            .height(60.dp)
+            .background(Blanco,
+                RoundedCornerShape(20.dp))
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(15.dp)),
+        label = {
+            Text(
+                text = label,
+                color = AzulGris,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Blanco,
+            unfocusedBorderColor = Blanco,
+        )
+    )
+}
+
+@Composable
+fun NumericTextField(
+    label: String,
+    valor: String,
+    onValueChange: (String) -> Unit
+) {
+    TextField(
+        value = valor,
+        onValueChange = onValueChange,
+        singleLine = true,
+        textStyle = TextStyle(
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Number
+        ),
+        modifier = Modifier
+            .width(90.dp)
+            .padding(8.dp)
+            .height(60.dp)
+            .background(Blanco,
+                RoundedCornerShape(20.dp))
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(15.dp)),
+        label = {
+            Text(
+                text = label,
+                color = AzulGris,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Blanco,
+            unfocusedBorderColor = Blanco,
+        )
+    )
+}
+
+
+
+
 @ExperimentalMultiplatform
 @Composable
 fun Inputpeq(
@@ -227,19 +353,17 @@ fun Inputpeq(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ) {
-    Box(
+    Box() {
+            TextField(
+                value = valor,
+                onValueChange = onValueChange,
+                singleLine = true,
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
 
-
-    ) {
-        TextField(
-            value = valor,
-            onValueChange = onValueChange,
-            singleLine = true,
-            textStyle = TextStyle(
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            ),
+                ),
             modifier = Modifier
                 .width(90.dp)
                 .padding(8.dp)
@@ -257,6 +381,7 @@ fun Inputpeq(
                     fontWeight = FontWeight.ExtraBold
                 )
             },
+
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Blanco,
                 unfocusedBorderColor = Blanco,

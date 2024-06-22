@@ -13,7 +13,7 @@ import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminView
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
 @Composable
-fun PerfilAdmin(navController: NavController, viewModel: AdminViewModel = hiltViewModel()) {
+fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     AndroidView(

@@ -21,10 +21,9 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
-import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
-import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdmin
+import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdminScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.EjemploNey
+import com.solidtype.atenas_apk_2.servicios.servicios
 
 @SuppressLint("StaticFieldLeak")
 object NavigationSingleton{
@@ -62,7 +61,7 @@ fun Navigation() {
             OutlinedTextFieldExample(navController)
         }
         composable(Screens.PerfilAdmin.route){
-            PerfilAdmin(navController)
+            PerfilAdminScreen(navController)
         }
         composable(route = Screens.PerfilAdministrador.route ) {
             PerfilAdministrador(navController)
@@ -86,7 +85,7 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route ) {
-            EjemploNey()
+            servicios()
         }
         composable(route = Screens.Ticket.route ) {
             Ticket(navController)
