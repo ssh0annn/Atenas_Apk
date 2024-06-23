@@ -184,4 +184,23 @@ class DataCloudImpl @Inject constructor(
     override suspend fun validarDispositivo(idDispositivo: String): Boolean {
         return true
     }
+
+   suspend fun prueba(querySnapshot: QuerySnapshot){
+       withContext(Dispatchers.IO){
+           for(documents in querySnapshot){
+               val data = documents.data
+
+                   if(data["a"] == true){
+
+                   }
+
+
+
+               }
+
+           }
+       }
+
+
+    }
 }
