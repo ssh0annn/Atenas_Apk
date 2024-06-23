@@ -4,7 +4,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.Check
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 
 interface MetodoAutenticacion {
-    suspend fun signing(email:String, pass:String, sistemID:String): CheckListAuth
+    suspend fun signing(email:String, pass:String, sistemID:String, licencia:String): CheckListAuth
     suspend fun signout()
     suspend fun registerNewUsers(email:String, pass:String)
     suspend fun getUsuarioActual(): Usuario

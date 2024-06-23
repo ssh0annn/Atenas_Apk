@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class Login @Inject constructor(private val repo: AuthRepository) {
 
-    suspend operator fun invoke(email:String, password:String, systemID:String?)= repo.signing(email, password, systemID ?:"")
+    suspend operator fun invoke(email:String, password:String, systemID:String?, licencia:String)= repo.signing(email, password, systemID ?:"", licencia)
 
 }

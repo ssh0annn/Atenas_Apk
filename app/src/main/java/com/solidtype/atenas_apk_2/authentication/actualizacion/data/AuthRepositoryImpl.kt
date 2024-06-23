@@ -9,9 +9,9 @@ import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacio
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAutenticacion) : AuthRepository {
-    override suspend fun signing(user: String, password: String, systemID: String): CheckListAuth {
+    override suspend fun signing(user: String, password: String, systemID: String, licencia:String): CheckListAuth {
         try {
-            val caminoFeliz =  autenticacion.signing(user, password, "292ji2ji2j29j2")
+            val caminoFeliz =  autenticacion.signing(user, password, "292ji2ji2j29j2", licencia)
             UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
             UsuarioActual.tipoUser = caminoFeliz.tipoUser
             return caminoFeliz
