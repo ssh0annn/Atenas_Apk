@@ -61,7 +61,6 @@ class AuthViewmodel @Inject constructor(
                         uiStates.update { it.copy(network = true) }
                         onEvent(AuthEvent.IsAutenticatedEvent)
                     }
-
                 }
             }
 
@@ -69,15 +68,14 @@ class AuthViewmodel @Inject constructor(
                 uiStates.update { it.copy(isLoading = true) }
                 if (isNetworkAvailable()) {
                     uiStates.update { it.copy(network = true) }
-                    val liencenciatemporal =""
-                    if (liencenciatemporal.isNotBlank()) {
-                        licencia(liencenciatemporal)
-                        login(event.email, event.password, liencenciatemporal)
+
+                    if (event.licencia.isNotBlank()) {
+                        licencia(event.licencia)
+                        login(event.email, event.password, event.licencia)
 
                     } else {
                        login(event.email, event.password,recuerdame.getString(LICENCIA, "").toString() )
                         println("Licencia temporal : ${recuerdame.getString(LICENCIA, "").toString()}")
-
                     }
                 } else {
                     viewModelScope.launch {
@@ -139,14 +137,16 @@ class AuthViewmodel @Inject constructor(
                                 }
                                 return true
                             }
-
                             false -> {
                                 uiStates.update {
                                     it.copy(
                                         isAutenticated = null,
                                         razones = "Licencia no activa."
                                     )
+
                                 }
+                                logout()
+                                eliminarLicencia()
 
                                 return false
                             }
@@ -160,10 +160,12 @@ class AuthViewmodel @Inject constructor(
                                 razones = "Dispositivo no registrado."
                             )
                         }
+                        eliminarLicencia()
                         logout()
                         return false
                     }
                 }
+
             }
 
             false -> {
@@ -180,7 +182,7 @@ class AuthViewmodel @Inject constructor(
 
     private fun logout() {
         viewModelScope.launch {
-            uiStates.update { it.copy(isLoading = true) }
+            uiStates.update { it.copy(isLoading = true, isAutenticated = null) }
             casosAuth.logout()
             uiStates.update { it.copy(isLoading = false) }
         }
@@ -246,6 +248,7 @@ class AuthViewmodel @Inject constructor(
     }
 
     private fun eliminarLicencia() {
+        uiStates.update { it.copy(licenciaGuardada = false) }
         recuerdame
             .edit()
             .remove(LICENCIA)
