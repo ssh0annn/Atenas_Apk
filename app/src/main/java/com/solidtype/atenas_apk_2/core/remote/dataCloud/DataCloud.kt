@@ -11,7 +11,6 @@ interface DataCloud {
         suspend fun insertAllToCloud (collection: String,dataToInsert:List<Map<String,String>>, idDocumento: String)
 
         suspend fun deleteDataInCloud(collectionName: String, dataToDelete: List<Map<String, String>>, idDocumento: String)
-
         /**
          * Buscara en las tablas: Administrador y si no encuentra, pues ira a la tabla vendedor y tecnicos.
          * SI encuentra dato en administrador debuelve un tipouser.Admin, y si es vendedor tipouser.vendedor...

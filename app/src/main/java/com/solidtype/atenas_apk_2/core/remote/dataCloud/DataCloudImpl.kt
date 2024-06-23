@@ -170,7 +170,7 @@ class DataCloudImpl @Inject constructor(
         }
     }
     //Por implementar
-    override suspend fun autenticacionCloud(email: String): TipoUser {
+    override suspend fun autenticacionCloud(email: String, licencia:String): TipoUser {
         return when(email){
             "adderlis@yahoo.com" -> TipoUser.ADMIN
             "vendedor@yahoo.com" -> TipoUser.VENDEDOR
