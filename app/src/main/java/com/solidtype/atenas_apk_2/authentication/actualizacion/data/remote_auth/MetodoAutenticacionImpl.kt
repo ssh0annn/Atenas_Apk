@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth
 
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.UsuarioActual
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
@@ -16,29 +17,42 @@ class MetodoAutenticacionImpl @Inject constructor(
     private val dataCloud: DataCloud
 ):MetodoAutenticacion {
     override suspend fun signing(email: String, pass: String, sistemID: String): CheckListAuth {
-        val check = CheckListAuth()
-        val tipoUsuario= withContext(Dispatchers.IO){
-            val user =firebaseAuth.signInWithEmailAndPassword(email, pass).await()
-            user.user?.email?.let {
-                check.autenticado = true
-                check.deviceRegistrado = dataCloud.validarDispositivo(sistemID)
-                check.licensiaActiva = true
-                check.emailUsuario = it
-                check.tipoUser =dataCloud.autenticacionCloud(it, "")
+      return  withContext(Dispatchers.IO){
+            val check = CheckListAuth()
+            try {
+                val user =firebaseAuth.signInWithEmailAndPassword(email, pass).await()
+                user.user?.email?.let {
+                    check.autenticado = true
+                    check.deviceRegistrado = dataCloud.validarDispositivo(sistemID)
+                    check.licensiaActiva = true
+                    check.emailUsuario = it
+                    check.tipoUser =dataCloud.autenticacionCloud(it, "papichulo",sistemID)
+                }
+                return@withContext check
+
+            }catch (e: Exception){
+
+                return@withContext check
+
             }
         }
-        return check
+
     }
 
     override suspend fun signout() {
         UsuarioActual.emailUsuario = ""
         UsuarioActual.tipoUser = TipoUser.UNKNOWN
+        firebaseAuth.signOut()
     }
 
     override suspend fun registerNewUsers(email: String, pass: String) {
-       //ALgun metodo de registro
-    }
+        try {
+            firebaseAuth.createUserWithEmailAndPassword(email, pass)
+        }catch (e: Exception){
+            println("error de registro : $e")
+        }
 
+    }
     override suspend fun getUsuarioActual(): Usuario {
         return Usuario(
             UsuarioActual.emailUsuario,

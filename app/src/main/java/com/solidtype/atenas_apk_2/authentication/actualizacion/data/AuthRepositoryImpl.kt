@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.authentication.actualizacion.data
 
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.AuthRepository
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
@@ -9,11 +10,16 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAutenticacion) : AuthRepository {
     override suspend fun signing(user: String, password: String, systemID: String): CheckListAuth {
+        try {
+            val caminoFeliz =  autenticacion.signing(user, password, "292ji2ji2j29j2")
+            UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
+            UsuarioActual.tipoUser = caminoFeliz.tipoUser
+            return caminoFeliz
 
-        val caminoFeliz =  autenticacion.signing(user, password, systemID)
-        UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
-        UsuarioActual.tipoUser = caminoFeliz.tipoUser
-        return caminoFeliz
+        }catch (e: FirebaseAuthInvalidCredentialsException){
+            println("Usuario desconocido o contrasenia invalida")
+            return CheckListAuth()
+        }
     }
 
     override suspend fun signout() {

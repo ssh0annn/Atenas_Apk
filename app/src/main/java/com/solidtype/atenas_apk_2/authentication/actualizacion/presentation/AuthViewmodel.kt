@@ -36,7 +36,12 @@ class AuthViewmodel @Inject constructor(
         uiStates.update { it.copy(network = isNetworkAvailable(),
             correoGuardado = recuerdame.getString("correo", "").toString()
             ) }
-        isAutenticated()
+        if(isNetworkAvailable()){
+            isAutenticated()
+        }else{
+            uiStates.update { it.copy(isAutenticated = null) }
+        }
+
     }
 
     fun onEvent(event: AuthEvent) {
@@ -122,9 +127,15 @@ class AuthViewmodel @Inject constructor(
     private fun isAutenticated() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                uiStates.update {
-                    it.copy(isAutenticated = casosAuth.whoIs())
+                if(isNetworkAvailable()){
+                    isAutenticated()
+                    uiStates.update {
+                        it.copy(isAutenticated = casosAuth.whoIs())
+                    }
+                }else{
+                    uiStates.update { it.copy(isAutenticated = null) }
                 }
+
             }
         }
     }
