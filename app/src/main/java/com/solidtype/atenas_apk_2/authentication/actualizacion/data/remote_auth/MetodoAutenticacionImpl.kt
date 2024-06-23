@@ -18,20 +18,14 @@ class MetodoAutenticacionImpl @Inject constructor(
 ):MetodoAutenticacion {
     override suspend fun signing(email: String, pass: String, sistemID: String, licencia:String): CheckListAuth {
       return  withContext(Dispatchers.IO){
-            val check = CheckListAuth()
+            var check = CheckListAuth()
             try {
                 val user =firebaseAuth.signInWithEmailAndPassword(email, pass).await()
                 user.user?.email?.let {
-                    check.autenticado = true
-                    check.deviceRegistrado = dataCloud.validarDispositivo(sistemID)
-                    check.licensiaActiva = true
-                    check.emailUsuario = it
-                    check.tipoUser =dataCloud.autenticacionCloud(it, licencia,sistemID)
+                    check=  dataCloud.autenticacionCloud(it, licencia, sistemID)
                 }
                 return@withContext check
-
             }catch (e: Exception){
-
                 return@withContext check
 
             }

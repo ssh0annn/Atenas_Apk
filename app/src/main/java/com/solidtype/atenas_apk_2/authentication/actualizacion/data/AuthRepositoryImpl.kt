@@ -11,9 +11,16 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAutenticacion) : AuthRepository {
     override suspend fun signing(user: String, password: String, systemID: String, licencia:String): CheckListAuth {
         try {
-            val caminoFeliz =  autenticacion.signing(user, password, "292ji2ji2j29j2", licencia)
-            UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
-            UsuarioActual.tipoUser = caminoFeliz.tipoUser
+            val caminoFeliz =  autenticacion.signing(user, password,systemID , licencia)
+            println("Este es el systemID: $systemID")
+            if(caminoFeliz.tipoUser != TipoUser.UNKNOWN && caminoFeliz.licensiaActiva == true && caminoFeliz.deviceRegistrado ==true){
+                UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
+                UsuarioActual.tipoUser = caminoFeliz.tipoUser
+            }else{
+                UsuarioActual.emailUsuario = ""
+                UsuarioActual.tipoUser = TipoUser.UNKNOWN
+            }
+
             return caminoFeliz
 
         }catch (e: FirebaseAuthInvalidCredentialsException){
@@ -24,6 +31,7 @@ class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAu
 
     override suspend fun signout() {
         println("Sinout exitoso!! ")
+
         UsuarioActual.emailUsuario = ""
         UsuarioActual.tipoUser = TipoUser.UNKNOWN
         autenticacion.signout()

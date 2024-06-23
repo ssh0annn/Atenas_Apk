@@ -4,7 +4,9 @@ import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
@@ -182,15 +184,15 @@ class DataCloudImpl @Inject constructor(
 
     suspend fun getAllLicencia(): QuerySnapshot? {
 
-            try {
-                return fireStore.collection(licencia)
-                    .get()
-                    .await<QuerySnapshot?>()
+        try {
+            return fireStore.collection(licencia)
+                .get()
+                .await<QuerySnapshot?>()
 
-            } catch (e: Exception) {
-                Log.e("error firebase", "No vinieron datos de licencia: Linea 189 DataCLoued $e")
-                return null
-            }
+        } catch (e: Exception) {
+            Log.e("error firebase", "No vinieron datos de licencia: Linea 189 DataCLoued $e")
+            return null
+        }
 
     }
 
@@ -200,17 +202,14 @@ class DataCloudImpl @Inject constructor(
         licencia: String,
         dispositivo: String
     ): String? {
+        val checker = CheckListAuth()
         queryLicencias.forEach { documentData ->
             val documents = documentData.data
-            println("Que pasa si imprimo documentos $documents")
-            println("dato licencia : ${documents["noLicencia"]} == $licencia")
             if (documents["noLicencia"]?.equals(licencia) == true) {
-                println("Me cumplo soy un $licencia")
                 if (documents["estadoLicencia"] == true) {
-                    println("Me cumplo soy igual a : ${documents["estadoLicencia"]} , ${documents["estadoLicencia"] == true}")
-                    println("veamos idDevice si se cumple: ${documents["idDevice"] } $dispositivo, if(${documents["idDevice"] ==dispositivo}")
+                    checker.licensiaActiva = true
                     if (documents["idDevice"].toString() == dispositivo) {
-                        println("dispositivo $dispositivo y documents[id] ${documents["idDevice"]}")
+                        checker.deviceRegistrado = true
 
                         return documents["direcionDB"].toString()
                     }
@@ -220,52 +219,74 @@ class DataCloudImpl @Inject constructor(
         return null
     }
 
+    private fun encuentraDocLicencia(querySnapshot: QuerySnapshot?, licensia:String):QueryDocumentSnapshot?{
+        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia }
+        return list
+    }
 
-    //Por implementar
-    override suspend fun autenticacionCloud(
-        email: String,
-        licencia: String,
-        dispositivo: String
-    ): TipoUser {
-        return withContext(Dispatchers.Default) {
-            val dbDirection = getAllLicencia()?.let { isLincenciaValida(it, licencia, dispositivo) }
-            println("Imprimo direction db: $dbDirection")
-            if (dbDirection != null) {
-                try {
-                    val doc =
-                        fireStore.collection(DbCollectionUsers).document(dbDirection).get().await()
-                    val campos = doc.data
-                    val correo = campos?.get("correo")?.toString()
-                    if (correo == email) {
-                        println("email $correo == correo $email")
-                        return@withContext TipoUser.ADMIN
-                    } else {
-                        val colletionVendedores =
-                            fireStore.collection(DbCollectionUsers).document(dbDirection)
-                                .collection("vendedor").get().await()
-                        colletionVendedores.forEach { documetos ->
-                            if (documetos["correo"] == email) {
-                                println("email $email == correo $email")
-                                return@withContext TipoUser.VENDEDOR
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    Log.e("error firebase", "No Coincidio el Correo$e")
-                    TipoUser.UNKNOWN
+    suspend fun laQuellamo (email: String,
+                            licencia: String,
+                            dispositivo: String):CheckListAuth{
+        val checker = CheckListAuth()
+        val encontrada = encuentraDocLicencia(getAllLicencia(), licencia)
+         if(encontrada?.get("idDevice") == dispositivo){
+             checker.deviceRegistrado = true
+
+         }
+        if(encontrada?.get("estadoLicencia") == true){
+            checker.licensiaActiva = true
+            println("Estado de licencia ${encontrada.get("estadoLicencia")} ")
+
+        }
+        checker.tipoUser = tipoUsurio(encontrada?.get("direcionDB").toString(),email )
+        checker.emailUsuario = email
+        checker.autenticado = true
+        println("Asi esta el checker $checker")
+        return checker
+    }
+
+
+suspend fun tipoUsurio(direcionDb:String, email: String): TipoUser{
+    try {
+        val doc = fireStore.collection(DbCollectionUsers).document(direcionDb).get()
+                .await()
+        val campos = doc.data
+        val correo = campos?.get("correo")?.toString()
+        if (correo == email) {
+            println("email $correo == correo $email")
+            return TipoUser.ADMIN
+        } else {
+            val colletionVendedores =
+                fireStore.collection(DbCollectionUsers).document(direcionDb)
+                    .collection("vendedor").get().await()
+            colletionVendedores.forEach { documetos ->
+                if (documetos["correo"] == email) {
+                    println("email $email == correo $email")
+                    return TipoUser.VENDEDOR
                 }
-            } else {
-                println("Db dbDirection esra vacio")
             }
-            return@withContext TipoUser.UNKNOWN
+        }
+    } catch (e: Exception) {
+        Log.e("error firebase", "No Coincidio el Correo$e")
+        return TipoUser.UNKNOWN
+    }
+    return TipoUser.UNKNOWN
+}
+
+        //Por implementar
+        override suspend fun autenticacionCloud(
+            email: String,
+            licencia: String,
+            dispositivo: String
+        ): CheckListAuth {
+            return  laQuellamo(email, licencia, dispositivo)
+
+
         }
 
+        //Por implementar
+        override suspend fun validarDispositivo(idDispositivo: String): Boolean {
+            return true
+        }
 
     }
-
-    //Por implementar
-    override suspend fun validarDispositivo(idDispositivo: String): Boolean {
-        return true
-    }
-
-}
