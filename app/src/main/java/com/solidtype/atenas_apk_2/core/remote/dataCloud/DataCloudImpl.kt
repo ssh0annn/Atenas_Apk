@@ -5,7 +5,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
+import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -24,24 +26,26 @@ import javax.inject.Inject
 class DataCloudImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
     autenticador: auth
-): DataCloud {
+) : DataCloud {
 
 
 //    private val uidUser: String = autenticador.getCurrentUser()!!.uid
 
     private val user = Firebase.auth.currentUser
     private var uidUser: String = ""
+    private var licencia: String = "licensias"
+    private var DbCollectionUsers = "usuarios"
 
     init {
         setUserUid()
     }
+
 
     private fun setUserUid() {
         user?.let {
             uidUser = it.uid
         }
     }
-
 
 
     //se convierte el snashopt a json por medio de la
@@ -63,7 +67,6 @@ class DataCloudImpl @Inject constructor(
         //luego se hace una convercion de json a string
         return Json.encodeToString(queryJson)
     }*/
-
 
 
     /**
@@ -111,7 +114,7 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 for (data in dataToInsert) {
-                    val ref = data[idDocumento]?.let {idMapa ->
+                    val ref = data[idDocumento]?.let { idMapa ->
                         fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
@@ -131,6 +134,7 @@ class DataCloudImpl @Inject constructor(
         }
 
     }
+
     /**
      * @param: String
      *@return: QuerySnapshot?
@@ -167,4 +171,101 @@ class DataCloudImpl @Inject constructor(
             throw Exception("No se pudo eliminar los datos de firebase $e")
         }
     }
+
+
+    /**
+     * Buscara en las tablas: Administrador y si no encuentra, pues ira a la tabla vendedor y tecnicos.
+     * SI encuentra dato en administrador debuelve un tipouser.Admin, y si es vendedor tipouser.vendedor...
+     * Si no encuentradada : tipouser.UNKNOWN. (desconocido)
+     */
+
+
+    suspend fun getAllLicencia(): QuerySnapshot? {
+
+            try {
+                return fireStore.collection(licencia)
+                    .get()
+                    .await<QuerySnapshot?>()
+
+            } catch (e: Exception) {
+                Log.e("error firebase", "No vinieron datos de licencia: Linea 189 DataCLoued $e")
+                return null
+            }
+
+    }
+
+
+    private fun isLincenciaValida(
+        queryLicencias: QuerySnapshot,
+        licencia: String,
+        dispositivo: String
+    ): String? {
+        queryLicencias.forEach { documentData ->
+            val documents = documentData.data
+            println("Que pasa si imprimo documentos $documents")
+            println("dato licencia : ${documents["noLicencia"]} == $licencia")
+            if (documents["noLicencia"]?.equals(licencia) == true) {
+                println("Me cumplo soy un $licencia")
+                if (documents["estadoLicencia"] == true) {
+                    println("Me cumplo soy igual a : ${documents["estadoLicencia"]} , ${documents["estadoLicencia"] == true}")
+                    println("veamos idDevice si se cumple: ${documents["idDevice"] } $dispositivo, if(${documents["idDevice"] ==dispositivo}")
+                    if (documents["idDevice"].toString() == dispositivo) {
+                        println("dispositivo $dispositivo y documents[id] ${documents["idDevice"]}")
+
+                        return documents["direcionDB"].toString()
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+
+    //Por implementar
+    override suspend fun autenticacionCloud(
+        email: String,
+        licencia: String,
+        dispositivo: String
+    ): TipoUser {
+        return withContext(Dispatchers.Default) {
+            val dbDirection = getAllLicencia()?.let { isLincenciaValida(it, licencia, dispositivo) }
+            println("Imprimo direction db: $dbDirection")
+            if (dbDirection != null) {
+                try {
+                    val doc =
+                        fireStore.collection(DbCollectionUsers).document(dbDirection).get().await()
+                    val campos = doc.data
+                    val correo = campos?.get("correo")?.toString()
+                    if (correo == email) {
+                        println("email $correo == correo $email")
+                        return@withContext TipoUser.ADMIN
+                    } else {
+                        val colletionVendedores =
+                            fireStore.collection(DbCollectionUsers).document(dbDirection)
+                                .collection("vendedor").get().await()
+                        colletionVendedores.forEach { documetos ->
+                            if (documetos["correo"] == email) {
+                                println("email $email == correo $email")
+                                return@withContext TipoUser.VENDEDOR
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("error firebase", "No Coincidio el Correo$e")
+                    TipoUser.UNKNOWN
+                }
+            } else {
+                println("Db dbDirection esra vacio")
+            }
+            return@withContext TipoUser.UNKNOWN
+        }
+
+
+    }
+
+    //Por implementar
+    override suspend fun validarDispositivo(idDispositivo: String): Boolean {
+        return true
+    }
+
 }
