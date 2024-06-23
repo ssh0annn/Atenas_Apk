@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
+import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -32,6 +33,8 @@ class DataCloudImpl @Inject constructor(
 
     private val user = Firebase.auth.currentUser
     private var uidUser: String = ""
+    private var licencia: String = "licensias"
+    private var DbCollectionUsers = "usuarios"
 
     init {
         setUserUid()
@@ -169,15 +172,81 @@ class DataCloudImpl @Inject constructor(
             throw Exception("No se pudo eliminar los datos de firebase $e")
         }
     }
-    //Por implementar
-    override suspend fun autenticacionCloud(email: String): TipoUser {
-        return when(email){
-            "adderlis@yahoo.com" -> TipoUser.ADMIN
-            "vendedor@yahoo.com" -> TipoUser.VENDEDOR
-            else -> {
-                TipoUser.UNKNOWN
+
+    /**
+     * Buscara en las tablas: Administrador y si no encuentra, pues ira a la tabla vendedor y tecnicos.
+     * SI encuentra dato en administrador debuelve un tipouser.Admin, y si es vendedor tipouser.vendedor...
+     * Si no encuentradada : tipouser.UNKNOWN. (desconocido)
+     */
+
+
+     suspend fun getAllLicencia():QuerySnapshot? {
+        return withContext(Dispatchers.Default){
+            try {
+                return@withContext fireStore.collection(licencia)
+                    .get()
+                    .await<QuerySnapshot?>()
+
+            }catch (e:Exception){
+                Log.e("error firebase", "No vinieron datos de licencia: Linea 189 DataCLoued $e")
+                return@withContext null
             }
         }
+    }
+
+
+    private fun isLincenciaValida(queryLicencias:QuerySnapshot,licencia: String,dispositivo: String):String? {
+        queryLicencias.forEach { documentData ->
+               val documents = documentData.data
+                if (documents.isNotEmpty()){
+                        if (documents["noLicencia"].toString() == licencia)  {
+                           if ( documents["estadoLicencia"] == true){
+                             if (documents["idDevice"].toString() == dispositivo){
+                                 return documents["direcionDB"].toString()
+                             }
+                           }
+                        }
+                }else
+                {
+                    println("No se encontro nada")
+                    return null
+                }
+        }
+        return null
+    }
+
+
+    //Por implementar
+    override suspend fun autenticacionCloud(dispositivo: String,licencia: String,correo:String): TipoUser {
+      return withContext(Dispatchers.Default) {
+           val dbDirection = isLincenciaValida(getAllLicencia()!!,licencia,dispositivo)
+           if (dbDirection!!.isNotEmpty()){
+               try {
+                   val doc =  fireStore.collection(DbCollectionUsers).document(dbDirection).get().await()
+                   val campos =  doc.data
+                   val email = campos?.get("correo")?.toString()
+                   if (email == correo) {
+                       return@withContext TipoUser.ADMIN
+                   }else{
+                       val colletionVendedores =  fireStore.collection(DbCollectionUsers).document(dbDirection).collection("vendedor").get().await()
+                       colletionVendedores.forEach {documetos ->
+                           if (documetos["correo"] == correo ){
+                               return@withContext TipoUser.VENDEDOR
+                           }
+                       }
+                   }
+
+               }catch (e:Exception) {
+                   Log.e("error firebase", "No Coincidio el Correo$e")
+                   TipoUser.UNKNOWN
+               }
+           }else{
+               println("Db dbDirection esra vacio")
+           }
+           return@withContext TipoUser.UNKNOWN
+       }
+
+
     }
 
     //Por implementar

@@ -17,7 +17,7 @@ interface DataCloud {
          * SI encuentra dato en administrador debuelve un tipouser.Admin, y si es vendedor tipouser.vendedor...
          * Si no encuentradada : tipouser.UNKNOWN. (desconocido)
          */
-        suspend fun autenticacionCloud(email:String, licencia:String):TipoUser
+        suspend fun autenticacionCloud(email:String, licencia:String,correo:String):TipoUser
 
         /**
          * @param String

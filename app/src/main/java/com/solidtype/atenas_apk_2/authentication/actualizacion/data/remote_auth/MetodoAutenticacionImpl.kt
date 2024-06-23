@@ -24,7 +24,7 @@ class MetodoAutenticacionImpl @Inject constructor(
                 check.deviceRegistrado = dataCloud.validarDispositivo(sistemID)
                 check.licensiaActiva = true
                 check.emailUsuario = it
-                check.tipoUser =dataCloud.autenticacionCloud(it, "")
+                check.tipoUser =dataCloud.autenticacionCloud(it, "papichulo",email)
             }
         }
         return check
