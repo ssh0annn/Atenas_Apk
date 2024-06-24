@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.solidtype.atenas_apk_2.core.Transacciones.DaoTransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
@@ -60,6 +61,8 @@ abstract class ProductDataBase : RoomDatabase() {
     abstract val ventaDAO: ventaDao
     abstract val adminDao: administradorDao
     abstract val dispositivoDao: DispositivoDao
+    abstract val DaoTicketsTransacciones: DaoTransacciones
+
     companion object{
         @Volatile
         private var DDBB: ProductDataBase? = null

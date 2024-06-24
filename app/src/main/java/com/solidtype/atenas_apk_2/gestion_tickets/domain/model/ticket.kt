@@ -26,7 +26,7 @@ import java.time.LocalDate
     Index(value = ["id_servicio"], unique = false)
 ])
 data class ticket (
-    @PrimaryKey(autoGenerate = true) var id_ticket :Long? = 0,
+    @PrimaryKey(autoGenerate = true) var id_ticket :Long = 0,
     val id_vendedor :Long,
     val id_cliente :Long,
     val id_tipo_venta :Long,

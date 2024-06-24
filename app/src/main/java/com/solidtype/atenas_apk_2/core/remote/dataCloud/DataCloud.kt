@@ -28,4 +28,10 @@ interface DataCloud {
          */
         suspend fun validarDispositivo(idDispositivo:String):Boolean
 
+        suspend fun insertAllToCloud2(
+                collection: String,
+                dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+                idDocumento: String
+        )
+
 }

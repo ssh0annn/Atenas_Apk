@@ -9,6 +9,19 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 
+import kotlin.reflect.full.memberProperties
+
+fun Any.toMutableMap(): MutableMap<String, Any?> {
+    val map = mutableMapOf<String, Any?>()
+    val kClass = this::class
+
+    for (property in kClass.memberProperties) {
+        map[property.name] = property
+    }
+
+    return map
+}
+
 fun String.toLocalDate(formato: String = "yyyy-MM-dd"): LocalDate {
     val format = DateTimeFormatter.ofPattern(formato)
     if (this.isEmpty() || this == " ") {

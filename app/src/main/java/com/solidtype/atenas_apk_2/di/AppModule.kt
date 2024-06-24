@@ -35,6 +35,7 @@ import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.S
 import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.SignOutUseCase
 import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.VerificaICCIDUseCase
 import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.getCurrentUser
+import com.solidtype.atenas_apk_2.core.Transacciones.DaoTransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
@@ -502,6 +503,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
+
+    //provendo dao ticket synchronized
+    @Provides
+    @Singleton
+    fun provideTicketTransaccionDao(db: ProductDataBase): DaoTransacciones {
+        return db.DaoTicketsTransacciones
+    }
 
 
 

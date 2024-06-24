@@ -3,6 +3,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.gestion_tickets.data.remote.mediator.TicketsMediador
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_cliente.ClientesManage
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_dispositivos.DispositivosManger
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets.TicketsManeger
@@ -25,7 +26,8 @@ class ServiciosViewModel @Inject constructor(
     private val casosDispositivo: DispositivosManger,
     private val casosTicket: TicketsManeger,
     private val casosTiposServicios: CasosTipoServicios,
-    private val casoCurrentUser: GetCurrentUserEmail
+    private val casoCurrentUser: GetCurrentUserEmail,
+    private val ticketsMediador: TicketsMediador
 
 ) : ViewModel() {
 
@@ -270,6 +272,14 @@ class ServiciosViewModel @Inject constructor(
 
             is OnTicket.InforTicket -> {
                 ticket.update { it.copy(detalles = event.infoTicket) }
+            }
+        }
+    }
+
+    fun testTiceket() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                ticketsMediador.getDatabase()
             }
         }
     }
