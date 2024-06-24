@@ -1,4 +1,5 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
@@ -10,6 +11,7 @@ import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tipo_servic
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_usuario.GetCurrentUserEmail
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,15 +27,21 @@ class ServiciosViewModel @Inject constructor(
     private val casosDispositivo: DispositivosManger,
     private val casosTicket: TicketsManeger,
     private val casosTiposServicios: CasosTipoServicios,
-    private val casoCurrentUser: GetCurrentUserEmail
+    private val casoCurrentUser: GetCurrentUserEmail,
+    @ApplicationContext private val context: Context,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
     var uiStates: MutableStateFlow<ServicesUIStates> = MutableStateFlow(ServicesUIStates())
         private set
     var job: Job? = null
+
     var ticket: MutableStateFlow<ServicioTicket> = MutableStateFlow(ServicioTicket())
         private set
+    private val CORREO: String = "correo"
+    private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
+
+
 
     init {
         getCurrentUser()
@@ -130,7 +138,7 @@ class ServiciosViewModel @Inject constructor(
 
     private fun getCurrentUser() {
         viewModelScope.launch {
-            casoCurrentUser.getUser().collect{ lista ->
+            casoCurrentUser.getUser(recuerdame.getString(CORREO, "").toString()).collect{ lista ->
                 if(lista.isNotEmpty()){
                     uiStates.update { it.copy(usuario =lista.first()) }
                     ticket.update { it.copy(vendedor =lista.first() ) }
@@ -172,7 +180,7 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             VendedorEvent.GetCurrentUser -> {
                 viewModelScope.launch {
-                   casoCurrentUser.getUser().collect{  usuarioss ->
+                   casoCurrentUser.getUser(recuerdame.getString(CORREO, "").toString()).collect{  usuarioss ->
                        usuarioss.forEach {  user ->
                            uiStates.update { it.copy(usuario = user) }
                            ticket.update { it.copy(vendedor = user) } }
