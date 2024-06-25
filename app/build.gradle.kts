@@ -150,7 +150,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
     //Implementacion PDF :
-    implementation ("com.itextpdf:itext7-core:7.1.15")
+  //  implementation ("com.itextpdf:itext7-core:7.1.15")
 
 
 
