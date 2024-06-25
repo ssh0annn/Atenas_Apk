@@ -166,6 +166,15 @@ fun MenuLateral(navController: NavController) {
                                 navController.navigate(Screens.GestionCliente.route)
                             }
                         }
+                        Boton(
+                            "Gestion de Proveedores",
+                            anchoTotal = true,
+                            habilitar = NavigationSingleton.screen != Screens.GestionProveedores.route
+                        ) {
+                            NavigationSingleton.screen = Screens.GestionProveedores.route
+                            mostrarMenu.value = false
+                            navController.navigate(Screens.GestionProveedores.route)
+                        }
                     }
                     Row(
                         modifier = Modifier

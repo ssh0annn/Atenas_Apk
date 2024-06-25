@@ -19,6 +19,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ticket
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ventas
 import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorScreen
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdminScreen
@@ -98,6 +99,9 @@ fun Navigation() {
         }
         composable(route = Screens.GestionCliente.route) {
             ClienteScreen(navController)
+        }
+        composable(route = Screens.GestionProveedores.route) {
+            ProveedorScreen(navController)
         }
     }
 
