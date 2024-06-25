@@ -150,11 +150,10 @@ fun MenuLateral(navController: NavController) {
                             Boton(
                                 "Configuración del Perfil",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.PerfilAdmin.route || !NavigationSingleton.primerScreen
+                                habilitar = NavigationSingleton.screen != Screens.PerfilAdmin.route
                             ) {
                                 NavigationSingleton.screen = Screens.PerfilAdmin.route
                                 mostrarMenu.value = false
-                                NavigationSingleton.primerScreen = false
                                 navController.navigate(Screens.PerfilAdmin.route)
                             }
                             Boton(
@@ -166,6 +165,15 @@ fun MenuLateral(navController: NavController) {
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionCliente.route)
                             }
+                        }
+                        Boton(
+                            "Gestion de Proveedores",
+                            anchoTotal = true,
+                            habilitar = NavigationSingleton.screen != Screens.GestionProveedores.route
+                        ) {
+                            NavigationSingleton.screen = Screens.GestionProveedores.route
+                            mostrarMenu.value = false
+                            navController.navigate(Screens.GestionProveedores.route)
                         }
                     }
                     Row(
