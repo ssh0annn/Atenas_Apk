@@ -23,7 +23,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    /*if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
@@ -33,18 +33,19 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-    } else {*/
-    if(!uiState.perfilAdmin.isEmpty()){
-        print(uiState.perfilAdmin.first())
-        AndroidView(
-            factory = { PefilAdministrador(context, uiState, viewModel) },
-            modifier = Modifier.fillMaxSize()
-        )
-    }else{
-        AndroidView(
-            factory = { PefilAdministrador(context, uiState, viewModel) },
-            modifier = Modifier.fillMaxSize()
-        )
-        MenuLateral(navController)
+    } else {
+        if (!uiState.perfilAdmin.isEmpty()) {
+            print(uiState.perfilAdmin.first())
+            AndroidView(
+                factory = { PefilAdministrador(context, uiState, viewModel) },
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            AndroidView(
+                factory = { PefilAdministrador(context, uiState, viewModel) },
+                modifier = Modifier.fillMaxSize()
+            )
+            MenuLateral(navController)
+        }
     }
 }
