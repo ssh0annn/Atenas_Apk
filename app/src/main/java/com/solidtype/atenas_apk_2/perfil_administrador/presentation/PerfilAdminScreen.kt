@@ -45,7 +45,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
         }
     } else {
         if (uiState.perfilAdmin.isNotEmpty()) {
-            print(uiState.perfilAdmin.first())
+            println(uiState.perfilAdmin.first())
             AndroidView(
                 factory = { PefilAdministrador(context) },
                 modifier = Modifier.fillMaxSize(),
@@ -93,7 +93,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         fecha_compra.text =
                             uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable()
                                 ?: "".toEditable()
-                    }
+
 
                     btn_g.setOnClickListener {
                         uiState.perfilAdmin.first()?.id_administrador?.let {
@@ -117,6 +117,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                             )
                         }
 
+                    }
                     }
 
 
