@@ -2,10 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-<<<<<<< HEAD
-      <entry key="app">
+      <entry key="MainActivity">
         <State />
-=======
+      </entry>
       <entry key="Splash">
         <State>
           <targetSelectedWithDropDown>
@@ -14,14 +13,13 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\elcap\.android\avd\Pixel_Tablet_API_VanillaIceCream.avd" />
+                  <value value="C:\Users\elcap\.android\avd\Pixel_3a_API_34_extension_level_7_x86_64.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-06-21T01:04:54.822041600Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-06-25T03:56:19.550702600Z" />
         </State>
->>>>>>> f497ba4b526fb3bc252399bd88e6b7d2b2737db7
       </entry>
     </value>
   </component>

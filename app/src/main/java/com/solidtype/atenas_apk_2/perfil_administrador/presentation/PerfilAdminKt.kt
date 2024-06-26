@@ -22,12 +22,12 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
     if(!uiState.perfilAdmin.isEmpty()){
         print(uiState.perfilAdmin.first())
         AndroidView(
-            factory = { PefilAdministrador(context, uiState) },
+            factory = { PefilAdministrador(context, uiState, viewModel) },
             modifier = Modifier.fillMaxSize()
         )
     }else{
         AndroidView(
-            factory = { PefilAdministrador(context, uiState) },
+            factory = { PefilAdministrador(context, uiState, viewModel) },
             modifier = Modifier.fillMaxSize()
         )
     }
