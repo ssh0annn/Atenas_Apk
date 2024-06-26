@@ -8,5 +8,6 @@ interface MetodoAutenticacion {
     suspend fun signout()
     suspend fun registerNewUsers(email:String, pass:String)
     suspend fun getUsuarioActual(): Usuario
+    suspend fun eliminarUsuario(email:String, password:String)
 
 }

@@ -19,6 +19,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ticket
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ventas
 import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorScreen
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosScreen
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdminScreen
@@ -26,10 +27,9 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScree
 import com.solidtype.atenas_apk_2.servicios.servicios
 
 @SuppressLint("StaticFieldLeak")
-object NavigationSingleton{
+object NavigationSingleton {
     var navController: NavController? = null
     var screen: String = ""
-    var primerScreen: Boolean = false
 }
 
 @Composable
@@ -39,12 +39,10 @@ fun Navigation() {
     NavigationSingleton.navController = navController
 
     NavHost(
-
         navController = navController,
         startDestination = Screens.Login.route
-
-    ){
-        composable(route = Screens.Login.route ) {
+    ) {
+        composable(route = Screens.Login.route) {
             LoginScreen(navController)
         }
         composable(
@@ -60,47 +58,50 @@ fun Navigation() {
         ) {
             OutlinedTextFieldExample(navController)
         }
-        composable(Screens.PerfilAdmin.route){
+        composable(Screens.PerfilAdmin.route) {
             PerfilAdminScreen(navController)
         }
-        composable(route = Screens.PerfilAdministrador.route ) {
+        composable(route = Screens.PerfilAdministrador.route) {
             PerfilAdministrador(navController)
         }
-        composable(route = Screens.Home.route + "/{usuario}" ) {
+        composable(route = Screens.Home.route + "/{usuario}") {
             HomeScreen(navController, it.arguments?.getString("usuario").orEmpty())
         }
-        composable(route = Screens.GestiondeTicket.route ) {
+        composable(route = Screens.GestiondeTicket.route) {
             GestiondeTicket(navController)
         }
-        composable(route = Screens.GestionProducto.route ) {
+        composable(route = Screens.GestionProducto.route) {
             GestionProductos(navController)
         }
-        composable(route = Screens.GestionUsuarios.route ) {
+        composable(route = Screens.GestionUsuarios.route) {
             GestionUsuariosScreen(navController)
         }
-        composable(route = Screens.HistorialVentasTickets.route ) {
-          HistorialScreen(navController)
+        composable(route = Screens.HistorialVentasTickets.route) {
+            HistorialScreen(navController)
         }
-        composable(route = Screens.Inventario.route ) {
+        composable(route = Screens.Inventario.route) {
             Inventario(navController)
         }
-        composable(route = Screens.Servicio.route ) {
+        composable(route = Screens.Servicio.route) {
             servicios()
         }
-        composable(route = Screens.Ticket.route ) {
+        composable(route = Screens.Ticket.route) {
             Ticket(navController)
         }
-        composable(route = Screens.Ventas.route ) {
+        composable(route = Screens.Ventas.route) {
             Ventas(navController)
         }
-        composable(route = Screens.Productos.route ) {
+        composable(route = Screens.Productos.route) {
             InventoryScreen(navController)
         }
-        composable(route = Screens.Factura.route ) {
+        composable(route = Screens.Factura.route) {
             FacturacionScreen(navController)
         }
-        composable(route = Screens.GestionCliente.route){
+        composable(route = Screens.GestionCliente.route) {
             ClienteScreen(navController)
+        }
+        composable(route = Screens.GestionProveedores.route) {
+            ProveedorScreen(navController)
         }
     }
 

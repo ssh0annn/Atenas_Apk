@@ -4,13 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
@@ -26,10 +24,23 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
             modifier = Modifier.fillMaxSize()
         )
     }else{
+
+    /*if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+        navController.navigate(Screens.Login.route)
+    } else if (uiState.isLoading) {
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    } else {*/
+
         AndroidView(
             factory = { PefilAdministrador(context, uiState, viewModel) },
             modifier = Modifier.fillMaxSize()
         )
+        MenuLateral(navController)
     }
-    MenuLateral(navController)
 }
