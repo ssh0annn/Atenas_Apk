@@ -37,8 +37,10 @@ class AuthViewmodel @Inject constructor(
 
 
     init {
-        if(recuerdame.getString(CORREO, "").toString().isNotBlank()){
+        if(recuerdame.getString(CORREO, "").toString() != ""){
             uiStates.update { it.copy(licenciaGuardada = true) }
+        }else{
+            uiStates.update { it.copy(licenciaGuardada = false) }
         }
         uiStates.update {
             it.copy(
@@ -139,15 +141,18 @@ class AuthViewmodel @Inject constructor(
                                 return true
                             }
                             false -> {
+                                eliminarLicencia()
+                                logout()
                                 uiStates.update {
                                     it.copy(
                                         isAutenticated = null,
-                                        razones = "Licencia no activa."
+                                        razones = "Licencia no activa.",
+                                        licenciaGuardada = false
                                     )
 
                                 }
-                                logout()
-                                eliminarLicencia()
+
+
 
                                 return false
                             }

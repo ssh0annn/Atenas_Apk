@@ -189,7 +189,13 @@ class DataCloudImpl @Inject constructor(
         querySnapshot: QuerySnapshot?,
         licensia: String
     ): QueryDocumentSnapshot? {
-        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia }
+        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia
+        }
+        for(i in querySnapshot!!.documents){
+            println("datos ${i.data}")
+
+        }
+        println("Lincencia pasasda $licensia")
         return list
     }
 

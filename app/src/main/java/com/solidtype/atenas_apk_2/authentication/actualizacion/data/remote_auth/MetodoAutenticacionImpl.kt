@@ -78,7 +78,6 @@ class MetodoAutenticacionImpl @Inject constructor(
         }catch (e: Exception){
             println("error de registro : $e")
         }
-
     }
     override suspend fun getUsuarioActual(): Usuario {
         return Usuario(
