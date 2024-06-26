@@ -14,7 +14,6 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
-import com.solidtype.atenas_apk_2.authentication.data.remote.RemoteFirebase
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
@@ -24,17 +23,6 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.UpdateProducto
 import com.solidtype.atenas_apk_2.products.domain.userCases.createProductos
 import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import com.solidtype.atenas_apk_2.products.domain.userCases.getProductosByCodigo
-import com.solidtype.atenas_apk_2.authentication.data.repository.RepositoryImpl
-import com.solidtype.atenas_apk_2.authentication.domain.repository.UserRepository
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.AuthUseCases
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.CapturaICCID
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.EstadoLicencia
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.ExisteUsuario
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.Registrarse
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.SignInUseCase
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.SignOutUseCase
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.VerificaICCIDUseCase
-import com.solidtype.atenas_apk_2.authentication.domain.userCase.implementados.getCurrentUser
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
@@ -57,7 +45,6 @@ import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicke
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
 import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
-import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl
 import com.solidtype.atenas_apk_2.dispositivos.data.repository.DispositivosRepositoryImpl
@@ -164,25 +151,10 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun userRepository(impl: RepositoryImpl): UserRepository = impl
-
-    @Singleton
-    @Provides
     fun historialVentasRepository(impl: HistorialRepositoryImp): HistorialRepository = impl
 
 
-    @Singleton
-    @Provides
-    fun provideAuthCases(repository: UserRepository) = AuthUseCases(
-        login = SignInUseCase(repository),
-        logout = SignOutUseCase(repository),
-        current_user = getCurrentUser(repository),
-        register = Registrarse(repository),
-        capturaIccid = CapturaICCID(repository),
-        validarICCID = VerificaICCIDUseCase(repository),
-        estado_licencia = EstadoLicencia(repository),
-        usuarioExiste = ExisteUsuario(repository)
-    )
+
 
 
     @Singleton
@@ -264,9 +236,6 @@ object AppModule {
     @Singleton
     fun providesDataDBTickets(QueryDBlocalImpl: QueryDBlocalImpl): QueryDBlocal = QueryDBlocalImpl
 
-    @Provides
-    @Singleton
-    fun providesAuthInterface(RemoteFirebase: RemoteFirebase): auth = RemoteFirebase
     //proveyendo el asyncPro interface
 
     @Provides

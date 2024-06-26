@@ -8,7 +8,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -26,13 +25,12 @@ import javax.inject.Inject
 
 class DataCloudImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
-    autenticador: auth
+
 ) : DataCloud {
 
 
 //    private val uidUser: String = autenticador.getCurrentUser()!!.uid
 
-    private val user = Firebase.auth.currentUser
     private var uidUser: String = ""
     private var licencia: String = "licensias"
     private var DbCollectionUsers = "usuarios"
@@ -171,7 +169,7 @@ class DataCloudImpl @Inject constructor(
      * Si no encuentradada : tipouser.UNKNOWN. (desconocido)
      */
 
-    suspend fun getAllLicencia(): QuerySnapshot? {
+    private suspend fun getAllLicencia(): QuerySnapshot? {
 
         try {
             return fireStore.collection(licencia)
@@ -220,7 +218,7 @@ class DataCloudImpl @Inject constructor(
     }
 
 
-    suspend fun tipoUsurio(direcionDb: String, email: String): TipoUser {
+    private suspend fun tipoUsurio(direcionDb: String, email: String): TipoUser {
         try {
             val doc = fireStore.collection(DbCollectionUsers).document(direcionDb).get()
                 .await()

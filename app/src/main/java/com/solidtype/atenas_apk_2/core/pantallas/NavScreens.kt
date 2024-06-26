@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.LoginScreen
-import com.solidtype.atenas_apk_2.authentication.presentation.register.OutlinedTextFieldExample
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestionProductos
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.GestiondeTicket
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.HomeScreen
@@ -45,19 +44,7 @@ fun Navigation() {
         composable(route = Screens.Login.route) {
             LoginScreen(navController)
         }
-        composable(
-            route = Screens.Register.route,
-            arguments = listOf(
-                navArgument(
-                    name = "userId"
-                ) {
-                    type = NavType.IntType
-                    defaultValue = -1
-                }
-            )
-        ) {
-            OutlinedTextFieldExample(navController)
-        }
+
         composable(Screens.PerfilAdmin.route) {
             PerfilAdminScreen(navController)
         }
