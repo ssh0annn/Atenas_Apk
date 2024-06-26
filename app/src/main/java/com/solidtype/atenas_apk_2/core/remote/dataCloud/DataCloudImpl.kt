@@ -37,16 +37,6 @@ class DataCloudImpl @Inject constructor(
     private var licencia: String = "licensias"
     private var DbCollectionUsers = "usuarios"
 
-    init {
-        setUserUid()
-    }
-
-
-    private fun setUserUid() {
-        user?.let {
-            uidUser = it.uid
-        }
-    }
 
 
     //se convierte el snashopt a json por medio de la
@@ -198,7 +188,13 @@ class DataCloudImpl @Inject constructor(
         querySnapshot: QuerySnapshot?,
         licensia: String
     ): QueryDocumentSnapshot? {
-        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia }
+        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia
+        }
+        for(i in querySnapshot!!.documents){
+            println("datos ${i.data}")
+
+        }
+        println("Lincencia pasasda $licensia")
         return list
     }
 
