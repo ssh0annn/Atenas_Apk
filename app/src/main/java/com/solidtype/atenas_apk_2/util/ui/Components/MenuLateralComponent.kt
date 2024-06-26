@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.util.ui.Components
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -38,19 +37,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.tipoUserSingleton
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.AuthEvent
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.AuthViewmodel
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
-fun MenuLateral(navController: NavController) {
+fun MenuLateral(navController: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
     val mostrarMenu = rememberSaveable { mutableStateOf(false) }
     val noHoverInteractionSource = remember { MutableInteractionSource() }
 
@@ -108,7 +109,7 @@ fun MenuLateral(navController: NavController) {
                             Titulo("Menú", Icons.Outlined.Inventory2)
                         }
 
-                        if (tipoUserSingleton.tipoUser == TipoUser.ADMIN) {
+                        if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
                             Spacer(modifier = Modifier.height(20.dp))
                             Boton(
                                 "Inventario",
@@ -191,6 +192,12 @@ fun MenuLateral(navController: NavController) {
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 10.dp)
+                                .clickable {
+                                    NavigationSingleton.screen = ""
+                                    navController.navigate(Screens.Login.route)
+                                    navController.popBackStack()
+                                    viewModel.onEvent(AuthEvent.LogoutEvent)
+                                }
                         )
                     }
                 }

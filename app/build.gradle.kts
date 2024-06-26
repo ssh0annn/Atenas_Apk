@@ -15,10 +15,6 @@ plugins {
 
 
 }
-repositories {
-    //mavenCentral() // o cualquier otro repositorio que necesites
-    //google()
-}
 
 android {
 
@@ -149,6 +145,10 @@ dependencies {
     implementation ("org.apache.poi:poi-ooxml:5.2.5") // Para trabajar con formatos de archivo de Excel (XLSX)
     implementation ("com.google.android.gms:play-services-base:17.6.0")
     implementation ("com.google.firebase:firebase-messaging:22.0.0")
+
+    //Lotti y animaciones :
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
+
 
 
 }

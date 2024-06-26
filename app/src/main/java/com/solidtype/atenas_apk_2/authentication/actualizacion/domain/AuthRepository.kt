@@ -4,7 +4,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.Check
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 
 interface AuthRepository {
-    suspend fun signing(user:String, password:String, systemID:String): CheckListAuth
+    suspend fun signing(user:String, password:String, systemID:String, licencia:String): CheckListAuth
     suspend fun signout()
     suspend fun isAutenticated(): Usuario
 }
