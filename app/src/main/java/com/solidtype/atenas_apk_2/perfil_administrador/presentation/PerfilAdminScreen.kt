@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.tipoUserSingleton
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
@@ -23,7 +23,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (tipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
@@ -38,6 +38,6 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
             factory = { PefilAdministrador(context, uiState) },
             modifier = Modifier.fillMaxSize()
         )
-
-        MenuLateral(navController) }
+        MenuLateral(navController)
+    }
 }

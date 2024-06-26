@@ -39,6 +39,7 @@ class DataCloudImpl @Inject constructor(
 
 
 
+
     //se convierte el snashopt a json por medio de la
     /**
      * @param: QuerySnapshot
