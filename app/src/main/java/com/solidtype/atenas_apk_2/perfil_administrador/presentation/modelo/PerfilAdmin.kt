@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo
 
 data class PerfilAdmin(
+    val id:Long,
     val nombre :String,
     val apellido :String,
     val correo :String,

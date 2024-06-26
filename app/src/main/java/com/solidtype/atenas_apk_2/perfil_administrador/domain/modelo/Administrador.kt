@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 @Entity
 data class administrador(
-    @PrimaryKey(autoGenerate = true) val id_administrador :Long = 5000,
+    @PrimaryKey(autoGenerate = true) val id_administrador :Long = 0,
     val nombre :String,
     val apellido :String,
     val correo :String?,
