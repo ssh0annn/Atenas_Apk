@@ -40,18 +40,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.AuthEvent
-import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.AuthViewmodel
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
+import com.solidtype.atenas_apk_2.util.ui.LogoutViewmodel
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
-fun MenuLateral(navController: NavController, viewModel: AuthViewmodel = hiltViewModel()) {
+fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltViewModel()) {
     val mostrarMenu = rememberSaveable { mutableStateOf(false) }
     val noHoverInteractionSource = remember { MutableInteractionSource() }
 
@@ -194,9 +193,9 @@ fun MenuLateral(navController: NavController, viewModel: AuthViewmodel = hiltVie
                             modifier = Modifier.padding(top = 10.dp)
                                 .clickable {
                                     NavigationSingleton.screen = ""
-                                    navController.navigate(Screens.Login.route)
                                     navController.popBackStack()
-                                    viewModel.onEvent(AuthEvent.LogoutEvent)
+                                    navController.navigate(Screens.Login.route)
+                                    viewModel.onEvent()
                                 }
                         )
                     }
