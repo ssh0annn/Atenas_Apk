@@ -7,7 +7,6 @@ import android.net.NetworkCapabilities
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.Authentication.actualizacion.presentation.AuthUIStates
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
