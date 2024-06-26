@@ -9,9 +9,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
-import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import dagger.hilt.android.qualifiers.ApplicationContext
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -30,18 +29,17 @@ import javax.inject.Inject
 class DataCloudImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fireStore: FirebaseFirestore,
-    autenticador: auth
-) : DataCloud {
+
+    ) : DataCloud {
 
 
 //    private val uidUser: String = autenticador.getCurrentUser()!!.uid
 
-    private val user = Firebase.auth.currentUser
+
+    private var uidUser: String = ""
     private var licencia: String = "licensias"
     private var DDBB: String = "db"
     private var DbCollectionUsers = "usuarios"
-    private val recuerdame = context.getSharedPreferences("Sincronizacion", Context.MODE_PRIVATE)
-    private var uidUser: String = recuerdame.getString(DDBB,"").toString()
 
     //se convierte el snashopt a json por medio de la
     /**
@@ -203,7 +201,7 @@ class DataCloudImpl @Inject constructor(
      */
 
     override suspend fun deleteDataInCloud(
-        collection: String,
+        collectionName: String,
         dataToDelete: List<Map<String, String>>,
         idDocumento: String
     ) {
@@ -214,7 +212,7 @@ class DataCloudImpl @Inject constructor(
                     val allData = i[idDocumento]?.let {
                         fireStore.collection("usuarios")
                             .document(uidUser)
-                            .collection(collection)
+                            .collection(collectionName)
                             .document(it)
                     }
                     if (allData != null) {
@@ -238,8 +236,7 @@ class DataCloudImpl @Inject constructor(
      * Si no encuentradada : tipouser.UNKNOWN. (desconocido)
      */
 
-
-    suspend fun getAllLicencia(): QuerySnapshot? {
+    private suspend fun getAllLicencia(): QuerySnapshot? {
 
         try {
             return fireStore.collection(licencia)
@@ -253,50 +250,34 @@ class DataCloudImpl @Inject constructor(
 
     }
 
-
-    private fun isLincenciaValida(
-        queryLicencias: QuerySnapshot,
-        licencia: String,
-        dispositivo: String
-    ): String? {
-        val checker = CheckListAuth()
-        queryLicencias.forEach { documentData ->
-            val documents = documentData.data
-            if (documents["noLicencia"]?.equals(licencia) == true) {
-                if (documents["estadoLicencia"] == true) {
-                    checker.licensiaActiva = true
-                    if (documents["idDevice"].toString() == dispositivo) {
-                        checker.deviceRegistrado = true
-
-                        return documents["direcionDB"].toString()
-                    }
-                }
-            }
+    private fun encuentraDocLicencia(
+        querySnapshot: QuerySnapshot?,
+        licensia: String
+    ): QueryDocumentSnapshot? {
+        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia
         }
-        return null
-    }
+        for(i in querySnapshot!!.documents){
+            println("datos ${i.data}")
 
-    private fun encuentraDocLicencia(querySnapshot: QuerySnapshot?, licensia:String):QueryDocumentSnapshot?{
-        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia }
+        }
+        println("Lincencia pasasda $licensia")
         return list
     }
 
-    suspend fun laQuellamo (email: String,
-                            licencia: String,
-                            dispositivo: String):CheckListAuth{
+    private suspend fun laQuellamo(
+        email: String,
+        licencia: String,
+        dispositivo: String
+    ): CheckListAuth {
         val checker = CheckListAuth()
         val encontrada = encuentraDocLicencia(getAllLicencia(), licencia)
-         if(encontrada?.get("idDevice") == dispositivo){
-             checker.deviceRegistrado = true
-
-         }
-        if(encontrada?.get("estadoLicencia") == true){
-            checker.licensiaActiva = true
-            println("Estado de licencia ${encontrada.get("estadoLicencia")} ")
-
+        if (encontrada?.get("idDevice") == dispositivo) {
+            checker.deviceRegistrado = true
         }
-        checker.tipoUser = tipoUsurio(encontrada?.get("direcionDB").toString(),email )
-        recuerdame(encontrada?.get("direcionDB").toString())
+        if (encontrada?.get("estadoLicencia") == true) {
+            checker.licensiaActiva = true
+        }
+        checker.tipoUser = tipoUsurio(encontrada?.get("direcionDB").toString(), email)
         checker.emailUsuario = email
         checker.autenticado = true
         println("Asi esta el checker $checker")
@@ -304,55 +285,43 @@ class DataCloudImpl @Inject constructor(
     }
 
 
-suspend fun tipoUsurio(direcionDb:String, email: String): TipoUser{
-    try {
-        val doc = fireStore.collection(DbCollectionUsers).document(direcionDb).get()
+    private suspend fun tipoUsurio(direcionDb: String, email: String): TipoUser {
+        try {
+            val doc = fireStore.collection(DbCollectionUsers).document(direcionDb).get()
                 .await()
-        val campos = doc.data
-        val correo = campos?.get("correo")?.toString()
-        if (correo == email) {
-            println("email $correo == correo $email")
-            return TipoUser.ADMIN
-        } else {
-            val colletionVendedores =
-                fireStore.collection(DbCollectionUsers).document(direcionDb)
-                    .collection("vendedor").get().await()
-            colletionVendedores.forEach { documetos ->
-                if (documetos["correo"] == email) {
-                    println("email $email == correo $email")
-                    return TipoUser.VENDEDOR
+            val campos = doc.data
+            val correo = campos?.get("correo")?.toString()
+            if (correo == email) {
+                println("email $correo == correo $email")
+                return TipoUser.ADMIN
+            } else {
+                val colletionVendedores =
+                    fireStore.collection(DbCollectionUsers).document(direcionDb)
+                        .collection("vendedor").get().await()
+                colletionVendedores.forEach { documetos ->
+                    if (documetos["correo"] == email) {
+                        println("email $email == correo $email")
+                        return TipoUser.VENDEDOR
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.e("error firebase", "No Coincidio el Correo$e")
+            return TipoUser.UNKNOWN
         }
-    } catch (e: Exception) {
-        Log.e("error firebase", "No Coincidio el Correo$e")
         return TipoUser.UNKNOWN
     }
-    return TipoUser.UNKNOWN
+
+
+    //Por implementar
+    override suspend fun autenticacionCloud(
+        email: String,
+        licencia: String,
+        dispositivo: String
+    ): CheckListAuth {
+        return laQuellamo(email, licencia, dispositivo)
+    }
+
+    //Por implementar
+
 }
-
-        //Por implementar
-        override suspend fun autenticacionCloud(
-            email: String,
-            licencia: String,
-            dispositivo: String
-        ): CheckListAuth {
-            return  laQuellamo(email, licencia, dispositivo)
-
-
-        }
-
-        //Por implementar
-        override suspend fun validarDispositivo(idDispositivo: String): Boolean {
-            return true
-        }
-
-    private fun recuerdame(db: String?) {
-        recuerdame
-            .edit()
-            .putString(DDBB, db)
-            .apply()
-
-    }
-
-    }

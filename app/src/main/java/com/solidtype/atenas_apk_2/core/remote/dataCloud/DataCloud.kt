@@ -19,14 +19,6 @@ interface DataCloud {
          */
         suspend fun autenticacionCloud(email:String, licencia:String,dispositivo:String): CheckListAuth
 
-        /**
-         * @param String
-         * @return Boolean
-         * Validar si el dispositivo esta registrado debuelve true o false.
-         * Nota: Si no existe un dato previo en la nube, debera registrar el que recibe por parametro.
-         * Este caso indicaria que es primera vez que el usuario se loguea.
-         */
-        suspend fun validarDispositivo(idDispositivo:String):Boolean
 
         suspend fun insertAllToCloud2(
                 collection: String,

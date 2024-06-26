@@ -1,3 +1,4 @@
+/*
 package com.solidtype.atenas_apk_2.authentication.presentation.login.component
 
 import android.content.Context
@@ -60,7 +61,7 @@ import com.solidtype.atenas_apk_2.ui.theme.Transparente
 
 
 @Composable
-fun LoginScreenOld(context: Context, nav: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreenOld(context: Context, nav: NavController) {
     val email: String by viewModel.mail.observeAsState(initial = "")
     val pass: String by viewModel.pass.observeAsState(initial = "")
     val loginEnabled: Boolean by viewModel.login.observeAsState(initial = false)
@@ -252,7 +253,8 @@ fun LoginScreenOld(context: Context, nav: NavController, viewModel: LoginViewMod
                             fontWeight = FontWeight.Bold,
                             color = AzulGris
                         )
-                        /*Button(
+                        */
+/*Button(
                             onClick = {
                                // nav.navigate(Screens.Register.route)
                                       //Esta parte de registro debe llevarte a  la pagina de compra para la app.
@@ -275,7 +277,8 @@ fun LoginScreenOld(context: Context, nav: NavController, viewModel: LoginViewMod
                             )
                         }
 
-                         */
+                         *//*
+
                     }
                     Spacer(modifier = Modifier.height(100.dp))
                 }
@@ -284,3 +287,4 @@ fun LoginScreenOld(context: Context, nav: NavController, viewModel: LoginViewMod
     }
 }
 
+*/

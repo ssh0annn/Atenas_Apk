@@ -149,8 +149,8 @@ dependencies {
     //Lotti y animaciones :
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
-    //reflect
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0")
+    //Implementacion PDF :
+  //  implementation ("com.itextpdf:itext7-core:7.1.15")
 
 
 

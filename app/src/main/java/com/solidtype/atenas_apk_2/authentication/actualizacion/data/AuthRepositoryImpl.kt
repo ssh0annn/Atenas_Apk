@@ -13,7 +13,7 @@ class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAu
         try {
             val caminoFeliz =  autenticacion.signing(user, password,systemID , licencia)
             println("Este es el systemID: $systemID")
-            if(caminoFeliz.tipoUser != TipoUser.UNKNOWN && caminoFeliz.licensiaActiva == true && caminoFeliz.deviceRegistrado ==true){
+            if(caminoFeliz.tipoUser != TipoUser.UNKNOWN && caminoFeliz.licensiaActiva && caminoFeliz.deviceRegistrado){
                 UsuarioActual.emailUsuario = caminoFeliz.emailUsuario ?: ""
                 UsuarioActual.tipoUser = caminoFeliz.tipoUser
             }else{

@@ -66,13 +66,6 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
             Column {
                 Spacer(modifier = Modifier.height(70.dp))
                 tablaserv(listaTiket = state.listaTickets)
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {viewmodel.testTiceket()}
-                ){
-                    Text("Prueba")
-                }
             }
         }
       //primera opcion

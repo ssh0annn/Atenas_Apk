@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
-
+/*
 import kotlin.reflect.full.memberProperties
 
 fun Any.toMutableMap(): MutableMap<String, Any?> {
@@ -21,7 +21,7 @@ fun Any.toMutableMap(): MutableMap<String, Any?> {
 
     return map
 }
-
+*/
 fun String.toLocalDate(formato: String = "yyyy-MM-dd"): LocalDate {
     val format = DateTimeFormatter.ofPattern(formato)
     if (this.isEmpty() || this == " ") {
