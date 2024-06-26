@@ -10,6 +10,18 @@ class DbTicketsImpl @Inject constructor (
     private val dao: DaoTransacciones
 ) {
 
+//    fun StringtoEntity(data :List<Map<String,Map<String,Any>>>): List<TicketModeloRelation>{
+//
+//
+//    }
+
+
+
+    /**
+     * @return  List<MutableList<Map<String,Map<String,Any>>>>
+     * @funcion: captura todos los datos de la tabla Tickets y los debuelve en una lista de mapas con con mapas para la conversion a MutableList<Map<String,Map<String,Any>>>.
+     */
+
      fun entityToString(dato:List<TicketModeloRelation>):MutableList<Map<String,Map<String,Any>>>{
         val collecionTicket:MutableList<Map<String,Map<String,Any>>> = mutableListOf()
         if (dato.isNotEmpty()){

@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts
 
 
+import com.solidtype.atenas_apk_2.core.Transacciones.ModeloTransacciones.InventarioModeloRelation
 import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.QueryDBlocal
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
@@ -178,6 +179,11 @@ class QueryDBlocalImpl @Inject constructor(
 
         }
     }
+
+
+
+
+
 }
 
 

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.solidtype.atenas_apk_2.core.Transacciones.ModeloTransacciones.InventarioModeloRelation
 import com.solidtype.atenas_apk_2.core.Transacciones.ModeloTransacciones.TicketModeloRelation
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.TicketwithRelation
@@ -37,5 +38,14 @@ interface DaoTransacciones {
         ticket.estado = false
         updateTicket(ticket)
     }
+
+
+    //Funciones Inventario
+    @Transaction
+    @Query("SELECT * FROM inventario")
+    fun getAllInventario(): List<InventarioModeloRelation>
+
+
+
 
 }
