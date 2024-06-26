@@ -36,10 +36,10 @@ class AuthViewmodel @Inject constructor(
 
 
     init {
-        if(recuerdame.getString(CORREO, "").toString() != ""){
-            uiStates.update { it.copy(licenciaGuardada = true) }
-        }else{
+        if(recuerdame.getString(CORREO, "") == ""){
             uiStates.update { it.copy(licenciaGuardada = false) }
+        }else{
+            uiStates.update { it.copy(licenciaGuardada = true) }
         }
         uiStates.update {
             it.copy(
