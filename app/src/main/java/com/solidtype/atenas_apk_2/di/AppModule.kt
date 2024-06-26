@@ -380,8 +380,9 @@ object AppModule {
     @Singleton
     fun provideRepositorioUsuario(
         userDao: usuarioDao,
-        roll: roll_usuarioDao
-    ): GestionUserRepository = GestionUserRepoImpl(roll, userDao)
+        roll: roll_usuarioDao,
+        registro: MetodoAutenticacion
+    ): GestionUserRepository = GestionUserRepoImpl(roll, userDao, registro)
 
     @Provides
     @Singleton

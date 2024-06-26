@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.Authentication.actualizacion.presentation.AuthUIStates
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
@@ -36,7 +37,9 @@ class AuthViewmodel @Inject constructor(
 
 
     init {
-        if(recuerdame.getString(CORREO, "").toString().isNotBlank()){
+        if(recuerdame.getString(CORREO, "") == ""){
+            uiStates.update { it.copy(licenciaGuardada = false) }
+        }else{
             uiStates.update { it.copy(licenciaGuardada = true) }
         }
         uiStates.update {
@@ -138,15 +141,18 @@ class AuthViewmodel @Inject constructor(
                                 return true
                             }
                             false -> {
+                                eliminarLicencia()
+                                logout()
                                 uiStates.update {
                                     it.copy(
                                         isAutenticated = null,
-                                        razones = "Licencia no activa."
+                                        razones = "Licencia no activa.",
+                                        licenciaGuardada = false
                                     )
 
                                 }
-                                logout()
-                                eliminarLicencia()
+
+
 
                                 return false
                             }

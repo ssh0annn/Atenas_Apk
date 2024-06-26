@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth
 
 import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.UsuarioActual
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
@@ -37,6 +38,38 @@ class MetodoAutenticacionImpl @Inject constructor(
         UsuarioActual.emailUsuario = ""
         UsuarioActual.tipoUser = TipoUser.UNKNOWN
         firebaseAuth.signOut()
+
+    }
+    override  suspend fun eliminarUsuario(email:String, password:String ){
+        reautenticarYEliminarUsuario(email, password)
+    }
+    private suspend fun reautenticarYEliminarUsuario(email: String, password: String) {
+        try {
+            val user = firebaseAuth.currentUser
+            user?.let {
+                val credential = EmailAuthProvider.getCredential(email, password)
+                it.reauthenticate(credential)
+                    .addOnCompleteListener { reauthTask ->
+                        if (reauthTask.isSuccessful) {
+                            it.delete()
+                                .addOnCompleteListener { deleteTask ->
+                                    if (deleteTask.isSuccessful) {
+                                        println("Usuario eliminado exitosamente.")
+                                    } else {
+                                        println("Error al eliminar usuario: ${deleteTask.exception?.message}")
+                                    }
+                                }
+                        } else {
+                            println("Error al reautenticar usuario: ${reauthTask.exception?.message}")
+                        }
+                    }
+            } ?: run {
+                println("No hay un usuario autenticado.")
+            }
+        }catch (e: Exception){
+            println("Error para eliminar usuario")
+        }
+
     }
 
     override suspend fun registerNewUsers(email: String, pass: String) {
@@ -45,7 +78,6 @@ class MetodoAutenticacionImpl @Inject constructor(
         }catch (e: Exception){
             println("error de registro : $e")
         }
-
     }
     override suspend fun getUsuarioActual(): Usuario {
         return Usuario(

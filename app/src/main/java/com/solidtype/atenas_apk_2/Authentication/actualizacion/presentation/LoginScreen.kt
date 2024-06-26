@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.authentication.actualizacion.presentation
 
-import android.content.Intent
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -21,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -55,13 +55,12 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
 import com.solidtype.atenas_apk_2.ui.theme.Transparente
 
-object tipoUserSingleton {
+object TipoUserSingleton {
     var tipoUser: TipoUser? = null
 }
 
@@ -74,8 +73,9 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
 
     val email = rememberSaveable { mutableStateOf(if (!uiState.correoGuardado.isNullOrEmpty()) uiState.correoGuardado!! else "") }
     val pass = rememberSaveable { mutableStateOf("") }
+    val licencia = rememberSaveable { mutableStateOf("") }
 
-    val checked = rememberSaveable { mutableStateOf( if (!uiState.correoGuardado.isNullOrEmpty()) true else false) }
+    val checked = rememberSaveable { mutableStateOf(!uiState.correoGuardado.isNullOrEmpty()) }
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
 
     val startedAdmin = rememberSaveable { mutableStateOf(false) }
@@ -86,13 +86,12 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     if (!uiState.network) Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
 
     if (uiState.isAutenticated != null) {
-        tipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
+        TipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
             TipoUser.ADMIN -> {
                 if (!startedAdmin.value) { //evita que se abra la pantalla de perfilAdmin varias veces
-                    navController.navigate(Screens.Home.route + "/Administrador") //PerfilAdmin(navController)
+                    //navController.navigate(Screens.Home.route + "/Administrador") //PerfilAdmin(navController)
                     NavigationSingleton.screen = Screens.PerfilAdmin.route
-                    NavigationSingleton.primerScreen = true
                     navController.navigate(Screens.PerfilAdmin.route)
                 }
             }
@@ -221,6 +220,37 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                     visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
+                if(!uiState.licenciaGuardada)
+                    TextField(
+                        value = licencia.value,
+                        onValueChange = { licencia.value = it },
+                        singleLine = true,
+                        modifier = Modifier
+                            .width(500.dp)
+                            .height(66.dp)
+                            .padding(start = 34.dp, end = 34.dp, top = 8.dp, bottom = 8.dp)
+                            .background(Blanco),
+                        shape = RoundedCornerShape(20),
+                        label = { Text(text = "Licencia") },
+                        textStyle = TextStyle(
+                            textAlign = TextAlign.Start,
+                            color = AzulGris,
+                            fontSize = 14.sp
+                        ),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.CreditCard,
+                                contentDescription = "License Icon"
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = BlancoOpaco,
+                            unfocusedContainerColor = BlancoOpaco,
+                            disabledContainerColor = BlancoOpaco,
+                            focusedIndicatorColor = Transparente,
+                            unfocusedIndicatorColor = Transparente
+                        ),
+                    )
                 Row(
                     modifier = Modifier
                         .width(500.dp)
@@ -245,7 +275,10 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 }
                 Button(
                     onClick = {
-                        viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value))
+                        when(uiState.licenciaGuardada){
+                            true -> viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value))
+                            false -> viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value, licencia.value))
+                        }
                         if(checked.value) viewModel.onEvent(AuthEvent.Recuerdame(email.value))
                         else viewModel.onEvent(AuthEvent.EliminarRecuerdos)
                     },
