@@ -19,6 +19,7 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.PerfilAdmin
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent
@@ -51,47 +52,78 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                 update = { view ->
                     val btn_g = view.findViewById<Button>(R.id.perfil_config_btnguardar)
                     val btn_c = view.findViewById<Button>(R.id.perfil_config_btncancelar)
-                    val nombre_admin : EditText = view.findViewById(R.id.txt_perfil_nombre_admin)
-                    val correo_admin : EditText = view.findViewById(R.id.txt_perfil_correo_admin)
-                    val clave_admin : EditText = view.findViewById(R.id.txt_perfil_clave_admin)
-                    val nombre_empresa : EditText = view.findViewById(R.id.txt_perfil_nombre_empresa_admin)
-                    var direccion_empresa : EditText = view.findViewById(R.id.txt_perfil_direccion_empresa_admin)
-                    var numero_empresa : EditText = view.findViewById(R.id.txt_perfil_numero_telefono_admin)
-                    var numero_licencia : EditText = view.findViewById(R.id.txt_perfil_numero_licencia_admin)
-                    var estado : EditText = view.findViewById(R.id.txt_perfil_estado_licencia_admin)
-                    var fecha_caduca  : EditText = view.findViewById(R.id.txt_perfil_fecha_caduca_admin)
-                    var fecha_compra : EditText = view.findViewById(R.id.txt_perfil_fecha_compra_admin)
+                    val nombre_admin: EditText = view.findViewById(R.id.txt_perfil_nombre_admin)
+                    val correo_admin: EditText = view.findViewById(R.id.txt_perfil_correo_admin)
+                    val clave_admin: EditText = view.findViewById(R.id.txt_perfil_clave_admin)
+                    val nombre_empresa: EditText =
+                        view.findViewById(R.id.txt_perfil_nombre_empresa_admin)
+                    val direccion_empresa: EditText =
+                        view.findViewById(R.id.txt_perfil_direccion_empresa_admin)
+                    val numero_empresa: EditText =
+                        view.findViewById(R.id.txt_perfil_numero_telefono_admin)
+                    val numero_licencia: EditText =
+                        view.findViewById(R.id.txt_perfil_numero_licencia_admin)
+                    val estado: EditText = view.findViewById(R.id.txt_perfil_estado_licencia_admin)
+                    val fecha_caduca: EditText =
+                        view.findViewById(R.id.txt_perfil_fecha_caduca_admin)
+                    val fecha_compra: EditText =
+                        view.findViewById(R.id.txt_perfil_fecha_compra_admin)
 
-                    if (uiState.perfilAdmin.first() != null){
-                        nombre_admin.text = uiState.perfilAdmin.get(0)?.nombre?.toEditable() ?: "".toEditable()
-                        correo_admin.text = uiState.perfilAdmin.get(0)?.correo?.toEditable() ?: "".toEditable()
-                        nombre_empresa.text = uiState.perfilAdmin.get(0)?.nombre_negocio?.toEditable() ?: "".toEditable()
-                        direccion_empresa.text = uiState.perfilAdmin.get(0)?.direccion_negocio?.toEditable() ?: "".toEditable()
-                        numero_empresa.text = uiState.perfilAdmin.get(0)?.telefono?.toEditable() ?: "".toEditable()
+                    if (uiState.perfilAdmin.first() != null) {
+                        nombre_admin.text =
+                            uiState.perfilAdmin[0]?.nombre?.toEditable() ?: "".toEditable()
+                        correo_admin.text =
+                            uiState.perfilAdmin[0]?.correo?.toEditable() ?: "".toEditable()
+                        nombre_empresa.text =
+                            uiState.perfilAdmin[0]?.nombre_negocio?.toEditable() ?: "".toEditable()
+                        direccion_empresa.text =
+                            uiState.perfilAdmin[0]?.direccion_negocio?.toEditable()
+                                ?: "".toEditable()
+                        numero_empresa.text =
+                            uiState.perfilAdmin[0]?.telefono?.toEditable() ?: "".toEditable()
+                        clave_admin.text =
+                            uiState.perfilAdmin[0]?.clave?.toEditable() ?: "".toEditable()
+                        numero_licencia.text =
+                            uiState.perfilAdmin[0]?.licencia?.toEditable() ?: "".toEditable()
+                        estado.text = uiState.perfilAdmin[0]?.estado?.toString()?.toEditable()
+                            ?: "".toEditable()
+                        fecha_caduca.text =
+                            uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable()
+                                ?: "".toEditable()
+                        fecha_compra.text =
+                            uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable()
+                                ?: "".toEditable()
                     }
 
                     btn_g.setOnClickListener {
-                        viewModel.onEvent(PerfilEvent.UpdatePerfil(PerfilAdmin(
-                            nombre_admin.text.toString(),
-                            nombre_admin.text.toString(),
-                            correo_admin.text.toString(),
-                            numero_empresa.text.toString(),
-                            direccion_empresa.text.toString(),
-                            nombre_empresa.text.toString()
-                        )))
+                        uiState.perfilAdmin.first()?.id_administrador?.let {
+                            viewModel.onEvent(
+                                PerfilEvent.UpdatePerfil(
+                                    administrador(
+                                        id_administrador = it,
+                                        nombre = nombre_admin.text.toString(),
+                                        apellido = nombre_admin.text.toString(),
+                                        correo = correo_admin.text.toString(),
+                                        telefono = numero_empresa.text.toString(),
+                                        direccion_negocio = direccion_empresa.text.toString(),
+                                        nombre_negocio = nombre_empresa.text.toString(),
+                                        clave = clave_admin.text.toString(),
+                                        licencia = uiState.perfilAdmin.first()!!.licencia,
+                                        fecha_compra = uiState.perfilAdmin.first()!!.fecha_compra,
+                                        fecha_caduca = uiState.perfilAdmin.first()!!.fecha_caduca,
+                                        estado = uiState.perfilAdmin.first()!!.estado
+                                    )
+                                )
+                            )
+                        }
+
                     }
-                    btn_c.setOnClickListener {
-                        viewModel.onEvent(PerfilEvent.VerPerfil)
-                    }
+
 
                 }
             )
-        } else {
-            AndroidView(
-                factory = { PefilAdministrador(context) },
-                modifier = Modifier.fillMaxSize()
-            )
             MenuLateral(navController)
         }
+
     }
 }
