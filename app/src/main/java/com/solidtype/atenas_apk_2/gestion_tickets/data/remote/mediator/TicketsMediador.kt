@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_tickets.data.remote.mediator
 
-import com.solidtype.atenas_apk_2.core.Transacciones.DaoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.gestion_tickets.data.remote.DBtickets.DbTicketsImpl
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ class TicketsMediador @Inject constructor (
             val dataCon = dbTickets.entityToString(daoTransacciones.getAllTickets())
             println(dataCon)
             dataCon.forEachIndexed { index, ticketRelation ->
-                println("TicketModeloRelation ${index + 1}:")
+                println("InventarioModeloRelation ${index + 1}:")
                 println(ticketRelation)
                 println()
             }

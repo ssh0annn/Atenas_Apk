@@ -34,9 +34,8 @@ class DataCloudImpl @Inject constructor(
 
 
 //    private val uidUser: String = autenticador.getCurrentUser()!!.uid
-
-
-    private var uidUser: String = ""
+        //donde esta la funcion que guarda la refereacia dur epila buscando el problema y era aqui palomo
+    private var uidUser: String = "johan@labestia.com"
     private var licencia: String = "licensias"
     private var DDBB: String = "db"
     private var DbCollectionUsers = "usuarios"
@@ -176,6 +175,232 @@ class DataCloudImpl @Inject constructor(
                         println(persona)
                         println(tipo_venta)
                         println(tipo_dispositivo)
+                        println("estos datos son el for dataInsert")
+
+                    }
+
+                }
+                lote.commit().await()
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("error firebase", "No se puedo insertar $e")
+            throw Exception("no se pudo insertar los datos a firebase $e")
+        }
+
+    }
+
+
+
+    override suspend fun insertAllToCloud3(
+        collection: String,
+        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        idDocumento: String
+    ) {
+
+        try {
+
+            withContext(Dispatchers.Default) {
+                val lote = fireStore.batch()
+                println("idDocument: $idDocumento")
+                dataToInsert.forEach{
+                    val llaves =   it.keys
+                    for (i in llaves) {
+
+                        val coleccion = i
+                        val ticketData = hashMapOf(
+                            "Inventario" to it[i]?.get("Inventario"),
+                            "Categoria" to it[i]?.get("Categoria"),
+                            "Persona" to it[i]?.get("Persona"),
+                        )
+
+
+                        val reference =  fireStore.collection("usuarios")
+                            .document(uidUser)
+                            .collection(collection)
+                            .document(coleccion)
+
+                        lote.set(reference, ticketData)
+
+                        val Inventario:Any? =  it[i]?.get("Inventario")
+                        val Categoria:Any? =  it[i]?.get("Categoria")
+                        val Persona:Any? =  it[i]?.get("Persona")
+                        println("estos datos son el for dataInsert")
+                        println(coleccion)
+                        println(Inventario)
+                        println(Categoria)
+                        println(Persona)
+                        println("estos datos son el for dataInsert")
+
+                    }
+
+                }
+                lote.commit().await()
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("error firebase", "No se puedo insertar $e")
+            throw Exception("no se pudo insertar los datos a firebase $e")
+        }
+
+    }
+
+    override suspend fun insertAllToCloudDetalleVenta(
+        collection: String,
+        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        idDocumento: String
+    ) {
+
+        try {
+
+            withContext(Dispatchers.Default) {
+                val lote = fireStore.batch()
+                println("idDocument: $idDocumento")
+                dataToInsert.forEach{
+                    val llaves =   it.keys
+                    for (i in llaves) {
+
+                        val coleccion = i
+                        val ticketData = hashMapOf(
+                            "Detalle_venta" to it[i]?.get("Detalle_venta"),
+                            "venta" to it[i]?.get("venta"),
+                            "Inventario" to it[i]?.get("Inventario"),
+                            "Tipo_venta" to it[i]?.get("Tipo_venta"),
+                        )
+
+
+                        val reference =  fireStore.collection("usuarios")
+                            .document(uidUser)
+                            .collection(collection)
+                            .document(coleccion)
+
+                        lote.set(reference, ticketData)
+
+                        val Detalle_venta:Any? =  it[i]?.get("Detalle_venta")
+                        val venta:Any? =  it[i]?.get("venta")
+                        val Inventario:Any? =  it[i]?.get("Inventario")
+                        val Tipo_venta:Any? =  it[i]?.get("Tipo_venta")
+                        println("estos datos son el for dataInsert")
+                        println(coleccion)
+                        println(Detalle_venta)
+                        println(venta)
+                        println(Inventario)
+                        println(Tipo_venta)
+                        println("estos datos son el for dataInsert")
+
+                    }
+
+                }
+                lote.commit().await()
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("error firebase", "No se puedo insertar $e")
+            throw Exception("no se pudo insertar los datos a firebase $e")
+        }
+
+    }
+
+
+    override suspend fun insertAllToCloudUsuarios(
+        collection: String,
+        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        idDocumento: String
+    ) {
+
+        try {
+
+            withContext(Dispatchers.Default) {
+                val lote = fireStore.batch()
+                println("idDocument: $idDocumento")
+                dataToInsert.forEach{
+                    val llaves =   it.keys
+                    for (i in llaves) {
+
+                        val coleccion = i
+                        val ticketData = hashMapOf(
+                            "usuario" to it[i]?.get("usuario"),
+                            "roll_usuario" to it[i]?.get("roll_usuario"),
+                        )
+
+
+                        val reference =  fireStore.collection("usuarios")
+                            .document(uidUser)
+                            .collection(collection)
+                            .document(coleccion)
+
+                        lote.set(reference, ticketData)
+
+                        val usuario:Any? =  it[i]?.get("usuario")
+                        val roll_usuario:Any? =  it[i]?.get("roll_usuario")
+                        val Inventario:Any? =  it[i]?.get("Inventario")
+                        val Tipo_venta:Any? =  it[i]?.get("Tipo_venta")
+                        println("estos datos son el for dataInsert")
+                        println(coleccion)
+                        println(usuario)
+                        println(roll_usuario)
+                        println("estos datos son el for dataInsert")
+
+                    }
+
+                }
+                lote.commit().await()
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("error firebase", "No se puedo insertar $e")
+            throw Exception("no se pudo insertar los datos a firebase $e")
+        }
+
+    }
+
+
+
+    override suspend fun insertAllToCloudVentas(
+        collection: String,
+        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        idDocumento: String
+    ) {
+
+        try {
+
+            withContext(Dispatchers.Default) {
+                val lote = fireStore.batch()
+                println("idDocument: $idDocumento")
+                dataToInsert.forEach{
+                    val llaves =   it.keys
+                    for (i in llaves) {
+
+                        val coleccion = i
+                        val ticketData = hashMapOf(
+                            "venta" to it[i]?.get("venta"),
+                            "usuario" to it[i]?.get("usuario"),
+                            "persona" to it[i]?.get("persona"),
+                            "tipo_venta" to it[i]?.get("tipo_venta"),
+                        )
+
+
+                        val reference =  fireStore.collection("usuarios")
+                            .document(uidUser)
+                            .collection(collection)
+                            .document(coleccion)
+
+                        lote.set(reference, ticketData)
+
+                        val venta:Any? =  it[i]?.get("venta")
+                        val usuario:Any? =  it[i]?.get("usuario")
+                        val persona:Any? =  it[i]?.get("persona")
+                        val tipo_venta:Any? =  it[i]?.get("tipo_venta")
+                        println("estos datos son el for dataInsert")
+                        println(coleccion)
+                        println(venta)
+                        println(usuario)
+                        println(persona)
+                        println(tipo_venta)
                         println("estos datos son el for dataInsert")
 
                     }

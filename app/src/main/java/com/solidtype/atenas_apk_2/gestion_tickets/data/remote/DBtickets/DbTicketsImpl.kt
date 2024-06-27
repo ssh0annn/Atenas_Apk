@@ -1,7 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_tickets.data.remote.DBtickets
 
-import com.solidtype.atenas_apk_2.core.Transacciones.DaoTransacciones.DaoTransacciones
-import com.solidtype.atenas_apk_2.core.Transacciones.ModeloTransacciones.TicketModeloRelation
+import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.TicketModeloRelation
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_tickets.data.remote.mediator.TicketsMediador
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.mediatorInventario
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_cliente.ClientesManage
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_dispositivos.DispositivosManger
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets.TicketsManeger
@@ -282,6 +283,8 @@ class ServiciosViewModel @Inject constructor(
             }
         }
     }
+
+
 
 
 }

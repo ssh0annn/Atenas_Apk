@@ -26,4 +26,28 @@ interface DataCloud {
                 idDocumento: String
         )
 
+        suspend fun insertAllToCloud3(
+                collection: String,
+                dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+                idDocumento: String
+        )
+
+         suspend fun insertAllToCloudVentas(
+                collection: String,
+                dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+                idDocumento: String
+        )
+
+       suspend fun insertAllToCloudDetalleVenta(
+            collection: String,
+            dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+            idDocumento: String
+       )
+
+     suspend fun insertAllToCloudUsuarios(
+        collection: String,
+        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        idDocumento: String
+    )
+
 }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FactCheck
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -63,6 +64,7 @@ import kotlinx.coroutines.delay
 fun ClienteScreen(
     navController: NavController,
     viewModel: ClientesViewModel = hiltViewModel()
+
 
     ){
     val context = LocalContext.current
@@ -320,6 +322,12 @@ fun ClienteScreen(
                 }
             }
         }
+    }
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {viewModel.testTiceket()}
+    ){
+        Text("Prueba")
     }
     MenuLateral(navController)
 }

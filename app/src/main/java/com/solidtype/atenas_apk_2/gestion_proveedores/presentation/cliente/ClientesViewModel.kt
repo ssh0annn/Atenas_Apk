@@ -4,17 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.CasosClientes
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.mediatorInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : ViewModel() {
+class ClientesViewModel @Inject constructor(private val casos: CasosClientes, private val ticketsMediador: mediatorInventario) : ViewModel() {
 
     var uiState: MutableStateFlow<ClienteStateUI> = MutableStateFlow(ClienteStateUI())
         private set
@@ -104,5 +107,14 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
         }.launchIn(viewModelScope)
 
     }
+
+    fun testTiceket() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                ticketsMediador.getDataBase()
+            }
+        }
+    }
+
 
 }

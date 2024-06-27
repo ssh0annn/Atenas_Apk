@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.solidtype.atenas_apk_2.core.Transacciones.DaoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao

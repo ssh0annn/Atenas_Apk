@@ -67,6 +67,9 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
                 Spacer(modifier = Modifier.height(70.dp))
                 tablaserv(listaTiket = state.listaTickets)
             }
+
+
+
         }
       //primera opcion
 

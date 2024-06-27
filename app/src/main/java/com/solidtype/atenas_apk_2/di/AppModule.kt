@@ -14,7 +14,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
-import com.solidtype.atenas_apk_2.core.Transacciones.DaoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
