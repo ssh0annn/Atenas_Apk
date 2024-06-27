@@ -149,10 +149,9 @@ dependencies {
     //Lotti y animaciones :
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
-    //Implementacion PDF :
-  //  implementation ("com.itextpdf:itext7-core:7.1.15")
-
-
+    //Printer
+    implementation("com.github.mazenrashed:Printooth:1.3.1")
+    implementation("com.github.kenglxn.QRGen:android:2.5.0")
 
 }
 

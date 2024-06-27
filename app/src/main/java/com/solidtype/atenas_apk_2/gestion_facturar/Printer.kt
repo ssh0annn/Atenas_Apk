@@ -1,4 +1,4 @@
-package com.dannyhack.thermalprinter
+package com.solidtype.atenas_apk_2.gestion_facturar
 
 import android.content.Context
 import android.content.Intent
