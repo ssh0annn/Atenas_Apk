@@ -62,7 +62,7 @@ import kotlinx.coroutines.delay
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
 @Composable
 fun ClienteScreen(
-    navController: NavController,
+   // navController: NavController,
     viewModel: ClientesViewModel = hiltViewModel()
 
 
@@ -329,7 +329,7 @@ fun ClienteScreen(
     ){
         Text("Prueba")
     }
-    MenuLateral(navController)
+    //MenuLateral(navController)
 }
 
 

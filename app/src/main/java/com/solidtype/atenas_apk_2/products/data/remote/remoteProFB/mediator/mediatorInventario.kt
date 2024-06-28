@@ -98,10 +98,6 @@ class mediatorInventario @Inject constructor(
                 println("entre al asyc")
                 println(dataFirebaseCloud)
                 println(re)
-
-
-
-
         }
    }
 
@@ -123,45 +119,41 @@ class mediatorInventario @Inject constructor(
         val listadoMapa:MutableList<Map<String,Map<String,Any>>> = mutableListOf()
 
         if (firebaseData!!.isEmpty){
-
             println("$ -- >>>firebaseData --> no contiene datos")
         }else{
-
-
-
-            firebaseData?.documents?.forEach {//recoriendo la collection de inventario por cada documento
+            firebaseData.documents.forEach {//recoriendo la collection de inventario por cada documento
                 var mapOneInventory = mutableMapOf<String,Map<String,Any>>()
                 var mapPersona = mutableMapOf<String,Any>()
                 var mapInventario = mutableMapOf<String,Any>()
                 var mapCategoria = mutableMapOf<String,Any>()
 
                 it.data.let{map->
-                   val persona =  map?.get("Persona")
+                    val persona =  map?.get("Persona")
                     val categorias  =  map?.get("Categoria")
                     val inventario =  map?.get("Inventario")
 
                     when(persona){
                         is String -> mapPersona["id_persona"] = persona
                         is Map<*,*> -> {
-                            mapPersona["id_persona"] = (persona)["id_persona"] as Any
-                            mapPersona["direccion"] = (persona)["direccion"] as Any
-                            mapPersona["documento"] = (persona)["documento"] as Any
-                            mapPersona["email"] = (persona)["email"] as Any
-                            mapPersona["estado"] = (persona)["estado"] as Any
-                            mapPersona["nombre"] = (persona)["nombre"] as Any
-                            mapPersona["telefono"] = (persona)["telefono"] as Any
-                            mapPersona["tipo_documento"] = (persona)["tipo_documento"] as Any
-                            mapPersona["tipo_persona"] = (persona)["tipo_persona"] as Any
+                            mapPersona["id_persona"] = (persona)["id_persona"] as Long
+                            mapPersona["direccion"] = (persona)["direccion"] as String
+                            mapPersona["documento"] = (persona)["documento"] as String
+                            mapPersona["email"] = (persona)["email"] as String
+                            mapPersona["estado"] = (persona)["estado"] as Boolean
+                            mapPersona["nombre"] = (persona)["nombre"] as String
+                            mapPersona["telefono"] = (persona)["telefono"] as String
+                            mapPersona["tipo_documento"] = (persona)["tipo_documento"] as String
+                            mapPersona["tipo_persona"] = (persona)["tipo_persona"] as String
                         }
                     }
 
                     when(categorias){
                         is String -> mapCategoria["id_categoria"] = categorias
                         is Map<*,*> -> {
-                            mapCategoria["descripcion"] = (categorias)["descripcion"] as Any
-                            mapCategoria["estado"] = (categorias)["estado"] as Any
-                            mapCategoria["id_categoria"] = (categorias)["id_categoria"] as Any
-                            mapCategoria["nombre"] = (categorias)["nombre"] as Any
+                            mapCategoria["descripcion"] = (categorias)["descripcion"] as String
+                            mapCategoria["estado"] = (categorias)["estado"] as Boolean
+                            mapCategoria["id_categoria"] = (categorias)["id_categoria"] as Long
+                            mapCategoria["nombre"] = (categorias)["nombre"] as String
                         }
                     }
 
@@ -169,21 +161,19 @@ class mediatorInventario @Inject constructor(
                         is String -> mapInventario["id_inventario"] = inventario
                         is Map<*,*> -> {
                             mapInventario["cantidad"] = (inventario)["cantidad"] as Any
-                            mapInventario["descripcion"] = (inventario)["descripcion"] as Any
-                            mapInventario["estado"] = (inventario)["estado"] as Any
-                            mapInventario["id_categoria"] = (inventario)["id_categoria"] as Any
-                            mapInventario["id_inventario"] = (inventario)["id_inventario"] as Any
-                            mapInventario["id_proveedor"] = (inventario)["id_proveedor"] as Any
-                            mapInventario["impuestos"] = (inventario)["impuestos"] as Any
-                            mapInventario["marca"] = (inventario)["marca"] as Any
-                            mapInventario["modelo"] = (inventario)["modelo"] as Any
-                            mapInventario["precio_compra"] = (inventario)["precio_compra"] as Any
-                            mapInventario["precio_venta"] = (inventario)["precio_venta"] as Any
+                            mapInventario["descripcion"] = (inventario)["descripcion"] as String
+                            mapInventario["estado"] = (inventario)["estado"] as Boolean
+                            mapInventario["id_categoria"] = (inventario)["id_categoria"] as Long
+                            mapInventario["id_inventario"] = (inventario)["id_inventario"] as Long
+                            mapInventario["id_proveedor"] = (inventario)["id_proveedor"] as Long
+                            mapInventario["nombre"] = (inventario)["nombre"] as String
+                            mapInventario["impuestos"] = (inventario)["impuestos"] as Double
+                            mapInventario["marca"] = (inventario)["marca"] as String
+                            mapInventario["modelo"] = (inventario)["modelo"] as String
+                            mapInventario["precio_compra"] = (inventario)["precio_compra"] as Double
+                            mapInventario["precio_venta"] = (inventario)["precio_venta"] as Double
                         }
                     }
-
-
-
 
 
                 }

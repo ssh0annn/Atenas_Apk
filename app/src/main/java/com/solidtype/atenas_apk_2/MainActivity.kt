@@ -30,8 +30,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            Navigation()
+            //Navigation()
 
+            ClienteScreen()
         }
 
     }

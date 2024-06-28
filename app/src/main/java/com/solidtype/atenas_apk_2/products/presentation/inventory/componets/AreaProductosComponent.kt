@@ -126,7 +126,7 @@ fun AreaProductos(
                                         it.id_categoria.toString()
                                     idProveedor.value =
                                         it.id_proveedor.toString()
-                                    nombre.value = it.nombre
+                                    nombre.value = it.nombre!!
                                     marca.value = it.marca!!
                                     modelo.value = it.modelo!!
                                     cantidad.value = it.cantidad.toString()
@@ -149,7 +149,7 @@ fun AreaProductos(
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = it.nombre,
+                                text = it.nombre!!,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )

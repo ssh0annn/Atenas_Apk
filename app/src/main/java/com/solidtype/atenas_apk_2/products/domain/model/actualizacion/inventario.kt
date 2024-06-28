@@ -18,7 +18,7 @@ data class inventario (
     @PrimaryKey(autoGenerate = true) val id_inventario :Long = 7000,
     val id_categoria :Long,
     val id_proveedor :Long?,
-    val nombre :String,
+    val nombre :String?,
     val marca :String?,
     val modelo :String?,
     val cantidad :Int,

@@ -75,7 +75,7 @@ class InventarioRepoImpl @Inject constructor(
                     rowdata.add(i.id_inventario.toString())
                     rowdata.add(i.id_categoria.toString())
                     rowdata.add(i.id_proveedor.toString())
-                    rowdata.add(i.nombre)
+                    i.nombre?.let { rowdata.add(it) }
                     rowdata.add(i.modelo.toString())
                     rowdata.add(i.cantidad.toString())
                     rowdata.add(i.precio_compra.toString())

@@ -5,8 +5,11 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,4 +26,5 @@ interface tipo_ventaDao {
     suspend fun updateTipoVenta(tipoVenta : tipo_venta)
     @Delete
     suspend fun deleteTipoVenta(tipoVenta : tipo_venta)
+
 }
