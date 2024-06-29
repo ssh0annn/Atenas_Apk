@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -134,7 +135,12 @@ class UsuariosViewmodel @Inject constructor(private val casos: UsuarioUseCases
    }
     private fun agregarUsuario(usuario: usuario) {
         viewModelScope.launch {
-            casos.agregar(usuario = usuario)
+            if(Patterns.EMAIL_ADDRESS.matcher(usuario.email).matches()){
+                casos.agregar(usuario = usuario)
+            }else{
+                uiState.update { it.copy(error = "Email or password Invalida") }
+            }
+
         }
     }
 

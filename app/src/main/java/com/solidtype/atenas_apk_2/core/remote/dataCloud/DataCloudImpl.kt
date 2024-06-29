@@ -4,8 +4,10 @@ import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import com.solidtype.atenas_apk_2.core.remote.authtentication.auth
+import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -23,24 +25,16 @@ import javax.inject.Inject
 
 class DataCloudImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
-    autenticador: auth
-): DataCloud {
+
+) : DataCloud {
 
 
 //    private val uidUser: String = autenticador.getCurrentUser()!!.uid
 
-    private val user = Firebase.auth.currentUser
     private var uidUser: String = ""
+    private var licencia: String = "licensias"
+    private var DbCollectionUsers = "usuarios"
 
-    init {
-        setUserUid()
-    }
-
-    private fun setUserUid() {
-        user?.let {
-            uidUser = it.uid
-        }
-    }
 
 
 
@@ -63,7 +57,6 @@ class DataCloudImpl @Inject constructor(
         //luego se hace una convercion de json a string
         return Json.encodeToString(queryJson)
     }*/
-
 
 
     /**
@@ -111,7 +104,7 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 for (data in dataToInsert) {
-                    val ref = data[idDocumento]?.let {idMapa ->
+                    val ref = data[idDocumento]?.let { idMapa ->
                         fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
@@ -131,6 +124,7 @@ class DataCloudImpl @Inject constructor(
         }
 
     }
+
     /**
      * @param: String
      *@return: QuerySnapshot?
@@ -140,7 +134,7 @@ class DataCloudImpl @Inject constructor(
      */
 
     override suspend fun deleteDataInCloud(
-        collection: String,
+        collectionName: String,
         dataToDelete: List<Map<String, String>>,
         idDocumento: String
     ) {
@@ -151,7 +145,7 @@ class DataCloudImpl @Inject constructor(
                     val allData = i[idDocumento]?.let {
                         fireStore.collection("usuarios")
                             .document(uidUser)
-                            .collection(collection)
+                            .collection(collectionName)
                             .document(it)
                     }
                     if (allData != null) {
@@ -167,4 +161,99 @@ class DataCloudImpl @Inject constructor(
             throw Exception("No se pudo eliminar los datos de firebase $e")
         }
     }
+
+
+    /**
+     * Buscara en las tablas: Administrador y si no encuentra, pues ira a la tabla vendedor y tecnicos.
+     * SI encuentra dato en administrador debuelve un tipouser.Admin, y si es vendedor tipouser.vendedor...
+     * Si no encuentradada : tipouser.UNKNOWN. (desconocido)
+     */
+
+    private suspend fun getAllLicencia(): QuerySnapshot? {
+
+        try {
+            return fireStore.collection(licencia)
+                .get()
+                .await<QuerySnapshot?>()
+
+        } catch (e: Exception) {
+            Log.e("error firebase", "No vinieron datos de licencia: Linea 189 DataCLoued $e")
+            return null
+        }
+
+    }
+
+    private fun encuentraDocLicencia(
+        querySnapshot: QuerySnapshot?,
+        licensia: String
+    ): QueryDocumentSnapshot? {
+        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia
+        }
+        for(i in querySnapshot!!.documents){
+            println("datos ${i.data}")
+
+        }
+        println("Lincencia pasasda $licensia")
+        return list
+    }
+
+    private suspend fun laQuellamo(
+        email: String,
+        licencia: String,
+        dispositivo: String
+    ): CheckListAuth {
+        val checker = CheckListAuth()
+        val encontrada = encuentraDocLicencia(getAllLicencia(), licencia)
+        if (encontrada?.get("idDevice") == dispositivo) {
+            checker.deviceRegistrado = true
+        }
+        if (encontrada?.get("estadoLicencia") == true) {
+            checker.licensiaActiva = true
+        }
+        checker.tipoUser = tipoUsurio(encontrada?.get("direcionDB").toString(), email)
+        checker.emailUsuario = email
+        checker.autenticado = true
+        println("Asi esta el checker $checker")
+        return checker
+    }
+
+
+    private suspend fun tipoUsurio(direcionDb: String, email: String): TipoUser {
+        try {
+            val doc = fireStore.collection(DbCollectionUsers).document(direcionDb).get()
+                .await()
+            val campos = doc.data
+            val correo = campos?.get("correo")?.toString()
+            if (correo == email) {
+                println("email $correo == correo $email")
+                return TipoUser.ADMIN
+            } else {
+                val colletionVendedores =
+                    fireStore.collection(DbCollectionUsers).document(direcionDb)
+                        .collection("vendedor").get().await()
+                colletionVendedores.forEach { documetos ->
+                    if (documetos["correo"] == email) {
+                        println("email $email == correo $email")
+                        return TipoUser.VENDEDOR
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("error firebase", "No Coincidio el Correo$e")
+            return TipoUser.UNKNOWN
+        }
+        return TipoUser.UNKNOWN
+    }
+
+    //Por implementar
+    override suspend fun autenticacionCloud(
+        email: String,
+        licencia: String,
+        dispositivo: String
+    ): CheckListAuth {
+        return laQuellamo(email, licencia, dispositivo)
+    }
+
+    //Por implementar
+
 }

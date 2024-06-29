@@ -3,6 +3,8 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+
+
     }
 }
 dependencyResolutionManagement {
@@ -10,6 +12,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        //Repositorio para animaciones peido por Carlos
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+
     }
 }
 

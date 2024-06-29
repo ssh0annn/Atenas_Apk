@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl
 
+import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.roll_usuarioDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.usuarioDao
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
@@ -10,11 +11,18 @@ import javax.inject.Inject
 
 class GestionUserRepoImpl @Inject constructor(
     private val rollDao: roll_usuarioDao,
-    private val usuarioDao: usuarioDao
+    private val usuarioDao: usuarioDao,
+    private val registro: MetodoAutenticacion
 ) : GestionUserRepository {
     override suspend fun agregarUsuario(usuario: usuario) {
         //Pendiende conectar con el remote para que el usuario se registre en la nube.
-        usuarioDao.addUsuario(usuario)
+        try {
+            registro.registerNewUsers(usuario.email, usuario.clave)
+            usuarioDao.addUsuario(usuario)
+            }catch (e:Exception){
+            println("Error creando nuevo usuario")
+            }
+
     }
 
     override fun buscarUsuario(any: String): Flow<List<usuario>> {
@@ -27,6 +35,7 @@ class GestionUserRepoImpl @Inject constructor(
     }
 
     override suspend fun eliminarUsuario(usuario: usuario) {
+        registro.eliminarUsuario(usuario.email, usuario.clave)
         usuarioDao.deleteUsuario(usuario)
     }
 

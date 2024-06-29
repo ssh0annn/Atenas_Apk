@@ -20,9 +20,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
+import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
@@ -130,22 +132,24 @@ fun Detalles(
                 BotonIconCircular(
                     true,
                     onClick = {//Boton X para borrar productos
-                        try {/*
-                                            viewModel.eliminarProductos(
-                                                ProductEntity(
-                                                    codigo.toInt(),
-                                                    nombre,
-                                                    descripcion,
-                                                    categoria,
-                                                    costo.toDouble(),
-                                                    modelo,
-                                                    precio.toDouble(),
-                                                    marca,
-                                                    cantidad.toInt()
-                                                )
+                        try {
+                            viewModel.eliminarProductos(
+                                inventario(
+                                    id_inventario = idInventario.value.toLong(),
+                                    id_categoria = idCatalogo.value.toLong(),
+                                    id_proveedor = idProveedor.value.toLong(),
+                                    nombre = nombre.value,
+                                    marca = marca.value,
+                                    modelo = modelo.value,
+                                    cantidad = cantidad.value.toInt(),
+                                    precio_compra = costo.value.toDouble(),
+                                    precio_venta = costo.value.toDouble(),
+                                    impuesto = impuesto.value.toDouble(),
+                                    descripcion = descripcion.value,
+                                    estado = estado.value.formatoActivoDDBB()
+                                )
 
-                                            )
-                                            */
+                            )
                             idInventario.value = ""
                             idCatalogo.value = ""
                             idProveedor.value = ""
@@ -168,20 +172,20 @@ fun Detalles(
                     }
                 )
                 Spacer(modifier = Modifier.width(60.dp))
-                BotonIconCircular(false, onClick = {
+                BotonIconCircular(false, onClick = { //Guardar productos
                     try {
                         viewModel.crearProductos(
-                            id_categoria= idCatalogo.value.toLong(),
-                            id_proveedor= idProveedor.value.toLong(),
-                            nombre= nombre.value,
-                            marca= marca.value,
-                            modelo= modelo.value,
-                            cantidad= cantidad.value.toInt(),
-                            precio_compra= costo.value.toDouble(),
-                            precio_venta= precio.value.toDouble(),
-                            impuesto= impuesto.value.toDouble(),
-                            descripcion= descripcion.value,
-                            estado= if (estado.value == "Activo") true else false
+                            id_categoria = idCatalogo.value.toLong(),
+                            id_proveedor = idProveedor.value.toLong(),
+                            nombre = nombre.value,
+                            marca = marca.value,
+                            modelo = modelo.value,
+                            cantidad = cantidad.value.toInt(),
+                            precio_compra = costo.value.toDouble(),
+                            precio_venta = precio.value.toDouble(),
+                            impuesto = impuesto.value.toDouble(),
+                            descripcion = descripcion.value,
+                            estado = estado.value == "Activo"
                         )
                     } catch (e: Exception) {
                         Toast.makeText(

@@ -4,8 +4,9 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usua
 
 data class AuthUIStates(
     val isAutenticated: Usuario? = null,
-    val isLoading:Boolean = false,
+    val isLoading:Boolean = true,
     val network:Boolean = false,
     val razones: String? = "",
-    val correoGuardado: String? = ""
+    val correoGuardado: String? = "",
+    val licenciaGuardada: Boolean = false
 )

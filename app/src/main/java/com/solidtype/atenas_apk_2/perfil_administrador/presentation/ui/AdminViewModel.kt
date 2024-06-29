@@ -3,16 +3,15 @@ package com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.casos_usos.AdminUseCases
-import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.toAdministrador
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.State
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(private val casos: AdminUseCases): ViewModel() {
@@ -30,9 +29,14 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
                 perfilAdmin()
             }
             is PerfilEvent.UpdatePerfil -> {
-                viewModelScope.launch {casos.updateAdmin(evento.perfil)  }
-            }else->{
+                println("Este es el perfil ${evento.perfil}")
+                viewModelScope.launch {
+                    withContext(Dispatchers.IO){
 
+                            casos.updateAdmin(evento.perfil)
+
+                    }
+                }
             }
         }
     }

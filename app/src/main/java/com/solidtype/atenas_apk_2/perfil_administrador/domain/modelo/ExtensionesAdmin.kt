@@ -5,18 +5,7 @@ import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.Perfi
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.VerInfoAdmin
 
 
-fun administrador.toPerfil(): PerfilAdmin? {
-    return this.correo?.let {
-        PerfilAdmin(
-        nombre = this.nombre,
-        apellido = this.apellido,
-        correo = it,
-        telefono = this.telefono,
-        direccion_negocio = this.direccion_negocio,
-        nombre_negocio = this.nombre_negocio
-        )
-    }
-}
+
 
 fun administrador.toVerInfoAdmin(): VerInfoAdmin? {
     return this.estado?.let {
@@ -37,22 +26,6 @@ fun administrador.toVerInfoAdmin(): VerInfoAdmin? {
     }
 }
 
-fun PerfilAdmin.toAdministrador(): administrador {
-    return administrador(
-      //  id_administrador = this.id_administrador,
-        nombre=this.nombre,
-        apellido=this.apellido,
-        correo=this.correo,
-        telefono=this.telefono,
-        clave= null,
-        direccion_negocio=this.direccion_negocio,
-        nombre_negocio=this.nombre_negocio,
-        licencia=null,
-        fecha_compra=null,
-        fecha_caduca=null,
-        estado=null
-    )
 
 
 
-}

@@ -13,6 +13,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usua
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,83 +30,167 @@ class AuthViewmodel @Inject constructor(
     var uiStates: MutableStateFlow<AuthUIStates> = MutableStateFlow(AuthUIStates())
         private set
 
-   private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
+    private val LICENCIA: String = "licencia"
+    private val CORREO: String = "correo"
+    private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
+
 
     init {
-
-        uiStates.update { it.copy(network = isNetworkAvailable(),
-            correoGuardado = recuerdame.getString("correo", "").toString()
-            ) }
-        isAutenticated()
+        if(recuerdame.getString(CORREO, "") == ""){
+            uiStates.update { it.copy(licenciaGuardada = false) }
+        }else{
+            uiStates.update { it.copy(licenciaGuardada = true) }
+        }
+        uiStates.update {
+            it.copy(
+                correoGuardado = recuerdame.getString(CORREO, "").toString()
+            )
+        }
+        onEvent(AuthEvent.IsAutenticatedEvent)
     }
 
     fun onEvent(event: AuthEvent) {
         when (event) {
             AuthEvent.IsAutenticatedEvent -> {
-                isAutenticated()
-                uiStates.update { it.copy(network = isNetworkAvailable()) }
+                uiStates.update { it.copy(isLoading = true) }
+                if (isNetworkAvailable()) {
+                    uiStates.update { it.copy(network = true) }
+                    isAutenticated()
+                } else {
+                    viewModelScope.launch {
+                        uiStates.update { it.copy(isLoading = false) }
+                        delay(2000)
+                        uiStates.update { it.copy(network = true) }
+                        onEvent(AuthEvent.IsAutenticatedEvent)
+                    }
+                }
             }
 
             is AuthEvent.LoginEvent -> {
-                uiStates.update { it.copy(network = isNetworkAvailable()) }
-                login(event.email, event.password)
+                uiStates.update { it.copy(isLoading = true) }
+                if (isNetworkAvailable()) {
+                    uiStates.update { it.copy(network = true) }
+
+                    if (event.licencia.isNotBlank()) {
+                        licencia(event.licencia)
+                        login(event.email, event.password, event.licencia)
+
+                    } else {
+                       login(event.email, event.password,recuerdame.getString(LICENCIA, "").toString() )
+                        println("Licencia temporal : ${recuerdame.getString(LICENCIA, "").toString()}")
+                    }
+                } else {
+                    viewModelScope.launch {
+                        delay(1000)
+                        uiStates.update { it.copy(isLoading = false, network = false) }
+                        delay(10000)
+                        uiStates.update { it.copy(isLoading = true, network = true) }
+                        onEvent(AuthEvent.IsAutenticatedEvent)
+                    }
+                }
+
             }
+
             is AuthEvent.Recuerdame -> {
                 recuerdame(event.email)
             }
+
             is AuthEvent.EliminarRecuerdos -> {
                 eliminarRecuerdos()
             }
+
             else -> {
+                viewModelScope.launch { casosAuth.logout() }
 
             }
         }
     }
 
-    private fun login(email: String, pass: String) {
+    private fun login(email: String, pass: String, licencia:String) {
         viewModelScope.launch {
             uiStates.update { it.copy(isLoading = true) }
             withContext(Dispatchers.IO) {
-                razonesDe(casosAuth.login(email, pass, getDeviceId()))
-                    uiStates.update {
-                        it.copy(
-                            isAutenticated = casosAuth.whoIs(),
-                            isLoading = false
-                        )
-                    }
+                razonesDe(casosAuth.login(email, pass, getDeviceId(), licencia))
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = casosAuth.whoIs(),
+                        isLoading = false
+                    )
+                }
             }
         }
     }
+
     private fun razonesDe(checkListAuth: CheckListAuth): Boolean {
-         when(checkListAuth.autenticado){
-              true -> {
-                  when(checkListAuth.deviceRegistrado){
-                        true -> {
-                            when(checkListAuth.licensiaActiva){//REvision por usuarios de otra tablet.
-                                true ->{
-                                    uiStates.update { it.copy(isAutenticated = Usuario(
-                                        correo = checkListAuth.emailUsuario,
-                                        tipoUser = checkListAuth.tipoUser
-                                    ), razones = "Bienvenido usuario: ${checkListAuth.tipoUser}.") }
-                                    return true
+        when (checkListAuth.autenticado) {
+            true -> {
+                when (checkListAuth.deviceRegistrado) {
+                    true -> {
+                        when (checkListAuth.licensiaActiva) {//REvision por usuarios de otra tablet.
+                            true -> {
+                                uiStates.update {
+                                    it.copy(
+                                        isAutenticated = Usuario(
+                                            correo = checkListAuth.emailUsuario,
+                                            tipoUser = checkListAuth.tipoUser
+                                        ),
+                                        razones = "Bienvenido usuario: ${checkListAuth.tipoUser}."
+                                    )
                                 }
-                                false -> {
-                                    uiStates.update { it.copy(isAutenticated = null, razones = "Licencia no activa.") }
-                                    return false
+                                return true
+                            }
+                            false -> {
+                                eliminarLicencia()
+                                logout()
+                                uiStates.update {
+                                    it.copy(
+                                        isAutenticated = null,
+                                        razones = "Licencia no activa.",
+                                        licenciaGuardada = false
+                                    )
+
                                 }
+
+
+
+                                return false
                             }
                         }
-                        false -> {
-                            uiStates.update { it.copy(isAutenticated = null, razones = "Dispositivo no registrado.") }
-                            return false
-                        }
                     }
-              }
-              false -> {
-                  uiStates.update { it.copy(isAutenticated = null, razones = "Usuario no identificado") }
-                  return false
-              }
-          }
+
+                    false -> {
+                        uiStates.update {
+                            it.copy(
+                                isAutenticated = null,
+                                razones = "Dispositivo no registrado."
+                            )
+                        }
+                        eliminarLicencia()
+                        logout()
+                        return false
+                    }
+                }
+
+            }
+
+            false -> {
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = null,
+                        razones = "Usuario no identificado"
+                    )
+                }
+                return false
+            }
+        }
+    }
+
+    private fun logout() {
+        viewModelScope.launch {
+            uiStates.update { it.copy(isLoading = true, isAutenticated = null) }
+            casosAuth.logout()
+            uiStates.update { it.copy(isLoading = false) }
+        }
     }
 
     @SuppressLint("HardwareIds")
@@ -124,9 +209,12 @@ class AuthViewmodel @Inject constructor(
                 uiStates.update {
                     it.copy(isAutenticated = casosAuth.whoIs())
                 }
+                uiStates.update { it.copy(isLoading = false) }
+
             }
         }
     }
+
     private fun isNetworkAvailable(): Boolean {
 
         val connectivityManager =
@@ -140,17 +228,35 @@ class AuthViewmodel @Inject constructor(
             else -> false
         }
     }
-    private fun eliminarRecuerdos(){
+
+    private fun eliminarRecuerdos() {
         recuerdame
             .edit()
-            .remove("correo")
+            .remove(CORREO)
             .apply()
     }
-    private fun recuerdame(correo: String?){
+
+    private fun recuerdame(correo: String?) {
         recuerdame
             .edit()
-            .putString("correo", correo)
+            .putString(CORREO, correo)
             .apply()
 
+    }
+
+    private fun licencia(licencia: String?) {
+        recuerdame
+            .edit()
+            .putString(LICENCIA, licencia)
+            .apply()
+
+    }
+
+    private fun eliminarLicencia() {
+        uiStates.update { it.copy(licenciaGuardada = false) }
+        recuerdame
+            .edit()
+            .remove(LICENCIA)
+            .apply()
     }
 }
