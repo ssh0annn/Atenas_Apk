@@ -1,8 +1,10 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.presentation
 
+import android.app.Dialog
 import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +53,16 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                 modifier = Modifier.fillMaxSize(),
                 update = { view ->
 
+                    //DIALOGO INICIALIZADO Y CON SUS BOTONES CORRESPONDIENTES
+                    val dialog = Dialog(context)
+                    dialog.setContentView(R.layout.dialog_password)
+                    dialog.setCancelable(false)
+                    val btnpassc = dialog.findViewById<Button>(R.id.dialog_confirmar_cambio)
+                    val btnpasscancel = dialog.findViewById<ImageView>(R.id.dialog_volver)
+                    val dclave = dialog.findViewById<EditText>(R.id.dialog_password)
+                    val dnewclave = dialog.findViewById<EditText>(R.id.dialog_new_password)
+                    val dconfirnewclave = dialog.findViewById<EditText>(R.id.dialog_confir_password)
+
                     //VARIABLE INICIADAS
                     val btng = view.findViewById<Button>(R.id.perfil_config_btnguardar)
                     val btnc = view.findViewById<Button>(R.id.perfil_config_btncambiarpass)
@@ -93,6 +105,20 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                             )
                         )
                         Toast.makeText(context,"Datos guardados",Toast.LENGTH_SHORT).show()
+                    }
+                    btnc.setOnClickListener {
+                        dialog.show()
+                    }
+                    btnpasscancel.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    btnpassc.setOnClickListener {
+                        if (!dclave.text.equals("") && dclave.text.equals(uiState.perfilAdmin.get(0)?.clave?.toEditable())) {
+                            if(!dnewclave.text.equals("") && !dconfirnewclave.text.equals("") && dnewclave.text.equals(dconfirnewclave)){
+                                Toast.makeText(context,"Contraseña guardada",Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                        }
                     }
                 }
             )
