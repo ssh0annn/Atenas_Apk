@@ -22,7 +22,7 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.PerfilAdmin
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
@@ -47,7 +47,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
         }
     } else {
         if (uiState.perfilAdmin.isNotEmpty()) {
-            print(uiState.perfilAdmin.first())
+            println(uiState.perfilAdmin.first())
             AndroidView(
                 factory = { PefilAdministrador(context) },
                 modifier = Modifier.fillMaxSize(),
@@ -78,32 +78,53 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     val fechacompra : EditText = view.findViewById(R.id.txt_perfil_fecha_compra_admin)
 
                     //VERIFICA SI LOS DATOS ESTAN PARA RELLENARLO
-                    if (uiState.perfilAdmin.first() != null){
-                        nombreadmin.text
-                            .append(uiState.perfilAdmin[0]?.nombre?.toEditable())
-                            .append(" ".toEditable())
-                            .append(uiState.perfilAdmin[0]?.apellido?.toEditable())
+                    if (uiState.perfilAdmin.first() != null) {
+                        nombreadmin.text =
+                            uiState.perfilAdmin[0]?.nombre?.toEditable() ?: "".toEditable()
+                        correoadmin.text =
+                            uiState.perfilAdmin[0]?.correo?.toEditable() ?: "".toEditable()
+                        nombreempresa.text =
+                            uiState.perfilAdmin[0]?.nombre_negocio?.toEditable() ?: "".toEditable()
+                        direccionempresa.text =
+                            uiState.perfilAdmin[0]?.direccion_negocio?.toEditable()
+                                ?: "".toEditable()
+                        numeroempresa.text =
+                            uiState.perfilAdmin[0]?.telefono?.toEditable() ?: "".toEditable()
+                        claveadmin.text =
+                            uiState.perfilAdmin[0]?.clave?.toEditable() ?: "".toEditable()
+                        numerolicencia.text =
+                            uiState.perfilAdmin[0]?.licencia?.toEditable() ?: "".toEditable()
+                        estado.text = uiState.perfilAdmin[0]?.estado?.toString()?.toEditable()
                             ?: "".toEditable()
-                        correoadmin.text.append(uiState.perfilAdmin[0]?.correo?.toEditable())
-                        nombreempresa.text = uiState.perfilAdmin[0]?.nombre_negocio?.toEditable() ?: "".toEditable()
-                        direccionempresa.text = uiState.perfilAdmin[0]?.direccion_negocio?.toEditable() ?: "".toEditable()
-                        numeroempresa.text = uiState.perfilAdmin[0]?.telefono?.toEditable() ?: "".toEditable()
+                        fechacaduca.text =
+                            uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable()
+                                ?: "".toEditable()
+                        fechacompra.text =
+                            uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable()
+                                ?: "".toEditable()
                     }
-
                     //ACCION DE EL BOTON GUARDAR
                     btng.setOnClickListener {
-                        viewModel.onEvent(
-                            PerfilEvent.UpdatePerfil(
-                                PerfilAdmin(
-                                    nombreadmin.text.toString(),
-                                    nombreadmin.text.toString(),
-                                    correoadmin.text.toString(),
-                                    numeroempresa.text.toString(),
-                                    direccionempresa.text.toString(),
-                                    nombreempresa.text.toString()
+                        uiState.perfilAdmin.first()?.id_administrador?.let {
+                            viewModel.onEvent(
+                                PerfilEvent.UpdatePerfil(
+                                    administrador(
+                                        id_administrador = it,
+                                        nombre = nombreadmin.text.toString(),
+                                        apellido = nombreadmin.text.toString(),
+                                        correo = correoadmin.text.toString(),
+                                        telefono = numeroempresa.text.toString(),
+                                        direccion_negocio = direccionempresa.text.toString(),
+                                        nombre_negocio = nombreempresa.text.toString(),
+                                        clave = claveadmin.text.toString(),
+                                        licencia = uiState.perfilAdmin.first()!!.licencia,
+                                        fecha_compra = uiState.perfilAdmin.first()!!.fecha_compra,
+                                        fecha_caduca = uiState.perfilAdmin.first()!!.fecha_caduca,
+                                        estado = uiState.perfilAdmin.first()!!.estado
+                                    )
                                 )
                             )
-                        )
+                        }
                         Toast.makeText(context,"Datos guardados",Toast.LENGTH_SHORT).show()
                     }
                     btnc.setOnClickListener {
@@ -113,21 +134,21 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         dialog.dismiss()
                     }
                     btnpassc.setOnClickListener {
-                        if (!dclave.text.equals("") && dclave.text.equals(uiState.perfilAdmin.get(0)?.clave?.toEditable())) {
-                            if(!dnewclave.text.equals("") && !dconfirnewclave.text.equals("") && dnewclave.text.equals(dconfirnewclave)){
-                                Toast.makeText(context,"Contraseña guardada",Toast.LENGTH_SHORT).show()
+                        if (!dclave.text.equals("") && dclave.text.equals(uiState.perfilAdmin[0]?.clave?.toEditable())) {
+                            if (!dnewclave.text.equals("") && !dconfirnewclave.text.equals("") && dnewclave.text.equals(
+                                    dconfirnewclave
+                                )
+                            ) {
+                                Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT)
+                                    .show()
                                 dialog.dismiss()
                             }
                         }
                     }
                 }
             )
-        } else {
-            AndroidView(
-                factory = { PefilAdministrador(context) },
-                modifier = Modifier.fillMaxSize()
-            )
             MenuLateral(navController)
         }
+
     }
 }

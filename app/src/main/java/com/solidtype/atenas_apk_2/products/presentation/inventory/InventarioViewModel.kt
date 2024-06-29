@@ -4,8 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
+import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,51 +31,97 @@ class InventarioViewModel @Inject constructor(
         mostrarProductos()
     }
 
-    fun crearProductos(
-        id_categoria: Long,
-        id_proveedor: Long,
-        nombre: String,
-        marca: String?,
-        modelo: String?,
-        cantidad: Int,
-        precio_compra: Double,
-        precio_venta: Double,
-        impuesto : Double,
-        descripcion: String?,
-        estado: Boolean
 
-    ) {
+    fun onEvent(event: InventariosEvent) {
+        when (event) {
+            is InventariosEvent.ActualizarCategoria -> {
+                agregarCategoria(event.catego)
+            }
 
-        val entidad = inventario(
-            id_categoria=id_categoria,
-            id_proveedor=id_proveedor,
-            nombre=nombre,
-            marca=marca,
-            modelo=modelo,
-            cantidad=cantidad,
-            precio_compra=precio_compra,
-            precio_venta=precio_venta,
-            impuesto = impuesto,
-            descripcion=descripcion,
-            estado =estado
-        )
+            is InventariosEvent.ActualizarProductos -> {
+                crearProductos(event.producto)
+
+            }
+            is InventariosEvent.AgregarCategorias -> {
+                agregarCategoria(event.catego)
+            }
+
+            is InventariosEvent.AgregarProductos -> {
+                crearProductos(event.productos)
+            }
+
+            is InventariosEvent.EliminarProductos -> {
+                eliminarProductos(event.producto)
+            }
+            InventariosEvent.GetCategorias -> {
+                getCategorias()
+            }
+
+            InventariosEvent.GetProductos -> {
+                mostrarProductos()
+            }
+
+            is InventariosEvent.eliminarCategoria -> {
+                eliminarCategoria(event.catego)
+            }
+
+            is InventariosEvent.BuscarCategoria -> {
+                buscarCategorias(event.any)
+
+            }
+            is InventariosEvent.BuscarProducto ->{
+                buscarProductos(event.any)
+            }
+        }
+    }
+    private fun buscarCategorias(any:String){
+
         viewModelScope.launch {
-            casosInventario.createProductos(entidad)
+            casosInventario.buscarCategorias(any).collect{ catego ->
+                uiState.update { it.copy(categoria = catego) }
+            }
+
+
+        }
+    }
+    private fun eliminarCategoria(catego: categoria){
+        viewModelScope.launch {
+            casosInventario.eliminarCategorias(catego)
+        }
+    }
+
+    private fun getCategorias() {
+        viewModelScope.launch {
+            casosInventario.getCategorias().collect { categoria ->
+                uiState.update { it.copy(categoria = categoria) }
+            }
+        }
+    }
+
+    private fun agregarCategoria(catego: categoria) {
+        viewModelScope.launch {
+            casosInventario.agregarCategoria(catego)
+        }
+    }
+
+   private fun crearProductos(
+        producto: inventario
+    ) {
+        viewModelScope.launch {
+            casosInventario.createProductos(producto)
             withContext(Dispatchers.Default) {
-               // syncProductos()
+                // syncProductos()
             }
         }
 
     }
 
-    fun mostrarProductos() {
-        val productos = casosInventario.getProductos()
-
+  private  fun mostrarProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 //syncProductos()
             }
-            productos.collect { product ->
+            casosInventario.getProductos().collect { product ->
                 uiState.update {
                     it.copy(products = product)
                 }
@@ -101,7 +149,7 @@ class InventarioViewModel @Inject constructor(
         }
     }
 
-    fun eliminarProductos(producto: inventario) {
+   private fun eliminarProductos(producto: inventario) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 uiState.update { it.copy(isLoading = true) }
@@ -125,7 +173,7 @@ class InventarioViewModel @Inject constructor(
     fun syncProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-               // casosInventario.syncProductos()
+                // casosInventario.syncProductos()
             }
         }
     }

@@ -74,6 +74,8 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
+import com.solidtype.atenas_apk_2.gestion_facturar.data.CasoBlueTooth
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.repositoryimpl.ClienteProveedorRepoImpl
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.EliminarPersona
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
@@ -129,7 +131,9 @@ import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.Qu
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.MediatorProductsImpl
+import com.solidtype.atenas_apk_2.products.domain.userCases.BuscarCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.CrearCategoria
+import com.solidtype.atenas_apk_2.products.domain.userCases.EliminarCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
@@ -203,7 +207,9 @@ object AppModule {
         importarExcelFile = ImportarExcelFile(repository),
         syncProductos = SyncProductos(repository),
         agregarCategoria = CrearCategoria(repository),
-        getCategorias = GetCategorias(repository)
+        getCategorias = GetCategorias(repository),
+        eliminarCategorias= EliminarCategorias(repository),
+        buscarCategorias= BuscarCategorias(repository)
     )
 
     @Singleton
@@ -500,9 +506,17 @@ object AppModule {
         whoIs = WhoIs(repo)
     )
 
+    @Singleton
+    @Provides
+    fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
+
+
+    //Bluetooth
+
     @Provides
     @Singleton
-    fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
+    fun provideBluetoothManager(context:Context): BluetoothManager = CasoBlueTooth(context)
+
 
 
 

@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
-import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -35,7 +34,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,17 +52,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.solidtype.atenas_apk_2.MainActivity
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
-import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PefilAdministrador
-import com.solidtype.atenas_apk_2.servicios.Input
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -336,7 +330,7 @@ fun SelectorMio(
                     }
                     Spacer(modifier = Modifier.padding(top=55.dp))
                     // Este es el Box que queremos que esté fijo en la parte inferior
-                    if (onClickAgregar != null) {
+                    if (onClickAgregar != null  ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()

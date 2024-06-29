@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.servicios.Input
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.Input
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)

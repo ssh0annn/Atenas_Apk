@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets
 
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util.client_builder.PersonaBuilder
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util.client_builder.PersonaDirector
 
@@ -12,9 +13,10 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.time.temporal.TemporalField
 import javax.inject.Inject
-class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
+class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket, private val prueba: BluetoothManager) {
 
     suspend fun crearTicket(ticket: ServicioTicket) {
+
         val newTicket = ticket(
             id_ticket = System.currentTimeMillis()+1,
             id_vendedor = ticket.vendedor!!.id_usuario,
@@ -40,6 +42,7 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
             dispositivo = ticket.dispositivo
         )
 
+
         casosTicket.crearTicket(transaction)
     }
 
@@ -49,7 +52,7 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
 
     fun getDetalleTicket(): Flow<List<TicketwithRelation>> {
-
+        prueba.permisosGranted()
         return casosTicket.getTickets()
     }
 

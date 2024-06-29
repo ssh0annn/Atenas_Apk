@@ -57,7 +57,7 @@ fun InventoryScreen(
     val busqueda = rememberSaveable { mutableStateOf("") }
     val mostrar = rememberSaveable { mutableStateOf(false) }
 
-    if (busqueda.value.isNotBlank()) viewModel.buscarProductos(busqueda.value) else viewModel.mostrarProductos()
+  //  if (busqueda.value.isNotBlank()) viewModel.buscarProductos(busqueda.value) else viewModel.mostrarProductos()
 
     if (uiState.pathExcel!!.isNotBlank()) Toast.makeText(
         context,

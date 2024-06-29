@@ -32,7 +32,9 @@ class AdminViewModel @Inject constructor(private val casos: AdminUseCases): View
                 println("Este es el perfil ${evento.perfil}")
                 viewModelScope.launch {
                     withContext(Dispatchers.IO){
-                        casos.updateAdmin(evento.perfil)
+
+                            casos.updateAdmin(evento.perfil)
+
                     }
                 }
             }

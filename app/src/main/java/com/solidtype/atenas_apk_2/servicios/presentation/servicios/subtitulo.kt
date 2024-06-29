@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.servicios
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import android.annotation.SuppressLint
 import android.widget.Toast
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.FactCheck
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,9 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.InputBlanco
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
-import org.apache.poi.xssf.usermodel.TextAlign
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
@@ -47,10 +43,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import com.solidtype.atenas_apk_2.ui.theme.Blanco
-import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.ui.theme.PurpleGrey80
 
 
 @Composable
