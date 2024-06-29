@@ -20,5 +20,8 @@ interface InventarioRepo {
     fun getCategorias():Flow<List<categoria>>
 
     suspend fun agregarCategorias(categoria: categoria)
+    suspend fun eliminarCategoria(categoria:categoria)
+    suspend fun buscarCategorias(any:String):Flow<List<categoria>>
+
 
 }

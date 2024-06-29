@@ -1,8 +1,11 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
+       // maven("https://jitpack.io")
+
+
 
 
     }
@@ -12,8 +15,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        //Repositorio para animaciones peido por Carlos
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+
 
     }
 }

@@ -20,8 +20,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
@@ -35,7 +37,7 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 fun Detalles(
     viewModel: InventarioViewModel,
     categoria: MutableState<String>,
-    categoriaList: List<String>,
+    categoriaList: List<categoria>,
     nombre: MutableState<String>,
     idInventario: MutableState<String>,
     descripcion: MutableState<String>,
@@ -85,11 +87,13 @@ fun Detalles(
                             AutocompleteSelect(
                                 "Categoría",
                                 categoria.value,
-                                categoriaList,
+                                categoriaList.map { it.nombre },
                                 true,
                                 onClickAgregar = {},
                             ) {
                                 categoria.value = it
+                                if(categoria.value != "")
+                                    idCatalogo.value = categoriaList.find { it.nombre == categoria.value }!!.id_categoria.toString()
                             }
                             InputDetalle(
                                 "Nombre", nombre.value, true
@@ -133,22 +137,23 @@ fun Detalles(
                     true,
                     onClick = {//Boton X para borrar productos
                         try {
-                            viewModel.eliminarProductos(
-                                inventario(
-                                    id_inventario = idInventario.value.toLong(),
-                                    id_categoria = idCatalogo.value.toLong(),
-                                    id_proveedor = idProveedor.value.toLong(),
-                                    nombre = nombre.value,
-                                    marca = marca.value,
-                                    modelo = modelo.value,
-                                    cantidad = cantidad.value.toInt(),
-                                    precio_compra = costo.value.toDouble(),
-                                    precio_venta = costo.value.toDouble(),
-                                    impuesto = impuesto.value.toDouble(),
-                                    descripcion = descripcion.value,
-                                    estado = estado.value.formatoActivoDDBB()
+                            viewModel.onEvent(
+                                InventariosEvent.EliminarProductos(
+                                    inventario(
+                                        id_inventario = idInventario.value.toLong(),
+                                        id_categoria = idCatalogo.value.toLong(),
+                                        id_proveedor = idProveedor.value.toLong(),
+                                        nombre = nombre.value,
+                                        marca = marca.value,
+                                        modelo = modelo.value,
+                                        cantidad = cantidad.value.toInt(),
+                                        precio_compra = costo.value.toDouble(),
+                                        precio_venta = costo.value.toDouble(),
+                                        impuesto = impuesto.value.toDouble(),
+                                        descripcion = descripcion.value,
+                                        estado = estado.value.formatoActivoDDBB()
+                                    )
                                 )
-
                             )
                             idInventario.value = ""
                             idCatalogo.value = ""
@@ -172,20 +177,25 @@ fun Detalles(
                     }
                 )
                 Spacer(modifier = Modifier.width(60.dp))
-                BotonIconCircular(false, onClick = { //Guardar productos
+                BotonIconCircular(false, onClick = { //Guardar o Editar productos
                     try {
-                        viewModel.crearProductos(
-                            id_categoria = idCatalogo.value.toLong(),
-                            id_proveedor = idProveedor.value.toLong(),
-                            nombre = nombre.value,
-                            marca = marca.value,
-                            modelo = modelo.value,
-                            cantidad = cantidad.value.toInt(),
-                            precio_compra = costo.value.toDouble(),
-                            precio_venta = precio.value.toDouble(),
-                            impuesto = impuesto.value.toDouble(),
-                            descripcion = descripcion.value,
-                            estado = estado.value == "Activo"
+                        viewModel.onEvent(
+                            InventariosEvent.AgregarProductos(
+                                inventario(
+                                    id_inventario = idInventario.value.toLong(),
+                                    id_categoria = idCatalogo.value.toLong(),
+                                    id_proveedor = idProveedor.value.toLong(),
+                                    nombre = nombre.value,
+                                    marca = marca.value,
+                                    modelo = modelo.value,
+                                    cantidad = cantidad.value.toInt(),
+                                    precio_compra = costo.value.toDouble(),
+                                    precio_venta = precio.value.toDouble(),
+                                    impuesto = impuesto.value.toDouble(),
+                                    descripcion = descripcion.value,
+                                    estado = estado.value == "Activo"
+                                )
+                            )
                         )
                     } catch (e: Exception) {
                         Toast.makeText(
@@ -194,7 +204,7 @@ fun Detalles(
                             Toast.LENGTH_LONG
                         )
                             .show()
-                    }/*viewModel.onGuardarDetalles()*/
+                    }
                 })
             }
         }

@@ -57,7 +57,10 @@ fun InventoryScreen(
     val busqueda = rememberSaveable { mutableStateOf("") }
     val mostrar = rememberSaveable { mutableStateOf(false) }
 
-    if (busqueda.value.isNotBlank()) viewModel.buscarProductos(busqueda.value) else viewModel.mostrarProductos()
+    if (busqueda.value.isNotBlank())
+        viewModel.onEvent(InventariosEvent.BuscarProducto(busqueda.value))
+    else
+        viewModel.onEvent(InventariosEvent.GetProductos)
 
     if (uiState.pathExcel!!.isNotBlank()) Toast.makeText(
         context,
@@ -86,13 +89,9 @@ fun InventoryScreen(
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    val categoriaList = listOf(
-        "Accesorios",
-        "Celulares",
-        "Laptops",
-        "Tablets",
-        "Otros"
-    )//Esto debería venir del ViewModel
+    var listProvider = listOf<String>()
+
+    if(uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
 
     if (false) {
         navController.navigate(Screens.Login.route)
@@ -153,7 +152,7 @@ fun InventoryScreen(
                     Detalles(
                         viewModel,
                         categoria,
-                        categoriaList,
+                        uiState.categoria,
                         nombre,
                         idInventario,
                         descripcion,

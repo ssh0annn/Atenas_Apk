@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.os.Message
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 
 data class ProductosViewStates(
@@ -11,7 +12,8 @@ data class ProductosViewStates(
     val pathExcel: String? = "",
     val userMessages: List<Message> = listOf(),
     val uriPath:String="",
-    val errorMessages: String = ""
+    val errorMessages: String = "",
+    val categoria:List<categoria> = emptyList()
 
 
 )

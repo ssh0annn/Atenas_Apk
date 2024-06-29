@@ -149,10 +149,10 @@ dependencies {
     //Lotti y animaciones :
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
-    //Implementacion PDF :
-  //  implementation ("com.itextpdf:itext7-core:7.1.15")
+    //Printer
 
-
+    //implementation ("com.github.kenglxn.QRGen:android:2.6.0")
+   // implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }
 
