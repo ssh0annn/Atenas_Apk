@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 
 import android.net.Uri
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
@@ -15,8 +16,9 @@ import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
     private val catego:categoriaDao,
-    private val daoProductos: inventarioDao, private val excel: XlsManeger,
-    private val mediador2: MediatorProducts
+    private val daoProductos: inventarioDao,
+    private val excel: XlsManeger,
+    private val mediador2: MediatorProducts,
 ) : InventarioRepo {
 
 

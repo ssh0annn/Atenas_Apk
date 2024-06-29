@@ -25,7 +25,12 @@ sealed class InventariosEvent {
 
     data class BuscarProducto(val any:String):InventariosEvent()
 
+
+
     //Exel
+
+    object Getrpoveedores:InventariosEvent()
+    data class BuscarProveedores(val any:String):InventariosEvent()
 
 
 
