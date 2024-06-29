@@ -39,7 +39,7 @@ fun administrador.toVerInfoAdmin(): VerInfoAdmin? {
 
 fun PerfilAdmin.toAdministrador(): administrador {
     return administrador(
-      //  id_administrador = this.id_administrador,
+        id_administrador = 5000,
         nombre=this.nombre,
         apellido=this.apellido,
         correo=this.correo,
