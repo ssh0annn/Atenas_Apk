@@ -76,7 +76,7 @@ modifier = Modifier
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(350.dp)
-                            .padding(start = 20.dp, top = 40.dp)
+                            .padding(start = 20.dp, top = 25.dp)
                             .background(AzulGris, shape = RoundedCornerShape(20.dp)),
 
                 ) {
@@ -84,7 +84,7 @@ modifier = Modifier
                     Box(
                         modifier = Modifier
                             .width(300.dp)
-                            .height(350.dp)
+                            .height(500.dp)
                             .padding(15.dp)
                             .background(GrisAzulado)
 
@@ -92,22 +92,28 @@ modifier = Modifier
                         Column(
                             modifier = Modifier.padding(15.dp)
                         ) {
+                            Row{
+                                Text(text = "Nfactura:", fontSize = 20.sp, color = BlancoOpaco)
+                                Spacer(modifier = Modifier.padding(start = 10.dp))
+                                Text(text = ticket?.ticket?.id_tipo_venta.toString(),fontSize = 20.sp, color = AzulGris)
+                            }
                             Row {
                                 Text(text = "Nombre:", fontSize = 20.sp, color = Blanco)
                                 Spacer(modifier = Modifier.padding(start = 10.dp))
                                 ticket?.cliente?.nombre?.let { nombre ->
-                                    Text(text = nombre, fontSize = 20.sp, color = BlancoOpaco)
+                                    Text(text = nombre, fontSize = 20.sp, color = Blanco)
                                     Spacer(modifier = Modifier.padding(top = 5.dp))
                                 }
                             }
                             Row{
-                                Text(text = "Servicio:", fontSize = 20.sp, color = BlancoOpaco)
+                                Text(text = "Servicio:", fontSize = 20.sp, color = Blanco)
                                 Spacer(modifier = Modifier.padding(start = 10.dp))
-                                ticket?.servicio?.nombre?.let { nombre ->
-                                    Text(text = nombre, fontSize = 20.sp, color = Blanco)
+                                ticket?.servicio?.nombre?.let { servicio ->
+                                    Text(text = servicio, fontSize = 20.sp, color = Blanco)
                                 }
                             }
-                            Spacer(modifier = Modifier.padding(top = 25.dp))
+
+                            Spacer(modifier = Modifier.padding(top = 20.dp))
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()

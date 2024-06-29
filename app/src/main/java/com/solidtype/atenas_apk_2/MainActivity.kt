@@ -14,8 +14,7 @@ import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 
 
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.servicios
-import com.solidtype.atenas_apk_2.servicios.presentation.ticket.ticketSeen
+import com.solidtype.atenas_apk_2.servicios.presentation.ticket.ticketScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -28,9 +27,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-       ticketSeen()
+//       ticketScreen()
         //servicios()
-        // Navigation()
+         Navigation()
 
         }
 
