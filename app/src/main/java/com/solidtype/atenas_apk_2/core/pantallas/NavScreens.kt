@@ -23,7 +23,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosS
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdminScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
-import com.solidtype.atenas_apk_2.servicios.servicios
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.servicios
 
 @SuppressLint("StaticFieldLeak")
 object NavigationSingleton{
