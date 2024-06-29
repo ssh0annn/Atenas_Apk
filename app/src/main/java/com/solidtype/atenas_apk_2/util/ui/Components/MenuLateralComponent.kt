@@ -165,15 +165,33 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionCliente.route)
                             }
-                        }
-                        Boton(
-                            "Gestion de Proveedores",
-                            anchoTotal = true,
-                            habilitar = NavigationSingleton.screen != Screens.GestionProveedores.route
-                        ) {
-                            NavigationSingleton.screen = Screens.GestionProveedores.route
-                            mostrarMenu.value = false
-                            navController.navigate(Screens.GestionProveedores.route)
+                            Boton(
+                                "Gestion de Proveedores",
+                                anchoTotal = true,
+                                habilitar = NavigationSingleton.screen != Screens.GestionProveedores.route
+                            ) {
+                                NavigationSingleton.screen = Screens.GestionProveedores.route
+                                mostrarMenu.value = false
+                                navController.navigate(Screens.GestionProveedores.route)
+                            }
+                            Boton(
+                                "Servicios",
+                                anchoTotal = true,
+                                habilitar = NavigationSingleton.screen != Screens.Servicio.route
+                            ) {
+                                NavigationSingleton.screen = Screens.Servicio.route
+                                mostrarMenu.value = false
+                                navController.navigate(Screens.Servicio.route)
+                            }
+                            Boton(
+                                "Vista de Tickets",
+                                anchoTotal = true,
+                                habilitar = NavigationSingleton.screen != Screens.VistaTicket.route
+                            ) {
+                                NavigationSingleton.screen = Screens.VistaTicket.route
+                                mostrarMenu.value = false
+                                navController.navigate(Screens.VistaTicket.route)
+                            }
                         }
                     }
                     Row(
@@ -190,7 +208,8 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             color = AzulGris,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 10.dp)
+                            modifier = Modifier
+                                .padding(top = 10.dp)
                                 .clickable {
                                     NavigationSingleton.screen = ""
                                     navController.popBackStack()
