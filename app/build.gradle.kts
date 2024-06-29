@@ -150,8 +150,11 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
     //Printer
-    implementation("com.github.mazenrashed:Printooth:1.3.1")
-    implementation("com.github.kenglxn.QRGen:android:2.5.0")
+
+    val printooth = "1.3.1"
+     implementation ("com.github.mazenrashed:Printooth:$printooth")
+    //implementation ("com.github.kenglxn.QRGen:android:2.6.0")
+   // implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }
 

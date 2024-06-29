@@ -1,16 +1,10 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
-        maven("https://jitpack.io")
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+       // maven("https://jitpack.io")
+
 
 
 
@@ -21,9 +15,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        //Repositorio para animaciones peido por Carlos
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://jitpack.io")
+        maven(url ="https://jitpack.io")
+
 
     }
 }

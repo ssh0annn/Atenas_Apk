@@ -9,10 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import com.solidtype.atenas_apk_2.core.pantallas.Navigation
-import com.solidtype.atenas_apk_2.gestion_facturar.App
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.servicios.servicios
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -29,7 +26,7 @@ class MainActivity : ComponentActivity() {
 
           //  Navigation()
             //servicios()
-            App()
+         //   App()
 
         }
     }
