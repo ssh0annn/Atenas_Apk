@@ -27,9 +27,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-//       ticketScreen()
-        //servicios()
-         Navigation()
+
+        Navigation()
 
         }
 

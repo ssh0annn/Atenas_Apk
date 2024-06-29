@@ -102,6 +102,7 @@ fun InventoryScreen(
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
+
             )
         }
     } else {

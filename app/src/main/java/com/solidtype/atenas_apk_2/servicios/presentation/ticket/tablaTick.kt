@@ -75,7 +75,7 @@ modifier = Modifier
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(350.dp)
+                            .height(360.dp)
                             .padding(start = 20.dp, top = 25.dp)
                             .background(AzulGris, shape = RoundedCornerShape(20.dp)),
 
@@ -84,7 +84,7 @@ modifier = Modifier
                     Box(
                         modifier = Modifier
                             .width(300.dp)
-                            .height(500.dp)
+                            .height(560.dp)
                             .padding(15.dp)
                             .background(GrisAzulado)
 
