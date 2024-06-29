@@ -9,7 +9,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,10 +25,8 @@ class MainActivity : ComponentActivity() {
         requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
         setContent {
+             Navigation()
 
-          //  Navigation()
-            //servicios()
-         //   App()
 
         }
     }

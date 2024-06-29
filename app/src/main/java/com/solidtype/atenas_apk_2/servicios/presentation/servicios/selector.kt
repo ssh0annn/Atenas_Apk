@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.servicios
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.SupervisedUserCircle
-import androidx.compose.material.icons.filled.Support
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,21 +48,8 @@ import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.servicios.modelo.servicio
 import com.solidtype.atenas_apk_2.servicios.presentation.modelo.FormaPagos
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClienteForm
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.InfoTicket
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoDevice
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.NuevoServicio
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.PagosEvent
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.SelectorMio
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServicioTicket
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
-import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
@@ -93,59 +78,19 @@ fun selector(
     
 
     //Dato de pagos
-
-
     var tipoPago by rememberSaveable { mutableStateOf("") }
 
     //formulario cliente
     var nombre by rememberSaveable { mutableStateOf("") }
-
-
-//    if(mystate){
-//        viewmodel.onPayment(
-//            PagosEvent.Impuestos(
-//                impuestos = mystate
-//            )
-//        )
-//    }else{
-//        viewmodel.onPayment(
-//            PagosEvent.Impuestos(
-//                impuestos = mystate
-//            )
-//        )
-//    }
-
-
-
-
-
     var telefono by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var falla by rememberSaveable { mutableStateOf("") }
     var estado by rememberSaveable { mutableStateOf("") }
     var imei by rememberSaveable { mutableStateOf("") }
     var accesorio by rememberSaveable { mutableStateOf("") }
-    var abono by rememberSaveable { mutableStateOf("0.0") }
     var nota by rememberSaveable { mutableStateOf("") }
-    var restante by rememberSaveable { mutableStateOf("0.0") }
-    var total by rememberSaveable { mutableStateOf("0.0") }
-
-    var sub by rememberSaveable { mutableStateOf("0.0") }
-    var impuesto by rememberSaveable { mutableStateOf("0.0") }
-    var accesorios by rememberSaveable { mutableStateOf("acessiom") }
-    var fecha_ini by rememberSaveable { mutableStateOf("20/04/24") }
-    var fecha_fin by rememberSaveable { mutableStateOf("20/05/24") }
-
-    val id_vendedor: Long = 1
-    val id_cliente: Long = 1
-    val id_tipo: Long = 1
-    val id_dipo: Long = 1
 
     //formulario servicio
-    val context = LocalContext.current
-    val coffeeDrinks: List<servicio?> = listaSericios
-    var expanded by remember { mutableStateOf(true) }
-    var selectedText by remember { mutableStateOf("") }
     var dia by rememberSaveable { mutableStateOf("0") }
     var precio by rememberSaveable { mutableStateOf("0.0") }
     var descrp by rememberSaveable { mutableStateOf("") }
@@ -156,20 +101,7 @@ fun selector(
     var agra_modelo by rememberSaveable { mutableStateOf("") }
     var nom_comercial by rememberSaveable { mutableStateOf("") }
 
-    //selector cliente
-    val contex = LocalContext.current
-    val coffee: List<Personastodas.ClienteUI?> = listaCliente
-    var expande by remember { mutableStateOf(false) }
 
-    //selecto modelo
-    val contex1 = LocalContext.current
-    val coffee1: List<Dispositivo?> = listaDispositivos
-    var expande1 by remember { mutableStateOf(false) }
-
-    //selecto marca
-    val contex2 = LocalContext.current
-    val coffee2: List<Dispositivo?> = listaDispositivos
-    var expande2 by remember { mutableStateOf(false) }
 
     //modal cliente existente
     if (nuevoServicios){
@@ -223,7 +155,6 @@ fun selector(
                                 )
 
                                 //cuerpo-------------------------------------
-//                                cliente(listacliente = state.listaClientes)
 
                                 Box(
                                     modifier = Modifier
@@ -355,7 +286,6 @@ fun selector(
 
                     modifier = Modifier
                         .width(800.dp)
-//                        .background(GrisOscuro)
                 )
             }
         }
@@ -377,9 +307,16 @@ fun selector(
                         open.value = false
                     },
                     text = {
-                        Column {
+                        Column (
+                            modifier = Modifier
+                                .padding(top = 5.dp)
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState()),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ){
                            Box {
-                               Text(text ="confirmae")
+                               Text(text ="Confirmar Datos",fontSize = 22.sp)
                            }
                         }
                     },
@@ -395,7 +332,17 @@ fun selector(
                                 viewmodel.onTicket(
                                     OnTicket.CrearTicket
                                 )
+                                dia = "0"
+                                precio = "0.0"
+                                descrp = ""
+                                imei = ""
+                                accesorio = ""
+                                falla = ""
+                                estado = ""
+                                nota = ""
                                 open.value = false
+                                mostrar.value = false
+                                openDialog.value = false
                             }) {
                             Text("Guardar", color = Blanco)
                         }
@@ -408,6 +355,7 @@ fun selector(
                                 .padding(5.dp),
                             onClick = {
                                 open.value = false
+                                mostrar.value = true
                             },
                         ) {
                             Text("salir", color = Blanco)
@@ -418,15 +366,11 @@ fun selector(
 
                     modifier = Modifier
                         .width(800.dp)
-//                        .background(GrisOscuro)
-                        .height(altura.value),
+                        .height(180.dp),
                 )
             }
         }
     }
-
-
-
 
 
     //cuerpo del modal
@@ -679,6 +623,7 @@ fun selector(
                                                     label = "Subtotal",
                                                     valor = stateTicket.datosFinance?.subtotal.toString(),
                                                     derecho = true,
+                                                    
                                                     modifier = Modifier
                                                 ) {
 
@@ -759,7 +704,7 @@ fun selector(
 
 
                     confirmButton = {
-                        if(precio.isEmpty() || dia.isEmpty() || descrp.isEmpty()){
+                        if(precio == "0.0" || dia == "0" || descrp.isEmpty() ) {
                             back = Color(0xFF8285A5)
                         }else{
 //                                    mostrar.value = true
@@ -772,7 +717,7 @@ fun selector(
                             .padding(5.dp),
 
                             onClick = {
-                                    if(precio.isEmpty() || dia.isEmpty() || descrp.isEmpty()){
+                                    if(precio == "0.0" || dia == "0" || descrp.isEmpty()){
 
                                     }else{
                                         viewmodel.onPayment(
@@ -785,7 +730,7 @@ fun selector(
                                         mostrar.value = true
                                     }
 
-                                    if(imei.isEmpty() || accesorio.isEmpty() || falla.isEmpty() || estado.isEmpty() || abono.isEmpty() || nota.isEmpty() || total.isEmpty()){
+                                    if(imei.isEmpty() || accesorio.isEmpty() || falla.isEmpty() || estado.isEmpty()  || nota.isEmpty() ){
 
                                     }else{
                                         viewmodel.onTicket(
@@ -865,8 +810,6 @@ fun selector(
                                 } else {
                                     mostrar.value = false
                                 }
-//                        openDialog.value = false
-//                        mostrar.value = false
                             },
                         ) {
                             if (!mostrar.value) {
@@ -1138,27 +1081,10 @@ fun selector(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 800.dp, top = 400.dp)
+            .padding(start = 1100.dp, top = 530.dp)
     ) {
 
-        Icon(imageVector = Icons.Filled.Support,
-            contentDescription = "",
-            tint = AzulGris,
-            modifier = Modifier
-                .padding(bottom = 0.dp)
-                .size(60.dp)
-                .clickable {
-                    openDialog2.value = true
-                })
-        Icon(imageVector = Icons.Filled.SupervisedUserCircle,
-            contentDescription = "",
-            tint = AzulGris,
-            modifier = Modifier
-                .padding(bottom = 0.dp)
-                .size(60.dp)
-                .clickable {
-                    openDialog1.value = true
-                })
+
         Icon(imageVector = Icons.Filled.AddCircle,
             contentDescription = "",
             tint = AzulGris,

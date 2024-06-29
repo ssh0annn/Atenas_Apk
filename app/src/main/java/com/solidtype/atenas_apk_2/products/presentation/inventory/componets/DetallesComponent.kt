@@ -170,19 +170,19 @@ fun Detalles(
                 Spacer(modifier = Modifier.width(60.dp))
                 BotonIconCircular(false, onClick = {
                     try {
-                        viewModel.crearProductos(
-                            id_categoria= idCatalogo.value.toLong(),
-                            id_proveedor= idProveedor.value.toLong(),
-                            nombre= nombre.value,
-                            marca= marca.value,
-                            modelo= modelo.value,
-                            cantidad= cantidad.value.toInt(),
-                            precio_compra= costo.value.toDouble(),
-                            precio_venta= precio.value.toDouble(),
-                            impuesto= impuesto.value.toDouble(),
-                            descripcion= descripcion.value,
-                            estado= if (estado.value == "Activo") true else false
-                        )
+//                        viewModel.crearProductos(
+//                            id_categoria= idCatalogo.value.toLong(),
+//                            id_proveedor= idProveedor.value.toLong(),
+//                            nombre= nombre.value,
+//                            marca= marca.value,
+//                            modelo= modelo.value,
+//                            cantidad= cantidad.value.toInt(),
+//                            precio_compra= costo.value.toDouble(),
+//                            precio_venta= precio.value.toDouble(),
+//                            impuesto= impuesto.value.toDouble(),
+//                            descripcion= descripcion.value,
+//                            estado= if (estado.value == "Activo") true else false
+//                        )
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,

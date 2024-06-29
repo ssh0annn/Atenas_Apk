@@ -131,7 +131,9 @@ import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.Qu
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.MediatorProductsImpl
+import com.solidtype.atenas_apk_2.products.domain.userCases.BuscarCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.CrearCategoria
+import com.solidtype.atenas_apk_2.products.domain.userCases.EliminarCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
@@ -205,7 +207,9 @@ object AppModule {
         importarExcelFile = ImportarExcelFile(repository),
         syncProductos = SyncProductos(repository),
         agregarCategoria = CrearCategoria(repository),
-        getCategorias = GetCategorias(repository)
+        getCategorias = GetCategorias(repository),
+        eliminarCategorias= EliminarCategorias(repository),
+        buscarCategorias= BuscarCategorias(repository)
     )
 
     @Singleton

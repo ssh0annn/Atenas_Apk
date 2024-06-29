@@ -150,6 +150,14 @@ class InventarioRepoImpl @Inject constructor(
            catego.addCategoria(categoria)
     }
 
+    override suspend fun eliminarCategoria(categoria:categoria) {
+        catego.deleteCategoria(categoria)
+    }
+
+    override suspend fun buscarCategorias(any: String):Flow<List<categoria>> {
+        return catego.buscarCategorias(any)
+    }
+
 }
 
 private fun validarNombresColumnas(columnas: List<String?>): Boolean {

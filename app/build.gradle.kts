@@ -151,8 +151,6 @@ dependencies {
 
     //Printer
 
-    val printooth = "1.3.1"
-     implementation ("com.github.mazenrashed:Printooth:$printooth")
     //implementation ("com.github.kenglxn.QRGen:android:2.6.0")
    // implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
