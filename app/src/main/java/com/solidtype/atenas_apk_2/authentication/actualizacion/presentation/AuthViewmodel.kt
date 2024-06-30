@@ -79,7 +79,7 @@ class AuthViewmodel @Inject constructor(
                        login(event.email, event.password,recuerdame.getString(LICENCIA, "").toString() )
                         println("Licencia temporal : ${recuerdame.getString(LICENCIA, "").toString()}")
                     }
-                } else {
+                }  else {
                     viewModelScope.launch {
                         delay(1000)
                         uiStates.update { it.copy(isLoading = false, network = false) }
@@ -98,11 +98,27 @@ class AuthViewmodel @Inject constructor(
             is AuthEvent.EliminarRecuerdos -> {
                 eliminarRecuerdos()
             }
+            is AuthEvent.ForgetPassword -> {
+                forgetPassword(event.email)
+            }
 
             else -> {
                 viewModelScope.launch { casosAuth.logout() }
 
             }
+        }
+    }
+    private fun forgetPassword(email:String){
+        viewModelScope.launch {
+           if(casosAuth.forgotPassword(email)){
+               uiStates.update {
+                   it.copy(enviado = true)
+               }
+           }else{
+               uiStates.update {
+                   it.copy(enviado = false, razones = "Correo no valido")
+               }
+           }
         }
     }
 

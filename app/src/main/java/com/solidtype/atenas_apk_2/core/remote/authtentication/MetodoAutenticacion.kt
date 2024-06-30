@@ -9,5 +9,11 @@ interface MetodoAutenticacion {
     suspend fun registerNewUsers(email:String, pass:String)
     suspend fun getUsuarioActual(): Usuario
     suspend fun eliminarUsuario(email:String, password:String)
+    suspend fun cambiarPassword(email:String, oldPassword:String, newPassworld:String, callback:(
+            success : Boolean,
+            razon:String?
+            )->Unit)
+
+    suspend fun olvideMiPassword(email:String):Boolean
 
 }
