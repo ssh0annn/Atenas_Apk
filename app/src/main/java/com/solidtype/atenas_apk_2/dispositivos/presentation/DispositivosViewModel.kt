@@ -23,7 +23,7 @@ class DispositivosViewModel @Inject constructor(private val casos:CasosDispositi
         private set
 
     private var job: Job? = null
-    private var restore:Dispositivo? = null
+    var restore:Dispositivo? = null
 
     fun onEvent(evento: DispositivosEvent){
         when(evento) {

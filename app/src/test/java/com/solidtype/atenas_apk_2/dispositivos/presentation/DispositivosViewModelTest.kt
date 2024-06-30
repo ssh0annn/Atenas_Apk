@@ -41,9 +41,6 @@ class DispositivosViewModelTest {
     @RelaxedMockK
     private lateinit var viewModel: DispositivosViewModel
 
-    @RelaxedMockK
-    private var restoreDeleted: Dispositivo? = null
-    private val dispositivoSlot =   slot<Dispositivo>()
 
 
     @Before
@@ -51,6 +48,7 @@ class DispositivosViewModelTest {
         MockKAnnotations.init(this)
         viewModel = DispositivosViewModel(casosDispositivo)
         Dispatchers.setMain(Dispatchers.Unconfined)
+      //  deleteRestored =  viewModel.restore
 
     }
 
@@ -88,30 +86,28 @@ class DispositivosViewModelTest {
     @Test
     fun `onEvent Delete calls deleteDevice and restores correctly`() = runTest {
         //Given
-//        val dispositivo =  Dispositivo(
-//            id_dispositivo= 12222,
-//            nombre_comercial= "nomber0",
-//            modelo= "nombere0",
-//            marca= "nombere0",
-//            estado= true
-//        )
-//        every { viewModel.onEvent(DispositivosEvent.Delete(dispositivo))
-//
-//        }answers {
-//            restoreDeleted = dispositivo
-//        }
-//        //When
-//        viewModel.onEvent(DispositivosEvent.Delete(dispositivo))
-//
-//        //Then
-//        assert(restoreDeleted == null)
+        val dispositivo = Dispositivo(
+            id_dispositivo= 13333,
+            nombre_comercial= "nombere2",
+            modelo= "nombere2",
+            marca= "nombere2",
+            estado= true
+        )
 
+        //When
+        coEvery { casosDispositivo.eliminar(dispositivo) } answers {
+            viewModel.restore = dispositivo
+        }
+        viewModel.onEvent(DispositivosEvent.Delete(dispositivo))
 
+        //Then
+        coVerify(exactly = 1){casosDispositivo.eliminar}
+        assert(viewModel.restore == dispositivo)
     }
 
     @Test
     fun `onEvent Search calls search`() = runTest {
-
+        
     }
 
     @Test
