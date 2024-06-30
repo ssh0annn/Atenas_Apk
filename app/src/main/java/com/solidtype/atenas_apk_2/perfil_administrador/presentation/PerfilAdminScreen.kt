@@ -53,7 +53,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                 modifier = Modifier.fillMaxSize(),
                 update = { view ->
 
-                    //DIALOGO INICIALIZADO Y CON SUS BOTONES CORRESPONDIENTES
+                    //DIALOGO INICIADAS Y CON SUS BOTONES CORRESPONDIENTES DE DIALOGOPERFILADMIN
                     val dialog = Dialog(context)
                     dialog.setContentView(R.layout.dialog_password)
                     dialog.setCancelable(false)
@@ -63,7 +63,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     val dnewclave = dialog.findViewById<EditText>(R.id.dialog_new_password)
                     val dconfirnewclave = dialog.findViewById<EditText>(R.id.dialog_confir_password)
 
-                    //VARIABLE INICIADAS
+                    //VARIABLE INICIADAS DE PERFILADMIN
                     val btng = view.findViewById<Button>(R.id.perfil_config_btnguardar)
                     val btnc = view.findViewById<Button>(R.id.perfil_config_btncambiarpass)
                     val nombreadmin : EditText = view.findViewById(R.id.txt_perfil_nombre_admin)
@@ -79,31 +79,20 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
 
                     //VERIFICA SI LOS DATOS ESTAN PARA RELLENARLO
                     if (uiState.perfilAdmin.first() != null) {
-                        nombreadmin.text =
-                            uiState.perfilAdmin[0]?.nombre?.toEditable() ?: "".toEditable()
-                        correoadmin.text =
-                            uiState.perfilAdmin[0]?.correo?.toEditable() ?: "".toEditable()
-                        nombreempresa.text =
-                            uiState.perfilAdmin[0]?.nombre_negocio?.toEditable() ?: "".toEditable()
-                        direccionempresa.text =
-                            uiState.perfilAdmin[0]?.direccion_negocio?.toEditable()
-                                ?: "".toEditable()
-                        numeroempresa.text =
-                            uiState.perfilAdmin[0]?.telefono?.toEditable() ?: "".toEditable()
-                        claveadmin.text =
-                            uiState.perfilAdmin[0]?.clave?.toEditable() ?: "".toEditable()
-                        numerolicencia.text =
-                            uiState.perfilAdmin[0]?.licencia?.toEditable() ?: "".toEditable()
-                        estado.text = uiState.perfilAdmin[0]?.estado?.toString()?.toEditable()
-                            ?: "".toEditable()
-                        fechacaduca.text =
-                            uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable()
-                                ?: "".toEditable()
-                        fechacompra.text =
-                            uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable()
-                                ?: "".toEditable()
+                        nombreadmin.text = uiState.perfilAdmin[0]?.nombre?.toEditable() ?: "".toEditable()
+                        correoadmin.text = uiState.perfilAdmin[0]?.correo?.toEditable() ?: "".toEditable()
+                        direccionempresa.text = uiState.perfilAdmin[0]?.direccion_negocio?.toEditable() ?: "".toEditable()
+                        numeroempresa.text = uiState.perfilAdmin[0]?.telefono?.toEditable() ?: "".toEditable()
+                        claveadmin.text = uiState.perfilAdmin[0]?.clave?.toEditable() ?: "".toEditable()
+                        numerolicencia.text = uiState.perfilAdmin[0]?.licencia?.toEditable() ?: "".toEditable()
+                        nombreempresa.text = uiState.perfilAdmin[0]?.nombre_negocio?.toEditable() ?: "".toEditable()
+                        if (uiState.perfilAdmin[0]?.estado == true) estado.text = "Habilitado".toEditable()
+                        else estado.text = "Desabilitado".toEditable()
+                        fechacaduca.text = uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable() ?: "".toEditable()
+                        fechacompra.text = uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable() ?: "".toEditable()
                     }
-                    //ACCION DE EL BOTON GUARDAR
+
+                    //ACCION DE LOS BOTONES TANTO DIALOGO COMO
                     btng.setOnClickListener {
                         uiState.perfilAdmin.first()?.id_administrador?.let {
                             viewModel.onEvent(
@@ -111,7 +100,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                                     administrador(
                                         id_administrador = it,
                                         nombre = nombreadmin.text.toString(),
-                                        apellido = nombreadmin.text.toString(),
+                                        apellido = uiState.perfilAdmin[0]?.apellido.toString(),
                                         correo = correoadmin.text.toString(),
                                         telefono = numeroempresa.text.toString(),
                                         direccion_negocio = direccionempresa.text.toString(),
@@ -135,13 +124,13 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     }
                     btnpassc.setOnClickListener {
                         if (!dclave.text.equals("") && dclave.text.equals(uiState.perfilAdmin[0]?.clave?.toEditable())) {
-                            if (!dnewclave.text.equals("") && !dconfirnewclave.text.equals("") && dnewclave.text.equals(
-                                    dconfirnewclave
-                                )
-                            ) {
-                                Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT)
-                                    .show()
-                                dialog.dismiss()
+                            if (!dnewclave.text.equals("") && !dconfirnewclave.text.equals("")) {
+                                if (dnewclave.text.equals(dconfirnewclave) && !dnewclave.text.equals(dclave)) {
+                                    //CAMBIAR CONTRASEÑA DE USUARIO
+                                    Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
+
+                                    dialog.dismiss()
+                                }
                             }
                         }
                     }
