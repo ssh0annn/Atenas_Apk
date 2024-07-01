@@ -128,7 +128,13 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                                 if (dnewclave.text.equals(dconfirnewclave) && !dnewclave.text.equals(dclave)) {
                                     //CAMBIAR CONTRASEÑA DE USUARIO
                                     Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
-
+                                    viewModel.onEvent(
+                                        PerfilEvent.ChangePassword(
+                                            correoadmin.text.toString(),
+                                            dclave.text.toString(),
+                                            dnewclave.text.toString()
+                                        )
+                                    )
                                     dialog.dismiss()
                                 }
                             }

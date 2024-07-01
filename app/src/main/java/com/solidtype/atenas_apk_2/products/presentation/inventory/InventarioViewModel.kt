@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
+    private val casosProveedores: CasosProveedores
 ) : ViewModel() {
 
     private var fileSelectionListener2: FileSelectionListener2? = null
@@ -42,6 +44,7 @@ class InventarioViewModel @Inject constructor(
                 crearProductos(event.producto)
 
             }
+
             is InventariosEvent.AgregarCategorias -> {
                 agregarCategoria(event.catego)
             }
@@ -53,6 +56,7 @@ class InventarioViewModel @Inject constructor(
             is InventariosEvent.EliminarProductos -> {
                 eliminarProductos(event.producto)
             }
+
             InventariosEvent.GetCategorias -> {
                 getCategorias()
             }
@@ -69,8 +73,33 @@ class InventarioViewModel @Inject constructor(
                 buscarCategorias(event.any)
 
             }
-            is InventariosEvent.BuscarProducto ->{
+
+            is InventariosEvent.BuscarProducto -> {
                 buscarProductos(event.any)
+            }
+
+            InventariosEvent.Getrpoveedores -> {
+                viewModelScope.launch {
+
+                    casosProveedores.getProveedores().collect { proveedores ->
+                        uiState.update {
+                            it.copy(proveedores = proveedores)
+                        }
+
+                    }
+                }
+            }
+
+            is InventariosEvent.BuscarProveedores -> {
+                viewModelScope.launch {
+
+                    casosProveedores.buscarProveedores(event.any).collect { proveedores ->
+                        uiState.update {
+                            it.copy(proveedores = proveedores)
+                        }
+
+                    }
+                }
             }
         }
     }

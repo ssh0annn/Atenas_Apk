@@ -11,6 +11,8 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.data.AuthReposito
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth.MetodoAutenticacionImpl
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.AuthRepository
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.CambiarPassword
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.ForgotPassword
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
@@ -503,7 +505,9 @@ object AppModule {
     fun provideCasosdeAutenticacion(repo: AuthRepository) = AuthCasos(
         login = Login(repo),
         logout= Logout(repo),
-        whoIs = WhoIs(repo)
+        whoIs = WhoIs(repo),
+        forgotPassword = ForgotPassword(repo),
+        cambiarPassword= CambiarPassword(repo)
     )
 
     @Singleton
