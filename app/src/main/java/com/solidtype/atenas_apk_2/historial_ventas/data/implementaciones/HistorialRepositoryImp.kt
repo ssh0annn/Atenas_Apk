@@ -36,7 +36,18 @@ class HistorialRepositoryImp @Inject constructor(
     }
 
     override suspend fun exportarVentas(listaProductos:List<venta>): Uri {
-        val columnas = listaProductos[1].toGetColumns()
+        val columnas = listOf(
+            "id_venta",
+            "id_vendedor",
+            "id_cliente",
+            "id_tipo_venta",
+            "subtotal",
+            "impuesto",
+            "total",
+            "cantidad",
+            "fecha",
+            "estado")
+
         val productosVendidos:MutableList<List<String>> = mutableListOf()
         try {
             for(productos in listaProductos ){
@@ -56,7 +67,7 @@ class HistorialRepositoryImp @Inject constructor(
 
             }
 
-            return excel.crearXls("Ventas", columnas,productosVendidos )
+            return excel.crearXls("Ventas_${System.currentTimeMillis()}", columnas,productosVendidos )
         }catch( _ : Exception){
             println("Error en la conversion de datos")
         }

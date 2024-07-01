@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
 @HiltViewModel
 class AuthViewmodel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -33,6 +32,7 @@ class AuthViewmodel @Inject constructor(
     private val LICENCIA: String = "licencia"
     private val CORREO: String = "correo"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
+    private  var conteoConexion = false
 
 
     init {
@@ -55,10 +55,15 @@ class AuthViewmodel @Inject constructor(
                 uiStates.update { it.copy(isLoading = true) }
                 if (isNetworkAvailable()) {
                     uiStates.update { it.copy(network = true) }
+                    if(conteoConexion){
+                        uiStates.update { it.copy(razones = "Conexion restablecida!") }
+                        conteoConexion = false
+                    }
                     isAutenticated()
                 } else {
                     viewModelScope.launch {
                         uiStates.update { it.copy(isLoading = false) }
+                        conteoConexion = true
                         delay(2000)
                         uiStates.update { it.copy(network = true) }
                         onEvent(AuthEvent.IsAutenticatedEvent)
@@ -67,9 +72,14 @@ class AuthViewmodel @Inject constructor(
             }
 
             is AuthEvent.LoginEvent -> {
+
                 uiStates.update { it.copy(isLoading = true) }
                 if (isNetworkAvailable()) {
                     uiStates.update { it.copy(network = true) }
+                    if(conteoConexion){
+                        uiStates.update { it.copy(razones = "Conexion restablecida!") }
+                        conteoConexion = false
+                    }
 
                     if (event.licencia.isNotBlank()) {
                         licencia(event.licencia)
@@ -82,7 +92,8 @@ class AuthViewmodel @Inject constructor(
                 }  else {
                     viewModelScope.launch {
                         delay(1000)
-                        uiStates.update { it.copy(isLoading = false, network = false) }
+                        uiStates.update { it.copy(isLoading = false, network = false, razones = "No hay conexion...") }
+                        conteoConexion = true
                         delay(10000)
                         uiStates.update { it.copy(isLoading = true, network = true) }
                         onEvent(AuthEvent.IsAutenticatedEvent)
@@ -108,6 +119,14 @@ class AuthViewmodel @Inject constructor(
             }
         }
     }
+
+    fun limpiaRazones(){
+        uiStates.update {
+            it.copy(
+                razones =null
+            )
+        }
+        }
     private fun forgetPassword(email:String){
         viewModelScope.launch {
            if(casosAuth.forgotPassword(email)){
@@ -129,7 +148,6 @@ class AuthViewmodel @Inject constructor(
                 razonesDe(casosAuth.login(email, pass, getDeviceId(), licencia))
                 uiStates.update {
                     it.copy(
-                        isAutenticated = casosAuth.whoIs(),
                         isLoading = false
                     )
                 }
@@ -140,9 +158,11 @@ class AuthViewmodel @Inject constructor(
     private fun razonesDe(checkListAuth: CheckListAuth): Boolean {
         when (checkListAuth.autenticado) {
             true -> {
-                when (checkListAuth.deviceRegistrado) {
+                when (checkListAuth.licensiaActiva) {//REvision por usuarios de otra tablet.
+
                     true -> {
-                        when (checkListAuth.licensiaActiva) {//REvision por usuarios de otra tablet.
+                        when (checkListAuth.deviceRegistrado) {
+
                             true -> {
                                 uiStates.update {
                                     it.copy(
@@ -150,7 +170,7 @@ class AuthViewmodel @Inject constructor(
                                             correo = checkListAuth.emailUsuario,
                                             tipoUser = checkListAuth.tipoUser
                                         ),
-                                        razones = "Bienvenido usuario: ${checkListAuth.tipoUser}."
+                                        razones = "Bienvenido usuario: ${checkListAuth.emailUsuario}."
                                     )
                                 }
                                 return true
@@ -161,14 +181,11 @@ class AuthViewmodel @Inject constructor(
                                 uiStates.update {
                                     it.copy(
                                         isAutenticated = null,
-                                        razones = "Licencia no activa.",
+                                        razones = "Dispositivo no registrado: '${getDeviceId()}' ",
                                         licenciaGuardada = false
                                     )
 
                                 }
-
-
-
                                 return false
                             }
                         }
@@ -178,11 +195,13 @@ class AuthViewmodel @Inject constructor(
                         uiStates.update {
                             it.copy(
                                 isAutenticated = null,
-                                razones = "Dispositivo no registrado."
+                                razones = "Licencia no valida.",
+                                licenciaGuardada = false
                             )
                         }
                         eliminarLicencia()
                         logout()
+
                         return false
                     }
                 }

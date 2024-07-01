@@ -17,7 +17,6 @@ plugins {
 }
 
 android {
-
     namespace = "com.solidtype.atenas_apk_2"
     compileSdk = 34
 

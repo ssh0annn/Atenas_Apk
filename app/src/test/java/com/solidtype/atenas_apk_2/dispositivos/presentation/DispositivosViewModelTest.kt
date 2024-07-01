@@ -106,6 +106,7 @@ class DispositivosViewModelTest {
 
     @Test
     fun `onEvent Search calls search`() = runTest {
+
         
     }
 

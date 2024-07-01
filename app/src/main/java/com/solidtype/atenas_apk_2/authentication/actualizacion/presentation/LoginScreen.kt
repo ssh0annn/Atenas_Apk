@@ -82,8 +82,12 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
 
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
     else painterResource(id = R.drawable.ic_visibility_true)
+    if(!uiState.razones.isNullOrEmpty()){
+       Toast.makeText(context, "${uiState.razones}", Toast.LENGTH_LONG).show()
+        viewModel.limpiaRazones()
+    }
 
-    if (!uiState.network) Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
+   // if (!uiState.network) Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
 
     if (uiState.isAutenticated != null) {
         TipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
@@ -95,14 +99,11 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                     navController.navigate(Screens.PerfilAdmin.route)
                 }
             }
-            TipoUser.TECNICO -> navController.navigate(Screens.Home.route + "/Técnico") //VentaScreen(navController)
-            TipoUser.VENDEDOR -> navController.navigate(Screens.Home.route + "/Vendedor") //VentaScreen(navController)
-            TipoUser.UNKNOWN ->
-                Toast.makeText(
-                    context,
-                    "Usuario Desconocido. Intente volver a logearse.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            TipoUser.TECNICO ->navController.navigate(Screens.Home.route + "/Técnico")//VentaScreen(navController)
+            TipoUser.VENDEDOR -> navController.navigate(Screens.Home.route + "/Vendedor")//VentaScreen(navController)
+            else ->{}
+
+
         }
     }
     if (uiState.isLoading) {
