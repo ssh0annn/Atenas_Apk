@@ -55,7 +55,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class,
     InternalCoroutinesApi::class, InternalCoroutinesApi::class
 )
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
@@ -64,7 +65,7 @@ fun ClienteScreen(
     navController: NavController,
     viewModel: ClientesViewModel = hiltViewModel()
 
-    ){
+) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -86,9 +87,9 @@ fun ClienteScreen(
 
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
 
-    if(Busqueda.value.isNotBlank()) {
+    if (Busqueda.value.isNotBlank()) {
         viewModel.onUserEvent(ClienteEvent.BuscarClientes(Busqueda.value))
-    }else{
+    } else {
         viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
     }
 
@@ -99,7 +100,7 @@ fun ClienteScreen(
             .fillMaxSize()
             .background(GrisClaro),
         horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -108,10 +109,10 @@ fun ClienteScreen(
             Column {
                 Titulo("Clientes", Icons.AutoMirrored.Outlined.FactCheck)
 
-                Box (
+                Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd
-                ){
+                ) {
                     Buscador(busqueda = Busqueda.value) {
                         Busqueda.value = it
                     }
@@ -119,13 +120,24 @@ fun ClienteScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                TableClients(uiState.clientes, mostrarDialogo, editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar,idCliente)
+                TableClients(
+                    uiState.clientes,
+                    mostrarDialogo,
+                    editar,
+                    nombre,
+                    Tipodocumento,
+                    Numdocumento,
+                    Email,
+                    Telefono,
+                    mostrarConfirmar,
+                    idCliente
+                )
 
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    Boton("Agregar"){
+                    Boton("Agregar") {
                         mostrarDialogo.value = true
                         editar.value = false
 
@@ -143,14 +155,19 @@ fun ClienteScreen(
             }
         }
     }
-    Dialogo(max = false,titulo = if (editar.value)  "Editar Cliente" else  "Nuevo Cliente", mostrar = mostrarDialogo.value, onCerrarDialogo = { mostrarDialogo.value = false }, clickable = true) {
+    Dialogo(
+        max = false,
+        titulo = if (editar.value) "Editar Cliente" else "Nuevo Cliente",
+        mostrar = mostrarDialogo.value,
+        onCerrarDialogo = { mostrarDialogo.value = false },
+        clickable = true
+    ) {
         Column(
             modifier = Modifier
                 .background(Color(0xFFEEEEEE), RoundedCornerShape(20.dp))
                 .width(400.dp)
                 .height(300.dp)
-                .padding(10.dp)
-            ,
+                .padding(10.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -165,11 +182,11 @@ fun ClienteScreen(
 
                 InputDetalle(
 
-                        label = "Nombre",
-                        valor = nombre.value,
-                    ) {
-                        nombre.value = it
-                    }
+                    label = "Nombre",
+                    valor = nombre.value,
+                ) {
+                    nombre.value = it
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 InputDetalle(
@@ -184,24 +201,25 @@ fun ClienteScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
                 InputDetalle(
-                        label = "Email",
-                        valor = Email.value,
-                    ) {
-                        Email.value = it
-                    }
+                    label = "Email",
+                    valor = Email.value,
+                ) {
+                    Email.value = it
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 InputDetalle(
-                        label = "Telefono",
-                        valor = Telefono.value,
-                    ) {
-                        Telefono.value = it
-                    }
+                    label = "Telefono",
+                    valor = Telefono.value,
+                ) {
+                    Telefono.value = it
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                val camposCompletos = nombre.value.isNotEmpty() && Numdocumento.value.isNotEmpty() && Email.value.isNotEmpty() && Telefono.value.isNotEmpty()
+                val camposCompletos =
+                    nombre.value.isNotEmpty() && Numdocumento.value.isNotEmpty() && Email.value.isNotEmpty() && Telefono.value.isNotEmpty()
 
 
                 if (editar.value)
@@ -223,40 +241,45 @@ fun ClienteScreen(
                                 )
                             )
                             mostrarDialogo.value = false
-                            Toast.makeText(context, "El cliente editado con exito", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "El cliente editado con exito",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-                        }catch (e: Exception) {
+                        } catch (e: Exception) {
                             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
 
                     }
                 else
-                Boton("Agregar", habilitar = camposCompletos) {
-                    try {
-                        if (!camposCompletos) {
-                            throw Exception("Campos vacios.")
-                        }
-                        viewModel.onUserEvent(
-                            ClienteEvent.AgregarClientes(
-                                Personastodas.ClienteUI(
-                                    0,
-                                    nombre.value,
-                                    Numdocumento.value,
-                                    Email.value,
-                                    Telefono.value
+                    Boton("Agregar", habilitar = camposCompletos) {
+                        try {
+                            if (!camposCompletos) {
+                                throw Exception("Campos vacios.")
+                            }
+                            viewModel.onUserEvent(
+                                ClienteEvent.AgregarClientes(
+                                    Personastodas.ClienteUI(
+                                        id_cliente = 0,
+                                        nombre = nombre.value,
+                                        documento = Numdocumento.value,
+                                        telefono = Telefono.value,
+                                        email = Email.value//OJO Estabas pasando el telefono donde iva el emial
+
+                                    )
                                 )
                             )
-                        )
 
-                        nombre.value = ""
-                        Numdocumento.value = ""
-                        Email.value = ""
-                        Telefono.value = ""
-                    } catch (e: Exception) {
-                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                            nombre.value = ""
+                            Numdocumento.value = ""
+                            Email.value = ""
+                            Telefono.value = ""
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        }
+
                     }
-
-                }
 
             }
         }
@@ -290,17 +313,17 @@ fun ClienteScreen(
                     try {
                         mostrarConfirmar.value = false
 
-                            viewModel.onUserEvent(
-                                ClienteEvent.BorrarClientes(
-                                    Personastodas.ClienteUI(
-                                        idCliente.value.toLong(),
-                                        nombre.value,
-                                        Numdocumento.value,
-                                        Email.value,
-                                        Telefono.value
-                                    )
+                        viewModel.onUserEvent(
+                            ClienteEvent.BorrarClientes(
+                                Personastodas.ClienteUI(
+                                    idCliente.value.toLong(),
+                                    nombre.value,
+                                    Numdocumento.value,
+                                    Email.value,
+                                    Telefono.value
                                 )
                             )
+                        )
                         Toast.makeText(
                             context,
                             "Se eliminó el cliente",

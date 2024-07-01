@@ -67,7 +67,7 @@ class PersonaBuilder: Builder {
         this.direccion = null
         this.telefono = null
         this.email = null
-        this.estado = false
+        this.estado = true
 
         return this
 

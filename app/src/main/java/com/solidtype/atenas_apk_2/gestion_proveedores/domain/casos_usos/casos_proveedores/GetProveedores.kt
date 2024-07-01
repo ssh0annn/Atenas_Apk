@@ -12,7 +12,7 @@ class GetProveedores @Inject constructor(private val repo: ClienteProveedorRepos
     operator fun invoke() : Flow<List<Personastodas.Proveedor>> {
         return repo.getPersonas("proveedor").map {
             proveedores ->
-            proveedores.map { proveedor -> proveedor.toProveedor() }
+            proveedores.filter { it.estado == true }.map { proveedor -> proveedor.toProveedor() }
         }
     }
 }
