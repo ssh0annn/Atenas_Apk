@@ -126,7 +126,8 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
             )
         }
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ){
             Titulo(text = "No hay datos de Administrador")
         }

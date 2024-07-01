@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
@@ -50,7 +52,10 @@ fun Detalles(
     idProveedor: MutableState<String>,
     impuesto: MutableState<String>,
     estado: MutableState<String>,
-    context: Context
+    context: Context,
+    provider: MutableState<String>,
+    listProvider: List<Personastodas.Proveedor>,
+    listEstados: List<String>
 ) {
     Column(
         modifier = Modifier
@@ -111,11 +116,23 @@ fun Detalles(
                         InputDetalle(
                             "Descripción", descripcion.value
                         ) { descripcion.value = it }
+                        AutocompleteSelect(
+                            "Proveedores",
+                            provider.value,
+                            listProvider.map { it.nombre!! },
+                        ) {
+                            provider.value = it
+                            if(provider.value != "")
+                                idProveedor.value = listProvider.find { it.nombre == provider.value }!!.id_proveedor.toString()
+                        }
                         InputDetalle("Costo", costo.value) {
                             costo.value = it
                         }
                         InputDetalle("Precio de Venta", precio.value) {
                             precio.value = it
+                        }
+                        InputDetalle("Impuesto", impuesto.value) {
+                            impuesto.value = it
                         }
                         InputDetalle("Modelo", modelo.value) {
                             modelo.value = it
@@ -125,6 +142,9 @@ fun Detalles(
                         }
                         InputDetalle("Cantidad", cantidad.value) {
                             cantidad.value = it
+                        }
+                        AutocompleteSelect("Estado", estado.value,  listEstados) {
+                            estado.value = it
                         }
                     }
                 }
@@ -197,6 +217,18 @@ fun Detalles(
                                 )
                             )
                         )
+                        idInventario.value = ""
+                        idCatalogo.value = ""
+                        idProveedor.value = ""
+                        nombre.value = ""
+                        marca.value = ""
+                        modelo.value = ""
+                        cantidad.value = ""
+                        costo.value = ""
+                        precio.value = ""
+                        impuesto.value = ""
+                        descripcion.value = ""
+                        estado.value = ""
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
@@ -204,6 +236,7 @@ fun Detalles(
                             Toast.LENGTH_LONG
                         )
                             .show()
+                        Log.e("ErrorInventario", "Error: ${e.message}, Causa: ${e.cause}")
                     }
                 })
             }
