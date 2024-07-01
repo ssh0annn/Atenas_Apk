@@ -21,19 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AreaVentas
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AvatarConBotones
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.DatePickerDialogoSimple
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Inputs
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Tabla
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 
 @Composable
-fun ticketSeen(viewModel: TicketViewModel = hiltViewModel()){
+fun ticketScreen(navController: NavController,
+                 viewModel: TicketViewModel = hiltViewModel()){
     val busqueda = rememberSaveable { mutableStateOf("") }
 
     val rol = rememberSaveable { mutableStateOf("") }
@@ -79,5 +73,5 @@ fun ticketSeen(viewModel: TicketViewModel = hiltViewModel()){
         }
 
     }
-
+MenuLateral(navController )
 }
