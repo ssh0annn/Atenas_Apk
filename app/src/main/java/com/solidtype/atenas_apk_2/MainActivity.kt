@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2
 
-
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -11,26 +10,20 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewmodel by viewModels<InventarioViewModel>()
 
-
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-
         setContent {
              Navigation()
 
-
         }
     }
-
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,18 +50,16 @@ class MainActivity : ComponentActivity() {
         return if (uri.scheme != "file") {
             uri.path
         } else {
-
             null
         }
     }
-    private  fun mierda(){
+
+    private fun mierda() {
         ActivityCompat.startActivityForResult(
-            this ,
+            this,
             Intent(this, BluetoothScanner::class.java),
             5,
             null
         )
     }
-
 }
-

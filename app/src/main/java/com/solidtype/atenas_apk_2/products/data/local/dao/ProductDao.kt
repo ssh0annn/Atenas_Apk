@@ -8,10 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
-import com.solidtype.atenas_apk_2.products.domain.userCases.getProductosByCodigo
 import kotlinx.coroutines.flow.Flow
-import java.util.Objects
 
 @Dao
 interface ProductDao {

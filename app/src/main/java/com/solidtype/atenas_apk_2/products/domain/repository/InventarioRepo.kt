@@ -2,8 +2,6 @@ package com.solidtype.atenas_apk_2.products.domain.repository
 
 
 import android.net.Uri
-import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import kotlinx.coroutines.flow.Flow

@@ -26,6 +26,7 @@ import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrad
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
@@ -142,8 +143,13 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     }
                 }
             )
-            MenuLateral(navController)
         }
-
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            Titulo(text = "No hay datos de Administrador")
+        }
+        MenuLateral(navController)
     }
 }
