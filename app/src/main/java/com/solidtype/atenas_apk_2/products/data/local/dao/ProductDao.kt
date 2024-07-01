@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.DataProductos
@@ -48,7 +49,9 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(product: ProductEntity)
 
-    @Delete
-    fun deleteProduct(codigo: ProductEntity)
+    @Transaction
+    fun deleteProduct(codigo: ProductEntity){
+
+    }
 
 }

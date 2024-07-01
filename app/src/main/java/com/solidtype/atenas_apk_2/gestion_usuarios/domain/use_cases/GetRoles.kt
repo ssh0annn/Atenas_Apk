@@ -7,5 +7,6 @@ import javax.inject.Inject
 
 class GetRoles @Inject constructor(private val repo: GestionUserRepository) {
 
-    operator fun invoke() = repo.getRolesUsuarios()
+
+    operator fun invoke() = repo.getRolesUsuarios().map { data -> data.filter { it.estado } }
 }

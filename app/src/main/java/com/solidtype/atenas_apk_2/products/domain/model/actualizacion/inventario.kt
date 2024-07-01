@@ -26,5 +26,5 @@ data class inventario (
     val precio_venta :Double,
     val impuesto : Double,
     val descripcion :String?,
-    @ColumnInfo(defaultValue = "true") val estado :Boolean
+    @ColumnInfo(defaultValue = "true") var estado :Boolean
 )

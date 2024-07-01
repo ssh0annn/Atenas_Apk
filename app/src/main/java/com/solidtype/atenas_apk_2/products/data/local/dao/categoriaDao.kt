@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,9 @@ interface categoriaDao {
     fun buscarCategorias(catego:String):Flow<List<categoria>>
     @Update
     suspend fun updateCategoria(categoria: categoria)
-    @Delete
-    suspend fun deleteCategoria(categoria: categoria)
+    @Transaction
+    suspend fun deleteCategoria(categoria: categoria){
+        categoria.estado = false
+        updateCategoria(categoria)
+    }
 }
