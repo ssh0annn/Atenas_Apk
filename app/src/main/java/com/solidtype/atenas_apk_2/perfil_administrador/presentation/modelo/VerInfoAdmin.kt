@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo
 
-import androidx.room.ColumnInfo
 import java.time.LocalDate
 
 data class VerInfoAdmin(
