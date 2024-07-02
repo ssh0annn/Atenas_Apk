@@ -170,7 +170,7 @@ class InventarioViewModel @Inject constructor(
                 println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
                     uiState.update {
-                        it.copy(uriPath = path.path.toString())
+                        it.copy(uriPath = path)
                     }
                 }
             }

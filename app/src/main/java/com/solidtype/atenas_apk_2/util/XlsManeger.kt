@@ -3,8 +3,10 @@ package com.solidtype.atenas_apk_2.util
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.poi.ss.usermodel.CellBase
@@ -17,49 +19,50 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-class XlsManeger @Inject constructor(private val context : Context) {
+class XlsManeger @Inject constructor(@ApplicationContext private val context : Context) {
 
-    fun crearXls(nombreArchivo:String, nombreColumnas:List<String>, datos:MutableList<List<String>>):Uri {
-        val wb=XSSFWorkbook()
+    fun crearXls(nombreArchivo: String, nombreColumnas: List<String>, datos: MutableList<List<String>>): Uri {
+        val wb = XSSFWorkbook()
         println("Entramos en CrearXLS del XLS Maneger")
-        
 
-       try {
-             val wbsheet= wb.createSheet()
-             val filaParaNombre =   wbsheet.createRow(0)// lo mismo de abajo donde dice ojo
-               for((column, name) in nombreColumnas.withIndex()){//nombro las columnas principales
-                   filaParaNombre.createCell(column).setCellValue(name)
+        try {
+            val wbsheet = wb.createSheet()
+            val filaParaNombre = wbsheet.createRow(0)
 
+            for ((column, name) in nombreColumnas.withIndex()) {
+                filaParaNombre.createCell(column).setCellValue(name)
             }
 
-            for ((fila, dato) in datos.withIndex()){ //relleno el cuerpo con los datos.
-                val filaparaDatos=wbsheet.createRow(fila+1)//OJO: crear el row debe ser fuera del bucle de las celdas
-                for((column, name) in dato.withIndex()){
+            for ((fila, dato) in datos.withIndex()) {
+                val filaparaDatos = wbsheet.createRow(fila + 1)
+                for ((column, name) in dato.withIndex()) {
                     filaparaDatos.createCell(column).setCellValue(name)
-
                 }
             }
-            val external = Environment.getExternalStorageDirectory().path + File.separator + "Documents"
-            println("Este es el external $external")
-            val path =  external+ File.separator + nombreArchivo + ".xlsx"
-            val archivo = File(external)
-            if(!archivo.exists()){
-                archivo.mkdir()
-                println("Se debe crear el archivo o la direccion")
-            }
-            val uri  = path
 
-           val fileou = FileOutputStream(uri)
+            val archivo = File(context.filesDir, "docs")
+            if (!archivo.exists()) {
+                archivo.mkdir()
+                println("Se debe crear el archivo o la dirección")
+            }
+
+            val path = File(archivo, "$nombreArchivo.xlsx")
+            val fileou = FileOutputStream(path)
 
             wb.write(fileou)
+            fileou.close()
+            wb.close()
+
+            // Obtener URI utilizando FileProvider
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", path)
             println("Todo parece salir bien")
-           return uri.toUri()
-        }catch (e:Exception){
+            return uri
+        } catch (e: Exception) {
             println("Error en XlsManeger : $e")
-        }finally {
+        } finally {
             wb.close()
         }
-       return Uri.EMPTY
+        return Uri.EMPTY
     }
 
     suspend fun importarXlsx(path:Uri) = withContext(Dispatchers.IO){
