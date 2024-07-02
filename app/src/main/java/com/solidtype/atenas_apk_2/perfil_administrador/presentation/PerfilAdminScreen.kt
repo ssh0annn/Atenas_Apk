@@ -124,7 +124,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
 
                 }
             )
-        }
+        } else
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
