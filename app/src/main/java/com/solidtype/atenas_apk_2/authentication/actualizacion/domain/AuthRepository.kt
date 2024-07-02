@@ -7,4 +7,10 @@ interface AuthRepository {
     suspend fun signing(user:String, password:String, systemID:String, licencia:String): CheckListAuth
     suspend fun signout()
     suspend fun isAutenticated(): Usuario
+    suspend fun cambiarPassword(email: String, oldPassword: String, newPassworld: String):Boolean
+    suspend fun olvideMiPassword(email: String): Boolean
+
+
+
+
 }

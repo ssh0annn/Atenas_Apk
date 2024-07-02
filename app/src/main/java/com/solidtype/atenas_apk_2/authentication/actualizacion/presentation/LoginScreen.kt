@@ -70,7 +70,8 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
 
     val uiState by viewModel.uiStates.collectAsStateWithLifecycle()
 
-    val email = rememberSaveable { mutableStateOf(if (!uiState.correoGuardado.isNullOrEmpty()) uiState.correoGuardado!! else "") }
+    val email =
+        rememberSaveable { mutableStateOf(if (!uiState.correoGuardado.isNullOrEmpty()) uiState.correoGuardado!! else "") }
     val pass = rememberSaveable { mutableStateOf("") }
     val licencia = rememberSaveable { mutableStateOf("") }
 
@@ -80,19 +81,17 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
     else painterResource(id = R.drawable.ic_visibility_true)
 
-    if (!uiState.network) Toast.makeText(context, "No hay red", Toast.LENGTH_SHORT).show()
+    if (!uiState.razones.isNullOrEmpty()) {
+        Toast.makeText(context, "${uiState.razones}", Toast.LENGTH_LONG).show()
+        viewModel.limpiaRazones()
+    }
 
     if (uiState.isAutenticated != null) {
         TipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
             TipoUser.ADMIN -> navController.navigate(Screens.PerfilAdmin.route)
             TipoUser.TECNICO, TipoUser.VENDEDOR -> navController.navigate(Screens.Ventas.route)
-            TipoUser.UNKNOWN ->
-                Toast.makeText(
-                    context,
-                    "Usuario Desconocido. Intente volver a logearse.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            else -> {}
         }
     }
     if (uiState.isLoading) {
@@ -210,7 +209,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                     visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
-                if(!uiState.licenciaGuardada)
+                if (!uiState.licenciaGuardada)
                     TextField(
                         value = licencia.value,
                         onValueChange = { licencia.value = it },
@@ -265,11 +264,17 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 }
                 Button(
                     onClick = {
-                        when(uiState.licenciaGuardada){
+                        when (uiState.licenciaGuardada) {
                             true -> viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value))
-                            false -> viewModel.onEvent(AuthEvent.LoginEvent(email.value, pass.value, licencia.value))
+                            false -> viewModel.onEvent(
+                                AuthEvent.LoginEvent(
+                                    email.value,
+                                    pass.value,
+                                    licencia.value
+                                )
+                            )
                         }
-                        if(checked.value) viewModel.onEvent(AuthEvent.Recuerdame(email.value))
+                        if (checked.value) viewModel.onEvent(AuthEvent.Recuerdame(email.value))
                         else viewModel.onEvent(AuthEvent.EliminarRecuerdos)
                     },
                     shape = RoundedCornerShape(25.dp),

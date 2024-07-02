@@ -6,5 +6,7 @@ import kotlinx.coroutines.flow.Flow
 data class PerfilUIState(
     val perfilAdmin: List<VerInfoAdmin?> = emptyList(),
     val error:String? = "",
-    val isLoading:Boolean = false
+    val isLoading:Boolean = false,
+    val passwordState:String ="",
+    val isClaveCambiada:Boolean = false
 )
