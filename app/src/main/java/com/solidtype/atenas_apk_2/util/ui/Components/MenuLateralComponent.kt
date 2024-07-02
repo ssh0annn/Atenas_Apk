@@ -41,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
-import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -108,89 +107,88 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             Titulo("Menú", Icons.Outlined.Inventory2)
                         }
 
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Boton(
+                            "Servicios",
+                            anchoTotal = true,
+                            //Si la pantalla actual es diferente a la pantalla de Servicios
+                            habilitar = navController.currentDestination?.route != Screens.Servicio.route
+                        ) {
+                            mostrarMenu.value = false
+                            navController.navigate(Screens.Servicio.route)
+                        }
+                        Boton(
+                            "Ventas",
+                            anchoTotal = true,
+                            habilitar = navController.currentDestination?.route != Screens.Ventas.route
+                        ) {
+                            mostrarMenu.value = false
+                            navController.navigate(Screens.Ventas.route)
+                        }
+                        Boton(
+                            "Vista de Tickets",
+                            anchoTotal = true,
+                            habilitar = navController.currentDestination?.route != Screens.VistaTicket.route
+                        ) {
+                            mostrarMenu.value = false
+                            navController.navigate(Screens.VistaTicket.route)
+                        }
+
                         if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
-                            Spacer(modifier = Modifier.height(20.dp))
                             Boton(
                                 "Inventario",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.Productos.route
+                                habilitar = navController.currentDestination?.route != Screens.Productos.route
                             ) {
-                                NavigationSingleton.screen = Screens.Productos.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.Productos.route)
                             }
                             Boton(
                                 "Historial",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.HistorialVentasTickets.route
+                                habilitar = navController.currentDestination?.route != Screens.HistorialVentasTickets.route
                             ) {
-                                NavigationSingleton.screen = Screens.HistorialVentasTickets.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.HistorialVentasTickets.route)
                             }
                             Boton(
                                 "Facturas",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.Factura.route
+                                habilitar = navController.currentDestination?.route != Screens.Factura.route
                             ) {
-                                NavigationSingleton.screen = Screens.Factura.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.Factura.route)
                             }
                             Boton(
                                 "Gestion de Usuarios",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.GestionUsuarios.route
+                                habilitar = navController.currentDestination?.route != Screens.GestionUsuarios.route
                             ) {
-                                NavigationSingleton.screen = Screens.GestionUsuarios.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionUsuarios.route)
                             }
-                            //Este botón es especial
                             Boton(
                                 "Configuración del Perfil",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.PerfilAdmin.route
-                            ) {
-                                NavigationSingleton.screen = Screens.PerfilAdmin.route
-                                mostrarMenu.value = false
+                                habilitar = navController.currentDestination?.route != Screens.PerfilAdmin.route
+                            ) {mostrarMenu.value = false
                                 navController.navigate(Screens.PerfilAdmin.route)
                             }
                             Boton(
                                 "Gestion de Clientes",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.GestionCliente.route
+                                habilitar = navController.currentDestination?.route != Screens.GestionCliente.route
                             ) {
-                                NavigationSingleton.screen = Screens.GestionCliente.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionCliente.route)
                             }
                             Boton(
                                 "Gestion de Proveedores",
                                 anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.GestionProveedores.route
+                                habilitar = navController.currentDestination?.route != Screens.GestionProveedores.route
                             ) {
-                                NavigationSingleton.screen = Screens.GestionProveedores.route
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionProveedores.route)
-                            }
-                            Boton(
-                                "Servicios",
-                                anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.Servicio.route
-                            ) {
-                                NavigationSingleton.screen = Screens.Servicio.route
-                                mostrarMenu.value = false
-                                navController.navigate(Screens.Servicio.route)
-                            }
-                            Boton(
-                                "Vista de Tickets",
-                                anchoTotal = true,
-                                habilitar = NavigationSingleton.screen != Screens.VistaTicket.route
-                            ) {
-                                NavigationSingleton.screen = Screens.VistaTicket.route
-                                mostrarMenu.value = false
-                                navController.navigate(Screens.VistaTicket.route)
                             }
                         }
                     }
@@ -211,7 +209,6 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .clickable {
-                                    NavigationSingleton.screen = ""
                                     navController.popBackStack()
                                     navController.navigate(Screens.Login.route)
                                     viewModel.onEvent()
