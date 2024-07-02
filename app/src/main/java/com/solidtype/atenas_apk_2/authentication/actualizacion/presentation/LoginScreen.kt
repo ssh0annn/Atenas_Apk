@@ -53,7 +53,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -78,8 +77,6 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     val checked = rememberSaveable { mutableStateOf(!uiState.correoGuardado.isNullOrEmpty()) }
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
 
-    val startedAdmin = rememberSaveable { mutableStateOf(false) }
-
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
     else painterResource(id = R.drawable.ic_visibility_true)
 
@@ -88,15 +85,8 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     if (uiState.isAutenticated != null) {
         TipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
-            TipoUser.ADMIN -> {
-                if (!startedAdmin.value) { //evita que se abra la pantalla de perfilAdmin varias veces
-                    //navController.navigate(Screens.Home.route + "/Administrador") //PerfilAdmin(navController)
-                    NavigationSingleton.screen = Screens.PerfilAdmin.route
-                    navController.navigate(Screens.PerfilAdmin.route)
-                }
-            }
-            TipoUser.TECNICO -> navController.navigate(Screens.Home.route + "/Técnico") //VentaScreen(navController)
-            TipoUser.VENDEDOR -> navController.navigate(Screens.Home.route + "/Vendedor") //VentaScreen(navController)
+            TipoUser.ADMIN -> navController.navigate(Screens.PerfilAdmin.route)
+            TipoUser.TECNICO, TipoUser.VENDEDOR -> navController.navigate(Screens.Ventas.route)
             TipoUser.UNKNOWN ->
                 Toast.makeText(
                     context,
