@@ -18,6 +18,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
+import java.math.RoundingMode
 import javax.inject.Inject
 
 class InventarioRepoImpl @Inject constructor(
@@ -63,35 +65,34 @@ class InventarioRepoImpl @Inject constructor(
         withContext(Dispatchers.Default) {
 
             val columnas = listOf(
-                "id_inventario",
-                "id_categoria",
-                "id_proveedor",
+                "categoria",
+                "proveedor",
                 "nombre",
                 "marca",
                 "modelo",
                 "cantidad",
                 "precio_compra",
                 "precio_venta",
+                "impuesto",
                 "descripcion",
-                "estado"
             )
             val datos: MutableList<List<String>> = mutableListOf()
 
             try {
 
                 for (i in productos) {
+
                     val rowdata = mutableListOf<String>()
-                    rowdata.add(i.id_inventario.toString())
-                    rowdata.add(i.id_categoria.toString())
-                    rowdata.add(i.id_proveedor.toString())
+                    rowdata.add(catego.getCategoriasById(i.id_categoria).nombre)
+                    rowdata.add(proDao.getPersonasById(i.id_proveedor!!).nombre!!)
                     rowdata.add(i.nombre)
+                    rowdata.add(i.marca ?: "")
                     rowdata.add(i.modelo.toString())
                     rowdata.add(i.cantidad.toString())
                     rowdata.add(i.precio_compra.toString())
                     rowdata.add(i.precio_venta.toString())
+                    rowdata.add(i.impuesto.toString())
                     rowdata.add(i.descripcion.toString())
-                    rowdata.add(i.estado.toString())
-
                     datos.add(rowdata)
                 }
 
@@ -197,9 +198,9 @@ class InventarioRepoImpl @Inject constructor(
                                     marca = i[3],
                                     modelo = i[4],
                                     cantidad = i[5].toInt(),
-                                    precio_compra = i[6].toDouble(),
-                                    precio_venta = i[7].toDouble(),
-                                    impuesto = i[8].toDouble(),
+                                    precio_compra = i[6].toPreciseDouble(),
+                                    precio_venta = i[7].toPreciseDouble(),
+                                    impuesto = i[8].toPreciseDouble(),
                                     descripcion = i[9],
                                     estado = true
                                 )
@@ -275,4 +276,13 @@ private fun validarNombresColumnas(columnas: List<String?>): Boolean {
 
     return false
 
+}
+
+//Magia
+fun String.toPreciseDouble(): Double {
+    return try {
+        BigDecimal(this).setScale(2, RoundingMode.HALF_UP).toDouble()
+    } catch (e: NumberFormatException) {
+        0.0
+    }
 }

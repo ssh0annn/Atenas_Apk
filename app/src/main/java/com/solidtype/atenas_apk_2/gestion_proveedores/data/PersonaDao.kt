@@ -32,7 +32,7 @@ interface personaDao {
     fun getPersonasTipo(tipo:String, any:String): Flow<List<persona>>
 
     @Query("select * from persona where id_persona ==:id")
-    suspend fun getPersonasById(id :Int): persona
+    suspend fun getPersonasById(id :Long): persona
     @Update
     suspend fun updatePersona(persona: persona)
     @Transaction
