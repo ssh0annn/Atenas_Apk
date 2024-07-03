@@ -11,11 +11,11 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
     ForeignKey(entity = categoria::class, parentColumns = ["id_categoria"], childColumns = ["id_categoria"], onDelete = ForeignKey.CASCADE),
     ForeignKey(entity = persona::class, parentColumns = ["id_persona"], childColumns = ["id_proveedor"], onDelete = ForeignKey.CASCADE)
 ], indices = [
-    Index(value = ["id_categoria"], unique = true),
-    Index(value = ["id_proveedor"], unique = true)
+    Index(value = ["id_categoria"], unique = false),
+    Index(value = ["id_proveedor"], unique = false)
 ])
 data class inventario (
-    @PrimaryKey(autoGenerate = true) val id_inventario :Long = 7000,
+    @PrimaryKey(autoGenerate = true) val id_inventario :Long? = null,
     val id_categoria :Long,
     val id_proveedor :Long?,
     val nombre :String,

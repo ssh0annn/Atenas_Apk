@@ -14,7 +14,7 @@ data class ProductosViewStates(
     val pathExcel: String? = "",
     val userMessages: List<Message> = listOf(),
     val uriPath: Uri? = null,
-    val errorMessages: String = "",
+    val messages: String = "",
     val categoria:List<categoria> = emptyList(),
     val proveedores:List<Personastodas.Proveedor> = emptyList()
 

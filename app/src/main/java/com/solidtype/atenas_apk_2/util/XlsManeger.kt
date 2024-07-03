@@ -73,8 +73,6 @@ class XlsManeger @Inject constructor(@ApplicationContext private val context : C
         val wbs= wrb.getSheetAt(0)
         val data:MutableList<List<String>> = mutableListOf()
        try {
-
-
         for( row in wbs){
             val rowdata:MutableList<String> = mutableListOf()
             for( cell in row){
@@ -113,7 +111,5 @@ class XlsManeger @Inject constructor(@ApplicationContext private val context : C
 private fun Double.isInt(): Boolean {
     return this == this.toInt().toDouble()
 }
-
-
 
 }
