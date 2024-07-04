@@ -1,6 +1,5 @@
-package com.solidtype.atenas_apk_2.servicios
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,16 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.TaskAlt
-import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,21 +25,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.facturacion.presentation.Factura
-import com.solidtype.atenas_apk_2.facturacion.presentation.sumaTotal
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.TicketVista
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
-import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoParaUser
 
 @Composable
 fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
@@ -113,6 +97,7 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(40.dp)
+                                .padding(3.dp)
                                 .clip(RoundedCornerShape(50.dp))
                                 .background(Blanco),
                             verticalAlignment = Alignment.CenterVertically

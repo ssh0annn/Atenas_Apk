@@ -51,7 +51,7 @@ class HistorailViewModel @Inject constructor(
 
                 withContext(Dispatchers.IO) {
                     uiState.update {
-                        it.copy(uriPath = corr.path.toString())
+                        it.copy(uriPath = corr)
                     }
                 }
             }

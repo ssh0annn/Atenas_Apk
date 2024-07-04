@@ -17,5 +17,5 @@ data class usuario (
     val email :String,
     val clave :String,
     val telefono :String,
-    @ColumnInfo(defaultValue = "true") val estado :Boolean
+    @ColumnInfo(defaultValue = "true") var estado :Boolean
 )

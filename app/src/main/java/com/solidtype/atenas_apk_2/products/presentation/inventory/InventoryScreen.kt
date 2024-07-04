@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
@@ -57,7 +59,10 @@ fun InventoryScreen(
     val busqueda = rememberSaveable { mutableStateOf("") }
     val mostrar = rememberSaveable { mutableStateOf(false) }
 
-    if (busqueda.value.isNotBlank()) viewModel.buscarProductos(busqueda.value) else viewModel.mostrarProductos()
+    if (busqueda.value.isNotBlank())
+        viewModel.onEvent(InventariosEvent.BuscarProducto(busqueda.value))
+    else
+        viewModel.onEvent(InventariosEvent.GetProductos)
 
     if (uiState.pathExcel!!.isNotBlank()) Toast.makeText(
         context,
@@ -78,6 +83,7 @@ fun InventoryScreen(
     val cantidad = rememberSaveable { mutableStateOf("") }
     val impuesto = rememberSaveable { mutableStateOf("") }
     val estado = rememberSaveable { mutableStateOf("") }
+    val provider = rememberSaveable { mutableStateOf("") }
 
     val showSnackbar = rememberSaveable { mutableStateOf(false) }
 
@@ -86,15 +92,12 @@ fun InventoryScreen(
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    val categoriaList = listOf(
-        "Accesorios",
-        "Celulares",
-        "Laptops",
-        "Tablets",
-        "Otros"
-    )//Esto debería venir del ViewModel
+    val listEstados = listOf("Activo", "No Activo")
 
-    if (false) {
+    if(uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
+    if(uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
+
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
@@ -153,7 +156,7 @@ fun InventoryScreen(
                     Detalles(
                         viewModel,
                         categoria,
-                        categoriaList,
+                        uiState.categoria,
                         nombre,
                         idInventario,
                         descripcion,
@@ -166,7 +169,10 @@ fun InventoryScreen(
                         idProveedor,
                         impuesto,
                         estado,
-                        context
+                        context,
+                        provider,
+                        uiState.proveedores,
+                        listEstados
                     )
                 }
                 AvatarConBotones(context, viewModel, showSnackbarIni, mostrar)

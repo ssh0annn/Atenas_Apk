@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import kotlinx.coroutines.flow.Flow
@@ -23,8 +24,11 @@ interface usuarioDao {
     suspend fun getUsuariosById(id :Int): usuario
     @Update
     suspend fun updateUsuario(usuario : usuario)
-    @Delete
-    suspend fun deleteUsuario(usuario : usuario)
+    @Transaction
+    suspend fun deleteUsuario(usuario : usuario){
+        usuario.estado = false
+        updateUsuario(usuario)
+    }
     @Query("""
         SELECT * FROM usuario WHERE 
             id_usuario LIKE '%' || :any ||   '%' OR 

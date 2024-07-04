@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +42,9 @@ interface inventarioDao {
 
     @Update
     suspend fun updateInventario(inventario: inventario)
-    @Delete
-    suspend fun deleteInventario(inventario: inventario)
+    @Transaction
+    suspend fun deleteInventario(inventario: inventario){
+        inventario.estado = false
+        updateInventario(inventario)
+    }
 }

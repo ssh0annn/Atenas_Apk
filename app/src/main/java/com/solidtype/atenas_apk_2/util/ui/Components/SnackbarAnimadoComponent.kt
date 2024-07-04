@@ -27,7 +27,7 @@ import com.solidtype.atenas_apk_2.ui.theme.VerdePalido
 fun SnackbarAnimado(
     showSnackbar: Boolean,
     // uiState: HistorialUIState o ProductosViewStates
-    uriPath: String,
+    uriPath: Uri?,
     context: Context
 ) {
     AnimatedVisibility(
@@ -43,10 +43,10 @@ fun SnackbarAnimado(
         ) {
             Snackbar(
                 action = {
-                    if (uriPath.isNotBlank()) {
+                    if (uriPath != null) {
                         Row {
                             BotonBlanco("Compartir") {
-                                val fileUri = Uri.parse(uriPath)
+                                val fileUri =uriPath
                                 val shareIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_SEND
                                     putExtra(Intent.EXTRA_STREAM, fileUri)
@@ -59,7 +59,7 @@ fun SnackbarAnimado(
                             }
                             Spacer(modifier = Modifier.width(10.dp))
                             BotonBlanco("Ver") {
-                                val fileUri = Uri.parse(uriPath)
+                                val fileUri = uriPath
                                 val openIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_VIEW
                                     setDataAndType(
@@ -86,8 +86,8 @@ fun SnackbarAnimado(
                 containerColor = AzulGris
             ) {
                 Text(
-                    text = if (uriPath.isNotBlank()) "El archivo se guardó en: $uriPath" else "Hubo un error al exportar",
-                    color = if (uriPath.isNotBlank()) VerdePalido else RojoPalido
+                    text = if (uriPath != null) "El archivo se guardó en: ${uriPath}" else "Hubo un error al exportar",
+                    color = if (uriPath != null) VerdePalido else RojoPalido
                 )
             }
         }
