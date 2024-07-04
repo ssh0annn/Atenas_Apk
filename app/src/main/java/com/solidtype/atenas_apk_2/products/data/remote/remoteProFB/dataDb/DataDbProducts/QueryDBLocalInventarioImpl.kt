@@ -11,82 +11,139 @@ import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 class QueryDBLocalInventarioImpl @Inject constructor(
-   private val Dao: DaoTransacciones
+    private val Dao: DaoTransacciones
 ) {
     /**
      * @return  List<MutableList<Map<String,Map<String,Any>>>>
      * @funcion: captura todos los datos de la tabla inventario y los debuelve en una lista de mapas con con mapas para la conversion a MutableList<Map<String,Map<String,Any>>>.
      */
+
     fun entityToString(dato:List<InventarioModeloRelation>):MutableList<Map<String,Map<String,Any>>>{
         val collecionTicket:MutableList<Map<String,Map<String,Any>>> = mutableListOf()
         if (dato.isNotEmpty()){
             dato.forEach {
                 collecionTicket.add(mapOf(it.inventario.id_inventario.toString() to mutableMapOf("Inventario" to it.inventario.toDataClassToMap(),
                     "Categoria" to it.categoria.toDataClassToMap(), "Persona" to it.provedor.toDataClassToMap(),)))
+
             }
         }
-        return  collecionTicket
+        return collecionTicket
     }
-
 
 
     /**
      * @return  List<InventarioModeloRelation>
      * @funcion: captura todos los datos de la tabla inventario y los debuelve en una lista de objetos InventarioModeloRelation.
      */
-    private suspend fun datosInventoryRelations():List<InventarioModeloRelation> {
+    private suspend fun datosInventoryRelations(): List<InventarioModeloRelation> {
         return coroutineScope {
-            val listInventario = async { Dao.getAllInventario()  }
+            val listInventario = async { Dao.getAllInventario() }
             return@coroutineScope listInventario.await()
         }
     }
 
     private fun listasMaptoTrasnsaccion(dataOfFirebase: MutableList<Map<String, Map<String, Any>>>): List<InventarioModeloRelation?> {
-        val listInventario: MutableList<InventarioModeloRelation?> = mutableListOf()
+        var listDatosRelacionados: MutableList<InventarioModeloRelation?> = mutableListOf()
 
-        val list = listOf("Inventario","Categoria","Persona")
+        val list: List<String> = listOf("Inventario", "Categoria", "Persona")
 
-       //primero ropo la lista
-        var contador = dataOfFirebase.size
-        while (contador > 1 ){
+
+        val listaInventarios: MutableList<inventario> = mutableListOf()
+        val listaPersona: MutableList<persona> = mutableListOf()
+        val listaCategorias: MutableList<categoria> = mutableListOf()
+
+        //primero ropo la lista
+        var contador = 0
+        while (dataOfFirebase.size > contador) {
             // agarro un mapa
             val mapa = dataOfFirebase[contador]
             //agarro una clave
-            for (llaves in mapa.keys){
-                for (i in mapa[llaves] as Map<String, Any>){
-                    //agarro el mapa de la clave
+            for (llaves in mapa.keys) {
 
-                    //identidico a que data class pertenece esa clave y ese mapa
-                    if (llaves == list[0]){
-                        println("este es un inventario ${llaves} ${i}")
-                    }else if (llaves == list[1]){
-                        println("este es una categoria ${llaves} ${i}")
+                //agarro el mapa de la clave
 
-                    }else if (llaves == list[2]){
-                        println("este es una persona ${llaves} ${i}")
+                //identidico a que data class pertenece esa clave y ese mapa
+                if (llaves == list[0]) {
+                    println("este es un inventario ${llaves} ${mapa[llaves] as Map<String, Any>}")
+                    val inventario = mapa[llaves] as Map<String, Any>
+                    val pendejo = inventario["cantidad"] as? Long
+
+
+                    if (pendejo != null) {
+                        listaInventarios.add(
+                            inventario(
+                                id_inventario = inventario["id_inventario"] as? Long ?: 0L,
+                                id_categoria = inventario["id_categoria"] as? Long ?: 0L,
+                                id_proveedor = inventario["id_proveedor"] as? Long ?: 0L,
+                                nombre = inventario["nombre"] as? String?,
+                                marca = inventario["marca"] as? String?,
+                                modelo = inventario["modelo"] as? String?,
+                                cantidad = pendejo.toInt(),
+                                precio_compra = inventario["precio_compra"] as Double,
+                                precio_venta = inventario["precio_venta"] as Double,
+                                impuesto = inventario["impuestos"] as Double,
+                                descripcion = inventario["descripcion"] as? String?,
+                                estado = inventario["estado"] as Boolean
+                            )
+                        )
                     }
 
+
+                } else if (llaves == list[1]) {
+                    println("este es una categoria ${llaves} ${mapa[llaves] as Map<String, Any>}")
+                    val catego = mapa[llaves] as Map<String, Any>
+                    listaCategorias.add(
+                        categoria(
+                            id_categoria = catego["id_categoria"] as? Long ?: 0L,
+                            nombre = catego["nombre"] as String,
+                            descripcion = catego["descripcion"] as String,
+                            estado = catego["estado"] as Boolean
+                        )
+                    )
+
+
+                } else if (llaves == list[2]) {
+                    println("este es una persona ${llaves} ${mapa[llaves] as Map<String, Any>}")
+                    val personas = mapa[llaves] as Map<String, Any>
+                    listaPersona.add(
+                        persona(
+                            id_persona = personas["id_persona"] as Long,
+                            tipo_persona = personas["tipo_persona"] as? String?,
+                            nombre = personas["nombre"] as String?,
+                            tipo_documento = personas["tipo_documento"] as? String?,
+                            documento = personas["documento"] as? String?,
+                            direccion = personas["direccion"] as? String?,
+                            telefono = personas["telefono"] as? String?,
+                            email = personas["email"] as? String?,
+                            estado = personas["estado"] as Boolean
+
+                        )
+                    )
                 }
-
             }
-
-
-
-            contador--
+            contador++
 
         }
 
-
-
-
-
-
-
-
         //una vez identificado lo tenemos que agregar en su respecrivo tipo de dato
+        println("Fuera del bucle yo impremo tres lineas ... pendejo ")
+        println("*********************************************************")
+        println("INventarios: $listaInventarios")
+        println("listaPersona: $listaPersona")
+        println("listaCategorias: $listaCategorias")
+        println("*********************************************************")
 
-
-        return listInventario
+        return listaInventarios.map{ inventario ->
+            listaCategorias.find {it.id_categoria == inventario.id_categoria}?.let {
+                listaPersona.find{ it.id_persona == inventario.id_proveedor}?.let { it1 ->
+                    InventarioModeloRelation(
+                        inventario =inventario,
+                        provedor = it1,
+                        categoria = it
+                    )
+                }
+            }
+        }.toMutableList()
     }
 
 
@@ -169,7 +226,7 @@ class QueryDBLocalInventarioImpl @Inject constructor(
 //        return listInventario
 //    }
 
-    suspend fun InsertTrassaccionInventario(dataOfFirebase: MutableList<Map<String,Map<String,Any>>>){
+    suspend fun InsertTrassaccionInventario(dataOfFirebase: MutableList<Map<String, Map<String, Any>>>) {
 
         val listInventario = listasMaptoTrasnsaccion(dataOfFirebase)
         listInventario.forEach {
@@ -184,14 +241,10 @@ class QueryDBLocalInventarioImpl @Inject constructor(
     }
 
 
-
-
-
-
 }
 
 
-fun Map<String,Any>.toPersona():persona{
+fun Map<String, Any>.toPersona(): persona {
     return persona(
         id_persona = this["id_persona"] as Long,
         direccion = this["direccion"] as String,
@@ -205,7 +258,7 @@ fun Map<String,Any>.toPersona():persona{
     )
 }
 
-fun Map<String,Any>.toCategoria():categoria{
+fun Map<String, Any>.toCategoria(): categoria {
     return categoria(
         id_categoria = this["id_categoria"] as Long,
         nombre = this["nombre"] as String,
@@ -214,7 +267,7 @@ fun Map<String,Any>.toCategoria():categoria{
     )
 }
 
-fun Map<String,Any>.toInventario():inventario?{
+fun Map<String, Any>.toInventario(): inventario? {
     val cantidad = this["cantidad"]
     when (cantidad) {
         is Int -> return inventario(
@@ -235,7 +288,6 @@ fun Map<String,Any>.toInventario():inventario?{
         else -> return null
 
     }
-
 
 
 }

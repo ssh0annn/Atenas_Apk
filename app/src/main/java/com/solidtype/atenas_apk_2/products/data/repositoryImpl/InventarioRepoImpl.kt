@@ -83,10 +83,11 @@ class InventarioRepoImpl @Inject constructor(
                 for (i in productos) {
 
                     val rowdata = mutableListOf<String>()
-                    rowdata.add(catego.getCategoriasById(i.id_categoria).nombre)
-                    rowdata.add(proDao.getPersonasById(i.id_proveedor!!).nombre!!)
-                    rowdata.add(i.nombre)
-                    rowdata.add(i.marca ?: "")
+
+                    rowdata.add(i.id_inventario.toString())
+                    rowdata.add(i.id_categoria.toString())
+                    rowdata.add(i.id_proveedor.toString())
+                    i.nombre?.let { rowdata.add(it) }
                     rowdata.add(i.modelo.toString())
                     rowdata.add(i.cantidad.toString())
                     rowdata.add(i.precio_compra.toString())

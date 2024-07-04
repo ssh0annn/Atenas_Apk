@@ -83,7 +83,7 @@ fun Navigation() {
             FacturacionScreen(navController)
         }
         composable(route = Screens.GestionCliente.route) {
-            ClienteScreen(navController)
+            //ClienteScreen(navController)
         }
         composable(route = Screens.GestionProveedores.route) {
             ProveedorScreen(navController)
