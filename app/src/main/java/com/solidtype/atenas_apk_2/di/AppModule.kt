@@ -11,6 +11,8 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.data.AuthReposito
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth.MetodoAutenticacionImpl
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.AuthRepository
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.CambiarPassword
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.ForgotPassword
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
@@ -63,6 +65,8 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
+import com.solidtype.atenas_apk_2.gestion_facturar.data.CasoBlueTooth
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.repositoryimpl.ClienteProveedorRepoImpl
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.EliminarPersona
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
@@ -118,7 +122,9 @@ import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.Qu
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts.QueryDBlocalImpl
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.MediatorProducts
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.MediatorProductsImpl
+import com.solidtype.atenas_apk_2.products.domain.userCases.BuscarCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.CrearCategoria
+import com.solidtype.atenas_apk_2.products.domain.userCases.EliminarCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ExportarExcel
 import com.solidtype.atenas_apk_2.products.domain.userCases.GetCategorias
 import com.solidtype.atenas_apk_2.products.domain.userCases.ImportarExcelFile
@@ -177,7 +183,9 @@ object AppModule {
         importarExcelFile = ImportarExcelFile(repository),
         syncProductos = SyncProductos(repository),
         agregarCategoria = CrearCategoria(repository),
-        getCategorias = GetCategorias(repository)
+        getCategorias = GetCategorias(repository),
+        eliminarCategorias= EliminarCategorias(repository),
+        buscarCategorias= BuscarCategorias(repository)
     )
 
     @Singleton
@@ -468,12 +476,22 @@ object AppModule {
     fun provideCasosdeAutenticacion(repo: AuthRepository) = AuthCasos(
         login = Login(repo),
         logout= Logout(repo),
-        whoIs = WhoIs(repo)
+        whoIs = WhoIs(repo),
+        forgotPassword = ForgotPassword(repo),
+        cambiarPassword= CambiarPassword(repo)
     )
+
+    @Singleton
+    @Provides
+    fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
+
+
+    //Bluetooth
 
     @Provides
     @Singleton
-    fun provideAuthRepository(metod: MetodoAutenticacion): AuthRepository = AuthRepositoryImpl(metod)
+    fun provideBluetoothManager(context:Context): BluetoothManager = CasoBlueTooth(context)
+
 
     //provendo dao ticket synchronized
     @Provides

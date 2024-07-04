@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.servicios
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 val servicio = listOf(
     servicioss(

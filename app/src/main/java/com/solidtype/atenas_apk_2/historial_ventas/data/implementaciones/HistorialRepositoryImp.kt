@@ -29,14 +29,19 @@ class HistorialRepositoryImp @Inject constructor(
         return dao.getVentas()
     }
 
-    suspend fun insertalTemporal(
-        ojeto:venta
-    ){
-        dao.addVenta(ojeto)
-    }
-
     override suspend fun exportarVentas(listaProductos:List<venta>): Uri {
-        val columnas = listaProductos[1].toGetColumns()
+        val columnas = listOf(
+            "id_venta",
+            "id_vendedor",
+            "id_cliente",
+            "id_tipo_venta",
+            "subtotal",
+            "impuesto",
+            "total",
+            "cantidad",
+            "fecha",
+            "estado")
+
         val productosVendidos:MutableList<List<String>> = mutableListOf()
         try {
             for(productos in listaProductos ){
@@ -56,7 +61,7 @@ class HistorialRepositoryImp @Inject constructor(
 
             }
 
-            return excel.crearXls("Ventas", columnas,productosVendidos )
+            return excel.crearXls("Ventas_${System.currentTimeMillis()}", columnas,productosVendidos )
         }catch( _ : Exception){
             println("Error en la conversion de datos")
         }
@@ -76,7 +81,7 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.id_vendedor.toString())
                 temp.add(productos.id_cliente.toString())
                 temp.add(productos.id_tipo_venta.toString())
-                productos.assesorios?.let { temp.add(it) }
+                productos.assesorios.let { temp.add(it) }
                 temp.add(productos.fecha_inicio.toString())
                 temp.add(productos.fecha_final.toString())
                 temp.add(productos.estado.toString())

@@ -12,7 +12,6 @@ import javax.inject.Inject
 class FacturaRepositoryImpl @Inject constructor(
     private val detalleVenta: detalle_ventaDao,
     private val venta: ventaDao
-
     ) : FacturaRepository {
     override fun busqueda(
         fechaini: LocalDate,

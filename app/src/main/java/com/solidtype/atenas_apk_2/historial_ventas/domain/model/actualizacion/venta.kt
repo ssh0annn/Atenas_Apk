@@ -15,9 +15,9 @@ import java.time.LocalDate
     ForeignKey(entity = persona::class, parentColumns = ["id_persona"], childColumns = ["id_cliente"], onDelete = ForeignKey.CASCADE),
     ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"], onDelete = ForeignKey.CASCADE),
 ], indices = [
-    Index(value = ["id_vendedor"], unique = true),
-    Index(value = ["id_cliente"], unique = true),
-    Index(value = ["id_tipo_venta"], unique = true)
+    Index(value = ["id_vendedor"], unique = false),
+    Index(value = ["id_cliente"], unique = false),
+    Index(value = ["id_tipo_venta"], unique = false)
 ])
 data class venta (
     @PrimaryKey(autoGenerate = true) val id_venta :Long,

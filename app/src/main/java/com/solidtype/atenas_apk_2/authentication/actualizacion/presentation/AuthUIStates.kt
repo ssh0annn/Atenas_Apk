@@ -6,7 +6,8 @@ data class AuthUIStates(
     val isAutenticated: Usuario? = null,
     val isLoading:Boolean = true,
     val network:Boolean = false,
-    val razones: String? = "",
+    val razones: String? = null,
     val correoGuardado: String? = "",
-    val licenciaGuardada: Boolean = false
+    val licenciaGuardada: Boolean = false,
+    val enviado:Boolean = false
 )

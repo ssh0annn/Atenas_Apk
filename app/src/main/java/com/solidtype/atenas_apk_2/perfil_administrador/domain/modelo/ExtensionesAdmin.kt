@@ -1,11 +1,6 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo
 
-import androidx.room.PrimaryKey
-import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.PerfilAdmin
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.modelo.VerInfoAdmin
-
-
-
 
 fun administrador.toVerInfoAdmin(): VerInfoAdmin? {
     return this.estado?.let {
@@ -25,7 +20,6 @@ fun administrador.toVerInfoAdmin(): VerInfoAdmin? {
     )
     }
 }
-
 
 
 

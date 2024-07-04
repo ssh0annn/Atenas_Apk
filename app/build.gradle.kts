@@ -17,7 +17,6 @@ plugins {
 }
 
 android {
-
     namespace = "com.solidtype.atenas_apk_2"
     compileSdk = 34
 
@@ -91,13 +90,15 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.7")
 //TEstin area
     testImplementation("io.mockk:mockk:1.12.2")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
@@ -149,13 +150,15 @@ dependencies {
     //Lotti y animaciones :
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
-    //Implementacion PDF :
-  //  implementation ("com.itextpdf:itext7-core:7.1.15")
+    //Printer
+
+   // implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     //reflect para la funcion de extecion para la conversion de las data classes a maps
     implementation(kotlin("reflect"))
 
 
+    //testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
 
 }
 

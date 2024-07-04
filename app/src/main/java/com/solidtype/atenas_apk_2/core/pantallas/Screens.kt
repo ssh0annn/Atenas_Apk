@@ -18,6 +18,7 @@ sealed class Screens(val route: String) {
     object GestionCliente : Screens("gestionCliente")
     object GestionProveedores: Screens("gestionProveedores")
     object PerfilAdmin : Screens("perfilAdmin")
+    object VistaTicket : Screens("vistaTicket")
 
     //vendedor
     object Ticket : Screens("ticket")

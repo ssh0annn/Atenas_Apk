@@ -3,5 +3,9 @@ package com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_uso
 data class AuthCasos (
     val login: Login,
     val logout: Logout,
-    val whoIs: WhoIs
+    val whoIs: WhoIs,
+    val forgotPassword: ForgotPassword,
+    val cambiarPassword: CambiarPassword
+
+
 )

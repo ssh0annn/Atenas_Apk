@@ -12,6 +12,6 @@ class BuscarProveedores @Inject constructor(private val repo: ClienteProveedorRe
 
         repo.buscarPersonaTipo("proveedor", any).map {
                 proveedores ->
-            proveedores.map { proveedor -> proveedor.toProveedor() }
+            proveedores.filter { it.estado == true }.map { proveedor -> proveedor.toProveedor() }
         }
     }

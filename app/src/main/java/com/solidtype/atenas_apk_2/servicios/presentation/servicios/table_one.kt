@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.servicios
+package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,17 +19,14 @@ import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ClientEvents
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.DeviceEvent
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.OnTicket
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiceEvent
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.ServiciosViewModel
+import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class)
-fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
+fun complementari(navController: NavController, viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
 
@@ -78,6 +75,7 @@ fun complementari(viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     selector(viewmodel, state.listaServicios, state.listaClientes, state.listaDispositivos)
 //    NavPlato("Servicios")
+    MenuLateral(navController)
 
 }
 

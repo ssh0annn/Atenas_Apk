@@ -12,7 +12,7 @@ class GetClientes  @Inject constructor(private val repo: ClienteProveedorReposit
     operator fun invoke() : Flow<List<Personastodas.ClienteUI>> {
         return repo.getPersonas("cliente").map {
                 clientes ->
-            clientes.map { cliente -> cliente.toClienteUI() }
+            clientes.filter { it.estado == true }.map { cliente -> cliente.toClienteUI() }
         }
     }
 }
