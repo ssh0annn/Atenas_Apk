@@ -169,7 +169,6 @@ class QueryDBLocalInventarioImpl @Inject constructor(
 
         }
 
-
         //una vez identificado lo tenemos que agregar en su respecrivo tipo de dato
         println("Fuera del bucle yo impremo tres lineas ... pendejo ")
         println("*********************************************************")
