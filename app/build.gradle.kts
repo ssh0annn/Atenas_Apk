@@ -152,6 +152,9 @@ dependencies {
     //Implementacion PDF :
   //  implementation ("com.itextpdf:itext7-core:7.1.15")
 
+    //reflect para la funcion de extecion para la conversion de las data classes a maps
+    implementation(kotlin("reflect"))
+
 
 
 }

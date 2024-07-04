@@ -7,6 +7,12 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import kotlin.reflect.KParameter
+import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
+
+
 
 /*
 import kotlin.reflect.full.memberProperties
@@ -139,3 +145,49 @@ fun Boolean.formatoActivo(): String {
 fun String.formatoActivoDDBB(): Boolean {
     return this == "Activo"
 }
+
+
+//conversion de cualquier data class a lista de maps
+fun <T : Any> List<T>.toDataListToMapList(): List<Map<String, Any>> {
+    return this.map { it.toDataClassToMap() }
+}
+
+
+//conversion de cualquier data class a un mapa
+fun <T : Any>  T.toDataClassToMap(): Map<String, Any> {
+    // Obtener todas las propiedades de la data class
+    val propertiesByName = this::class.declaredMemberProperties
+        .map { it.name to it }
+        .toMap()
+
+    // Construir el mapa resultante
+    return propertiesByName.mapValues { (_, prop) ->
+        prop.isAccessible = true
+        prop.getter.call(this)!!
+    }
+}
+
+//se lanza una exception IllegalArgumentException que debe controlar la funcion que la use
+//si los datos en el mapa no son compatibles con la data class recibida en cuestion
+//objet to dataClass
+
+inline fun <reified T : Any> Map<String, Any?>.toDataClass(): T? {
+    val constructor = T::class.primaryConstructor ?: return null
+    val params = constructor.parameters
+
+    val args = params.mapNotNull { param ->
+        this[param.name]?.let { value ->
+            when (param.type.classifier) {
+                String::class -> value.toString()
+                Int::class -> (value as? String)?.toIntOrNull() ?: value as? Int
+                else -> value
+            }
+        }
+    }.toTypedArray()
+
+    return constructor.call(*args)
+}
+
+
+
+
