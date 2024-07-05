@@ -101,18 +101,18 @@ fun Tabla(
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
-                            Text(
-                                uiState.Historial[i].subtotal.toString(),
-                                fontSize = 16.sp,
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
-                            Text(
-                                uiState.Historial[i].total.toString(),
-                                fontSize = 16.sp,
-                                modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
-                            )
+//                            Text(
+//                                uiState.Historial[i].subtotal.toString(),
+//                                fontSize = 16.sp,
+//                                modifier = Modifier.weight(1f),
+//                                textAlign = TextAlign.Center
+//                            )
+//                            Text(
+//                                uiState.Historial[i].total.toString(),
+//                                fontSize = 16.sp,
+//                                modifier = Modifier.weight(1f),
+//                                textAlign = TextAlign.Center
+//                            )
                             Text(
                                 uiState.Historial[i].cantidad.toString(),
                                 fontSize = 16.sp,

@@ -5,7 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
+import com.solidtype.atenas_apk_2.facturacion.domain.model.VentasRelacionadas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -37,4 +39,22 @@ interface ventaDao {
     suspend fun updateVenta(venta : venta)
     @Delete
     suspend fun deleteVenta(venta : venta)
+
+    //Bainita bacana paya ... esto es para pro
+    @Query("SELECT * From venta")
+    fun getVentaWithRelation():Flow<List<VentasRelacionadas>>
+    @Transaction
+    @Query("""
+            SELECT * FROM venta WHERE  
+            id_venta like'%' || :any || '%' 
+            or id_vendedor like '%' || :any || '%'
+            or id_cliente like '%' || :any || '%'
+            or id_tipo_venta like '%' || :any || '%'        
+    """
+    )
+    fun buscarVentaWithRelation(any:String):Flow<List<VentasRelacionadas>>
+    @Transaction
+    fun insertarVentaWithRelation(venta: VentasRelacionadas){
+
+    }
 }

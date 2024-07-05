@@ -2,11 +2,8 @@ package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
-import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.kk
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
