@@ -58,22 +58,25 @@ class MetodoAutenticacionImpl @Inject constructor(
         callback: (success: Boolean, reason: String?) -> Unit
     ) {
         try {
+
             val credential = reutenticar(email, oldPassword)
             if (credential != null) {
                 val user = firebaseAuth.currentUser
                 user?.let {
-                    if (it.reauthenticate(credential).isSuccessful) {
                         user.updatePassword(newPassworld).addOnCompleteListener { updateTask ->
                             if (updateTask.isSuccessful) {
+                                println("Contrasenia comabiada con exito!! ")
                                 callback(true, null) // Contraseña cambiada exitosamente
+
                             } else {
-                                callback(false, updateTask.exception?.message ?: "Error al cambiar la contraseña")
+                                println("Hay booboo!! ")
+                                callback(false, "Serca ${updateTask.exception?.message  ?: "Error al cambiar la contraseña"}")
                             }
                         }
                         return  // Salir después de llamar al callback
                     }
                 }
-            }
+
             callback(false, "Correo o contraseña incorrectos")
         } catch (e: Exception) {
             println("Error al cambiar la contraseña: $e")
@@ -91,8 +94,7 @@ class MetodoAutenticacionImpl @Inject constructor(
 
 
     private fun reutenticar(email: String, password: String): AuthCredential? {
-        var credntial: AuthCredential?
-        credntial = try {
+        val credntial: AuthCredential? = try {
             EmailAuthProvider.getCredential(email, password)
 
         } catch (e: Exception) {

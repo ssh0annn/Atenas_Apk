@@ -9,6 +9,8 @@ sealed class PerfilEvent {
 
     object VerPerfil: PerfilEvent()
 
+    object CleanMensaje:PerfilEvent()
+
     data class ChangePassword(val email:String, val oldPassword:String, val newPassword:String):PerfilEvent()
 
 }

@@ -101,6 +101,14 @@ class InventarioViewModel @Inject constructor(
                     }
                 }
             }
+
+            is InventariosEvent.CrearProveedor -> {
+                viewModelScope.launch { casosProveedores.crearProveedor(event.provee) }
+
+            }
+            is InventariosEvent.EliminarProveedor -> {
+                viewModelScope.launch { casosProveedores.eliminarPersona(event.provee) }
+            }
         }
     }
     private fun buscarCategorias(any:String){
