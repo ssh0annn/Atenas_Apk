@@ -54,7 +54,8 @@ fun Detalles(
     context: Context,
     provider: MutableState<String>,
     listEstados: List<String>,
-    mostrarCategoria: MutableState<Boolean>
+    mostrarCategoria: MutableState<Boolean>,
+    mostrarProveedor: MutableState<Boolean>
 ) {
     Column(
         modifier = Modifier
@@ -103,6 +104,7 @@ fun Detalles(
                                 if(categoria.value != "")
                                     idCatalogo.value = uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
                             }
+                            Spacer(modifier = Modifier.height(5.dp))
                             InputDetalle(
                                 "Nombre", nombre.value, true
                             ) { nombre.value = it }
@@ -110,7 +112,7 @@ fun Detalles(
                     }
                     Column(
                         modifier = Modifier
-                            .padding(start = 10.dp)
+                            .padding(horizontal = 10.dp)
                     ) {// Codigo, Descripción, Precio y Cantidad
                         InputDetalle(
                             "Código",
@@ -119,15 +121,22 @@ fun Detalles(
                         InputDetalle(
                             "Descripción", descripcion.value
                         ) { descripcion.value = it }
+                        Spacer(modifier = Modifier.height(5.dp))
                         AutocompleteSelect(
-                            "Proveedores",
+                            "Proveedor",
                             provider.value,
-                            uiState.proveedores.map { it.nombre!! },
+                            if (uiState.proveedores.isNotEmpty()) uiState.proveedores.map { it.nombre.toString() } else listOf(
+                                ""
+                            ),
+                            onClickAgregar = {
+                                mostrarProveedor.value = true
+                            },
                         ) {
                             provider.value = it
                             if(provider.value != "")
                                 idProveedor.value = uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
+                        Spacer(modifier = Modifier.height(5.dp))
                         InputDetalle("Costo", costo.value) {
                             costo.value = it
                         }
@@ -146,9 +155,11 @@ fun Detalles(
                         InputDetalle("Cantidad", cantidad.value) {
                             cantidad.value = it
                         }
+                        Spacer(modifier = Modifier.height(5.dp))
                         AutocompleteSelect("Estado", estado.value,  listEstados) {
                             estado.value = it
                         }
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
             }
