@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetProveedores @Inject constructor(private val repo: ClienteProveedorRepository) {
-    operator fun invoke() : Flow<List<Personastodas.Proveedor>> {
+    operator fun invoke(switch:Boolean) : Flow<List<Personastodas.Proveedor>> {
         return repo.getPersonas("proveedor").map {
             proveedores ->
-            proveedores.filter { it.estado == true }.map { proveedor -> proveedor.toProveedor() }
+            proveedores.filter { it.estado == switch && it.tipo_persona == "proveedor"}.map { proveedor -> proveedor.toProveedor() }
         }
     }
 }

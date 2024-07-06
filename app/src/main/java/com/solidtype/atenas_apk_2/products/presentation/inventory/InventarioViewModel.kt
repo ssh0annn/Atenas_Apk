@@ -76,7 +76,7 @@ class InventarioViewModel @Inject constructor(
             InventariosEvent.Getrpoveedores -> {
                 viewModelScope.launch {
 
-                    casosProveedores.getProveedores().collect { proveedores ->
+                    casosProveedores.getProveedores(switch).collect { proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
@@ -88,7 +88,7 @@ class InventarioViewModel @Inject constructor(
             is InventariosEvent.BuscarProveedores -> {
                 viewModelScope.launch {
 
-                    casosProveedores.buscarProveedores(event.any).collect { proveedores ->
+                    casosProveedores.buscarProveedores(event.any, switch).collect { proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
@@ -203,15 +203,10 @@ class InventarioViewModel @Inject constructor(
     }
 
     fun syncProductos() {
-
-
     }
     fun importarExcel(filePath: Uri) {
         fileSelectionListener2?.onFileSelected(filePath)
-        println("Este esl el patchFile $filePath")
-        println("Se llamo el fileSelected")
         viewModelScope.launch {
-
             withContext(Dispatchers.IO) {
                 uiState.update { it.copy(isLoading = true) }
                 if (casosInventario.importarExcelFile(filePath)) {
