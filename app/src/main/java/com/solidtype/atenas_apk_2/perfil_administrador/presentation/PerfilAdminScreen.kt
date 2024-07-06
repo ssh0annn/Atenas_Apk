@@ -124,9 +124,9 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         dialog.dismiss()
                     }
                     btnpassc.setOnClickListener {
-                        if (!dclave.text.equals("") && dclave.text.equals(uiState.perfilAdmin[0]?.clave?.toEditable())) {
-                            if (!dnewclave.text.equals("") && !dconfirnewclave.text.equals("")) {
-                                if (dnewclave.text.equals(dconfirnewclave) && !dnewclave.text.equals(dclave)) {
+                        if (dclave.text.toString() != "" && dclave.text.toString() == claveadmin.text.toString()) {
+                            if (dnewclave.text.toString() != "" && dconfirnewclave.text.toString() != "") {
+                                if (dnewclave.text.toString() == dconfirnewclave.text.toString() && dnewclave.text.toString() != dclave.text.toString()) {
                                     //CAMBIAR CONTRASEÑA DE USUARIO
                                     Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
                                     viewModel.onEvent(
@@ -137,8 +137,14 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                                         )
                                     )
                                     dialog.dismiss()
+                                }else{
+                                    Toast.makeText(context,"Contraseña nueva no son iguales",Toast.LENGTH_SHORT).show()
                                 }
+                            }else{
+                                Toast.makeText(context,"Contraseña nueva vacia",Toast.LENGTH_SHORT).show()
                             }
+                        }else{
+                            Toast.makeText(context,"Contraseña anterior incorrecta",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
