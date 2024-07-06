@@ -25,26 +25,21 @@ class InventarioViewModel @Inject constructor(
 
     private var fileSelectionListener2: FileSelectionListener2? = null
 
+    private var switch: Boolean = false
     var uiState = MutableStateFlow(ProductosViewStates())
         private set
-
-
+    
     init {
         mostrarProductos()
     }
-
-
     fun onEvent(event: InventariosEvent) {
         when (event) {
             is InventariosEvent.ActualizarCategoria -> {
                 agregarCategoria(event.catego)
             }
-
             is InventariosEvent.ActualizarProductos -> {
                 crearProductos(event.producto)
-
             }
-
             is InventariosEvent.AgregarCategorias -> {
                 agregarCategoria(event.catego)
             }
@@ -109,6 +104,14 @@ class InventarioViewModel @Inject constructor(
             is InventariosEvent.EliminarProveedor -> {
                 viewModelScope.launch { casosProveedores.eliminarPersona(event.provee) }
             }
+
+            InventariosEvent.Switch -> {
+                switch = !switch
+                uiState.update { it.copy(switch = switch) }
+                mostrarProductos()
+                getCategorias()
+                onEvent(InventariosEvent.Getrpoveedores)
+            }
         }
     }
     private fun buscarCategorias(any:String){
@@ -129,7 +132,7 @@ class InventarioViewModel @Inject constructor(
 
     private fun getCategorias() {
         viewModelScope.launch {
-            casosInventario.getCategorias().collect { categoria ->
+            casosInventario.getCategorias(switch).collect { categoria ->
                 uiState.update { it.copy(categoria = categoria) }
             }
         }
@@ -158,7 +161,7 @@ class InventarioViewModel @Inject constructor(
             withContext(Dispatchers.Default) {
                 //syncProductos()
             }
-            casosInventario.getProductos().collect { product ->
+            casosInventario.getProductos(switch).collect { product ->
                 uiState.update {
                     it.copy(products = product)
                 }
@@ -198,7 +201,7 @@ class InventarioViewModel @Inject constructor(
 
     fun buscarProductos(any: String) {
         viewModelScope.launch {
-            val busqueda = casosInventario.searchProductos(any)
+            val busqueda = casosInventario.searchProductos(any, switch)
             busqueda.collect { product ->
                 uiState.update {
                     it.copy(products = product)
