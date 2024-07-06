@@ -44,21 +44,21 @@ class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAu
             tipoUser = UsuarioActual.tipoUser
         )
     }
-    override suspend fun cambiarPassword(email: String, oldPassword: String, newPassword: String): Boolean {
-        var cambioExitoso = false
+    override suspend fun cambiarPassword(email: String, oldPassword: String, newPassword: String, callback:(
+            Boolean, String?
+            ) -> Unit) {
         autenticacion.cambiarPassword(email, oldPassword, newPassword) { success, reason ->
             if (success) {
 
-                cambioExitoso= true // Devuelve true si el cambio de contraseña fue exitoso
+                callback(success, null)
+                println("Todo va bien por el Auth Repo: $success")
 
             } else {
-
-                println(reason)
-                cambioExitoso=  false // Devuelve false si hubo un error al cambiar la contraseña
-
+                println("Funcion CabiarPassword Repositiro: $reason")
+                callback(success, reason)
             }
         }
-        return cambioExitoso
+
     }
 
     override suspend fun olvideMiPassword(email: String): Boolean {
