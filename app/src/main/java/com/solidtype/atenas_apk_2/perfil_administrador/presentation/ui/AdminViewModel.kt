@@ -57,6 +57,12 @@ class AdminViewModel @Inject constructor(
                 }
 
             }
+
+            PerfilEvent.CleanDialog -> {
+                uiState.update {
+                    it.copy(showDialogo = false, mensaje ="Favor cierra e inicia seccion")
+                }
+            }
         }
     }
 
@@ -70,9 +76,8 @@ class AdminViewModel @Inject constructor(
                     uiState.update {
                             it.copy(
                                 isClaveCambiada = success,
-                                passwordState = reason ?: "",
                                 showDialogo = !success,
-                                mensaje = if(success) "Clave cambiada con exito!!" else reason
+                                mensaje = reason
                             )
                     }
                     if(success){
