@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import kotlinx.coroutines.flow.Flow
@@ -18,12 +19,15 @@ interface categoriaDao {
     @Query("select * from categoria")
     fun getCategorias(): Flow<List<categoria>>
     @Query("select * from categoria where id_categoria ==:id")
-    suspend fun getCategoriasById(id :Int): categoria
+    suspend fun getCategoriasById(id :Long): categoria
 
     @Query("SELECT * FROM categoria WHERE nombre LIKE '%' || :catego || '%'")
     fun buscarCategorias(catego:String):Flow<List<categoria>>
     @Update
     suspend fun updateCategoria(categoria: categoria)
-    @Delete
-    suspend fun deleteCategoria(categoria: categoria)
+    @Transaction
+    suspend fun deleteCategoria(categoria: categoria){
+        categoria.estado = false
+        updateCategoria(categoria)
+    }
 }

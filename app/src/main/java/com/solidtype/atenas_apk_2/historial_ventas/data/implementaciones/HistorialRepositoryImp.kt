@@ -10,7 +10,6 @@ import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import com.solidtype.atenas_apk_2.util.ListaTicket
 import com.solidtype.atenas_apk_2.util.XlsManeger
-import com.solidtype.atenas_apk_2.util.toGetColumns
 import com.solidtype.atenas_apk_2.util.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -29,26 +28,24 @@ class HistorialRepositoryImp @Inject constructor(
         return dao.getVentas()
     }
 
-    suspend fun insertalTemporal(
-        ojeto:venta
-    ){
-        dao.addVenta(ojeto)
-    }
-
     override suspend fun exportarVentas(listaProductos:List<venta>): Uri {
-        val columnas = listaProductos[1].toGetColumns()
+        val columnas = listOf(
+            "id_venta",
+            "id_vendedor",
+            "id_cliente",
+            "id_tipo_venta",
+            "cantidad",
+            "fecha",
+            "estado")
+
         val productosVendidos:MutableList<List<String>> = mutableListOf()
         try {
             for(productos in listaProductos ){
                 val temp = mutableListOf<String>()
-
                 temp.add(productos.id_venta.toString())
                 temp.add(productos.id_vendedor.toString())
                 temp.add(productos.id_cliente.toString())
                 temp.add(productos.id_tipo_venta.toString())
-                temp.add(productos.subtotal.toString())
-                temp.add(productos.impuesto.toString())
-                temp.add(productos.total.toString())
                 temp.add(productos.cantidad.toString())
                 temp.add(productos.fecha.toString())
                 temp.add(productos.estado.toString())
@@ -56,7 +53,7 @@ class HistorialRepositoryImp @Inject constructor(
 
             }
 
-            return excel.crearXls("Ventas", columnas,productosVendidos )
+            return excel.crearXls("Ventas_${System.currentTimeMillis()}", columnas,productosVendidos )
         }catch( _ : Exception){
             println("Error en la conversion de datos")
         }
@@ -76,7 +73,7 @@ class HistorialRepositoryImp @Inject constructor(
                 temp.add(productos.id_vendedor.toString())
                 temp.add(productos.id_cliente.toString())
                 temp.add(productos.id_tipo_venta.toString())
-                productos.assesorios?.let { temp.add(it) }
+                productos.assesorios.let { temp.add(it) }
                 temp.add(productos.fecha_inicio.toString())
                 temp.add(productos.fecha_final.toString())
                 temp.add(productos.estado.toString())
@@ -92,12 +89,12 @@ class HistorialRepositoryImp @Inject constructor(
 
     //Removi la variable fecha final de donde la recive el DAO, ARREGLALO!
     override fun buscarPorFechasCategoriasVentas(
-        Fecha_inicio: String,
+        fecha_inicio: String,
         fecha_final: String,
 
-    ): Flow<List<venta>> {
+        ): Flow<List<venta>> {
 
-       return dao.getHistorialVentaFechaCategoria(Fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
+       return dao.getHistorialVentaFechaCategoria(fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
 
     }
 

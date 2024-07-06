@@ -52,11 +52,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 
-
+/*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldExample(nav:NavController, validarr: login_medenview = hiltViewModel()) {
+//fun OutlinedTextFieldExample(nav:NavController, ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
@@ -420,8 +420,4 @@ fun OutlinedTextFieldExample(nav:NavController, validarr: login_medenview = hilt
 
 }
 
-
-
-fun onClick() {
-    TODO("Not yet implemented")
-}
+*/

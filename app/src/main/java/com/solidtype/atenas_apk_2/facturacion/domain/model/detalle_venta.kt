@@ -11,18 +11,15 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 
 @Entity(foreignKeys = [
     ForeignKey(entity = venta::class, parentColumns = ["id_venta"], childColumns = ["id_venta"], onDelete = ForeignKey.CASCADE),
-    ForeignKey(entity = inventario::class, parentColumns = ["id_inventario"], childColumns = ["id_producto"], onDelete = ForeignKey.CASCADE),
-    ForeignKey(entity = tipo_venta::class, parentColumns = ["id_tipo_venta"], childColumns = ["id_tipo_venta"], onDelete = ForeignKey.CASCADE)
+    ForeignKey(entity = inventario::class, parentColumns = ["id_inventario"], childColumns = ["id_producto"], onDelete = ForeignKey.CASCADE)
 ], indices = [
     Index(value = ["id_venta"], unique = false),
-    Index(value = ["id_producto"], unique = false),
-    Index(value = ["id_tipo_venta"], unique = false)
+    Index(value = ["id_producto"], unique = false)
 ])
 data class detalle_venta (
     @PrimaryKey(autoGenerate = true) val id_detalle_venta :Long,
     val id_venta :Long,
     val id_producto :Long,
-    val id_tipo_venta :Long,
     val cantidad :Int,
     val total :Double,
     @ColumnInfo(defaultValue = "true") val estado :Boolean

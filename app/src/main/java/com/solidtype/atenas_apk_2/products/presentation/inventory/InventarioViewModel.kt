@@ -101,6 +101,14 @@ class InventarioViewModel @Inject constructor(
                     }
                 }
             }
+
+            is InventariosEvent.CrearProveedor -> {
+                viewModelScope.launch { casosProveedores.crearProveedor(event.provee) }
+
+            }
+            is InventariosEvent.EliminarProveedor -> {
+                viewModelScope.launch { casosProveedores.eliminarPersona(event.provee) }
+            }
         }
     }
     private fun buscarCategorias(any:String){
@@ -170,7 +178,7 @@ class InventarioViewModel @Inject constructor(
                 println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
                     uiState.update {
-                        it.copy(uriPath = path.path.toString())
+                        it.copy(uriPath = path)
                     }
                 }
             }
@@ -200,16 +208,10 @@ class InventarioViewModel @Inject constructor(
     }
 
     fun syncProductos() {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                // casosInventario.syncProductos()
-            }
-        }
+
+
     }
-
-
     fun importarExcel(filePath: Uri) {
-        // Aquí puedes realizar las operaciones necesarias con el archivo seleccionado
         fileSelectionListener2?.onFileSelected(filePath)
         println("Este esl el patchFile $filePath")
         println("Se llamo el fileSelected")
@@ -218,21 +220,20 @@ class InventarioViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 if (casosInventario.importarExcelFile(filePath)) {
                     syncProductos()
+                    uiState.update {
+                        it.copy(
+                            isLoading = false, messages = "Se inserto con exito!!"
+                        )
+                    }
                 } else {
                     uiState.update {
                         it.copy(
-                            isLoading = false, errorMessages = "Formato invalido"
+                            isLoading = false, messages = "Formato invalido"
                         )
                     }
-
                 }
-                casosInventario.importarExcelFile(filePath)
-                uiState.update { it.copy(isLoading = false) }
-
             }
-
         }
-
     }
 
     interface FileSelectionListener2 {

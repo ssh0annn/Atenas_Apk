@@ -17,7 +17,6 @@ plugins {
 }
 
 android {
-
     namespace = "com.solidtype.atenas_apk_2"
     compileSdk = 34
 
@@ -157,6 +156,9 @@ dependencies {
 
 
     //testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+
+    //Sincronizacion el worker
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
 
 }
 

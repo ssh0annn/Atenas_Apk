@@ -51,7 +51,7 @@ class HistorailViewModel @Inject constructor(
 
                 withContext(Dispatchers.IO) {
                     uiState.update {
-                        it.copy(uriPath = corr.path.toString())
+                        it.copy(uriPath = corr)
                     }
                 }
             }
@@ -83,7 +83,7 @@ class HistorailViewModel @Inject constructor(
                 casosHistorialReportes.buscarporFechCatego(fechaInicio.toIsoDate(), fechaFinal.toIsoDate())
                     .collect { product ->
                         for (i in product) {
-                            total += i.total
+                            //total += i.total
                         }
                         println("Qui lo que se pidio : $product")
                         uiState.update {
@@ -146,7 +146,7 @@ class HistorailViewModel @Inject constructor(
 
             mostrarHistory.collect { product ->
                 for (i in product) {
-                    total += i.total
+                   // total += i.total
                     println(i)
                 }
                 uiState.update {

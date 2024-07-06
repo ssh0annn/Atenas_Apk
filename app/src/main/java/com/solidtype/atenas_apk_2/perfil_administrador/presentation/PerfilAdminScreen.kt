@@ -27,6 +27,7 @@ import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrad
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
@@ -79,6 +80,15 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     val fechacaduca  : EditText = view.findViewById(R.id.txt_perfil_fecha_caduca_admin)
                     val fechacompra : EditText = view.findViewById(R.id.txt_perfil_fecha_compra_admin)
 
+                    if(!uiState.mensaje.isNullOrEmpty()){
+                        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+                        viewModel.onEvent(PerfilEvent.CleanMensaje)
+                    }
+                    if(uiState.showDialogo){
+                        dialog.show()
+                        viewModel.onEvent(PerfilEvent.CleanDialog)
+                    }
+
                     //VERIFICA SI LOS DATOS ESTAN PARA RELLENARLO
                     if (uiState.perfilAdmin.first() != null) {
                         nombreadmin.text = uiState.perfilAdmin[0]?.nombre?.toEditable() ?: "".toEditable()
@@ -93,6 +103,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         fechacaduca.text = uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable() ?: "".toEditable()
                         fechacompra.text = uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable() ?: "".toEditable()
                     }
+
 
                     //ACCION DE LOS BOTONES TANTO DIALOGO COMO
                     btng.setOnClickListener {
@@ -126,20 +137,29 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     }
                     btnpassc.setOnClickListener {
                         //CAMBIAR CONTRASEÑA DE USUARIO
-                        Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
-                        viewModel.onEvent(
-                            PerfilEvent.ChangePassword(
-                                "elcapomax48@gmail.com",
-                                "deadpool",
-                                "maxwell1"
+                        if (dclave.text.length >= 8 && dnewclave.text.length >= 8) {
+                            viewModel.onEvent(
+                                PerfilEvent.ChangePassword(
+                                    correoadmin.text.toString(),
+                                    dclave.text.toString(),
+                                    dnewclave.text.toString()
+                                )
                             )
-                        )
-                        dialog.dismiss()
+                            dialog.dismiss()
+                        }else{
+                            Toast.makeText(context,"La tienes muy corta",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             )
+        } else{
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                Titulo(text = "No hay datos de Administrador")
+            }
             MenuLateral(navController)
         }
-
     }
 }

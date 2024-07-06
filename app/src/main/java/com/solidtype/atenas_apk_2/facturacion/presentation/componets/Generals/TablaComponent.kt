@@ -157,11 +157,11 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
-                                Text(
-                                    text = factura?.factura?.total.toString(),
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
+//                                Text(
+//                                    //text = factura?.factura?.toString(),
+//                                  //  modifier = Modifier.weight(1f),
+//                                   // textAlign = TextAlign.Center
+//                                )
                                 factura?.factura?.estado?.let {
                                     Text(
                                         text = it.formatoActivo(),

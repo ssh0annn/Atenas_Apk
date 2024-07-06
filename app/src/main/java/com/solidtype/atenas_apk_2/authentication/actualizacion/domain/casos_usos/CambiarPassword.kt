@@ -6,6 +6,10 @@ import javax.inject.Inject
 class CambiarPassword @Inject constructor(private val repo: AuthRepository) {
 
     suspend operator fun invoke(email:String, oldPassword:String, newPassword:String
-    ) = repo.cambiarPassword(email, oldPassword, newPassword)
+    , callback:(
+            Boolean, String?
+        ) -> Unit) = repo.cambiarPassword(email, oldPassword, newPassword){success, reason ->
+            callback(success, reason)
+        }
 
 }
