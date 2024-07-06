@@ -21,11 +21,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
+import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
@@ -39,7 +38,7 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 fun Detalles(
     viewModel: InventarioViewModel,
     categoria: MutableState<String>,
-    categoriaList: List<categoria>,
+    uiState: ProductosViewStates,
     nombre: MutableState<String>,
     idInventario: MutableState<String>,
     descripcion: MutableState<String>,
@@ -54,8 +53,8 @@ fun Detalles(
     estado: MutableState<String>,
     context: Context,
     provider: MutableState<String>,
-    listProvider: List<Personastodas.Proveedor>,
-    listEstados: List<String>
+    listEstados: List<String>,
+    mostrarCategoria: MutableState<Boolean>
 ) {
     Column(
         modifier = Modifier
@@ -92,13 +91,17 @@ fun Detalles(
                             AutocompleteSelect(
                                 "Categoría",
                                 categoria.value,
-                                categoriaList.map { it.nombre },
+                                if (uiState.categoria.isNotEmpty()) uiState.categoria.map { it.nombre } else listOf(
+                                    ""
+                                ),
                                 true,
-                                onClickAgregar = {},
+                                onClickAgregar = {
+                                    mostrarCategoria.value = true
+                                },
                             ) {
                                 categoria.value = it
                                 if(categoria.value != "")
-                                    idCatalogo.value = categoriaList.find { it.nombre == categoria.value }!!.id_categoria.toString()
+                                    idCatalogo.value = uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
                             }
                             InputDetalle(
                                 "Nombre", nombre.value, true
@@ -119,11 +122,11 @@ fun Detalles(
                         AutocompleteSelect(
                             "Proveedores",
                             provider.value,
-                            listProvider.map { it.nombre!! },
+                            uiState.proveedores.map { it.nombre!! },
                         ) {
                             provider.value = it
                             if(provider.value != "")
-                                idProveedor.value = listProvider.find { it.nombre == provider.value }!!.id_proveedor.toString()
+                                idProveedor.value = uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
                         InputDetalle("Costo", costo.value) {
                             costo.value = it
