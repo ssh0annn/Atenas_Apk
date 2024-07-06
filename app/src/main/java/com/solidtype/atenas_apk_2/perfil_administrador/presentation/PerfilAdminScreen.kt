@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.presentation
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.text.Editable
 import android.widget.Button
@@ -29,6 +30,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
+@SuppressLint("SetTextI18n")
 @Composable
 fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -123,28 +125,16 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         dialog.dismiss()
                     }
                     btnpassc.setOnClickListener {
-                        if (dclave.text.toString() != "" && dclave.text.toString() == claveadmin.text.toString()) {
-                            if (dnewclave.text.toString() != "" && dconfirnewclave.text.toString() != "") {
-                                if (dnewclave.text.toString() == dconfirnewclave.text.toString() && dnewclave.text.toString() != dclave.text.toString()) {
-                                    //CAMBIAR CONTRASEÑA DE USUARIO
-                                    Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
-                                    viewModel.onEvent(
-                                        PerfilEvent.ChangePassword(
-                                            correoadmin.text.toString(),
-                                            dclave.text.toString(),
-                                            dnewclave.text.toString()
-                                        )
-                                    )
-                                    dialog.dismiss()
-                                }else{
-                                    Toast.makeText(context,"Contraseña nueva no son iguales",Toast.LENGTH_SHORT).show()
-                                }
-                            }else{
-                                Toast.makeText(context,"Contraseña nueva vacia",Toast.LENGTH_SHORT).show()
-                            }
-                        }else{
-                            Toast.makeText(context,"Contraseña anterior incorrecta",Toast.LENGTH_SHORT).show()
-                        }
+                        //CAMBIAR CONTRASEÑA DE USUARIO
+                        Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
+                        viewModel.onEvent(
+                            PerfilEvent.ChangePassword(
+                                "elcapomax48@gmail.com",
+                                "deadpool",
+                                "maxwell1"
+                            )
+                        )
+                        dialog.dismiss()
                     }
                 }
             )
