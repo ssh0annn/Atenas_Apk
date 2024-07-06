@@ -66,11 +66,13 @@ class MetodoAutenticacionImpl @Inject constructor(
                         user.updatePassword(newPassworld).addOnCompleteListener { updateTask ->
                             if (updateTask.isSuccessful) {
                                 println("Contrasenia comabiada con exito!! ")
-                                callback(true, null) // Contraseña cambiada exitosamente
+                                callback(true, "Contraseña cambiada exitosamente!!") // Contraseña cambiada exitosamente
 
                             } else {
                                 println("Hay booboo!! ")
-                                callback(false, "Serca ${updateTask.exception?.message  ?: "Error al cambiar la contraseña"}")
+                                callback(false,
+                                    updateTask.exception?.message  ?: "Error al cambiar la contraseña"
+                                )
                             }
                         }
                         return  // Salir después de llamar al callback

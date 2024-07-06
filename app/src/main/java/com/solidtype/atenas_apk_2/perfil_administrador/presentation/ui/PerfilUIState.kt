@@ -9,5 +9,6 @@ data class PerfilUIState(
     val isLoading:Boolean = false,
     val passwordState:String ="",
     val isClaveCambiada:Boolean = false,
-    val showDialogo:Boolean = false
+    val showDialogo:Boolean = false,
+
 )

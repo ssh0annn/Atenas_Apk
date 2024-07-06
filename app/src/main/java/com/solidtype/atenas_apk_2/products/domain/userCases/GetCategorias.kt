@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 class GetCategorias  @Inject constructor(private val repo: InventarioRepo){
 
-     operator fun invoke() = repo.getCategorias().map { cate -> cate.filter {it.estado} }
+     operator fun invoke(estado:Boolean) = repo.getCategorias().map { cate -> cate.filter {it.estado == estado} }
 }

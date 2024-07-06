@@ -8,10 +8,10 @@ import javax.inject.Inject
 
 class BuscarProveedores @Inject constructor(private val repo: ClienteProveedorRepository) {
 
-    operator fun invoke(any:String) =
+    operator fun invoke(any:String, switch:Boolean) =
 
         repo.buscarPersonaTipo("proveedor", any).map {
                 proveedores ->
-            proveedores.filter { it.estado == true }.map { proveedor -> proveedor.toProveedor() }
+            proveedores.filter { it.estado == switch && it.tipo_persona == "proveedor" }.map { proveedor -> proveedor.toProveedor() }
         }
     }

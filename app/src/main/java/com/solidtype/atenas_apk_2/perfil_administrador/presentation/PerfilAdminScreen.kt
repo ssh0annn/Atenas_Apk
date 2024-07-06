@@ -84,6 +84,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     }
                     if(uiState.showDialogo){
                         dialog.show()
+                        viewModel.onEvent(PerfilEvent.CleanDialog)
                     }
 
                     //VERIFICA SI LOS DATOS ESTAN PARA RELLENARLO

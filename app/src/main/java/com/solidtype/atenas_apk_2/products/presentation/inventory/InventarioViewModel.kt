@@ -25,26 +25,21 @@ class InventarioViewModel @Inject constructor(
 
     private var fileSelectionListener2: FileSelectionListener2? = null
 
+    private var switch: Boolean = true
     var uiState = MutableStateFlow(ProductosViewStates())
         private set
-
 
     init {
         mostrarProductos()
     }
-
-
     fun onEvent(event: InventariosEvent) {
         when (event) {
             is InventariosEvent.ActualizarCategoria -> {
                 agregarCategoria(event.catego)
             }
-
             is InventariosEvent.ActualizarProductos -> {
                 crearProductos(event.producto)
-
             }
-
             is InventariosEvent.AgregarCategorias -> {
                 agregarCategoria(event.catego)
             }
@@ -81,7 +76,7 @@ class InventarioViewModel @Inject constructor(
             InventariosEvent.Getrpoveedores -> {
                 viewModelScope.launch {
 
-                    casosProveedores.getProveedores().collect { proveedores ->
+                    casosProveedores.getProveedores(switch).collect { proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
@@ -93,7 +88,7 @@ class InventarioViewModel @Inject constructor(
             is InventariosEvent.BuscarProveedores -> {
                 viewModelScope.launch {
 
-                    casosProveedores.buscarProveedores(event.any).collect { proveedores ->
+                    casosProveedores.buscarProveedores(event.any, switch).collect { proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
@@ -109,6 +104,14 @@ class InventarioViewModel @Inject constructor(
             is InventariosEvent.EliminarProveedor -> {
                 viewModelScope.launch { casosProveedores.eliminarPersona(event.provee) }
             }
+
+            InventariosEvent.Switch -> {
+                switch = !switch
+                uiState.update { it.copy(switch = switch) }
+                mostrarProductos()
+                getCategorias()
+                onEvent(InventariosEvent.Getrpoveedores)
+            }
         }
     }
     private fun buscarCategorias(any:String){
@@ -117,8 +120,6 @@ class InventarioViewModel @Inject constructor(
             casosInventario.buscarCategorias(any).collect{ catego ->
                 uiState.update { it.copy(categoria = catego) }
             }
-
-
         }
     }
     private fun eliminarCategoria(catego: categoria){
@@ -129,7 +130,7 @@ class InventarioViewModel @Inject constructor(
 
     private fun getCategorias() {
         viewModelScope.launch {
-            casosInventario.getCategorias().collect { categoria ->
+            casosInventario.getCategorias(switch).collect { categoria ->
                 uiState.update { it.copy(categoria = categoria) }
             }
         }
@@ -150,15 +151,13 @@ class InventarioViewModel @Inject constructor(
                 // syncProductos()
             }
         }
-
     }
-
   private  fun mostrarProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 //syncProductos()
             }
-            casosInventario.getProductos().collect { product ->
+            casosInventario.getProductos(switch).collect { product ->
                 uiState.update {
                     it.copy(products = product)
                 }
@@ -168,14 +167,10 @@ class InventarioViewModel @Inject constructor(
 
     fun exportarExcel() {
         viewModelScope.launch {
-            println("inicia viewScope en la funcion que exporta en viewmodel")
             withContext(Dispatchers.IO) {
-                println("withContext la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 val path = casosInventario.exportarExcel(uiState.value.products)
-                println("Se guardo el archivo en: ${path}")
                 uiState.update { it.copy(isLoading = false) }
-                println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
                     uiState.update {
                         it.copy(uriPath = path)
@@ -198,7 +193,7 @@ class InventarioViewModel @Inject constructor(
 
     fun buscarProductos(any: String) {
         viewModelScope.launch {
-            val busqueda = casosInventario.searchProductos(any)
+            val busqueda = casosInventario.searchProductos(any, switch)
             busqueda.collect { product ->
                 uiState.update {
                     it.copy(products = product)
@@ -208,16 +203,12 @@ class InventarioViewModel @Inject constructor(
     }
 
     fun syncProductos() {
-
-
     }
     fun importarExcel(filePath: Uri) {
         fileSelectionListener2?.onFileSelected(filePath)
-        println("Este esl el patchFile $filePath")
-        println("Se llamo el fileSelected")
         viewModelScope.launch {
-            uiState.update { it.copy(isLoading = true) }
             withContext(Dispatchers.IO) {
+                uiState.update { it.copy(isLoading = true) }
                 if (casosInventario.importarExcelFile(filePath)) {
                     syncProductos()
                     uiState.update {

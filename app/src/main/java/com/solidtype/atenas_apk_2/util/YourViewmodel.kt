@@ -15,10 +15,11 @@ import javax.inject.Inject
 @HiltViewModel
 class YourViewModel @Inject constructor(private val casosInventario: CasosInventario): ViewModel() {
     var fileSelectionListener: FileSelectionListener? = null
+    private val switch: Boolean = true
 
     init {
 
-         casosInventario.getProductos()
+         casosInventario.getProductos(switch)
 
     }
 

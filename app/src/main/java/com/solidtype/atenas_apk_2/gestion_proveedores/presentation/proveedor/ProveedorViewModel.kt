@@ -21,8 +21,8 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
         private set
 
     private var recentlyDelete: Personastodas.Proveedor? = null
-
     private var userJob: Job? = null
+    private var switch:Boolean = uiState.value.switch
 
     init {
         getUsuarios()
@@ -59,6 +59,9 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
                 EditarUsuario(evento.proveedors)
             }
 
+            ProveedorEvent.Switch -> {
+                uiState.update { it.copy(switch = !switch) }
+            }
         }
     }
 
@@ -91,7 +94,7 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
 
     private fun getUsuarios() {
         userJob?.cancel()
-        userJob = casos.getProveedores().onEach { users ->
+        userJob = casos.getProveedores(switch).onEach { users ->
             uiState.update { it.copy(proveedores = users) }
 
         }.launchIn(viewModelScope)
@@ -100,7 +103,7 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
     private fun buscarUsuarios(any: String) {
 
         userJob?.cancel()
-        userJob = casos.buscarProveedores(any).onEach { users ->
+        userJob = casos.buscarProveedores(any, switch).onEach { users ->
             uiState.update { it.copy(proveedores = users) }
         }.launchIn(viewModelScope)
 
