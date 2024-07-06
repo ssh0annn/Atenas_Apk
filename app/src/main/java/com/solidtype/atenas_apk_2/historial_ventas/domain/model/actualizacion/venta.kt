@@ -24,9 +24,6 @@ data class venta (
     val id_vendedor :Long,
     val id_cliente :Long,
     val id_tipo_venta :Long,
-    val subtotal :Double,
-    val impuesto :Double,
-    val total :Double,
     val cantidad :Int, //Cantidad articulos
     val fecha : LocalDate,
     @ColumnInfo(defaultValue = "true") val estado :Boolean

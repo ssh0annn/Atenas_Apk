@@ -22,8 +22,6 @@ interface detalle_ventaDao {
     fun getDetalleVentasByIdVenta(id_venta :Int):Flow<List<detalle_venta>>
     @Query("select * from detalle_venta where id_producto ==:id_producto")
     fun getDetalleVentasByIdProducto(id_producto :Int):Flow<List<detalle_venta>>
-    @Query("select * from detalle_venta where id_tipo_venta ==:id")
-    fun getDetalleVentasByIdTipoVenta(id :Long): Flow<List<detalle_venta>>
     @Query("select * from detalle_venta where id_detalle_venta ==:id")
     suspend fun getDetalleVentaById(id :Int): detalle_venta
     @Query("select * from detalle_venta where id_venta ==:id")

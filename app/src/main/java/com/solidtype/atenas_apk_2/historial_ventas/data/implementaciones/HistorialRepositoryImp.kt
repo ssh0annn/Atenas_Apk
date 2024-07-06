@@ -10,7 +10,6 @@ import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import com.solidtype.atenas_apk_2.util.ListaTicket
 import com.solidtype.atenas_apk_2.util.XlsManeger
-import com.solidtype.atenas_apk_2.util.toGetColumns
 import com.solidtype.atenas_apk_2.util.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -35,9 +34,6 @@ class HistorialRepositoryImp @Inject constructor(
             "id_vendedor",
             "id_cliente",
             "id_tipo_venta",
-            "subtotal",
-            "impuesto",
-            "total",
             "cantidad",
             "fecha",
             "estado")
@@ -46,14 +42,10 @@ class HistorialRepositoryImp @Inject constructor(
         try {
             for(productos in listaProductos ){
                 val temp = mutableListOf<String>()
-
                 temp.add(productos.id_venta.toString())
                 temp.add(productos.id_vendedor.toString())
                 temp.add(productos.id_cliente.toString())
                 temp.add(productos.id_tipo_venta.toString())
-                temp.add(productos.subtotal.toString())
-                temp.add(productos.impuesto.toString())
-                temp.add(productos.total.toString())
                 temp.add(productos.cantidad.toString())
                 temp.add(productos.fecha.toString())
                 temp.add(productos.estado.toString())
@@ -97,12 +89,12 @@ class HistorialRepositoryImp @Inject constructor(
 
     //Removi la variable fecha final de donde la recive el DAO, ARREGLALO!
     override fun buscarPorFechasCategoriasVentas(
-        Fecha_inicio: String,
+        fecha_inicio: String,
         fecha_final: String,
 
-    ): Flow<List<venta>> {
+        ): Flow<List<venta>> {
 
-       return dao.getHistorialVentaFechaCategoria(Fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
+       return dao.getHistorialVentaFechaCategoria(fecha_inicio.toLocalDate(), fecha_final.toLocalDate())
 
     }
 
