@@ -82,7 +82,15 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
             ) {//Contenedor
                 Column {
                     Titulo("Facturas", Icons.AutoMirrored.Outlined.FactCheck)
-                    Inputs(noFacturaCliente, datePickerState1, fechaIni.value, showDatePicker1, datePickerState2, fechaFin.value, showDatePicker2)
+                    Inputs(
+                        noFacturaCliente,
+                        datePickerState1,
+                        fechaIni.value,
+                        showDatePicker1,
+                        datePickerState2,
+                        fechaFin.value,
+                        showDatePicker2
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
                     Tabla(facturas = uiState.facturaConDetalle)
                     BotonesFinales(viewModel, fechaFin, fechaIni, noFacturaCliente)
@@ -91,6 +99,6 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
         }
         DatePickerDialogoSimple(showDatePicker1, datePickerState1, fechaIni)
         DatePickerDialogoSimple(showDatePicker2, datePickerState2, fechaFin)
+        MenuLateral(navController)
     }
-    MenuLateral(navController)
 }
