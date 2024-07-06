@@ -17,7 +17,7 @@ data class ProductosViewStates(
     val messages: String = "",
     val categoria:List<categoria> = emptyList(),
     val proveedores:List<Personastodas.Proveedor> = emptyList(),
-    val switch:Boolean = false
+    val switch:Boolean = true
 
 
 )

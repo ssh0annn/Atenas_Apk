@@ -25,10 +25,10 @@ class InventarioViewModel @Inject constructor(
 
     private var fileSelectionListener2: FileSelectionListener2? = null
 
-    private var switch: Boolean = false
+    private var switch: Boolean = true
     var uiState = MutableStateFlow(ProductosViewStates())
         private set
-    
+
     init {
         mostrarProductos()
     }
