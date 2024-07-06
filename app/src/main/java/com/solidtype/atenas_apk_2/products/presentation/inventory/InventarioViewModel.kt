@@ -120,8 +120,6 @@ class InventarioViewModel @Inject constructor(
             casosInventario.buscarCategorias(any).collect{ catego ->
                 uiState.update { it.copy(categoria = catego) }
             }
-
-
         }
     }
     private fun eliminarCategoria(catego: categoria){
@@ -153,9 +151,7 @@ class InventarioViewModel @Inject constructor(
                 // syncProductos()
             }
         }
-
     }
-
   private  fun mostrarProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
@@ -171,14 +167,10 @@ class InventarioViewModel @Inject constructor(
 
     fun exportarExcel() {
         viewModelScope.launch {
-            println("inicia viewScope en la funcion que exporta en viewmodel")
             withContext(Dispatchers.IO) {
-                println("withContext la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 val path = casosInventario.exportarExcel(uiState.value.products)
-                println("Se guardo el archivo en: ${path}")
                 uiState.update { it.copy(isLoading = false) }
-                println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
                     uiState.update {
                         it.copy(uriPath = path)
@@ -219,8 +211,9 @@ class InventarioViewModel @Inject constructor(
         println("Este esl el patchFile $filePath")
         println("Se llamo el fileSelected")
         viewModelScope.launch {
-            uiState.update { it.copy(isLoading = true) }
+
             withContext(Dispatchers.IO) {
+                uiState.update { it.copy(isLoading = true) }
                 if (casosInventario.importarExcelFile(filePath)) {
                     syncProductos()
                     uiState.update {
