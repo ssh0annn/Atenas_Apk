@@ -1,10 +1,10 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoCategoria
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarCategoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
@@ -54,7 +56,6 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
@@ -109,10 +110,10 @@ fun InventoryScreen(
 
     val mostrarCategoria = rememberSaveable { mutableStateOf(false) }
 
-    val id_categoria = rememberSaveable { mutableStateOf("") }
-    val nombre_categoria = rememberSaveable { mutableStateOf("") }
-    val descripcion_categoria = rememberSaveable { mutableStateOf("") }
-    val estado_categoria = rememberSaveable { mutableStateOf("") }
+    val idCategoria = rememberSaveable { mutableStateOf("") }
+    val nombreCategoria = rememberSaveable { mutableStateOf("") }
+    val descripcionCategoria = rememberSaveable { mutableStateOf("") }
+    val estadoCategoria = rememberSaveable { mutableStateOf("") }
     val mostrarConfirmarCategoria = rememberSaveable { mutableStateOf(false) }
 
     val mostrarProveedores = rememberSaveable { mutableStateOf(false) }
@@ -211,257 +212,238 @@ fun InventoryScreen(
             }
         }
         DialogoExcel(mostrar)
-        Dialogo("Gestor de Categoría", mostrarCategoria.value, { mostrarCategoria.value = false }, false) {
-            Row {//Detalles y Lista
-                Column( //Detalles
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .background(AzulGris, RoundedCornerShape(20.dp))
-                ) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .background(GrisOscuro, RoundedCornerShape(5.dp))
-                    ) {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .padding(10.dp)
-                            ) {
-                                InputDetalle("ID", id_categoria.value) { id_categoria.value = it }
-                                InputDetalle(
-                                    "Categoría",
-                                    nombre_categoria.value
-                                ) { nombre_categoria.value = it }
-                                InputDetalle("Descripción", descripcion_categoria.value) {
-                                    descripcion_categoria.value = it
-                                }
-                                Spacer(modifier = Modifier.height(5.dp))
-                                AutocompleteSelect(
-                                    "Estado",
-                                    estado_categoria.value,
-                                    listOf("Activo", "Inactivo")
-                                ) { estado_categoria.value = it }
-                            }
-                        }
-                    }
-                    Row{
-                        BotonBlanco("Guardar") {
-                            try {
-                                if (id_categoria.value.isEmpty() || nombre_categoria.value.isEmpty() || descripcion_categoria.value.isEmpty() || estado_categoria.value.isEmpty()) {
-                                    throw Exception("Campos vacios.")
-                                }
+        DialogoCategoria(
+            mostrarCategoria,
+            idCategoria,
+            nombreCategoria,
+            descripcionCategoria,
+            estadoCategoria,
+            uiState,
+            viewModel,
+            context,
+            mostrarConfirmarCategoria
+        )
+        DialogoConfirmarCategoria(
+            mostrarConfirmarCategoria,
+            viewModel,
+            idCategoria,
+            nombreCategoria,
+            descripcionCategoria,
+            estadoCategoria,
+            context
+        )
 
-                                if (uiState.categoria.find { it.id_categoria == id_categoria.value.toLong() } != null) {
-                                    viewModel.onEvent(
-                                        InventariosEvent.ActualizarCategoria(
-                                            categoria(
-                                                id_categoria = id_categoria.value.toLong(),
-                                                nombre = nombre_categoria.value,
-                                                descripcion = descripcion_categoria.value,
-                                                estado = estado_categoria.value.formatoActivoDDBB()
-                                            )
-                                        )
-                                    )
-                                } else {
-                                    viewModel.onEvent(
-                                        InventariosEvent.AgregarCategorias(
-                                            categoria(
-                                                id_categoria = id_categoria.value.toLong(),
-                                                nombre = nombre_categoria.value,
-                                                descripcion = descripcion_categoria.value,
-                                                estado = estado_categoria.value.formatoActivoDDBB()
-                                            )
-                                        )
-                                    )
-                                }
+        MenuLateral(navController)
+        SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
+    }
+}
 
-                                id_categoria.value = ""
-                                nombre_categoria.value = ""
-                                descripcion_categoria.value = ""
-                                estado_categoria.value = ""
-
-                                Toast.makeText(
-                                    context,
-                                    "Categoría guardada",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            } catch (e: Exception) {
-                                Toast.makeText(
-                                    context,
-                                    "error: ${e.message}",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                        Spacer(modifier = Modifier.width(40.dp))
-                        BotonBlanco("Eliminar"){ mostrarConfirmarCategoria.value = true }
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-                Column( //Lista
-                    modifier = Modifier
-                        .padding(0.dp, 20.dp, 0.dp, 0.dp)
-                        .background(AzulGris, RoundedCornerShape(20.dp))
-                ) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .heightIn(max = 355.dp)
-                            .padding(10.dp)
-                            .background(GrisOscuro, RoundedCornerShape(5.dp))
-                    ) {
-                        item {
-                            Column(
-                                modifier = Modifier.padding(5.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .padding(5.dp)
-                                        .background(GrisOscuro, RoundedCornerShape(5.dp))
-                                ) {
-                                    Text(
-                                        text = "ID",
-                                        modifier = Modifier.weight(1f),
-                                        color = Blanco,
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = "Nombre",
-                                        modifier = Modifier.weight(1f),
-                                        color = Blanco,
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = "Descripción",
-                                        modifier = Modifier.weight(1f),
-                                        color = Blanco,
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = "Estado",
-                                        modifier = Modifier.weight(1f),
-                                        color = Blanco,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-                        }
-                        if (uiState.categoria.isNotEmpty())
-                            items(uiState.categoria) { categoriaIndex ->
-                                Row(
-                                    modifier = Modifier
-                                        .padding(
-                                            start = 10.dp,
-                                            end = 5.dp,
-                                            top = 5.dp,
-                                            bottom = 5.dp
-                                        )
-                                        .background(
-                                            GrisClaro,
-                                            RoundedCornerShape(10.dp)
-                                        )
-                                        .clickable {
-                                            id_categoria.value = categoriaIndex.id_categoria.toString()
-                                            nombre_categoria.value = categoriaIndex.nombre
-                                            descripcion_categoria.value = categoriaIndex.descripcion.toString()
-                                            estado_categoria.value = categoriaIndex.estado.formatoActivo()
-                                        },
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = categoriaIndex.id_categoria.toString(),
-                                        modifier = Modifier
-                                            .padding(5.dp, 5.dp, 0.dp, 5.dp)
-                                            .weight(1f),
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = categoriaIndex.nombre,
-                                        modifier = Modifier.weight(1f),
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = categoriaIndex.descripcion.toString(),
-                                        modifier = Modifier.weight(1f),
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = categoriaIndex.estado.formatoActivo(),
-                                        modifier = Modifier
-                                            .padding(0.dp, 5.dp, 5.dp, 5.dp)
-                                            .weight(1f),
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-                    }
-                }
-            }
-        }
-        Dialogo(
-            titulo = "Confirma",
-            mostrar = mostrarConfirmarCategoria.value,
-            onCerrarDialogo = { mostrarConfirmarCategoria.value = false },
-            max = false,
-            sinBoton = true
-        ) {
-            Column(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
+@Composable
+@OptIn(ExperimentalMultiplatform::class)
+fun DialogoProveedor(
+    mostrarProveedor: MutableState<Boolean>,
+    idProveedor: MutableState<String>,
+    nombreProveedor: MutableState<String>,
+    descripcionProveedor: MutableState<String>,
+    estadoProveedor: MutableState<String>,
+    uiState: ProductosViewStates,
+    viewModel: InventarioViewModel,
+    context: Context,
+    mostrarConfirmarProveedor: MutableState<Boolean>
+) {
+    Dialogo(
+        "Gestor de Categoría",
+        mostrarProveedor.value,
+        { mostrarProveedor.value = false },
+        false
+    ) {
+        Row {//Detalles y Lista
+            Column( //Detalles
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .padding(20.dp)
+                    .background(AzulGris, RoundedCornerShape(20.dp))
             ) {
-                Text(
-                    text = "¿Estás seguro que deseas eliminar esta categoría?",
-                    textAlign = TextAlign.Center,
-                    color = AzulGris,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = Modifier.height(20.dp))
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .background(GrisOscuro, RoundedCornerShape(5.dp))
+                ) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .padding(10.dp)
+                        ) {
+                            InputDetalle("ID", idProveedor.value) { idProveedor.value = it }
+                            InputDetalle(
+                                "Proveedor",
+                                nombreProveedor.value
+                            ) { nombreProveedor.value = it }
+                            InputDetalle("Descripción", descripcionProveedor.value) {
+                                descripcionProveedor.value = it
+                            }
+                            Spacer(modifier = Modifier.height(5.dp))
+                            AutocompleteSelect(
+                                "Estado",
+                                estadoProveedor.value,
+                                listOf("Activo", "Inactivo")
+                            ) { estadoProveedor.value = it }
+                        }
+                    }
+                }
                 Row {
-                    Boton("Aceptar") {
-                        try {
-                            viewModel.onEvent(
-                                InventariosEvent.eliminarCategoria(
-                                    categoria(
-                                        id_categoria.value.toLong(),
-                                        nombre_categoria.value,
-                                        descripcion_categoria.value,
-                                        estado_categoria.value.formatoActivoDDBB()
+                    BotonBlanco("Guardar") {
+                        /*try {
+                            if (idProveedor.value.isEmpty() || nombreProveedor.value.isEmpty() || descripcionProveedor.value.isEmpty() || estadoProveedor.value.isEmpty()) {
+                                throw Exception("Campos vacios.")
+                            }
+
+                            if (uiState.categoria.find { it.id_categoria == idProveedor.value.toLong() } != null) {
+                                viewModel.onEvent(
+                                    InventariosEvent.ActualizarProveedor(
+                                        categoria(
+                                            id_categoria = idCategoria.value.toLong(),
+                                            nombre = nombreCategoria.value,
+                                            descripcion = descripcionCategoria.value,
+                                            estado = estadoCategoria.value.formatoActivoDDBB()
+                                        )
                                     )
                                 )
-                            )
+                            } else {
+                                viewModel.onEvent(
+                                    InventariosEvent.AgregarCategorias(
+                                        categoria(
+                                            id_categoria = idCategoria.value.toLong(),
+                                            nombre = nombreCategoria.value,
+                                            descripcion = descripcionCategoria.value,
+                                            estado = estadoCategoria.value.formatoActivoDDBB()
+                                        )
+                                    )
+                                )
+                            }
 
-                            id_categoria.value = ""
-                            nombre_categoria.value = ""
-                            descripcion_categoria.value = ""
-                            estado_categoria.value = ""
-
-                            mostrarConfirmarCategoria.value = false
+                            idCategoria.value = ""
+                            nombreCategoria.value = ""
+                            descripcionCategoria.value = ""
+                            estadoCategoria.value = ""
 
                             Toast.makeText(
                                 context,
-                                "Se eliminó la categoría",
+                                "Categoría guardada",
                                 Toast.LENGTH_LONG
                             ).show()
                         } catch (e: Exception) {
                             Toast.makeText(
                                 context,
-                                "No se pudo eliminar",
+                                "error: ${e.message}",
                                 Toast.LENGTH_LONG
                             ).show()
+                        }*/
+                    }
+                    Spacer(modifier = Modifier.width(40.dp))
+                    BotonBlanco("Inactivar") { mostrarConfirmarProveedor.value = true }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+            Column( //Lista
+                modifier = Modifier
+                    .padding(0.dp, 20.dp, 0.dp, 0.dp)
+                    .background(AzulGris, RoundedCornerShape(20.dp))
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .heightIn(max = 355.dp)
+                        .padding(10.dp)
+                        .background(GrisOscuro, RoundedCornerShape(5.dp))
+                ) {
+                    item {
+                        Column(
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .background(GrisOscuro, RoundedCornerShape(5.dp))
+                            ) {
+                                Text(
+                                    text = "ID",
+                                    modifier = Modifier.weight(1f),
+                                    color = Blanco,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "Nombre",
+                                    modifier = Modifier.weight(1f),
+                                    color = Blanco,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "Descripción",
+                                    modifier = Modifier.weight(1f),
+                                    color = Blanco,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "Estado",
+                                    modifier = Modifier.weight(1f),
+                                    color = Blanco,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Boton("Cancelar") {
-                        mostrarConfirmarCategoria.value = false
-                    }
+                    if (uiState.categoria.isNotEmpty())
+                        items(uiState.categoria) { categoriaIndex ->
+                            Row(
+                                modifier = Modifier
+                                    .padding(
+                                        start = 10.dp,
+                                        end = 5.dp,
+                                        top = 5.dp,
+                                        bottom = 5.dp
+                                    )
+                                    .background(
+                                        GrisClaro,
+                                        RoundedCornerShape(10.dp)
+                                    )
+                                    .clickable {
+                                        idProveedor.value = categoriaIndex.id_categoria.toString()
+                                        nombreProveedor.value = categoriaIndex.nombre
+                                        descripcionProveedor.value =
+                                            categoriaIndex.descripcion.toString()
+                                        estadoProveedor.value =
+                                            categoriaIndex.estado.formatoActivo()
+                                    },
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = categoriaIndex.id_categoria.toString(),
+                                    modifier = Modifier
+                                        .padding(5.dp, 5.dp, 0.dp, 5.dp)
+                                        .weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = categoriaIndex.nombre,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = categoriaIndex.descripcion.toString(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = categoriaIndex.estado.formatoActivo(),
+                                    modifier = Modifier
+                                        .padding(0.dp, 5.dp, 5.dp, 5.dp)
+                                        .weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                 }
             }
         }
-        MenuLateral(navController)
-        SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
 }
