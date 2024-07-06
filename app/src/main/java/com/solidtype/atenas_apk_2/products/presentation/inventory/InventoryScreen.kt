@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,22 +28,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.DialogoProveedor
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoCategoria
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarCategoria
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Detalles
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
+import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
+import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
 import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
@@ -98,13 +109,14 @@ fun InventoryScreen(
 
     val mostrarProveedor = rememberSaveable { mutableStateOf(false) }
 
+    val idProveedor = rememberSaveable { mutableStateOf("") }
     val nombreProveedor = rememberSaveable { mutableStateOf("") }
     val tipoDocumentoProveedor = rememberSaveable { mutableStateOf("") }
     val documentoProveedor = rememberSaveable { mutableStateOf("") }
     val direccionProveedor = rememberSaveable { mutableStateOf("") }
     val telefonoProveedor = rememberSaveable { mutableStateOf("") }
     val emailProveedor = rememberSaveable { mutableStateOf("") }
-    //val mostrarConfirmarProveedor = rememberSaveable { mutableStateOf(false) }
+    val mostrarConfirmarProveedor = rememberSaveable { mutableStateOf(false) }
 
     val showSnackbar = rememberSaveable { mutableStateOf(false) }
 
@@ -231,8 +243,80 @@ fun InventoryScreen(
             emailProveedor,
             viewModel,
             context,
-            uiState
+            uiState,
+            mostrarConfirmarProveedor,
+            idProveedor
         )
+        Dialogo(
+            titulo = "Confirma",
+            mostrar = mostrarConfirmarProveedor.value,
+            onCerrarDialogo = { mostrarConfirmarProveedor.value = false },
+            max = false,
+            sinBoton = true
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(400.dp)
+                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "¿Estás seguro que deseas eliminar este proveedor?",
+                    textAlign = TextAlign.Center,
+                    color = AzulGris,
+                    fontSize = 24.sp
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Row {
+                    Boton("Aceptar") {
+                        try {
+                            viewModel.onEvent(
+                                InventariosEvent.EliminarProveedor(
+                                    Personastodas.Proveedor(
+                                        id_proveedor = idProveedor.value.toLong(),
+                                        nombre = nombreProveedor.value,
+                                        tipo_documento = tipoDocumentoProveedor.value,
+                                        documento = documentoProveedor.value,
+                                        direccion = direccionProveedor.value,
+                                        telefono = telefonoProveedor.value,
+                                        email = emailProveedor.value
+                                    )
+                                )
+                            )
+
+                            viewModel.onEvent(InventariosEvent.Getrpoveedores)
+
+                            idProveedor.value = ""
+                            nombreProveedor.value = ""
+                            tipoDocumentoProveedor.value = ""
+                            documentoProveedor.value = ""
+                            direccionProveedor.value = ""
+                            telefonoProveedor.value = ""
+                            emailProveedor.value = ""
+
+                            mostrarConfirmarProveedor.value = false
+
+                            Toast.makeText(
+                                context,
+                                "Se eliminó el proveedor",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                context,
+                                "No se pudo eliminar",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Boton("Cancelar") {
+                        mostrarConfirmarProveedor.value = false
+                    }
+                }
+            }
+        }
         MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }

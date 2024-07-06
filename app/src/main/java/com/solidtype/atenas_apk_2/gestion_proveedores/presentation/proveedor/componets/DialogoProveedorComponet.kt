@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,7 +47,9 @@ fun DialogoProveedor(
     emailProveedor: MutableState<String>,
     viewModel: InventarioViewModel,
     context: Context,
-    uiState: ProductosViewStates
+    uiState: ProductosViewStates,
+    mostrarConfirmarProveedor: MutableState<Boolean>,
+    idProveedor: MutableState<String>
 ) {
     Dialogo(
         "Gestor de Proveedores",
@@ -147,8 +150,8 @@ fun DialogoProveedor(
                             ).show()
                         }
                     }
-                    /*Spacer(modifier = Modifier.width(40.dp))
-                        BotonBlanco("Inactivar") { mostrarConfirmarProveedor.value = true }*/
+                    Spacer(modifier = Modifier.width(40.dp))
+                        BotonBlanco("Eliminar") { mostrarConfirmarProveedor.value = true }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -214,6 +217,7 @@ fun DialogoProveedor(
                                         RoundedCornerShape(10.dp)
                                     )
                                     .clickable {
+                                        idProveedor.value = proveedor.id_proveedor.toString()
                                         nombreProveedor.value = proveedor.nombre.toString()
                                         tipoDocumentoProveedor.value =
                                             proveedor.tipo_documento.toString()
