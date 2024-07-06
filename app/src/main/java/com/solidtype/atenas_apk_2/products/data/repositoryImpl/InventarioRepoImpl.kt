@@ -155,11 +155,11 @@ class InventarioRepoImpl @Inject constructor(
                     Personastodas.Proveedor(
                         id_proveedor = System.currentTimeMillis(),
                         nombre = proveedor,
-                        tipo_documento = null,
-                        documento = null,
-                        direccion = null,
-                        telefono = null,
-                        email = null
+                        tipo_documento = "Modificar",
+                        documento = "Modificar",
+                        direccion = "Modificar",
+                        telefono = "Modificar",
+                        email = "Modificar"
                     )
                 )
             )

@@ -35,6 +35,8 @@ sealed class InventariosEvent {
     data class CrearProveedor(val provee:Personastodas.Proveedor):InventariosEvent()
     data class EliminarProveedor(val provee:Personastodas.Proveedor):InventariosEvent()
 
+    object Switch:InventariosEvent()
+
 
 
 }

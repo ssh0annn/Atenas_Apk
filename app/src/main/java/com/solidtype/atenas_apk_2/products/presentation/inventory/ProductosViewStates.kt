@@ -16,7 +16,8 @@ data class ProductosViewStates(
     val uriPath: Uri? = null,
     val messages: String = "",
     val categoria:List<categoria> = emptyList(),
-    val proveedores:List<Personastodas.Proveedor> = emptyList()
+    val proveedores:List<Personastodas.Proveedor> = emptyList(),
+    val switch:Boolean = true
 
 
 )

@@ -14,4 +14,5 @@ sealed class ProveedorEvent {
     object RestaurarProveedor : ProveedorEvent()
 
     object MostrarProveedorEvent : ProveedorEvent()
+    object Switch : ProveedorEvent()
 }
