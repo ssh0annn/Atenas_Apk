@@ -4,33 +4,41 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.util.showFilePicker
-import com.solidtype.atenas_apk_2.util.ui.Components.Avatar
 import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 
 @Composable
-fun AvatarConBotones(
+fun Botones(
     context: Context,
     viewModel: InventarioViewModel,
     showSnackbarIni: MutableState<Boolean>,
-    mostrar: MutableState<Boolean>
+    mostrar: MutableState<Boolean>,
+    mostrarProducto: MutableState<Boolean>,
+    editar: MutableState<Boolean>,
+    idInventario: MutableState<String>,
+    categoria: MutableState<String>,
+    nombre: MutableState<String>,
+    descripcion: MutableState<String>,
+    costo: MutableState<String>,
+    precio: MutableState<String>,
+    modelo: MutableState<String>,
+    marca: MutableState<String>,
+    cantidad: MutableState<String>,
+    impuesto: MutableState<String>,
+    estado: MutableState<String>,
+    provider: MutableState<String>
 ) {
-    Box(//Avatar y Botones
+    Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.TopEnd
-    ) { //Avatar y Botones
+    ) {
         Row {
-            //Botones para Importar, Exportar y Ver
             Boton("Importar") {
                 showFilePicker(context)
             }
@@ -42,6 +50,23 @@ fun AvatarConBotones(
             }
             Boton("Ejemplar") {
                 mostrar.value = true
+            }
+            Boton ("Agregar") {
+                mostrarProducto.value = true
+                editar.value = false
+
+                idInventario.value = ""
+                categoria.value = ""
+                nombre.value = ""
+                descripcion.value = ""
+                costo.value = ""
+                precio.value = ""
+                modelo.value = ""
+                marca.value = ""
+                cantidad.value = ""
+                impuesto.value = ""
+                estado.value = ""
+                provider.value = ""
             }
         }
     }

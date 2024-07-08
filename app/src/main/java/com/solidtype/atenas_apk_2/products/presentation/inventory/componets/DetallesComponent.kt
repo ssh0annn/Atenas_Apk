@@ -29,6 +29,7 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.Components.Boton
 import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
 import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
@@ -60,7 +61,7 @@ fun Detalles(
     Column(
         modifier = Modifier
             .padding(top = 0.dp)
-            .height(Pantalla.alto - 185.dp)
+            .height(Pantalla.alto * 0.6f)
     ) {
         Column(
             modifier = Modifier
@@ -162,97 +163,6 @@ fun Detalles(
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {//Botones de cerrar y guardar
-                BotonIconCircular(
-                    true,
-                    onClick = {//Boton X para borrar productos
-                        try {
-                            viewModel.onEvent(
-                                InventariosEvent.EliminarProductos(
-                                    inventario(
-                                        id_inventario = idInventario.value.toLong(),
-                                        id_categoria = idCatalogo.value.toLong(),
-                                        id_proveedor = idProveedor.value.toLong(),
-                                        nombre = nombre.value,
-                                        marca = marca.value,
-                                        modelo = modelo.value,
-                                        cantidad = cantidad.value.toInt(),
-                                        precio_compra = costo.value.toDouble(),
-                                        precio_venta = costo.value.toDouble(),
-                                        impuesto = impuesto.value.toDouble(),
-                                        descripcion = descripcion.value,
-                                        estado = estado.value.formatoActivoDDBB()
-                                    )
-                                )
-                            )
-                            idInventario.value = ""
-                            idCatalogo.value = ""
-                            idProveedor.value = ""
-                            nombre.value = ""
-                            marca.value = ""
-                            modelo.value = ""
-                            cantidad.value = ""
-                            costo.value = ""
-                            precio.value = ""
-                            impuesto.value = ""
-                            descripcion.value = ""
-                            estado.value = ""
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "No se pudo eliminar",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                )
-                Spacer(modifier = Modifier.width(60.dp))
-                BotonIconCircular(false, onClick = { //Guardar o Editar productos
-                    try {
-                        viewModel.onEvent(
-                            InventariosEvent.AgregarProductos(
-                                inventario(
-                                    id_inventario = idInventario.value.toLong(),
-                                    id_categoria = idCatalogo.value.toLong(),
-                                    id_proveedor = idProveedor.value.toLong(),
-                                    nombre = nombre.value,
-                                    marca = marca.value,
-                                    modelo = modelo.value,
-                                    cantidad = cantidad.value.toInt(),
-                                    precio_compra = costo.value.toDouble(),
-                                    precio_venta = precio.value.toDouble(),
-                                    impuesto = impuesto.value.toDouble(),
-                                    descripcion = descripcion.value,
-                                    estado = estado.value == "Activo"
-                                )
-                            )
-                        )
-                        idInventario.value = ""
-                        idCatalogo.value = ""
-                        idProveedor.value = ""
-                        nombre.value = ""
-                        marca.value = ""
-                        modelo.value = ""
-                        cantidad.value = ""
-                        costo.value = ""
-                        precio.value = ""
-                        impuesto.value = ""
-                        descripcion.value = ""
-                        estado.value = ""
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "error: campos invalidos",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                        Log.e("ErrorInventario", "Error: ${e.message}, Causa: ${e.cause}")
-                    }
-                })
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,14 +38,15 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.DialogoProveedor
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoCategoria
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarCategoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Botones
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Detalles
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProveedor
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -71,7 +73,7 @@ fun InventoryScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val busqueda = rememberSaveable { mutableStateOf("") }
-    val mostrar = rememberSaveable { mutableStateOf(false) }
+    val mostrarEjemplar = rememberSaveable { mutableStateOf(false) }
 
     if (busqueda.value.isNotBlank())
         viewModel.onEvent(InventariosEvent.BuscarProducto(busqueda.value))
@@ -84,9 +86,14 @@ fun InventoryScreen(
         Toast.LENGTH_LONG
     ).show()
 
-    val idInventario = rememberSaveable { mutableStateOf("") }
+    val mostrarProducto = rememberSaveable { mutableStateOf(false) }
+    val mostrarConfirmarProducto = rememberSaveable { mutableStateOf(false) }
+    val editar = rememberSaveable { mutableStateOf(false) }
+
     val idCategoriaText = rememberSaveable { mutableStateOf("") }
     val idProveedorText = rememberSaveable { mutableStateOf("") }
+
+    val idInventario = rememberSaveable { mutableStateOf("") }
     val categoria = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
     val descripcion = rememberSaveable { mutableStateOf("") }
@@ -127,8 +134,8 @@ fun InventoryScreen(
 
     val listEstados = listOf("Activo", "No Activo")
 
-    if(uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
-    if(uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
+    if (uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
+    if (uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
 
     if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
@@ -168,51 +175,218 @@ fun InventoryScreen(
                 Titulo("Inventario", Icons.Outlined.Inventory2)
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
-                    Column {
-                        Buscador(busqueda.value) { busqueda.value = it }
-                        AreaProductos(
-                            uiState,
-                            idInventario,
-                            idCategoriaText,
-                            idProveedorText,
-                            nombre,
-                            marca,
-                            modelo,
-                            cantidad,
-                            costo,
-                            precio,
-                            impuesto,
-                            descripcion,
-                            estado
-                        )
-                    }
-                    Detalles(
-                        viewModel,
-                        categoria,
-                        uiState,
-                        nombre,
-                        idInventario,
-                        descripcion,
-                        costo,
-                        precio,
-                        modelo,
-                        marca,
-                        cantidad,
-                        idCategoriaText,
-                        idProveedorText,
-                        impuesto,
-                        estado,
-                        context,
-                        provider,
-                        listEstados,
-                        mostrarCategoria,
-                        mostrarProveedor
-                    )
+                    Buscador(busqueda.value) { busqueda.value = it }
+                    //Switch para mostrar productos inactivos
                 }
-                AvatarConBotones(context, viewModel, showSnackbarIni, mostrar)
+                AreaProductos(
+                    uiState,
+                    idInventario,
+                    idCategoriaText,
+                    idProveedorText,
+                    nombre,
+                    marca,
+                    modelo,
+                    cantidad,
+                    costo,
+                    precio,
+                    impuesto,
+                    descripcion,
+                    estado,
+                    mostrarProducto,
+                    editar,
+                    categoria,
+                    provider,
+                    mostrarConfirmarProducto
+                )
+                Botones(
+                    context,
+                    viewModel,
+                    showSnackbarIni,
+                    mostrarEjemplar,
+                    mostrarProducto,
+                    editar,
+                    idInventario,
+                    categoria,
+                    nombre,
+                    descripcion,
+                    costo,
+                    precio,
+                    modelo,
+                    marca,
+                    cantidad,
+                    impuesto,
+                    estado,
+                    provider
+                )
             }
         }
-        DialogoExcel(mostrar)
+        Dialogo(
+            titulo = "Gestor de Productos",
+            mostrar = mostrarProducto.value,
+            onCerrarDialogo = { mostrarProducto.value = false },
+            max = false,
+            sinBoton = true
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(380.dp)
+                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Detalles(
+                    viewModel,
+                    categoria,
+                    uiState,
+                    nombre,
+                    idInventario,
+                    descripcion,
+                    costo,
+                    precio,
+                    modelo,
+                    marca,
+                    cantidad,
+                    idCategoriaText,
+                    idProveedorText,
+                    impuesto,
+                    estado,
+                    context,
+                    provider,
+                    listEstados,
+                    mostrarCategoria,
+                    mostrarProveedor
+                )
+                Row{
+                    Boton(
+                        "Guardar"
+                    ) {
+                        try {
+                            viewModel.onEvent(
+                                InventariosEvent.AgregarProductos(
+                                    inventario(
+                                        id_inventario = idInventario.value.toLong(),
+                                        id_categoria = idCategoriaText.value.toLong(),
+                                        id_proveedor = idProveedorText.value.toLong(),
+                                        nombre = nombre.value,
+                                        marca = marca.value,
+                                        modelo = modelo.value,
+                                        cantidad = cantidad.value.toInt(),
+                                        precio_compra = costo.value.toDouble(),
+                                        precio_venta = precio.value.toDouble(),
+                                        impuesto = impuesto.value.toDouble(),
+                                        descripcion = descripcion.value,
+                                        estado = estado.value == "Activo"
+                                    )
+                                )
+                            )
+                            idInventario.value = ""
+                            idCategoria.value = ""
+                            idProveedor.value = ""
+                            nombre.value = ""
+                            marca.value = ""
+                            modelo.value = ""
+                            cantidad.value = ""
+                            costo.value = ""
+                            precio.value = ""
+                            impuesto.value = ""
+                            descripcion.value = ""
+                            estado.value = ""
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                context,
+                                "error: campos invalidos",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                            Log.e("ErrorInventario", "Error: ${e.message}, Causa: ${e.cause}")
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Boton("Cerrar"){
+                        mostrarProducto.value = false
+                    }
+                }
+            }
+        }
+        Dialogo(
+            titulo = "Confirma",
+            mostrar = mostrarConfirmarProducto.value,
+            onCerrarDialogo = { mostrarConfirmarProducto.value = false },
+            max = false,
+            sinBoton = true
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(400.dp)
+                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "¿Estás seguro que deseas eliminar este producto?",
+                    textAlign = TextAlign.Center,
+                    color = AzulGris,
+                    fontSize = 24.sp
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Row {
+                    Boton("Aceptar") {
+                        try {
+                            viewModel.onEvent(
+                                InventariosEvent.EliminarProductos(
+                                    inventario(
+                                        idInventario.value.toLong(),
+                                        idCategoriaText.value.toLong(),
+                                        idProveedorText.value.toLong(),
+                                        nombre.value,
+                                        marca.value,
+                                        modelo.value,
+                                        cantidad.value.toInt(),
+                                        costo.value.toDouble(),
+                                        precio.value.toDouble(),
+                                        impuesto.value.toDouble(),
+                                        descripcion.value,
+                                        estado.value.formatoActivoDDBB()
+                                    )
+                                )
+                            )
+
+                            idInventario.value = ""
+                            categoria.value = ""
+                            nombre.value = ""
+                            descripcion.value = ""
+                            costo.value = ""
+                            precio.value = ""
+                            modelo.value = ""
+                            marca.value = ""
+                            cantidad.value = ""
+                            impuesto.value = ""
+                            estado.value = ""
+                            provider.value = ""
+
+                            mostrarConfirmarProducto.value = false
+
+                            Toast.makeText(
+                                context,
+                                "Se eliminó el producto",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                context,
+                                "No se pudo eliminar",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Boton("Cancelar") {
+                        mostrarConfirmarCategoria.value = false
+                    }
+                }
+            }
+        }
+        DialogoExcel(mostrarEjemplar)
         DialogoCategoria(
             mostrarCategoria,
             idCategoria,
@@ -247,76 +421,18 @@ fun InventoryScreen(
             mostrarConfirmarProveedor,
             idProveedor
         )
-        Dialogo(
-            titulo = "Confirma",
-            mostrar = mostrarConfirmarProveedor.value,
-            onCerrarDialogo = { mostrarConfirmarProveedor.value = false },
-            max = false,
-            sinBoton = true
-        ) {
-            Column(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "¿Estás seguro que deseas eliminar este proveedor?",
-                    textAlign = TextAlign.Center,
-                    color = AzulGris,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Row {
-                    Boton("Aceptar") {
-                        try {
-                            viewModel.onEvent(
-                                InventariosEvent.EliminarProveedor(
-                                    Personastodas.Proveedor(
-                                        id_proveedor = idProveedor.value.toLong(),
-                                        nombre = nombreProveedor.value,
-                                        tipo_documento = tipoDocumentoProveedor.value,
-                                        documento = documentoProveedor.value,
-                                        direccion = direccionProveedor.value,
-                                        telefono = telefonoProveedor.value,
-                                        email = emailProveedor.value
-                                    )
-                                )
-                            )
-
-                            viewModel.onEvent(InventariosEvent.Getrpoveedores)
-
-                            idProveedor.value = ""
-                            nombreProveedor.value = ""
-                            tipoDocumentoProveedor.value = ""
-                            documentoProveedor.value = ""
-                            direccionProveedor.value = ""
-                            telefonoProveedor.value = ""
-                            emailProveedor.value = ""
-
-                            mostrarConfirmarProveedor.value = false
-
-                            Toast.makeText(
-                                context,
-                                "Se eliminó el proveedor",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "No se pudo eliminar",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Boton("Cancelar") {
-                        mostrarConfirmarProveedor.value = false
-                    }
-                }
-            }
-        }
+        DialogoConfirmarProveedor(
+            mostrarConfirmarProveedor,
+            viewModel,
+            idProveedor,
+            nombreProveedor,
+            tipoDocumentoProveedor,
+            documentoProveedor,
+            direccionProveedor,
+            telefonoProveedor,
+            emailProveedor,
+            context
+        )
         MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
