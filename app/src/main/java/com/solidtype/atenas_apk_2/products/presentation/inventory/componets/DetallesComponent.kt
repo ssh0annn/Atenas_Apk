@@ -37,7 +37,6 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
 fun Detalles(
-    viewModel: InventarioViewModel,
     categoria: MutableState<String>,
     uiState: ProductosViewStates,
     nombre: MutableState<String>,
@@ -52,7 +51,6 @@ fun Detalles(
     idProveedor: MutableState<String>,
     impuesto: MutableState<String>,
     estado: MutableState<String>,
-    context: Context,
     provider: MutableState<String>,
     listEstados: List<String>,
     mostrarCategoria: MutableState<Boolean>,
