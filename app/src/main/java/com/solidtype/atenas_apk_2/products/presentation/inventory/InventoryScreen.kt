@@ -41,6 +41,7 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dial
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProveedor
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoProducto
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
@@ -165,7 +166,8 @@ fun InventoryScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
                     Buscador(busqueda.value) { busqueda.value = it }
-                    //Switch para mostrar productos inactivos
+                    //Switch para mostrar productos inactivos4
+                    SwitchInactivos(uiState, viewModel)
                 }
                 AreaProductos(
                     uiState,
