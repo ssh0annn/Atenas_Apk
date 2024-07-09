@@ -18,8 +18,8 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
 @Composable
 fun DialogoProducto(

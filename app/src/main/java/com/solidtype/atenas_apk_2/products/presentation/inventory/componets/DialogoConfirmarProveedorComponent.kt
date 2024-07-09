@@ -21,8 +21,8 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.model
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
 @Composable
 fun DialogoConfirmarProveedor(

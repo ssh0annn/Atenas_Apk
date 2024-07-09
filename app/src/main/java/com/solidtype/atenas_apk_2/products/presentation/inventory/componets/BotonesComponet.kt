@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.util.showFilePicker
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
 
 @Composable
 fun Botones(

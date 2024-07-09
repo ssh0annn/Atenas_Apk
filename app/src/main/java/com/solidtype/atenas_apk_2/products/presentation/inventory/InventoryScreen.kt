@@ -43,10 +43,11 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dial
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoProducto
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.SnackbarAnimado
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -131,11 +132,10 @@ fun InventoryScreen(
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
         if (showSnackbarIni.value) {

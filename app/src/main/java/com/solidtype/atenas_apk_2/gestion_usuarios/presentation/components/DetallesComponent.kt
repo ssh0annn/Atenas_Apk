@@ -27,8 +27,8 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boto
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable

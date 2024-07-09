@@ -1,7 +1,5 @@
-package com.solidtype.atenas_apk_2.util.ui.Components
+package com.solidtype.atenas_apk_2.util.ui.components
 
-import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

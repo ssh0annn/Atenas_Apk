@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.util.ui.Components
+package com.solidtype.atenas_apk_2.util.ui.components
 
 import android.content.Context
 import android.content.Intent

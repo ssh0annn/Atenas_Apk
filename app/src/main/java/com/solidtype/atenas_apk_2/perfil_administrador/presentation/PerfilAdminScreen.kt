@@ -25,8 +25,9 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
@@ -40,11 +41,10 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
         if (uiState.perfilAdmin.isNotEmpty()) {

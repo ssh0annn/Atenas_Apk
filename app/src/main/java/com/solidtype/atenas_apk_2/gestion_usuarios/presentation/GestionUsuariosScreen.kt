@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AvatarConBotones
@@ -33,10 +35,11 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Dialo
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoSimple
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 @Composable
 fun GestionUsuariosScreen(
@@ -80,15 +83,14 @@ fun GestionUsuariosScreen(
     if (uiState.roles.isEmpty())
         viewModel.onUserEvent(UserEvent.GetRoles)
 
-    if (false) {
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
         Column( //All

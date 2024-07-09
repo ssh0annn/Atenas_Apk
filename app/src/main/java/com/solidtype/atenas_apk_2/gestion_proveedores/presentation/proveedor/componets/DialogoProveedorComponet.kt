@@ -29,10 +29,10 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
-import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable

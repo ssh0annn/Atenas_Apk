@@ -22,8 +22,8 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioView
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
 @Composable
 fun DialogoConfirmarProducto(

@@ -1,10 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -21,17 +16,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
-import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.components.Carrito
+import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
