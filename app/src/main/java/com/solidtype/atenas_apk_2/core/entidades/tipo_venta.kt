@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.core.entidades
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 @Entity
 data class tipo_venta (
@@ -19,5 +20,6 @@ data class tipo_venta (
     var total :Double = 0.0,
     var abono :Double = 0.0,
     var restantante:Double = 0.0,
+    val fecha:LocalDate = LocalDate.now(),
     @ColumnInfo(defaultValue = "true") val estado :Boolean = true
 )

@@ -224,31 +224,31 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                         ) {
-                                            Text(
-                                                text = factura!!.detalle!!.id_detalle_venta.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = factura.detalle!!.id_venta.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = factura.detalle.id_producto.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = factura.detalle.cantidad.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            Text(
-                                                text = factura.detalle.total.toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
+//                                            Text(
+//                                                text = factura!!.detalle!!.id_detalle_venta.toString(),
+//                                                modifier = Modifier.weight(1f),
+//                                                textAlign = TextAlign.Center
+//                                            )
+//                                            Text(
+//                                                text = factura.detalle!!.id_venta.toString(),
+//                                                modifier = Modifier.weight(1f),
+//                                                textAlign = TextAlign.Center
+//                                            )
+//                                            Text(
+//                                                text = factura.detalle.id_producto.toString(),
+//                                                modifier = Modifier.weight(1f),
+//                                                textAlign = TextAlign.Center
+//                                            )
+//                                            Text(
+//                                                text = factura.detalle.cantidad.toString(),
+//                                                modifier = Modifier.weight(1f),
+//                                                textAlign = TextAlign.Center
+//                                            )
+//                                            Text(
+//                                                text = factura.detalle.total.toString(),
+//                                                modifier = Modifier.weight(1f),
+//                                                textAlign = TextAlign.Center
+//                                            )
                                         }
                                         Divider()
                                         /*Row { // Pie

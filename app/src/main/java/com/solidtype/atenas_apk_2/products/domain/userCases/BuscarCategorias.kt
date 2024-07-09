@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 class BuscarCategorias @Inject constructor(private val repo: InventarioRepo){
 
-    suspend operator fun invoke(any:String) = repo.buscarCategorias(any).map { data -> data.filter { it.estado } }
+    suspend operator fun invoke(any:String) = repo.buscarCategorias(any)
 }

@@ -27,29 +27,38 @@ class  FacturaViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-        mostrarFactura()
+        onEvent(FacturasEvent.GetFacturas)
     }
-    fun mostrarFactura() {
-        job?.cancel()
-        job = viewModelScope.launch {
+
+    fun onEvent(event: FacturasEvent){
+        when(event){
+            is FacturasEvent.BuscarFacturas -> buscarfacturas(event.desde, event.hasta, event.semejante)
+            FacturasEvent.GetFacturas -> mostrarFactura()
+        }
+    }
+  private fun mostrarFactura() {
+      viewModelScope.launch {
             uiState.update {
                 it.copy(
                     isLoading = true
                 )
             }
             withContext(Dispatchers.IO) {
-
-                facturacionCasosdeUso.mostrarTodo().helper().collect { product ->
+                facturacionCasosdeUso.mostrarTodo().collect { product ->
+                    val factura:List<FacturaConDetalle> = product.map {
+                        FacturaConDetalle(
+                        factura = it.venta,
+                        detalle = it.detalleVenta
+                    ) }
                     uiState.update {
-                        it.copy(
-                            facturaConDetalle = product, isLoading = false
-                        )
+                        it.copy(facturaConDetalle = factura
+                            ,isLoading = false)
                     }
                 }
             }
         }
     }
-    fun buscarfacturas(
+    private fun buscarfacturas(
         fechaini: LocalDate,
         fechafinal: LocalDate,
         datoSemejante: String,
@@ -57,7 +66,7 @@ class  FacturaViewModel @Inject constructor(
         if (datoSemejante.isBlank()) {
             uiState.update {
                 it.copy(
-                    error = "Campos vacios"
+                    mensaje = "Campos vacios"
                 )
             }
         } else {
@@ -69,9 +78,14 @@ class  FacturaViewModel @Inject constructor(
             job?.cancel()
             job = viewModelScope.launch {
                 withContext(Dispatchers.IO){
-                    facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante).helper().collect { product ->
+                    facturacionCasosdeUso.buscarFacturas(fechaini, fechafinal, datoSemejante).collect { product ->
+                        val factura:List<FacturaConDetalle> = product.map { FacturaConDetalle(
+                            factura = it.venta,
+                            detalle = it.detalleVenta
+                        ) }
                         uiState.update {
-                            it.copy(facturaConDetalle = product, isLoading = false)
+                            it.copy(facturaConDetalle = factura
+                            , isLoading = false)
                         }
                     }
                 }
@@ -80,15 +94,15 @@ class  FacturaViewModel @Inject constructor(
         }
     }
 
-    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
-
-        return this.map { listaFacturas ->
-            listaFacturas.map { factura->
-                FacturaConDetalle(
-                    factura = factura,
-                    detalle = factura?.let { detalle -> facturacionCasosdeUso.detallesFacturas(detalle.id_venta) }
-                )
-            }
-        }
-    }
+//    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
+//
+//        return this.map { listaFacturas ->
+//            listaFacturas.map { factura->
+//                FacturaConDetalle(
+//                    factura = factura,
+//                    detalle = factura?.let { detalle -> facturacionCasosdeUso.detallesFacturas(detalle.id_venta) }
+//                )
+//            }
+//        }
+//    }
 }

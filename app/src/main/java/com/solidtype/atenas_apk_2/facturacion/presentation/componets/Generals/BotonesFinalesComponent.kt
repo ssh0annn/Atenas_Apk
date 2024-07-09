@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.solidtype.atenas_apk_2.facturacion.presentation.FacturaViewModel
+import com.solidtype.atenas_apk_2.facturacion.presentation.FacturasEvent
 import com.solidtype.atenas_apk_2.util.fomatoLocalDate
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 
@@ -25,15 +26,17 @@ fun BotonesFinales(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Boton("Ver Todos") {
-            viewModel.mostrarFactura()
+            viewModel.onEvent(FacturasEvent.GetFacturas)
             fechaFin.value = ""
             fechaIni.value = ""
         }
         Boton("Filtrar", fechaFin.value.isNotEmpty() && fechaIni.value.isNotEmpty()) {
-            viewModel.buscarfacturas(
+            viewModel.onEvent(FacturasEvent.BuscarFacturas(
+                noFacturaCliente.value,
                 fechaIni.value.fomatoLocalDate(),
                 fechaFin.value.fomatoLocalDate(),
-                noFacturaCliente.value
+
+            )
             )
         }
     }

@@ -75,12 +75,10 @@ class InventarioViewModel @Inject constructor(
 
             InventariosEvent.Getrpoveedores -> {
                 viewModelScope.launch {
-
                     casosProveedores.getProveedores(switch).collect { proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
-
                     }
                 }
             }
