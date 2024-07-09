@@ -128,7 +128,6 @@ class HistorailViewModel @Inject constructor(
 //                    uiState.update {
 //                        it.copy(Ticket = product, isLoading = false, total2 = deuda)
 //                    }
-
             }
         }
     }
