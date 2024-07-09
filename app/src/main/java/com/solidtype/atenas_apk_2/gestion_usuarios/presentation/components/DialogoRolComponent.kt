@@ -38,7 +38,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
-fun DialogoSimple(
+fun DialogoRol(
     mostrarDialogo: MutableState<Boolean>,
     mostrarConfirmarRol: MutableState<Boolean>,
     idRollUsuario: MutableState<String>,

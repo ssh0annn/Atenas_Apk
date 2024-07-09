@@ -166,8 +166,9 @@ fun InventoryScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
                     Buscador(busqueda.value) { busqueda.value = it }
-                    //Switch para mostrar productos inactivos4
-                    SwitchInactivos(uiState, viewModel)
+                    SwitchInactivos(uiState.switch){
+                        viewModel.onEvent(InventariosEvent.Switch)
+                    }
                 }
                 AreaProductos(
                     uiState,

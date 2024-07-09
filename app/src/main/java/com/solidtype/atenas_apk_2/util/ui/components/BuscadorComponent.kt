@@ -25,7 +25,10 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
-fun Buscador(busqueda: String,onBusquedaChange: (String) -> Unit) {
+fun Buscador(
+    busqueda: String,
+    onBusquedaChange: (String) -> Unit
+) {
     TextField(
         value = busqueda,
         onValueChange = onBusquedaChange,

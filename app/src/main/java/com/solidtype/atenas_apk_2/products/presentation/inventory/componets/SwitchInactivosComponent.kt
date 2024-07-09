@@ -10,17 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 
 
 @Composable
 fun SwitchInactivos(
-    uiState: ProductosViewStates,
-    viewModel: InventarioViewModel
+    switch: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier.padding(top = 10.dp)
@@ -34,16 +31,14 @@ fun SwitchInactivos(
                 .padding(10.dp)
         )
         Switch(
-            checked = uiState.switch,
+            checked = switch,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = GrisClaro,
                 checkedTrackColor = AzulGris,
                 uncheckedThumbColor = AzulGris,
                 uncheckedTrackColor = GrisClaro
             ),
-            onCheckedChange = {
-                viewModel.onEvent(InventariosEvent.Switch)
-            }
+            onCheckedChange = onCheckedChange
         )
     }
 }

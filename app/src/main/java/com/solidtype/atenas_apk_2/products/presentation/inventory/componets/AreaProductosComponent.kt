@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -115,7 +116,7 @@ fun AreaProductos(
                     )
                     Text(
                         text = "",
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(0.5f),
                         color = Blanco,
                         textAlign = TextAlign.Center
                     )
@@ -178,7 +179,10 @@ fun AreaProductos(
                                 textAlign = TextAlign.Center
                             )
                             //Iconos de editar y eliminar
-                            Row {
+                            Row (
+                                modifier = Modifier.weight(0.5f),
+                                horizontalArrangement = Arrangement.End
+                            ){
                                 IconButton(onClick = {
                                     mostrarProducto.value = true
                                     editar.value = true
