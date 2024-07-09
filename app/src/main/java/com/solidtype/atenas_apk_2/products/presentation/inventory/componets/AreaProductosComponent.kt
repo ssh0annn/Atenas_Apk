@@ -1,7 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,15 +32,13 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
-import com.solidtype.atenas_apk_2.util.ui.components.Carrito
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
+import com.solidtype.atenas_apk_2.util.ui.components.Carrito
 
 @Composable
 fun AreaProductos(
     uiState: ProductosViewStates,
     idInventario: MutableState<String>,
-    idCatalogo: MutableState<String>,
-    idProveedor: MutableState<String>,
     nombre: MutableState<String>,
     marca: MutableState<String>,
     modelo: MutableState<String>,
@@ -133,28 +130,14 @@ fun AreaProductos(
                             modifier = Modifier
                                 .padding(start = 20.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(GrisClaro)
-                                .clickable {
-                                    idInventario.value =
-                                        producto.id_inventario.toString()
-                                    idCatalogo.value =
-                                        producto.id_categoria.toString()
-                                    idProveedor.value =
-                                        producto.id_proveedor.toString()
-                                    nombre.value = producto.nombre
-                                    marca.value = producto.marca!!
-                                    modelo.value = producto.modelo!!
-                                    cantidad.value = producto.cantidad.toString()
-                                    costo.value = producto.precio_compra.toString()
-                                    precio.value = producto.precio_venta.toString()
-                                    impuesto.value = producto.impuesto.toString()
-                                    descripcion.value = producto.descripcion!!
-                                    estado.value = producto.estado.formatoActivo()
-                                },
+                                .background(GrisClaro),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(10.dp),
+                                contentAlignment = Alignment.Center
                             ) {
                                 Carrito(false)
                             }// Aquí debería ir la imagen del producto
@@ -179,10 +162,10 @@ fun AreaProductos(
                                 textAlign = TextAlign.Center
                             )
                             //Iconos de editar y eliminar
-                            Row (
+                            Row(
                                 modifier = Modifier.weight(0.5f),
                                 horizontalArrangement = Arrangement.End
-                            ){
+                            ) {
                                 IconButton(onClick = {
                                     mostrarProducto.value = true
                                     editar.value = true
@@ -198,8 +181,10 @@ fun AreaProductos(
                                     descripcion.value = producto.descripcion!!
                                     estado.value = producto.estado.formatoActivo()
                                     //filtrar el nombre proveedor y la categoria con el id del producto de uiState.proveedores y uiState.categoria
-                                    provider.value = uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }!!.nombre.toString()
-                                    categoria.value = uiState.categoria.find { it.id_categoria == producto.id_categoria }!!.nombre
+                                    provider.value =
+                                        uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                    categoria.value =
+                                        uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre ?: ""
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Edit,
@@ -207,28 +192,31 @@ fun AreaProductos(
                                         tint = AzulGris
                                     )
                                 }
-                                IconButton(onClick = {
-                                    mostrarConfirmarProducto.value = true
+                                if (producto.estado)
+                                    IconButton(onClick = {
+                                        mostrarConfirmarProducto.value = true
 
-                                    idInventario.value = producto.id_inventario.toString()
-                                    nombre.value = producto.nombre
-                                    marca.value = producto.marca!!
-                                    modelo.value = producto.modelo!!
-                                    cantidad.value = producto.cantidad.toString()
-                                    costo.value = producto.precio_compra.toString()
-                                    precio.value = producto.precio_venta.toString()
-                                    impuesto.value = producto.impuesto.toString()
-                                    descripcion.value = producto.descripcion!!
-                                    estado.value = producto.estado.formatoActivo()
-                                    provider.value = uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }!!.nombre.toString()
-                                    categoria.value = uiState.categoria.find { it.id_categoria == producto.id_categoria }!!.nombre
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Delete,
-                                        contentDescription = null,
-                                        tint = AzulGris
-                                    )
-                                }
+                                        idInventario.value = producto.id_inventario.toString()
+                                        nombre.value = producto.nombre
+                                        marca.value = producto.marca!!
+                                        modelo.value = producto.modelo!!
+                                        cantidad.value = producto.cantidad.toString()
+                                        costo.value = producto.precio_compra.toString()
+                                        precio.value = producto.precio_venta.toString()
+                                        impuesto.value = producto.impuesto.toString()
+                                        descripcion.value = producto.descripcion!!
+                                        estado.value = producto.estado.formatoActivo()
+                                        provider.value =
+                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                        categoria.value =
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre ?: ""
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Delete,
+                                            contentDescription = null,
+                                            tint = AzulGris
+                                        )
+                                    }
                             }
                         }
                     }
