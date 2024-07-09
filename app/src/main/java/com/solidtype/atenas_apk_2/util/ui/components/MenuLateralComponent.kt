@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.util.ui.Components
+package com.solidtype.atenas_apk_2.util.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -135,6 +135,14 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                         }
 
                         if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
+
+                            Boton(
+                                "Configuración del Perfil",
+                                anchoTotal = true,
+                                habilitar = navController.currentDestination?.route != Screens.PerfilAdmin.route
+                            ) {mostrarMenu.value = false
+                                navController.navigate(Screens.PerfilAdmin.route)
+                            }
                             Boton(
                                 "Inventario",
                                 anchoTotal = true,
@@ -166,13 +174,6 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             ) {
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionUsuarios.route)
-                            }
-                            Boton(
-                                "Configuración del Perfil",
-                                anchoTotal = true,
-                                habilitar = navController.currentDestination?.route != Screens.PerfilAdmin.route
-                            ) {mostrarMenu.value = false
-                                navController.navigate(Screens.PerfilAdmin.route)
                             }
                             Boton(
                                 "Gestion de Clientes",

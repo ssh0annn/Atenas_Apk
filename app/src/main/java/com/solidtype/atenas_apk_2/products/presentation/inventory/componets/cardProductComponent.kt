@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
-import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
+import com.solidtype.atenas_apk_2.util.ui.components.Carrito
 
 @Composable
 fun CardProduct(productEntity: ProductEntity, onProductClick: (ProductEntity) -> Unit) {

@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AreaVentas
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AvatarConBotones
@@ -38,9 +40,10 @@ import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.DatePi
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Inputs
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Tabla
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.SnackbarAnimado
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -74,15 +77,14 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    if (false) {
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
         if (showSnackbarIni.value) {

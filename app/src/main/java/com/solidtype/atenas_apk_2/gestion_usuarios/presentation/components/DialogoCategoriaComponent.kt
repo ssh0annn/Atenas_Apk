@@ -21,35 +21,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
+import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.BotonBlanco
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
-import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
-fun DialogoSimple(
-    mostrarDialogo: MutableState<Boolean>,
-    mostrarConfirmarRol: MutableState<Boolean>,
-    idRollUsuario: MutableState<String>,
-    nombreRollUsuario: MutableState<String>,
-    descripcion: MutableState<String>,
-    estadoRollUsuario: MutableState<String>,
-    uiState: UserStatesUI,
-    viewModel: UsuariosViewmodel,
-    context: Context
+fun DialogoCategoria(
+    mostrarCategoria: MutableState<Boolean>,
+    idCategoria: MutableState<String>,
+    nombreCategoria: MutableState<String>,
+    descripcionCategoria: MutableState<String>,
+    estadoCategoria: MutableState<String>,
+    uiState: ProductosViewStates,
+    viewModel: InventarioViewModel,
+    context: Context,
+    mostrarConfirmarCategoria: MutableState<Boolean>
 ) {
-    Dialogo("Gestor de Roles", mostrarDialogo.value, { mostrarDialogo.value = false }, false) {
+    Dialogo(
+        "Gestor de Categoría",
+        mostrarCategoria.value,
+        { mostrarCategoria.value = false },
+        false
+    ) {
         Row {//Detalles y Lista
             Column( //Detalles
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -67,65 +72,62 @@ fun DialogoSimple(
                             modifier = Modifier
                                 .padding(10.dp)
                         ) {
-                            InputDetalle("ID", idRollUsuario.value) { idRollUsuario.value = it }
+                            InputDetalle("ID", idCategoria.value) { idCategoria.value = it }
                             InputDetalle(
-                                "Rol",
-                                nombreRollUsuario.value
-                            ) { nombreRollUsuario.value = it }
-                            InputDetalle("Descripción", descripcion.value) {
-                                descripcion.value = it
+                                "Categoría",
+                                nombreCategoria.value
+                            ) { nombreCategoria.value = it }
+                            InputDetalle("Descripción", descripcionCategoria.value) {
+                                descripcionCategoria.value = it
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             AutocompleteSelect(
                                 "Estado",
-                                estadoRollUsuario.value,
+                                estadoCategoria.value,
                                 listOf("Activo", "Inactivo")
-                            ) { estadoRollUsuario.value = it }
+                            ) { estadoCategoria.value = it }
                         }
                     }
                 }
-                Row{
+                Row {
                     BotonBlanco("Guardar") {
                         try {
-                            if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
+                            if (idCategoria.value.isEmpty() || nombreCategoria.value.isEmpty() || descripcionCategoria.value.isEmpty() || estadoCategoria.value.isEmpty()) {
                                 throw Exception("Campos vacios.")
                             }
 
-                            if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
-//                            Log.i("GestionUsuariosScreen", "Editar Rol")
-                                viewModel.onUserEvent(
-                                    UserEvent.EditarRol(
-                                        roll_usuarios(
-                                            id_roll_usuario = idRollUsuario.value.toLong(),
-                                            nombre = nombreRollUsuario.value,
-                                            descripcion = descripcion.value,
-                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
+                            if (uiState.categoria.find { it.id_categoria == idCategoria.value.toLong() } != null) {
+                                viewModel.onEvent(
+                                    InventariosEvent.ActualizarCategoria(
+                                        categoria(
+                                            id_categoria = idCategoria.value.toLong(),
+                                            nombre = nombreCategoria.value,
+                                            descripcion = descripcionCategoria.value,
+                                            estado = estadoCategoria.value.formatoActivoDDBB()
                                         )
                                     )
                                 )
-                                //Error: No se puede editar un rol
-                                //throw Exception("No se puede editar un rol.")
                             } else {
-                                viewModel.onUserEvent(
-                                    UserEvent.AgregarNuevoRol(
-                                        roll_usuarios(
-                                            id_roll_usuario = idRollUsuario.value.toLong(),
-                                            nombre = nombreRollUsuario.value,
-                                            descripcion = descripcion.value,
-                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                viewModel.onEvent(
+                                    InventariosEvent.AgregarCategorias(
+                                        categoria(
+                                            id_categoria = idCategoria.value.toLong(),
+                                            nombre = nombreCategoria.value,
+                                            descripcion = descripcionCategoria.value,
+                                            estado = estadoCategoria.value.formatoActivoDDBB()
                                         )
                                     )
                                 )
                             }
 
-                            idRollUsuario.value = ""
-                            nombreRollUsuario.value = ""
-                            descripcion.value = ""
-                            estadoRollUsuario.value = ""
+                            idCategoria.value = ""
+                            nombreCategoria.value = ""
+                            descripcionCategoria.value = ""
+                            estadoCategoria.value = ""
 
                             Toast.makeText(
                                 context,
-                                "Rol guardado",
+                                "Categoría guardada",
                                 Toast.LENGTH_LONG
                             ).show()
                         } catch (e: Exception) {
@@ -137,7 +139,7 @@ fun DialogoSimple(
                         }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
-                    BotonBlanco("Eliminar"){ mostrarConfirmarRol.value = true }
+                    BotonBlanco("Inactivar") { mostrarConfirmarCategoria.value = true }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -188,8 +190,8 @@ fun DialogoSimple(
                             }
                         }
                     }
-                    if (uiState.roles.isNotEmpty())
-                        items(uiState.roles) { rol ->
+                    if (uiState.categoria.isNotEmpty())
+                        items(uiState.categoria) { categoriaIndex ->
                             Row(
                                 modifier = Modifier
                                     .padding(
@@ -203,32 +205,34 @@ fun DialogoSimple(
                                         RoundedCornerShape(10.dp)
                                     )
                                     .clickable {
-                                        idRollUsuario.value = rol.id_roll_usuario.toString()
-                                        nombreRollUsuario.value = rol.nombre
-                                        descripcion.value = rol.descripcion
-                                        estadoRollUsuario.value = rol.estado.formatoActivo()
+                                        idCategoria.value = categoriaIndex.id_categoria.toString()
+                                        nombreCategoria.value = categoriaIndex.nombre
+                                        descripcionCategoria.value =
+                                            categoriaIndex.descripcion.toString()
+                                        estadoCategoria.value =
+                                            categoriaIndex.estado.formatoActivo()
                                     },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = rol.id_roll_usuario.toString(),
+                                    text = categoriaIndex.id_categoria.toString(),
                                     modifier = Modifier
                                         .padding(5.dp, 5.dp, 0.dp, 5.dp)
                                         .weight(1f),
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    text = rol.nombre,
+                                    text = categoriaIndex.nombre,
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    text = rol.descripcion,
+                                    text = categoriaIndex.descripcion.toString(),
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    text = rol.estado.formatoActivo(),
+                                    text = categoriaIndex.estado.formatoActivo(),
                                     modifier = Modifier
                                         .padding(0.dp, 5.dp, 5.dp, 5.dp)
                                         .weight(1f),

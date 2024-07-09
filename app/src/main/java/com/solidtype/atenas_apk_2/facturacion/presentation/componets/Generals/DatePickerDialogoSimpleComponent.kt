@@ -5,7 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import com.solidtype.atenas_apk_2.util.formatearFecha
-import com.solidtype.atenas_apk_2.util.ui.Components.DatePickerDialogo
+import com.solidtype.atenas_apk_2.util.ui.components.DatePickerDialogo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

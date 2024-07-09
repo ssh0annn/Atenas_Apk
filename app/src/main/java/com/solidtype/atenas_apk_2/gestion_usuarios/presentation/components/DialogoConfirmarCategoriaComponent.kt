@@ -17,34 +17,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
 @Composable
-fun DialogoConfirmarEliminarUsuario(
-    mostrarConfirmar: MutableState<Boolean>,
-    viewModel: UsuariosViewmodel,
-    idUsuario: MutableState<String>,
-    uiState: UserStatesUI,
-    rol: MutableState<String>,
-    nombre: MutableState<String>,
-    apellido: MutableState<String>,
-    correo: MutableState<String>,
-    clave: MutableState<String>,
-    telefono: MutableState<String>,
-    estado: MutableState<String>,
+fun DialogoConfirmarCategoria(
+    mostrarConfirmarCategoria: MutableState<Boolean>,
+    viewModel: InventarioViewModel,
+    idCategoria: MutableState<String>,
+    nombreCategoria: MutableState<String>,
+    descripcionCategoria: MutableState<String>,
+    estadoCategoria: MutableState<String>,
     context: Context
 ) {
     Dialogo(
         titulo = "Confirma",
-        mostrar = mostrarConfirmar.value,
-        onCerrarDialogo = { mostrarConfirmar.value = false },
+        mostrar = mostrarConfirmarCategoria.value,
+        onCerrarDialogo = { mostrarConfirmarCategoria.value = false },
         max = false,
         sinBoton = true
     ) {
@@ -56,7 +50,7 @@ fun DialogoConfirmarEliminarUsuario(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "¿Estás seguro que deseas eliminar este usuario?",
+                text = "¿Estás seguro que deseas inactivar esta categoría?",
                 textAlign = TextAlign.Center,
                 color = AzulGris,
                 fontSize = 24.sp
@@ -65,47 +59,42 @@ fun DialogoConfirmarEliminarUsuario(
             Row {
                 Boton("Aceptar") {
                     try {
-                        viewModel.onUserEvent(
-                            UserEvent.BorrarUsuario(
-                                usuario(
-                                    id_usuario = idUsuario.value.toLong(),
-                                    id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                        ?: 0,
-                                    nombre = nombre.value,
-                                    apellido = apellido.value,
-                                    email = correo.value,
-                                    clave = clave.value,
-                                    telefono = telefono.value,
-                                    estado = estado.value.formatoActivoDDBB()
+                        viewModel.onEvent(
+                            InventariosEvent.eliminarCategoria(
+                                categoria(
+                                    idCategoria.value.toLong(),
+                                    nombreCategoria.value,
+                                    descripcionCategoria.value,
+                                    estadoCategoria.value.formatoActivoDDBB()
                                 )
                             )
                         )
-                        idUsuario.value = ""
-                        nombre.value = ""
-                        apellido.value = ""
-                        correo.value = ""
-                        clave.value = ""
-                        telefono.value = ""
-                        estado.value = ""
 
-                        mostrarConfirmar.value = false
+                        viewModel.onEvent(InventariosEvent.GetCategorias)
+
+                        idCategoria.value = ""
+                        nombreCategoria.value = ""
+                        descripcionCategoria.value = ""
+                        estadoCategoria.value = ""
+
+                        mostrarConfirmarCategoria.value = false
 
                         Toast.makeText(
                             context,
-                            "Se eliminó el usuario",
+                            "Se inactivó la categoría",
                             Toast.LENGTH_LONG
                         ).show()
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
-                            "No se pudo eliminar",
+                            "No se pudo inactivar",
                             Toast.LENGTH_LONG
                         ).show()
                     }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {
-                    mostrarConfirmar.value = false
+                    mostrarConfirmarCategoria.value = false
                 }
             }
         }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,18 +24,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AvatarConBotones
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Botones
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarRol
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoSimple
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoRol
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoUsuario
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 @Composable
 fun GestionUsuariosScreen(
@@ -64,15 +66,17 @@ fun GestionUsuariosScreen(
     val descripcion = rememberSaveable { mutableStateOf("") }
     val estadoRollUsuario = rememberSaveable { mutableStateOf("") }
 
-    val mostrarDialogo = rememberSaveable { mutableStateOf(false) }
-    val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
+    val editar = rememberSaveable { mutableStateOf(false) }
+    val mostrarUsuario = rememberSaveable { mutableStateOf(false) }
+    val mostrarConfirmarUsuario = rememberSaveable { mutableStateOf(false) }
+    val mostrarRol = rememberSaveable { mutableStateOf(false) }
     val mostrarConfirmarRol = rememberSaveable { mutableStateOf(false) }
     val mostrarQR = rememberSaveable { mutableStateOf(false) }
 
-    if(busqueda.value.isNotBlank()) {
+    if (busqueda.value.isNotBlank()) {
         viewModel.onUserEvent(UserEvent.BuscarUsuario(busqueda.value))
         Log.i("GestionUsuariosScreen", "Buscando usuario")
-    }else{
+    } else {
         viewModel.onUserEvent(UserEvent.MostrarUserEvent)
         Log.i("GestionUsuariosScreen", "Todos los usuarios")
     }
@@ -80,25 +84,26 @@ fun GestionUsuariosScreen(
     if (uiState.roles.isEmpty())
         viewModel.onUserEvent(UserEvent.GetRoles)
 
-    if (false) {
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
-        Column( //All
+        Column(
+            //All
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .background(GrisClaro),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column( //Contenedor
+            Column(
+                //Contenedor
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 100.dp, vertical = 20.dp),
@@ -106,20 +111,99 @@ fun GestionUsuariosScreen(
             ) {
                 Titulo("Usuarios", Icons.Outlined.AccountCircle)
                 Spacer(modifier = Modifier.height(10.dp))
-                Row {
-                    Column {
+                Column {
+                    Row {
                         Buscador(busqueda.value) { busqueda.value = it }
-                        AreaUsuarios(uiState, idUsuario, nombre, apellido, correo, clave, telefono, estado, rol)
+                        /*SwitchInactivos(uiState.switch){
+                            viewModel.onUserEvent(UserEvent.Switch)
+                        }*/
                     }
-                    Detalles(idUsuario, nombre, apellido, correo, clave, telefono, rol, uiState, mostrarDialogo, mostrarConfirmar, estado, viewModel, context)
+                    AreaUsuarios(
+                        uiState,
+                        idUsuario,
+                        nombre,
+                        apellido,
+                        correo,
+                        clave,
+                        telefono,
+                        estado,
+                        rol,
+                        mostrarUsuario,
+                        editar,
+                        mostrarConfirmarUsuario
+                    )
                 }
-                AvatarConBotones(mostrarQR)
+                Botones(
+                    mostrarQR,
+                    mostrarUsuario,
+                    idUsuario,
+                    nombre,
+                    apellido,
+                    correo,
+                    clave,
+                    telefono,
+                    estado,
+                    rol,
+                    editar
+                )
             }
         }
-        DialogoSimple(mostrarDialogo, mostrarConfirmarRol, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, uiState, viewModel, context)
-        DialogoConfirmarEliminarUsuario(mostrarConfirmar, viewModel, idUsuario, uiState, rol, nombre, apellido, correo, clave, telefono, estado, context)
-        DialogoConfirmarEliminarRol(mostrarConfirmarRol, viewModel, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, context)
-        Dialogo(titulo = "QR de Técnico", mostrar = mostrarQR.value, onCerrarDialogo = { mostrarQR.value = false }, max = false) {
+        DialogoUsuario(
+            mostrarUsuario,
+            idUsuario,
+            nombre,
+            apellido,
+            correo,
+            clave,
+            telefono,
+            rol,
+            uiState,
+            mostrarRol,
+            mostrarConfirmarUsuario,
+            estado,
+            viewModel,
+            context
+        )
+        DialogoConfirmarEliminarUsuario(
+            mostrarConfirmarUsuario,
+            viewModel,
+            idUsuario,
+            uiState,
+            rol,
+            nombre,
+            apellido,
+            correo,
+            clave,
+            telefono,
+            estado,
+            context
+        )
+        DialogoRol(
+            mostrarRol,
+            mostrarConfirmarRol,
+            idRollUsuario,
+            nombreRollUsuario,
+            descripcion,
+            estadoRollUsuario,
+            uiState,
+            viewModel,
+            context
+        )
+        DialogoConfirmarEliminarRol(
+            mostrarConfirmarRol,
+            viewModel,
+            idRollUsuario,
+            nombreRollUsuario,
+            descripcion,
+            estadoRollUsuario,
+            context
+        )
+        Dialogo(
+            titulo = "QR de Técnico",
+            mostrar = mostrarQR.value,
+            onCerrarDialogo = { mostrarQR.value = false },
+            max = false
+        ) {
             Box(
                 contentAlignment = Alignment.Center,
             ) {
