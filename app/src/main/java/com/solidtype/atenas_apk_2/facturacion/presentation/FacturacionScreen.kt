@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FactCheck
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
@@ -30,10 +29,10 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.BotonesFinales
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.DatePickerDialogoSimple
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Inputs
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.BotonesFinales
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.DatePickerDialogoSimple
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Inputs
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Tabla
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral

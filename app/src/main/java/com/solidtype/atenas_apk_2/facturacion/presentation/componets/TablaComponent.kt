@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals
+package com.solidtype.atenas_apk_2.facturacion.presentation.componets
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,11 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisAzulado
@@ -157,11 +156,11 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
-//                                Text(
-//                                    //text = factura?.factura?.toString(),
-//                                  //  modifier = Modifier.weight(1f),
-//                                   // textAlign = TextAlign.Center
-//                                )
+                                Text(
+                                    text = factura?.detalle?.sumOf { it.total }.toString(),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
                                 factura?.factura?.estado?.let {
                                     Text(
                                         text = it.formatoActivo(),
@@ -220,38 +219,42 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                                             )
                                         }
                                         Divider()
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                        ) {
-//                                            Text(
-//                                                text = factura!!.detalle!!.id_detalle_venta.toString(),
-//                                                modifier = Modifier.weight(1f),
-//                                                textAlign = TextAlign.Center
-//                                            )
-//                                            Text(
-//                                                text = factura.detalle!!.id_venta.toString(),
-//                                                modifier = Modifier.weight(1f),
-//                                                textAlign = TextAlign.Center
-//                                            )
-//                                            Text(
-//                                                text = factura.detalle.id_producto.toString(),
-//                                                modifier = Modifier.weight(1f),
-//                                                textAlign = TextAlign.Center
-//                                            )
-//                                            Text(
-//                                                text = factura.detalle.cantidad.toString(),
-//                                                modifier = Modifier.weight(1f),
-//                                                textAlign = TextAlign.Center
-//                                            )
-//                                            Text(
-//                                                text = factura.detalle.total.toString(),
-//                                                modifier = Modifier.weight(1f),
-//                                                textAlign = TextAlign.Center
-//                                            )
+                                        LazyColumn {
+                                            items(factura!!.detalle) { detalle ->
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                ) {
+                                                    Text(
+                                                        text = detalle.id_detalle_venta.toString(),
+                                                        modifier = Modifier.weight(1f),
+                                                        textAlign = TextAlign.Center
+                                                    )
+                                                    Text(
+                                                        text = detalle.id_venta.toString(),
+                                                        modifier = Modifier.weight(1f),
+                                                        textAlign = TextAlign.Center
+                                                    )
+                                                    Text(
+                                                        text = detalle.id_producto.toString(),
+                                                        modifier = Modifier.weight(1f),
+                                                        textAlign = TextAlign.Center
+                                                    )
+                                                    Text(
+                                                        text = detalle.cantidad.toString(),
+                                                        modifier = Modifier.weight(1f),
+                                                        textAlign = TextAlign.Center
+                                                    )
+                                                    Text(
+                                                        text = detalle.total.toString(),
+                                                        modifier = Modifier.weight(1f),
+                                                        textAlign = TextAlign.Center
+                                                    )
+                                                }
+                                            }
                                         }
                                         Divider()
-                                        /*Row { // Pie
+                                        Row { // Pie
                                             Text(
                                                 text = "Total",
                                                 modifier = Modifier.weight(1f),
@@ -264,13 +267,15 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                                                     modifier = Modifier.weight(1f)
                                                 )
                                             }
-                                            Text(
-                                                text = factura.productos.sumaTotal().toString(),
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center,
-                                                fontWeight = FontWeight.Bold
-                                            )
-                                        }*/
+                                            if (factura != null) {
+                                                Text(
+                                                    text = factura.detalle.sumOf { it.total }.toString(),
+                                                    modifier = Modifier.weight(1f),
+                                                    textAlign = TextAlign.Center,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }

@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals
+package com.solidtype.atenas_apk_2.facturacion.presentation.componets
 
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
