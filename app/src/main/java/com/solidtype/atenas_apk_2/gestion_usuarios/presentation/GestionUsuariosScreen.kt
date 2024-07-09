@@ -159,7 +159,6 @@ fun GestionUsuariosScreen(
             rol,
             uiState,
             mostrarRol,
-            mostrarConfirmarUsuario,
             estado,
             viewModel,
             context

@@ -17,6 +17,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
@@ -33,7 +34,6 @@ fun DialogoUsuario(
     rol: MutableState<String>,
     uiState: UserStatesUI,
     mostrarRol: MutableState<Boolean>,
-    mostrarConfirmarUsuario: MutableState<Boolean>,
     estado: MutableState<String>,
     viewModel: UsuariosViewmodel,
     context: Context
@@ -52,7 +52,7 @@ fun DialogoUsuario(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles(
+            Detalles(
                 idUsuario,
                 nombre,
                 apellido,
@@ -62,10 +62,7 @@ fun DialogoUsuario(
                 rol,
                 uiState,
                 mostrarRol,
-                mostrarConfirmarUsuario,
-                estado,
-                viewModel,
-                context
+                estado
             )
             Row {
                 Boton("Guardar") {
