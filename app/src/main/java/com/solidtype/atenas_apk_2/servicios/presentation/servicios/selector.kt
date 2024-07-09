@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,7 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
 
+
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
 fun selector(
@@ -62,6 +64,7 @@ fun selector(
     listaCliente: List<Personastodas.ClienteUI?>, listaDispositivos: List<Dispositivo?>
 
 ) {
+    val palomo = LocalContext.current
 
     var search by rememberSaveable { mutableStateOf("") }
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }

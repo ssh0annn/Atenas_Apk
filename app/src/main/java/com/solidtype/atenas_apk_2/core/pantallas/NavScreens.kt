@@ -45,7 +45,6 @@ fun Navigation() {
         composable(route = Screens.Login.route) {
             LoginScreen(navController)
         }
-
         composable(Screens.PerfilAdmin.route) {
             PerfilAdminScreen(navController)
         }
@@ -71,7 +70,7 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route) {
-            servicios(navController)
+            servicios()
         }
         composable(route = Screens.Ticket.route) {
             Ticket(navController)

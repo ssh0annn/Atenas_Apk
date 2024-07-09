@@ -22,7 +22,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class)
-fun complementari(navController: NavController, viewmodel: ServiciosViewModel = hiltViewModel()) {
+fun complementari( viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
 
@@ -68,7 +68,7 @@ fun complementari(navController: NavController, viewmodel: ServiciosViewModel = 
 
     selector(viewmodel, state.listaServicios, state.listaClientes, state.listaDispositivos)
 //    NavPlato("Servicios")
-    MenuLateral(navController)
+//    MenuLateral(navController)
 
 }
 
