@@ -12,5 +12,4 @@ sealed class AuthEvent {
 
     data class ForgetPassword(val email:String):AuthEvent()
 
-
 }

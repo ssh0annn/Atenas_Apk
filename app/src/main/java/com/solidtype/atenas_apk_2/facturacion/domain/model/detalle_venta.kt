@@ -18,7 +18,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 ])
 data class detalle_venta (
     @PrimaryKey(autoGenerate = true) val id_detalle_venta :Long,
-    val id_venta :Long,
+    var id_venta :Long,
     val id_producto :Long,
     val cantidad :Int,
     val total :Double,

@@ -81,7 +81,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
     var tipoPago by rememberSaveable { mutableStateOf("") }
     var vendedor by rememberSaveable { mutableStateOf("") }
-    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
+   // var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
 
 
 

@@ -45,16 +45,17 @@ interface ventaDao {
     fun getVentaWithRelation():Flow<List<VentasRelacionadas>>
     @Transaction
     @Query("""
-            SELECT * FROM venta WHERE  
-            id_venta like'%' || :any || '%' 
-            or id_vendedor like '%' || :any || '%'
-            or id_cliente like '%' || :any || '%'
-            or id_tipo_venta like '%' || :any || '%'        
+            SELECT * FROM venta 
+            WHERE id_cliente  LIKE '%' || :id || '%'
+            or id_vendedor LIKE '%' || :id || '%'
+            or id_venta  LIKE '%' || :id || '%'
+            AND fecha BETWEEN :desde AND :hasta
     """
     )
-    fun buscarVentaWithRelation(any:String):Flow<List<VentasRelacionadas>>
+    fun buscarVentaWithRelation(id:String,desde:LocalDate, hasta:LocalDate):Flow<List<VentasRelacionadas>>
     @Transaction
     fun insertarVentaWithRelation(venta: VentasRelacionadas){
+
 
     }
 }
