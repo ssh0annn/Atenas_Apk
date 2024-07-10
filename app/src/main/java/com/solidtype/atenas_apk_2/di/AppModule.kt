@@ -77,6 +77,7 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_pr
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.EditarProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.ProveedoresTodos
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
@@ -399,7 +400,9 @@ object AppModule {
         getProveedores = GetProveedores(repo),
         crearProveedor = CrearProveedor(repo),
         eliminarPersona = EliminarPersona(repo),
-        editarProveedores = EditarProveedores(repo)
+        editarProveedores = EditarProveedores(repo),
+        proveedoresTodos= ProveedoresTodos(repo)
+
     )
 
     //Perfil admnistrador

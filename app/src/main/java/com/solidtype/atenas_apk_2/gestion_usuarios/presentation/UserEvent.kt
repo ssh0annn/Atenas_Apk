@@ -26,6 +26,8 @@ sealed class UserEvent{
 
    object Switch:UserEvent()
 
+   object LimpiarMensaje:UserEvent()
+
 
 }
 

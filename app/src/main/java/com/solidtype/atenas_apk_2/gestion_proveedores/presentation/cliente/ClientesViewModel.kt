@@ -30,41 +30,24 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
     fun onUserEvent(evento: ClienteEvent) {
         when (evento) {
-            is ClienteEvent.MostrarClientesEvent -> {
-                getUsuarios()
-            }
+            is ClienteEvent.MostrarClientesEvent -> getUsuarios()
 
-            is ClienteEvent.BuscarClientes -> {
-                if (evento.any.isNotEmpty()) {
-                    buscarUsuarios(evento.any)
-                } else {
-                    getUsuarios()
-                }
-            }
+            is ClienteEvent.BuscarClientes -> if (evento.any.isNotEmpty()) { buscarUsuarios(evento.any)
+                } else { getUsuarios()}
 
-            is ClienteEvent.BorrarClientes -> {
-                borrarUsuario(evento.clientes)
-            }
+            is ClienteEvent.BorrarClientes -> borrarUsuario(evento.clientes)
 
-            is ClienteEvent.RestaurarClientes -> {
-                restaurarUsuario()
-            }
+            is ClienteEvent.RestaurarClientes ->restaurarUsuario()
 
-            is ClienteEvent.AgregarClientes -> {
-                AgregarUsuario(evento.clientes)
+            is ClienteEvent.AgregarClientes -> AgregarUsuario(evento.clientes)
 
-            }
+            is ClienteEvent.EditarClientes -> EditarUsuario(evento.clientes)
 
-            is ClienteEvent.EditarClientes -> {
-                EditarUsuario(evento.clientes)
-            }
+            ClienteEvent.Switch -> uiState.update { it.copy(switch = !switch)}
 
-            ClienteEvent.Switch -> {
-                uiState.update { it.copy(switch = !switch) }
-            }
+            ClienteEvent.LimpiarMensaje -> uiState.update { it.copy(mensaje = "") }
         }
     }
-
     private fun AgregarUsuario(cliente: Personastodas.ClienteUI) {
         viewModelScope.launch {
             casos.crearClientes(cliente)
