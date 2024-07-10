@@ -122,6 +122,11 @@ fun InventoryScreen(
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
+    if (uiState.messages.isNotEmpty()) {
+        Toast.makeText(context, uiState.messages, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(InventariosEvent.LimpiarMensaje)
+    }
+
     if (uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
     if (uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
 

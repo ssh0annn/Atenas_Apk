@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.TableProviders
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -55,8 +56,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 fun ProveedorScreen(
     navController: NavController,
     viewModel: ProveedorViewModel = hiltViewModel()
-
-){
+) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -66,22 +66,27 @@ fun ProveedorScreen(
     //formulario proveedor
     val idProveedor = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
-    val Tipodocumento = rememberSaveable { mutableStateOf("") }
-    val Numdocumento = rememberSaveable { mutableStateOf("") }
-    val Email = rememberSaveable { mutableStateOf("") }
-    val Telefono = rememberSaveable { mutableStateOf("") }
-    val Direccion = rememberSaveable { mutableStateOf("") }
+    val tipoDocumento = rememberSaveable { mutableStateOf("") }
+    val numDocumento = rememberSaveable { mutableStateOf("") }
+    val email = rememberSaveable { mutableStateOf("") }
+    val telefono = rememberSaveable { mutableStateOf("") }
+    val direccion = rememberSaveable { mutableStateOf("") }
 
     //LISTA SELECTOR
-    val DocumetSelector = listOf("Cédula", "Pasaporte")
+    val documetSelector = listOf("Cédula", "Pasaporte")
     //estado busqueda
-    val Busqueda = rememberSaveable { mutableStateOf("") }
+    val busqueda = rememberSaveable { mutableStateOf("") }
 
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
 
-    if(Busqueda.value.isNotBlank()) {
-        viewModel.onUserEvent(ProveedorEvent.BuscarProveedor(Busqueda.value))
-    }else{
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+        viewModel.onUserEvent(ProveedorEvent.LimpiarMensaje)
+    }
+
+    if (busqueda.value.isNotBlank()) {
+        viewModel.onUserEvent(ProveedorEvent.BuscarProveedor(busqueda.value))
+    } else {
         viewModel.onUserEvent(ProveedorEvent.MostrarProveedorEvent)
     }
 
@@ -109,31 +114,27 @@ fun ProveedorScreen(
             ) {//Contenedor
                 Column {
                     Titulo("Proveedor", Icons.Default.LocalShipping)
-
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        Buscador(busqueda = Busqueda.value) {
-                            Busqueda.value = it
+                        Buscador(busqueda = busqueda.value) {
+                            busqueda.value = it
                         }
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
-
                     TableProviders(
                         uiState.proveedores,
                         mostrarDialogo,
                         editar,
                         nombre,
-                        Tipodocumento,
-                        Numdocumento,
-                        Email,
-                        Telefono,
+                        tipoDocumento,
+                        numDocumento,
+                        email,
+                        telefono,
                         mostrarConfirmar,
                         idProveedor
                     )
-
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.BottomEnd
@@ -144,15 +145,13 @@ fun ProveedorScreen(
 
                             idProveedor.value = ""
                             nombre.value = ""
-                            Direccion.value = ""
-                            Numdocumento.value = ""
-                            Telefono.value = ""
-                            Email.value = ""
-                            Tipodocumento.value = ""
-
+                            direccion.value = ""
+                            numDocumento.value = ""
+                            telefono.value = ""
+                            email.value = ""
+                            tipoDocumento.value = ""
                         }
                     }
-
                     Spacer(modifier = Modifier.height(40.dp))
                 }
             }
@@ -180,70 +179,53 @@ fun ProveedorScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-
-
                     InputDetalle(
-
                         label = "Nombre",
                         valor = nombre.value,
                     ) {
                         nombre.value = it
                     }
-
                     Spacer(modifier = Modifier.height(15.dp))
-
                     AutocompleteSelect(
                         text = "Tipo de Documento",
-                        variableStr = Tipodocumento.value,
-                        items = DocumetSelector,
+                        variableStr = tipoDocumento.value,
+                        items = documetSelector,
                     ) {
-                        Tipodocumento.value = it
+                        tipoDocumento.value = it
                     }
-
                     Spacer(modifier = Modifier.height(15.dp))
-
                     InputDetalle(
                         label = "Numero de documento",
-                        valor = Numdocumento.value,
+                        valor = numDocumento.value,
                     ) {
-                        Numdocumento.value = it
+                        numDocumento.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
                     InputDetalle(
                         label = "Email",
-                        valor = Email.value,
+                        valor = email.value,
                     ) {
-                        Email.value = it
+                        email.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
-
                     InputDetalle(
                         label = "Telefono",
-                        valor = Telefono.value,
+                        valor = telefono.value,
                     ) {
-                        Telefono.value = it
+                        telefono.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
-
                     InputDetalle(
                         label = "Dirección",
-                        valor = Direccion.value,
+                        valor = direccion.value,
                     ) {
-                        Direccion.value = it
+                        direccion.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
-
                     val camposCompletos =
-                        nombre.value.isNotEmpty() && Numdocumento.value.isNotEmpty() && Email.value.isNotEmpty() && Telefono.value.isNotEmpty()
-
-
+                        nombre.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty()
                     if (editar.value)
                         Boton("Editar") {
-
                             try {
                                 if (!camposCompletos) {
                                     throw Exception("Campos vacios.")
@@ -253,25 +235,23 @@ fun ProveedorScreen(
                                         Personastodas.Proveedor(
                                             idProveedor.value.toLong(),
                                             nombre.value,
-                                            Tipodocumento.value,
-                                            Numdocumento.value,
-                                            Direccion.value,
-                                            Telefono.value,
-                                            Email.value,
+                                            tipoDocumento.value,
+                                            numDocumento.value,
+                                            direccion.value,
+                                            telefono.value,
+                                            email.value,
                                         )
                                     )
                                 )
                                 mostrarDialogo.value = false
                                 Toast.makeText(
                                     context,
-                                    "El proveedor fue editado con exito",
+                                    "El proveedor fue editado con éxito",
                                     Toast.LENGTH_SHORT
                                 ).show()
-
                             } catch (e: Exception) {
                                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                             }
-
                         }
                     else
                         Boton("Agregar", habilitar = camposCompletos) {
@@ -284,31 +264,26 @@ fun ProveedorScreen(
                                         Personastodas.Proveedor(
                                             0,
                                             nombre.value,
-                                            Tipodocumento.value,
-                                            Numdocumento.value,
-                                            Direccion.value,
-                                            Telefono.value,
-                                            Email.value,
+                                            tipoDocumento.value,
+                                            numDocumento.value,
+                                            direccion.value,
+                                            telefono.value,
+                                            email.value,
                                         )
                                     )
                                 )
 
                                 nombre.value = ""
-                                Numdocumento.value = ""
-                                Email.value = ""
-                                Telefono.value = ""
+                                numDocumento.value = ""
+                                email.value = ""
+                                telefono.value = ""
                             } catch (e: Exception) {
                                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                             }
-
                         }
-
                 }
             }
-
-
         }
-
         Dialogo(
             titulo = "Confirma",
             mostrar = mostrarConfirmar.value,
@@ -340,11 +315,11 @@ fun ProveedorScreen(
                                     Personastodas.Proveedor(
                                         idProveedor.value.toLong(),
                                         nombre.value,
-                                        Tipodocumento.value,
-                                        Numdocumento.value,
-                                        Direccion.value,
-                                        Telefono.value,
-                                        Email.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        direccion.value,
+                                        telefono.value,
+                                        email.value,
                                     )
                                 )
                             )

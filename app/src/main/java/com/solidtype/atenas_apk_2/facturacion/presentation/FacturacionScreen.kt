@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,13 +34,14 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.componets.BotonesFina
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.DatePickerDialogoSimple
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Inputs
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Tabla
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 @SuppressLint("MutableCollectionMutableState", "SuspiciousIndentation")
-@OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel = hiltViewModel()) {
 
@@ -57,6 +59,11 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
     val fechaIni = rememberSaveable { mutableStateOf("") }
     val fechaFin = rememberSaveable { mutableStateOf("") }
     val noFacturaCliente = rememberSaveable { mutableStateOf("") }
+
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(FacturasEvent.LimpiarMensaje)
+    }
 
     if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
