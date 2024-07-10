@@ -121,7 +121,7 @@ fun DialogoUsuario(
                         correo.value = ""
                         clave.value = ""
                         telefono.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,

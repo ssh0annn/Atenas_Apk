@@ -59,12 +59,12 @@ fun GestionUsuariosScreen(
     val correo = rememberSaveable { mutableStateOf("") }
     val clave = rememberSaveable { mutableStateOf("") }
     val telefono = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("") }
+    val estado = rememberSaveable { mutableStateOf("Activo") }
 
     val idRollUsuario = rememberSaveable { mutableStateOf("") }
     val nombreRollUsuario = rememberSaveable { mutableStateOf("") }
     val descripcion = rememberSaveable { mutableStateOf("") }
-    val estadoRollUsuario = rememberSaveable { mutableStateOf("") }
+    val estadoRollUsuario = rememberSaveable { mutableStateOf("Activo") }
 
     val editar = rememberSaveable { mutableStateOf(false) }
     val mostrarUsuario = rememberSaveable { mutableStateOf(false) }

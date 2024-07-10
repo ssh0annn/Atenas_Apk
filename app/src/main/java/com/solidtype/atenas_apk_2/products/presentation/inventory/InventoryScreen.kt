@@ -93,7 +93,7 @@ fun InventoryScreen(
     val marca = rememberSaveable { mutableStateOf("") }
     val cantidad = rememberSaveable { mutableStateOf("") }
     val impuesto = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("") }
+    val estado = rememberSaveable { mutableStateOf("Activo") }
     val provider = rememberSaveable { mutableStateOf("") }
 
     val mostrarCategoria = rememberSaveable { mutableStateOf(false) }
@@ -101,7 +101,7 @@ fun InventoryScreen(
     val idCategoria = rememberSaveable { mutableStateOf("") }
     val nombreCategoria = rememberSaveable { mutableStateOf("") }
     val descripcionCategoria = rememberSaveable { mutableStateOf("") }
-    val estadoCategoria = rememberSaveable { mutableStateOf("") }
+    val estadoCategoria = rememberSaveable { mutableStateOf("Activo") }
     val mostrarConfirmarCategoria = rememberSaveable { mutableStateOf(false) }
 
     val mostrarProveedor = rememberSaveable { mutableStateOf(false) }

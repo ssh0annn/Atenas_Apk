@@ -122,7 +122,7 @@ fun DialogoRol(
                             idRollUsuario.value = ""
                             nombreRollUsuario.value = ""
                             descripcion.value = ""
-                            estadoRollUsuario.value = ""
+                            estadoRollUsuario.value = "Activo"
 
                             Toast.makeText(
                                 context,

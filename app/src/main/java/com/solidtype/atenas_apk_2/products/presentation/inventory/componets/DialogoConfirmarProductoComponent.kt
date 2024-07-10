@@ -98,7 +98,7 @@ fun DialogoConfirmarProducto(
                         marca.value = ""
                         cantidad.value = ""
                         impuesto.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
                         provider.value = ""
 
                         mostrarConfirmarProducto.value = false

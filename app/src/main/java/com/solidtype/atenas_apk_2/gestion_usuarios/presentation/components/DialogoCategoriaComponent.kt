@@ -124,7 +124,7 @@ fun DialogoCategoria(
                             idCategoria.value = ""
                             nombreCategoria.value = ""
                             descripcionCategoria.value = ""
-                            estadoCategoria.value = ""
+                            estadoCategoria.value = "Activo"
 
                             Toast.makeText(
                                 context,

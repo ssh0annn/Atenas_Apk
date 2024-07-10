@@ -73,7 +73,7 @@ fun DialogoConfirmarEliminarRol(
                         idRollUsuario.value = ""
                         nombreRollUsuario.value = ""
                         descripcion.value = ""
-                        estadoRollUsuario.value = ""
+                        estadoRollUsuario.value = "Activo"
 
                         mostrarConfirmarRol.value = false
 

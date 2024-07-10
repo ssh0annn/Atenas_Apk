@@ -86,7 +86,7 @@ fun DialogoConfirmarEliminarUsuario(
                         correo.value = ""
                         clave.value = ""
                         telefono.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
 
                         mostrarConfirmar.value = false
 
