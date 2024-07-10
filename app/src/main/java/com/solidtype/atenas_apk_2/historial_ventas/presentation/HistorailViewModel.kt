@@ -83,9 +83,11 @@ class HistorailViewModel @Inject constructor(
                 var total = 0.0
                 casosHistorialReportes.buscarporFechCatego(fechaInicio.toIsoDate().toLocalDate(), fechaFinal.toIsoDate().toLocalDate())
                     .collect { product ->
-                        for (i in product) {
-                            //total += i.total
-                        }
+                        product.sumOf { it.tipoVenta.total }
+                        product.sumOf { it.tipoVenta.abono }
+                        product.sumOf { it.tipoVenta.impuesto }
+                        product.sumOf { it.tipoVenta.subtotal }
+                        product.sumOf { it.tipoVenta.presupuesto }
                         println("Qui lo que se pidio : $product")
 //                        uiState.update {
 //                            it.copy(Historial = product, isLoading = false)

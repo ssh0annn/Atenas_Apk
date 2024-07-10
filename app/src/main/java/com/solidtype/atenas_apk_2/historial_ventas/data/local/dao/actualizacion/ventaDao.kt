@@ -39,7 +39,6 @@ interface ventaDao {
     suspend fun updateVenta(venta : venta)
     @Delete
     suspend fun deleteVenta(venta : venta)
-
     //Bainita bacana paya ... esto es para pro
     @Query("SELECT * From venta")
     fun getVentaWithRelation():Flow<List<VentasRelacionadas>>

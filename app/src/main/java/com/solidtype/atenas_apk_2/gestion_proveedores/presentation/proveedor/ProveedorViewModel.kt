@@ -62,6 +62,8 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
             ProveedorEvent.Switch -> {
                 uiState.update { it.copy(switch = !switch) }
             }
+
+            ProveedorEvent.LimpiarMensaje -> uiState.update { it.copy(mensaje ="") }
         }
     }
 

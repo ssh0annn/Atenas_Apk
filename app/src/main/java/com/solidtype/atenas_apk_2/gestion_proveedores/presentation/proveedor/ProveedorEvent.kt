@@ -15,4 +15,5 @@ sealed class ProveedorEvent {
 
     object MostrarProveedorEvent : ProveedorEvent()
     object Switch : ProveedorEvent()
+    object LimpiarMensaje:ProveedorEvent()
 }

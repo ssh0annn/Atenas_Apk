@@ -78,6 +78,7 @@ class UsuariosViewmodel @Inject constructor(
                 }
             }
             UserEvent.Switch -> uiState.update { it.copy(switch = !switch) }
+            UserEvent.LimpiarMensaje -> uiState.update { it.copy(razones = "") }
         }
     }
 
@@ -168,7 +169,6 @@ class UsuariosViewmodel @Inject constructor(
             uiState.update { it.copy(usuarios = users) }
 
         }.launchIn(viewModelScope)
-
     }
 
     private fun getRoles() {
