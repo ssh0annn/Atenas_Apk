@@ -11,7 +11,7 @@ interface AuthRepository {
         Boolean, String?
     ) -> Unit)
     suspend fun olvideMiPassword(email: String): Boolean
-
+    suspend fun nuevoDevice(id: String, licencia: String)
 
 
 

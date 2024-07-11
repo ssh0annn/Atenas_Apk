@@ -12,16 +12,18 @@ data class HistorialUIState(
     val total2: Double = 0.0,
     val uriPath: Uri? = null,
     val ventasOTicket: Boolean = false, //SI esta en false porque se esta observando
-
     //las ventas, si esta en true, es porque se observan los tickets.
     val error: String = "",
 
     //Totales
-    val total: Double = 0.0,
-    val abono: Double = 0.0,
-    val impuesto: Double = 0.0,
     val subtotal: Double = 0.0,
-    val presupuesto: Double = 0.0,
+    val impuesto: Double = 0.0,
+    val total: Double = 0.0,
+    val descuentos:Double= 0.0,
+    val abono: Double = 0.0,
+
+
+
 
 
 )

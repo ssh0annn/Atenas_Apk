@@ -219,14 +219,14 @@ class ServiciosViewModel @Inject constructor(
                 datosRealeas.id_tipo_venta = System.currentTimeMillis()//Para revision
                 datosRealeas.abono = uiStates.value.abono
                 if(uiStates.value.impuestos){
-                    datosRealeas.impuesto = datosRealeas.presupuesto * 0.18
-                    datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
+                    datosRealeas.impuesto =  datosRealeas.subtotal * 0.18
                     datosRealeas.total = datosRealeas.subtotal + datosRealeas.impuesto
+                    datosRealeas.restantante =datosRealeas.total - datosRealeas.abono
 
                 }else{
                     datosRealeas.impuesto = 0.0
-                    datosRealeas.subtotal = datosRealeas.presupuesto - datosRealeas.abono
                     datosRealeas.total = datosRealeas.subtotal + datosRealeas.impuesto
+                    datosRealeas.restantante = datosRealeas.total - datosRealeas.abono
                 }
                 ticket.update { it.copy(datosFinance = datosRealeas ) }
             }

@@ -126,4 +126,7 @@ class MetodoAutenticacionImpl @Inject constructor(
             UsuarioActual.tipoUser
         )
     }
+    override suspend fun registrarNewDispositivo(id:String, licencia: String){
+        dataCloud.registrarNuevoDevice(id, licencia)
+    }
 }

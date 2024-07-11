@@ -12,4 +12,8 @@ sealed class AuthEvent {
 
     data class ForgetPassword(val email:String):AuthEvent()
 
+    object RegistrarNuevoDevice:AuthEvent()
+
+    object CancelarRegistro:AuthEvent()
+
 }

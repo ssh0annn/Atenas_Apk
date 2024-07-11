@@ -57,7 +57,20 @@ class AuthViewmodel @Inject constructor(
             is AuthEvent.Recuerdame -> recuerdame(event.email)
             is AuthEvent.EliminarRecuerdos -> eliminarRecuerdos()
             is AuthEvent.ForgetPassword -> forgetPassword(event.email)
+            AuthEvent.RegistrarNuevoDevice -> registraNuevoDivice(getDeviceId().toString())
+            AuthEvent.CancelarRegistro -> {
+                uiStates.update { it.copy(dispositivo = true)  }
+                eliminarLicencia()
+                logout()
+            }
             else -> viewModelScope.launch { casosAuth.logout() }
+        }
+    }
+
+    private fun registraNuevoDivice(id:String){
+        viewModelScope.launch {
+            casosAuth.nuevoDevice(id, recuerdame.getString(LICENCIA, "").toString())
+            uiStates.update { it.copy(dispositivo = true) }
         }
     }
     private fun handleAuthenticationEvent() {
@@ -177,13 +190,12 @@ class AuthViewmodel @Inject constructor(
             }
 
             !checkListAuth.deviceRegistrado -> {
-                eliminarLicencia()
-                logout()
                 uiStates.update {
                     it.copy(
                         isAutenticated = null,
                         razones = "Dispositivo no registrado: '${getDeviceId()}' ",
-                        licenciaGuardada = false
+                        licenciaGuardada = false,
+                        dispositivo = false
                     )
                 }
                 false
@@ -218,7 +230,6 @@ class AuthViewmodel @Inject constructor(
             context.contentResolver,
             Settings.Secure.ANDROID_ID
         )
-
         return deviceId
     }
 

@@ -51,29 +51,28 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
             }
 
             is ProveedorEvent.AgregarProveedor -> {
-                AgregarUsuario(evento.proveedors)
+                agregarUsuario(evento.proveedors)
 
             }
 
             is ProveedorEvent.EditarProveedor -> {
-                EditarUsuario(evento.proveedors)
+                editarUsuario(evento.proveedors)
             }
 
             ProveedorEvent.Switch -> {
                 uiState.update { it.copy(switch = !switch) }
             }
-
             ProveedorEvent.LimpiarMensaje -> uiState.update { it.copy(mensaje ="") }
         }
     }
 
-    private fun AgregarUsuario(usuario: Personastodas.Proveedor) {
+    private fun agregarUsuario(usuario: Personastodas.Proveedor) {
         viewModelScope.launch {
             casos.crearProveedor(proveedor = usuario)
         }
     }
 
-    private fun EditarUsuario(usuario: Personastodas.Proveedor) {
+    private fun editarUsuario(usuario: Personastodas.Proveedor) {
         viewModelScope.launch {
             casos.editarProveedores(proveedor = usuario)
         }

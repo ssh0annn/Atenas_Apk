@@ -15,6 +15,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.ForgotPassword
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.RegistraNuevoDevice
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
@@ -479,7 +480,8 @@ object AppModule {
         logout= Logout(repo),
         whoIs = WhoIs(repo),
         forgotPassword = ForgotPassword(repo),
-        cambiarPassword= CambiarPassword(repo)
+        cambiarPassword= CambiarPassword(repo),
+        nuevoDevice= RegistraNuevoDevice(repo)
     )
 
     @Singleton
