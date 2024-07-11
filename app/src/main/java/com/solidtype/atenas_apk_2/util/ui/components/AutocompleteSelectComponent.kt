@@ -76,7 +76,7 @@ fun AutocompleteSelect(
                 color = AzulGris,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
-            ),label = {
+            ), label = {
                 Text(
                     text = text,
                     color = AzulGris,
@@ -120,41 +120,42 @@ fun AutocompleteSelect(
                     // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
                 }
             ) {
-                for (item in filteredItems) {
-                    DropdownMenuItem(text = { Text(item) }, onClick = {
-                        searchText = item
-                        expanded.value = false
-                        onSelectionChange(item)
-                    })
-                }
-                if (onClickAgregar != null)
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp)
-                        .clickable(onClick = {
-                            onClickAgregar()
+                if (filteredItems != listOf(""))
+                    for (item in filteredItems) {
+                        DropdownMenuItem(text = { Text(item) }, onClick = {
+                            searchText = item
                             expanded.value = false
-                            //Debería hacer un back
-                            keyboardController?.hide()
-                        }),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add",
-                        tint = AzulGris
-                    )
-                    Text(
-                        text = "Agregar",
-                        color = AzulGris,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.ExtraBold,
+                            onSelectionChange(item)
+                        })
+                    }
+                if (onClickAgregar != null)
+                    Row(
                         modifier = Modifier
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                }
+                            .fillMaxWidth()
+                            .padding(5.dp)
+                            .clickable(onClick = {
+                                onClickAgregar()
+                                expanded.value = false
+                                //Debería hacer un back
+                                keyboardController?.hide()
+                            }),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add",
+                            tint = AzulGris
+                        )
+                        Text(
+                            text = "Agregar",
+                            color = AzulGris,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
             }
         }
     }

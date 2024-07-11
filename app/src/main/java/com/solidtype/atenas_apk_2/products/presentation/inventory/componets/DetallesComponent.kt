@@ -81,7 +81,8 @@ fun Detalles(
                             AutocompleteSelect(
                                 "Categoría",
                                 categoria.value,
-                                if (uiState.categoria.isNotEmpty()) uiState.categoria.map { it.nombre } else listOf(
+                                if (uiState.categoria.isNotEmpty()) uiState.categoria.filter { it.estado }
+                                    .map { it.nombre } else listOf(
                                     ""
                                 ),
                                 true,
@@ -90,8 +91,9 @@ fun Detalles(
                                 },
                             ) {
                                 categoria.value = it
-                                if(categoria.value != "")
-                                    idCatalogo.value = uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
+                                if (categoria.value != "")
+                                    idCatalogo.value =
+                                        uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             InputDetalle(
@@ -122,8 +124,9 @@ fun Detalles(
                             },
                         ) {
                             provider.value = it
-                            if(provider.value != "")
-                                idProveedor.value = uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
+                            if (provider.value != "")
+                                idProveedor.value =
+                                    uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
                         Spacer(modifier = Modifier.height(5.dp))
                         InputDetalle("Costo", costo.value) {
@@ -145,7 +148,7 @@ fun Detalles(
                             cantidad.value = it
                         }
                         Spacer(modifier = Modifier.height(5.dp))
-                        AutocompleteSelect("Estado", estado.value,  listEstados) {
+                        AutocompleteSelect("Estado", estado.value, listEstados) {
                             estado.value = it
                         }
                         Spacer(modifier = Modifier.height(10.dp))
