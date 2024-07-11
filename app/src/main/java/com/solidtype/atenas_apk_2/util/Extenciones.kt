@@ -61,19 +61,21 @@ fun venta.toGetColumns(): List<String> {
     )
 }
 
-fun ListaTicket():List<String>{
+fun ListaTicket(): List<String> {
     return listOf(
         "id_ticket",
-        "id_vendedor",
-        "id_cliente",
-        "id_tipo_venta",
-        "descripcion",
+        "servicio",
+        "falla",
+        "tipo_pago",
+        "numeroTransaccion",
         "subtotal",
+        "descuento",
         "impuesto",
         "total",
-        "fecha_inicio",
-        "fecha_final",
-        "estado"
+        "abono",
+        "restante",
+        "fecha",
+        "open"
     )
 }
 
@@ -83,8 +85,9 @@ fun ListaTicket():List<String>{
  */
 
 fun Map<String, Any?>.toUsuario(): usuario {
-    val usuario= setOf("id_roll_usuario","nombre", "apellido", "email", "clave", "telefono", "estado")
-    if(this.keys.toSet() == usuario){
+    val usuario =
+        setOf("id_roll_usuario", "nombre", "apellido", "email", "clave", "telefono", "estado")
+    if (this.keys.toSet() == usuario) {
         return usuario(
             id_roll_usuario = this["id_roll_usuario"] as Long,
             nombre = this["nombre"] as String,
@@ -98,11 +101,12 @@ fun Map<String, Any?>.toUsuario(): usuario {
     }
     throw Exception("No se reconoce el mapa, favor solo usar un mapa que sea compatible con Usuario")
 }
+
 /**
  * param: map(string, any)
  * return: Usuario Entity
  */
-fun usuario.toMap(): Map<String, Any?>{
+fun usuario.toMap(): Map<String, Any?> {
     return mapOf(
         "id_roll_usuario" to id_roll_usuario,
         "nombre" to nombre,

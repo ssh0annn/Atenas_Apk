@@ -30,13 +30,13 @@ fun SelectorVentaTicket(
                     ventasTickerTitulo.value = "Ventas"
                     fechaIni.value = ""
                     fechaFin.value = ""
-                    viewModel.MostrarHistoriar()
+                 //   viewModel.MostrarHistoriar()
                 }
                 "Ticket" -> {
                     ventasTickerTitulo.value = "Cuenta x Cobrar"
                     fechaIni.value = ""
                     fechaFin.value = ""
-                    viewModel.mostrarTicket()
+                  //  viewModel.mostrarTicket()
                 }
             }
         }

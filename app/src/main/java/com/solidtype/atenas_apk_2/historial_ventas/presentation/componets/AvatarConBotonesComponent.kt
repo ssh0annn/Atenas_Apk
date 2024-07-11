@@ -26,8 +26,8 @@ fun AvatarConBotones(
     ) { //Avatar y Botones
         Row {
             Boton("Ver Todo") {
-                viewModel.MostrarHistoriar()
-                viewModel.mostrarTicket()
+//                viewModel.MostrarHistoriar()
+//                viewModel.mostrarTicket()
                 // limpiar fechas
                 fechaIni.value = ""
                 fechaFin.value = ""
@@ -35,7 +35,7 @@ fun AvatarConBotones(
             Boton("Exportar") {
                 Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
                     .show()
-                viewModel.Exportar()
+               // viewModel.Exportar()
                 showSnackbarIni.value = true
             }
         }
