@@ -77,8 +77,8 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    if (uiState.error.isNotEmpty()) {
-        Toast.makeText(context, uiState.error, Toast.LENGTH_LONG).show()
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
         //viewModel.limpiaMessages()
     }
 

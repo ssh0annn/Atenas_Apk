@@ -40,6 +40,7 @@ interface ventaDao {
     @Delete
     suspend fun deleteVenta(venta : venta)
     //Bainita bacana paya ... esto es para pro
+    @Transaction
     @Query("SELECT * From venta")
     fun getVentaWithRelation():Flow<List<VentasRelacionadas>>
     @Transaction
@@ -54,7 +55,6 @@ interface ventaDao {
     fun buscarVentaWithRelation(id:String,desde:LocalDate, hasta:LocalDate):Flow<List<VentasRelacionadas>>
     @Transaction
     fun insertarVentaWithRelation(venta: VentasRelacionadas){
-
 
     }
 }

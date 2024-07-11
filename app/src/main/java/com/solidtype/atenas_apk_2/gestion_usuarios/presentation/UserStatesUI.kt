@@ -10,5 +10,5 @@ data class UserStatesUI(
     val roles: List<roll_usuarios> = emptyList(),
     val rolSelecionado: roll_usuarios? = null,
     val qr: String? = "",
-    val switch:Boolean = true
+    val switch:Boolean = false
 )
