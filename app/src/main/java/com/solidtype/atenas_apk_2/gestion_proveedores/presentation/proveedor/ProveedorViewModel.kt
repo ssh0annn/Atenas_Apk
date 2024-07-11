@@ -95,7 +95,7 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
 
     private fun getUsuarios() {
         userJob?.cancel()
-        userJob = casos.getProveedores(switch).onEach { users ->
+        userJob = casos.getProveedores(!switch).onEach { users ->
             uiState.update { it.copy(proveedores = users) }
 
         }.launchIn(viewModelScope)
@@ -104,7 +104,7 @@ class ProveedorViewModel @Inject constructor(private val casos: CasosProveedores
     private fun buscarUsuarios(any: String) {
 
         userJob?.cancel()
-        userJob = casos.buscarProveedores(any, switch).onEach { users ->
+        userJob = casos.buscarProveedores(any, !switch).onEach { users ->
             uiState.update { it.copy(proveedores = users) }
         }.launchIn(viewModelScope)
 

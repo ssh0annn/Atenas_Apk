@@ -6,6 +6,6 @@ data class ProveedorStatesUI(
     val proveedores: List<Personastodas.Proveedor> = emptyList(),
     val isLoading: Boolean = false,
     val mensaje: String = "",
-    val switch:Boolean = true
+    val switch:Boolean = false
 
 )

@@ -6,5 +6,5 @@ data class ClienteStateUI(
     val clientes: List<Personastodas.ClienteUI> = emptyList(),
     val isLoading: Boolean = false,
     val mensaje: String = "",
-    val switch:Boolean = true
+    val switch:Boolean = false
 )

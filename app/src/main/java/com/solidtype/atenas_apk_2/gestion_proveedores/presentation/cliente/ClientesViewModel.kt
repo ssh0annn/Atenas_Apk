@@ -77,7 +77,7 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
     private fun getUsuarios() {
         userJob?.cancel()
-        userJob = casos.getClientes(switch).onEach { users ->
+        userJob = casos.getClientes(!switch).onEach { users ->
          uiState.update { it.copy(clientes = users) }
 
         }.launchIn(viewModelScope)
@@ -86,7 +86,7 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
     private fun buscarUsuarios(any: String) {
 
         userJob?.cancel()
-        userJob = casos.buscarClientes(any, switch).onEach { users ->
+        userJob = casos.buscarClientes(any, !switch).onEach { users ->
             uiState.update { it.copy(clientes = users) }
         }.launchIn(viewModelScope)
 
