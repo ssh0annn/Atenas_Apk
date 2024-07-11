@@ -75,7 +75,7 @@ fun DialogoConfirmarCategoria(
                         idCategoria.value = ""
                         nombreCategoria.value = ""
                         descripcionCategoria.value = ""
-                        estadoCategoria.value = ""
+                        estadoCategoria.value = "Activo"
 
                         mostrarConfirmarCategoria.value = false
 

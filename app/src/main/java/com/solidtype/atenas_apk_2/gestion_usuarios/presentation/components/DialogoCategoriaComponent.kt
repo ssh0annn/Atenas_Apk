@@ -31,6 +31,7 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
@@ -123,7 +124,7 @@ fun DialogoCategoria(
                             idCategoria.value = ""
                             nombreCategoria.value = ""
                             descripcionCategoria.value = ""
-                            estadoCategoria.value = ""
+                            estadoCategoria.value = "Activo"
 
                             Toast.makeText(
                                 context,
@@ -150,7 +151,7 @@ fun DialogoCategoria(
             ) {
                 LazyColumn(
                     modifier = Modifier
-                        .heightIn(max = 355.dp)
+                        .height(Pantalla.alto * 0.482f)
                         .padding(10.dp)
                         .background(GrisOscuro, RoundedCornerShape(5.dp))
                 ) {

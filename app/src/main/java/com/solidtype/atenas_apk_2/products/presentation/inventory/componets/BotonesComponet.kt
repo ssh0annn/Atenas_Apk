@@ -65,7 +65,7 @@ fun Botones(
                 marca.value = ""
                 cantidad.value = ""
                 impuesto.value = ""
-                estado.value = ""
+                estado.value = "Activo"
                 provider.value = ""
             }
         }

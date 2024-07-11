@@ -113,7 +113,7 @@ fun DialogoProducto(
                         precio.value = ""
                         impuesto.value = ""
                         descripcion.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,

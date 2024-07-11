@@ -41,7 +41,7 @@ fun Botones(
                 correo.value = ""
                 clave.value = ""
                 telefono.value = ""
-                estado.value = ""
+                estado.value = "Activo"
                 rol.value = ""
             }
         }

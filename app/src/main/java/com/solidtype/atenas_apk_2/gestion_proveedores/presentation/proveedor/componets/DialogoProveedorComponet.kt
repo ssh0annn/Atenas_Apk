@@ -162,7 +162,7 @@ fun DialogoProveedor(
             ) {
                 LazyColumn(
                     modifier = Modifier
-                        .heightIn(max = 355.dp)
+                        .height(Pantalla.alto * 0.557f)
                         .padding(10.dp)
                         .background(GrisOscuro, RoundedCornerShape(5.dp))
                 ) {

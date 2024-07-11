@@ -43,8 +43,7 @@ fun DialogoConfirmarProducto(
     estado: MutableState<String>,
     categoria: MutableState<String>,
     provider: MutableState<String>,
-    context: Context,
-    mostrarConfirmarCategoria: MutableState<Boolean>
+    context: Context
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -99,7 +98,7 @@ fun DialogoConfirmarProducto(
                         marca.value = ""
                         cantidad.value = ""
                         impuesto.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
                         provider.value = ""
 
                         mostrarConfirmarProducto.value = false
@@ -119,7 +118,7 @@ fun DialogoConfirmarProducto(
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {
-                    mostrarConfirmarCategoria.value = false
+                    mostrarConfirmarProducto.value = false
                 }
             }
         }

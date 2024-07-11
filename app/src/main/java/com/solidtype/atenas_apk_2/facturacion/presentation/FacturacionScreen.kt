@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FactCheck
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
@@ -30,17 +30,18 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.BotonesFinales
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.DatePickerDialogoSimple
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Inputs
-import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Generals.Tabla
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.BotonesFinales
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.DatePickerDialogoSimple
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Inputs
+import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Tabla
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 @SuppressLint("MutableCollectionMutableState", "SuspiciousIndentation")
-@OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel = hiltViewModel()) {
 
@@ -58,6 +59,11 @@ fun FacturacionScreen(navController: NavController, viewModel: FacturaViewModel 
     val fechaIni = rememberSaveable { mutableStateOf("") }
     val fechaFin = rememberSaveable { mutableStateOf("") }
     val noFacturaCliente = rememberSaveable { mutableStateOf("") }
+
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(FacturasEvent.LimpiarMensaje)
+    }
 
     if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)

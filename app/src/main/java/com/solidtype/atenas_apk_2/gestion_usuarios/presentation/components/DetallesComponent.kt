@@ -43,10 +43,7 @@ fun Detalles(
     rol: MutableState<String>,
     uiState: UserStatesUI,
     mostrarDialogo: MutableState<Boolean>,
-    mostrarConfirmar: MutableState<Boolean>,
     estado: MutableState<String>,
-    viewModel: UsuariosViewmodel,
-    context: Context
 ) {
     Column(
         modifier = Modifier
@@ -81,7 +78,7 @@ fun Detalles(
                             apellido.value = it
                         }
                         InputDetalle("Correo", correo.value) { correo.value = it }
-                        InputDetalle("Clave", clave.value) { clave.value = it }
+                        InputDetalle("Clave", clave.value, pass = true) { clave.value = it }
                         InputDetalle("Teléfono", telefono.value) {
                             telefono.value = it
                         }

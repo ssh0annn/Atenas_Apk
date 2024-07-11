@@ -162,6 +162,8 @@ dependencies {
     //Sincronizacion el worker
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
+    implementation("com.github.kenglxn.QRGen:android:3.0.1") //QR
+
 }
 
 ksp {

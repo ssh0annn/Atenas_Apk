@@ -276,10 +276,10 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .height(100.dp)
                 .padding(top = 30.dp),
             enabled = Patterns.EMAIL_ADDRESS.matcher(email.value)
-                .matches() && pass.value.length >= 8
+                .matches() && pass.value.length >= 8 && !uiState.isLoading
         ) {
             Text(
-                "Sign in",
+                "Iniciar Sesión",
                 fontSize = 24.sp
             )
         }

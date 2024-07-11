@@ -6,7 +6,11 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ve
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import android.util.Base64
 import java.util.Date
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 
 fun String.toLocalDate(formato: String = "yyyy-MM-dd"): LocalDate {
@@ -129,4 +133,27 @@ fun Boolean.formatoActivo(): String {
 
 fun String.formatoActivoDDBB(): Boolean {
     return this == "Activo"
+}
+
+fun String.toScretKeySpec(): SecretKeySpec { //256 bits
+    val key = this.toByteArray(Charsets.UTF_8)
+    return SecretKeySpec(key, "AES")
+}
+
+fun String.encriptar(key: String): String {
+    val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    val ivBytes = ByteArray(cipher.blockSize)
+    val ivSpec = IvParameterSpec(ivBytes)
+    cipher.init(Cipher.ENCRYPT_MODE, key.toScretKeySpec(), ivSpec)
+    val encrypted = cipher.doFinal(this.toByteArray(Charsets.UTF_8))
+    return Base64.encodeToString(encrypted, Base64.DEFAULT)
+}
+
+fun String.desencriptar(key: String): String {
+    val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    val ivBytes = ByteArray(cipher.blockSize)
+    val ivSpec = IvParameterSpec(ivBytes)
+    cipher.init(Cipher.DECRYPT_MODE, key.toScretKeySpec(), ivSpec)
+    val original = cipher.doFinal(Base64.decode(this, Base64.DEFAULT))
+    return String(original, Charsets.UTF_8)
 }

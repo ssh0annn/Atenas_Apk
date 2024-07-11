@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,7 +93,7 @@ fun InventoryScreen(
     val marca = rememberSaveable { mutableStateOf("") }
     val cantidad = rememberSaveable { mutableStateOf("") }
     val impuesto = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("") }
+    val estado = rememberSaveable { mutableStateOf("Activo") }
     val provider = rememberSaveable { mutableStateOf("") }
 
     val mostrarCategoria = rememberSaveable { mutableStateOf(false) }
@@ -102,7 +101,7 @@ fun InventoryScreen(
     val idCategoria = rememberSaveable { mutableStateOf("") }
     val nombreCategoria = rememberSaveable { mutableStateOf("") }
     val descripcionCategoria = rememberSaveable { mutableStateOf("") }
-    val estadoCategoria = rememberSaveable { mutableStateOf("") }
+    val estadoCategoria = rememberSaveable { mutableStateOf("Activo") }
     val mostrarConfirmarCategoria = rememberSaveable { mutableStateOf(false) }
 
     val mostrarProveedor = rememberSaveable { mutableStateOf(false) }
@@ -123,7 +122,10 @@ fun InventoryScreen(
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    val listEstados = listOf("Activo", "No Activo")
+    if (uiState.messages.isNotEmpty()) {
+        Toast.makeText(context, uiState.messages, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(InventariosEvent.LimpiarMensaje)
+    }
 
     if (uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
     if (uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
@@ -173,8 +175,6 @@ fun InventoryScreen(
                 AreaProductos(
                     uiState,
                     idInventario,
-                    idCategoriaText,
-                    idProveedorText,
                     nombre,
                     marca,
                     modelo,
@@ -231,7 +231,7 @@ fun InventoryScreen(
             estado,
             context,
             provider,
-            listEstados,
+            listOf("Activo", "Inactivo"),
             mostrarCategoria,
             mostrarProveedor,
             idCategoria,
@@ -254,8 +254,7 @@ fun InventoryScreen(
             estado,
             categoria,
             provider,
-            context,
-            mostrarConfirmarCategoria
+            context
         )
         DialogoExcel(mostrarEjemplar)
         DialogoCategoria(

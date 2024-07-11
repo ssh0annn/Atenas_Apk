@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FactCheck
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +39,6 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.TableClients
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
-
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
@@ -49,19 +47,13 @@ import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
-import kotlinx.coroutines.InternalCoroutinesApi
 
-
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class,
-    InternalCoroutinesApi::class, InternalCoroutinesApi::class
-)
+@OptIn(ExperimentalMultiplatform::class)
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
 @Composable
 fun ClienteScreen(
     navController: NavController,
     viewModel: ClientesViewModel = hiltViewModel()
-
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -72,20 +64,25 @@ fun ClienteScreen(
     //formulario cliente
     val idCliente = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
-    val Tipodocumento = rememberSaveable { mutableStateOf("") }
-    val Numdocumento = rememberSaveable { mutableStateOf("") }
-    val Email = rememberSaveable { mutableStateOf("") }
-    val Telefono = rememberSaveable { mutableStateOf("") }
+    val tipoDocumento = rememberSaveable { mutableStateOf("") }
+    val numDocumento = rememberSaveable { mutableStateOf("") }
+    val email = rememberSaveable { mutableStateOf("") }
+    val telefono = rememberSaveable { mutableStateOf("") }
 
     //LISTA SELECTOR
-    val DocumetSelector = listOf("Cédula", "Pasaporte")
+//    val documetSelector = listOf("Cédula", "Pasaporte")
     //estado busqueda
-    val Busqueda = rememberSaveable { mutableStateOf("") }
+    val busqueda = rememberSaveable { mutableStateOf("") }
 
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
 
-    if (Busqueda.value.isNotBlank()) {
-        viewModel.onUserEvent(ClienteEvent.BuscarClientes(Busqueda.value))
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+        viewModel.onUserEvent(ClienteEvent.LimpiarMensaje)
+    }
+
+    if (busqueda.value.isNotBlank()) {
+        viewModel.onUserEvent(ClienteEvent.BuscarClientes(busqueda.value))
     } else {
         viewModel.onUserEvent(ClienteEvent.MostrarClientesEvent)
     }
@@ -119,8 +116,8 @@ fun ClienteScreen(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        Buscador(busqueda = Busqueda.value) {
-                            Busqueda.value = it
+                        Buscador(busqueda = busqueda.value) {
+                            busqueda.value = it
                         }
                     }
 
@@ -131,10 +128,10 @@ fun ClienteScreen(
                         mostrarDialogo,
                         editar,
                         nombre,
-                        Tipodocumento,
-                        Numdocumento,
-                        Email,
-                        Telefono,
+                        tipoDocumento,
+                        numDocumento,
+                        email,
+                        telefono,
                         mostrarConfirmar,
                         idCliente
                     )
@@ -149,10 +146,10 @@ fun ClienteScreen(
 
                             idCliente.value = ""
                             nombre.value = ""
-                            Numdocumento.value = ""
-                            Telefono.value = ""
-                            Email.value = ""
-                            Tipodocumento.value = ""
+                            numDocumento.value = ""
+                            telefono.value = ""
+                            email.value = ""
+                            tipoDocumento.value = ""
 
                         }
                     }
@@ -184,53 +181,38 @@ fun ClienteScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-
-
                     InputDetalle(
-
                         label = "Nombre",
                         valor = nombre.value,
                     ) {
                         nombre.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
                     InputDetalle(
                         label = "Numero de documento",
-                        valor = Numdocumento.value,
+                        valor = numDocumento.value,
                     ) {
-                        Numdocumento.value = it
+                        numDocumento.value = it
                     }
-
-
-
-
                     Spacer(modifier = Modifier.height(10.dp))
                     InputDetalle(
                         label = "Email",
-                        valor = Email.value,
+                        valor = email.value,
                     ) {
-                        Email.value = it
+                        email.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
-
                     InputDetalle(
                         label = "Telefono",
-                        valor = Telefono.value,
+                        valor = telefono.value,
                     ) {
-                        Telefono.value = it
+                        telefono.value = it
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
-
                     val camposCompletos =
-                        nombre.value.isNotEmpty() && Numdocumento.value.isNotEmpty() && Email.value.isNotEmpty() && Telefono.value.isNotEmpty()
-
-
+                        nombre.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty()
                     if (editar.value)
                         Boton("Editar") {
-
                             try {
                                 if (!camposCompletos) {
                                     throw Exception("Campos vacios.")
@@ -240,23 +222,21 @@ fun ClienteScreen(
                                         Personastodas.ClienteUI(
                                             idCliente.value.toLong(),
                                             nombre.value,
-                                            Numdocumento.value,
-                                            Email.value,
-                                            Telefono.value
+                                            numDocumento.value,
+                                            email.value,
+                                            telefono.value
                                         )
                                     )
                                 )
                                 mostrarDialogo.value = false
                                 Toast.makeText(
                                     context,
-                                    "El cliente editado con exito",
+                                    "El cliente fue editado con éxito",
                                     Toast.LENGTH_SHORT
                                 ).show()
-
                             } catch (e: Exception) {
                                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                             }
-
                         }
                     else
                         Boton("Agregar", habilitar = camposCompletos) {
@@ -269,30 +249,23 @@ fun ClienteScreen(
                                         Personastodas.ClienteUI(
                                             id_cliente = 0,
                                             nombre = nombre.value,
-                                            documento = Numdocumento.value,
-                                            telefono = Telefono.value,
-                                            email = Email.value//OJO Estabas pasando el telefono donde iva el emial
-
+                                            documento = numDocumento.value,
+                                            telefono = telefono.value,
+                                            email = email.value//OJO Estabas pasando el telefono donde iva el emial
                                         )
                                     )
                                 )
-
                                 nombre.value = ""
-                                Numdocumento.value = ""
-                                Email.value = ""
-                                Telefono.value = ""
+                                numDocumento.value = ""
+                                email.value = ""
+                                telefono.value = ""
                             } catch (e: Exception) {
                                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                             }
-
                         }
-
                 }
             }
-
-
         }
-
         Dialogo(
             titulo = "Confirma",
             mostrar = mostrarConfirmar.value,
@@ -324,9 +297,9 @@ fun ClienteScreen(
                                     Personastodas.ClienteUI(
                                         idCliente.value.toLong(),
                                         nombre.value,
-                                        Numdocumento.value,
-                                        Email.value,
-                                        Telefono.value
+                                        numDocumento.value,
+                                        email.value,
+                                        telefono.value
                                     )
                                 )
                             )
@@ -353,13 +326,3 @@ fun ClienteScreen(
         MenuLateral(navController)
     }
 }
-
-
-
-
-
-
-
-
-
-
