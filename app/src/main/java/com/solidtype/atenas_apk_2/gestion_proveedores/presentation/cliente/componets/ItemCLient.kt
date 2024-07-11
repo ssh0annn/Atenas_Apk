@@ -139,13 +139,13 @@ fun MyClientItem(
 @Composable
 fun PreviewClient() {
 
-    val cliente : Personastodas.ClienteUI = Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "4848-+84",
-        "809-659-8452",
-        "therealdiaz@live.com",
-    )
+//    val cliente : Personastodas.ClienteUI = Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "4848-+84",
+//        "809-659-8452",
+//        "therealdiaz@live.com",
+//    )
 
     MaterialTheme {
     }

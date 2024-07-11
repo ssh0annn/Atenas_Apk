@@ -217,17 +217,17 @@ fun ClienteScreen(
                                 if (!camposCompletos) {
                                     throw Exception("Campos vacios.")
                                 }
-                                viewModel.onUserEvent(
-                                    ClienteEvent.EditarClientes(
-                                        Personastodas.ClienteUI(
-                                            idCliente.value.toLong(),
-                                            nombre.value,
-                                            numDocumento.value,
-                                            email.value,
-                                            telefono.value
-                                        )
-                                    )
-                                )
+//                                viewModel.onUserEvent(
+//                                    ClienteEvent.EditarClientes(
+//                                        Personastodas.ClienteUI(
+//                                            idCliente.value.toLong(),
+//                                            nombre.value,
+//                                            numDocumento.value,
+//                                            email.value,
+//                                            telefono.value
+//                                        )
+//                                    )
+//                                )
                                 mostrarDialogo.value = false
                                 Toast.makeText(
                                     context,
@@ -244,17 +244,17 @@ fun ClienteScreen(
                                 if (!camposCompletos) {
                                     throw Exception("Campos vacios.")
                                 }
-                                viewModel.onUserEvent(
-                                    ClienteEvent.AgregarClientes(
-                                        Personastodas.ClienteUI(
-                                            id_cliente = 0,
-                                            nombre = nombre.value,
-                                            documento = numDocumento.value,
-                                            telefono = telefono.value,
-                                            email = email.value//OJO Estabas pasando el telefono donde iva el emial
-                                        )
-                                    )
-                                )
+//                                viewModel.onUserEvent(
+//                                    ClienteEvent.AgregarClientes(
+//                                        Personastodas.ClienteUI(
+//                                            id_cliente = 0,
+//                                            nombre = nombre.value,
+//                                            documento = numDocumento.value,
+//                                            telefono = telefono.value,
+//                                            email = email.value//OJO Estabas pasando el telefono donde iva el emial
+//                                        )
+//                                    )
+//                                )
                                 nombre.value = ""
                                 numDocumento.value = ""
                                 email.value = ""
@@ -292,17 +292,17 @@ fun ClienteScreen(
                         try {
                             mostrarConfirmar.value = false
 
-                            viewModel.onUserEvent(
-                                ClienteEvent.BorrarClientes(
-                                    Personastodas.ClienteUI(
-                                        idCliente.value.toLong(),
-                                        nombre.value,
-                                        numDocumento.value,
-                                        email.value,
-                                        telefono.value
-                                    )
-                                )
-                            )
+//                            viewModel.onUserEvent(
+//                                ClienteEvent.BorrarClientes(
+//                                    Personastodas.ClienteUI(
+//                                        idCliente.value.toLong(),
+//                                        nombre.value,
+//                                        numDocumento.value,
+//                                        email.value,
+//                                        telefono.value
+//                                    )
+//                                )
+//                            )
                             Toast.makeText(
                                 context,
                                 "Se eliminó el cliente",

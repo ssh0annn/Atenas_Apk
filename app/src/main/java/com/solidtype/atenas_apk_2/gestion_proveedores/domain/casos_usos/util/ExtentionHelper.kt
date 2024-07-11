@@ -22,6 +22,7 @@ fun persona.toClienteUI():Personastodas.ClienteUI{
     return Personastodas.ClienteUI(
         id_cliente = this.id_persona,
         nombre = this.nombre,
+        tipo_documento = this.tipo_documento,
         documento = this.documento,
         telefono = this.telefono,
         email = this.email

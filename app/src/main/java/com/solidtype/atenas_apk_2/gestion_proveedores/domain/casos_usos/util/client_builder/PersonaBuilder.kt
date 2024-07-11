@@ -6,12 +6,12 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 class PersonaBuilder: Builder {
     private var id_persona: Long = 0
     private var tipo_persona: String? = "proveedor"
-    private var nombre: String? = null
-    private var tipo_documento: String? = null
-    private var documento: String? = null
-    private var direccion: String? = null
-    private var telefono: String? = null
-    private var email: String? = null
+    private var nombre: String? = ""
+    private var tipo_documento: String? = ""
+    private var documento: String? = ""
+    private var direccion: String? = ""
+    private var telefono: String? = ""
+    private var email: String? = ""
     private var estado: Boolean = true
 
     override fun id_persona(idPersona: Long): Builder {
@@ -61,16 +61,14 @@ class PersonaBuilder: Builder {
 
     override fun reset(): Builder {
         this.id_persona = 0
-        this.nombre = null
-        this.tipo_documento = null
-        this.documento = null
-        this.direccion = null
-        this.telefono = null
-        this.email = null
+        this.nombre = ""
+        this.tipo_documento = ""
+        this.documento = ""
+        this.direccion = ""
+        this.telefono = ""
+        this.email = ""
         this.estado = true
-
         return this
-
 
     }
 

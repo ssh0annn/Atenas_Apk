@@ -23,45 +23,45 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
-val listClients : List<Personastodas.ClienteUI> = listOf(
-    Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    )
-)
+//val listClients : List<Personastodas.ClienteUI> = listOf(
+//    Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "423-4234-324",
+//        "3242343",
+//        "therealdiaz@live.com",
+//    ),   Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "423-4234-324",
+//        "3242343",
+//        "therealdiaz@live.com",
+//    ),   Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "423-4234-324",
+//        "3242343",
+//        "therealdiaz@live.com",
+//    ),   Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "423-4234-324",
+//        "3242343",
+//        "therealdiaz@live.com",
+//    ),   Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "423-4234-324",
+//        "3242343",
+//        "therealdiaz@live.com",
+//    ),   Personastodas.ClienteUI(
+//        1,
+//        "Johan Diaz",
+//        "423-4234-324",
+//        "3242343",
+//        "therealdiaz@live.com",
+//    )
+//)
 
  @Composable
     fun TableClients(
