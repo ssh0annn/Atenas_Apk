@@ -36,7 +36,6 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.TableProviders
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -128,7 +127,6 @@ fun ProveedorScreen(
                         mostrarDialogo,
                         editar,
                         nombre,
-                        tipoDocumento,
                         numDocumento,
                         email,
                         telefono,
@@ -161,7 +159,8 @@ fun ProveedorScreen(
             titulo = if (editar.value) "Editar Proveedor" else "Nuevo Proveedor",
             mostrar = mostrarDialogo.value,
             onCerrarDialogo = { mostrarDialogo.value = false },
-            clickable = true
+            clickable = true,
+            sinBoton = true
         ) {
             Column(
                 modifier = Modifier
@@ -222,65 +221,80 @@ fun ProveedorScreen(
                         direccion.value = it
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    val camposCompletos =
-                        nombre.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty()
-                    if (editar.value)
-                        Boton("Editar") {
-                            try {
-                                if (!camposCompletos) {
-                                    throw Exception("Campos vacios.")
-                                }
-                                viewModel.onUserEvent(
-                                    ProveedorEvent.EditarProveedor(
-                                        Personastodas.Proveedor(
-                                            idProveedor.value.toLong(),
-                                            nombre.value,
-                                            tipoDocumento.value,
-                                            numDocumento.value,
-                                            direccion.value,
-                                            telefono.value,
-                                            email.value,
-                                        )
-                                    )
-                                )
-                                mostrarDialogo.value = false
-                                Toast.makeText(
-                                    context,
-                                    "El proveedor fue editado con éxito",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } catch (e: Exception) {
-                                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(400.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                val camposCompletos =
+                    nombre.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty() && direccion.value.isNotEmpty()
+                if (editar.value)
+                    Boton("Editar") {
+                        try {
+                            if (!camposCompletos) {
+                                throw Exception("Campos vacios.")
                             }
-                        }
-                    else
-                        Boton("Agregar", habilitar = camposCompletos) {
-                            try {
-                                if (!camposCompletos) {
-                                    throw Exception("Campos vacios.")
-                                }
-                                viewModel.onUserEvent(
-                                    ProveedorEvent.AgregarProveedor(
-                                        Personastodas.Proveedor(
-                                            0,
-                                            nombre.value,
-                                            tipoDocumento.value,
-                                            numDocumento.value,
-                                            direccion.value,
-                                            telefono.value,
-                                            email.value,
-                                        )
+                            viewModel.onUserEvent(
+                                ProveedorEvent.EditarProveedor(
+                                    Personastodas.Proveedor(
+                                        idProveedor.value.toLong(),
+                                        nombre.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        direccion.value,
+                                        telefono.value,
+                                        email.value,
                                     )
                                 )
+                            )
+                            mostrarDialogo.value = false
+                            Toast.makeText(
+                                context,
+                                "El proveedor fue editado con éxito",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                else
+                    Boton("Agregar", habilitar = camposCompletos) {
+                        try {
+                            if (!camposCompletos) {
+                                throw Exception("Campos vacios.")
+                            }
+                            viewModel.onUserEvent(
+                                ProveedorEvent.AgregarProveedor(
+                                    Personastodas.Proveedor(
+                                        0,
+                                        nombre.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        direccion.value,
+                                        telefono.value,
+                                        email.value,
+                                    )
+                                )
+                            )
 
-                                nombre.value = ""
-                                numDocumento.value = ""
-                                email.value = ""
-                                telefono.value = ""
-                            } catch (e: Exception) {
-                                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                            }
+                            nombre.value = ""
+                            tipoDocumento.value = ""
+                            numDocumento.value = ""
+                            direccion.value = ""
+                            email.value = ""
+                            telefono.value = ""
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
+                    }
+
+                Spacer(modifier = Modifier.width(20.dp))
+                Boton("Cancelar") {
+                    mostrarDialogo.value = false
                 }
             }
         }

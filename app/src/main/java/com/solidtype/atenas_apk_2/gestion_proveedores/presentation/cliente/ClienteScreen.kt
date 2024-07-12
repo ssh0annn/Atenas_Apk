@@ -40,6 +40,7 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.compo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
@@ -70,7 +71,7 @@ fun ClienteScreen(
     val telefono = rememberSaveable { mutableStateOf("") }
 
     //LISTA SELECTOR
-//    val documetSelector = listOf("Cédula", "Pasaporte")
+    val documetSelector = listOf("Cédula", "Pasaporte")
     //estado busqueda
     val busqueda = rememberSaveable { mutableStateOf("") }
 
@@ -146,6 +147,7 @@ fun ClienteScreen(
 
                             idCliente.value = ""
                             nombre.value = ""
+                            tipoDocumento.value = ""
                             numDocumento.value = ""
                             telefono.value = ""
                             email.value = ""
@@ -163,7 +165,8 @@ fun ClienteScreen(
             titulo = if (editar.value) "Editar Cliente" else "Nuevo Cliente",
             mostrar = mostrarDialogo.value,
             onCerrarDialogo = { mostrarDialogo.value = false },
-            clickable = true
+            clickable = true,
+            sinBoton = true,
         ) {
             Column(
                 modifier = Modifier
@@ -187,7 +190,15 @@ fun ClienteScreen(
                     ) {
                         nombre.value = it
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
+                    AutocompleteSelect(
+                        text = "Tipo de Documento",
+                        variableStr = tipoDocumento.value,
+                        items = documetSelector,
+                    ) {
+                        tipoDocumento.value = it
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
                     InputDetalle(
                         label = "Numero de documento",
                         valor = numDocumento.value,
@@ -209,60 +220,77 @@ fun ClienteScreen(
                         telefono.value = it
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    val camposCompletos =
-                        nombre.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty()
-                    if (editar.value)
-                        Boton("Editar") {
-                            try {
-                                if (!camposCompletos) {
-                                    throw Exception("Campos vacios.")
-                                }
-//                                viewModel.onUserEvent(
-//                                    ClienteEvent.EditarClientes(
-//                                        Personastodas.ClienteUI(
-//                                            idCliente.value.toLong(),
-//                                            nombre.value,
-//                                            numDocumento.value,
-//                                            email.value,
-//                                            telefono.value
-//                                        )
-//                                    )
-//                                )
-                                mostrarDialogo.value = false
-                                Toast.makeText(
-                                    context,
-                                    "El cliente fue editado con éxito",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } catch (e: Exception) {
-                                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(400.dp),
+                horizontalArrangement = Arrangement.Center
+            ){
+                val camposCompletos =
+                    nombre.value.isNotEmpty() && tipoDocumento.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty()
+                if (editar.value)
+                    Boton("Editar") {
+                        try {
+                            if (!camposCompletos) {
+                                throw Exception("Campos vacios.")
                             }
+                            viewModel.onUserEvent(
+                                ClienteEvent.EditarClientes(
+                                    Personastodas.ClienteUI(
+                                        idCliente.value.toLong(),
+                                        nombre.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        email.value,
+                                        telefono.value
+                                    )
+                                )
+                            )
+                            mostrarDialogo.value = false
+                            Toast.makeText(
+                                context,
+                                "El cliente fue editado con éxito",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
-                    else
-                        Boton("Agregar", habilitar = camposCompletos) {
-                            try {
-                                if (!camposCompletos) {
-                                    throw Exception("Campos vacios.")
-                                }
-//                                viewModel.onUserEvent(
-//                                    ClienteEvent.AgregarClientes(
-//                                        Personastodas.ClienteUI(
-//                                            id_cliente = 0,
-//                                            nombre = nombre.value,
-//                                            documento = numDocumento.value,
-//                                            telefono = telefono.value,
-//                                            email = email.value//OJO Estabas pasando el telefono donde iva el emial
-//                                        )
-//                                    )
-//                                )
-                                nombre.value = ""
-                                numDocumento.value = ""
-                                email.value = ""
-                                telefono.value = ""
-                            } catch (e: Exception) {
-                                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                else
+                    Boton("Agregar", habilitar = camposCompletos) {
+                        try {
+                            if (!camposCompletos) {
+                                throw Exception("Campos vacios.")
                             }
+                            viewModel.onUserEvent(
+                                ClienteEvent.AgregarClientes(
+                                    Personastodas.ClienteUI(
+                                        id_cliente = 0,
+                                        nombre = nombre.value,
+                                        tipo_documento = tipoDocumento.value,
+                                        documento = numDocumento.value,
+                                        telefono = telefono.value,
+                                        email = email.value//OJO Estabas pasando el telefono donde iva el emial
+                                    )
+                                )
+                            )
+                            nombre.value = ""
+                            tipoDocumento.value = ""
+                            numDocumento.value = ""
+                            email.value = ""
+                            telefono.value = ""
+                        } catch (e: Exception) {
+                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
+                    }
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Boton("Cancelar") {
+                    mostrarDialogo.value = false
                 }
             }
         }
@@ -292,17 +320,18 @@ fun ClienteScreen(
                         try {
                             mostrarConfirmar.value = false
 
-//                            viewModel.onUserEvent(
-//                                ClienteEvent.BorrarClientes(
-//                                    Personastodas.ClienteUI(
-//                                        idCliente.value.toLong(),
-//                                        nombre.value,
-//                                        numDocumento.value,
-//                                        email.value,
-//                                        telefono.value
-//                                    )
-//                                )
-//                            )
+                            viewModel.onUserEvent(
+                                ClienteEvent.BorrarClientes(
+                                    Personastodas.ClienteUI(
+                                        idCliente.value.toLong(),
+                                        nombre.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        email.value,
+                                        telefono.value
+                                    )
+                                )
+                            )
                             Toast.makeText(
                                 context,
                                 "Se eliminó el cliente",
