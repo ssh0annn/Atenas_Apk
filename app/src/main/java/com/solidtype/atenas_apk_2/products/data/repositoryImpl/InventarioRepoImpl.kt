@@ -131,15 +131,12 @@ class InventarioRepoImpl @Inject constructor(
             categoEncontrada = nuevaListaCate.find {
                 it.nombre.lowercase() == categoria.lowercase()
             }
-            println("NO se encontro categoria, agregando $categoEncontrada")
         }
-
-        println("NO se pudo encontrar, debio de agregarse $categoEncontrada")
         return@withContext categoEncontrada as categoria
     }
 
     private suspend fun buscaCreaProveedor(proveedor: String): persona = withContext(Dispatchers.IO) {
-        println("Buscando proveedor : $proveedor")
+
         // Paso 1: Recolectar la lista de proveedores
         val listaProveedor = proDao.getPersonasTipo("proveedor", proveedor.lowercase()).first()
 
@@ -163,16 +160,12 @@ class InventarioRepoImpl @Inject constructor(
                     )
                 )
             )
-            println("NO se encontro proveedor, agregando $proveedorEncontrada")
             // Recolectar la lista de nuevo después de agregar el proveedor
             val nuevaListaProveedor = proDao.getPersonasTipo("proveedor", proveedor.lowercase()).first()
             proveedorEncontrada = nuevaListaProveedor.find {
                 it.nombre?.lowercase() == proveedor.lowercase()
             }
         }
-        println("Se encontro proveedor $proveedorEncontrada")
-
-        println("NO se pudo encontrar, debio de agregarse $proveedorEncontrada")
         return@withContext proveedorEncontrada as persona
     }
 
@@ -188,8 +181,6 @@ class InventarioRepoImpl @Inject constructor(
 
                             val categoid =  async{buscaCreaCategoria(i[0]).id_categoria}.await()
                             val proveeID = async{buscaCreaProveedor(i[1]).id_persona}.await()
-                            println("Id Proveedor $proveeID")
-                            println("ID categoria $categoid")
                             listaProductos.add(
                                 inventario(
                                     id_categoria = categoid,
@@ -207,9 +198,7 @@ class InventarioRepoImpl @Inject constructor(
                             )
                         }
                     }
-                    println("Listos para insertar: ${listaProductos}")
                    async {  daoProductos.addInventarios(listaProductos)}.await()
-                    println("Insertando datos !!...$datos")
                     return@withContext true
                 } catch (e: Exception) {
                     println("Error importando excel, ver formato: $e")
@@ -244,7 +233,6 @@ class InventarioRepoImpl @Inject constructor(
 }
 
 private fun validarNombresColumnas(columnas: List<String?>): Boolean {
-    println("Nombre de columnas: $columnas")
     val nombresOrigin = listOf(
         "categoria",
         "proveedor",
@@ -265,15 +253,10 @@ private fun validarNombresColumnas(columnas: List<String?>): Boolean {
                 listaTEmpo.add(i)
             }
         }
-        println("Nueva listaTEmpo: $listaTEmpo")
         if (nombresOrigin == listaTEmpo) {
-            println("Comparacion de listas : ${nombresOrigin == listaTEmpo}")
             return true
         }
     }
-    println("Los datos son incorrectos... verifica")
-
-
     return false
 
 }
