@@ -86,28 +86,13 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/txt_perfil_apellido_admin"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="@drawable/background_fondo"
-                        android:hint="Nombre de administrador"
-                        android:inputType="textPersonName"
-                        android:paddingStart="10dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="4dp"
-                        android:textColor="@color/button"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <EditText
                         android:id="@+id/txt_perfil_correo_admin"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginBottom="15dp"
                         android:background="@drawable/background_fondo"
                         android:hint="Correo de administrador"
+                        android:enabled="false"
                         android:inputType="textEmailAddress"
                         android:paddingStart="10dp"
                         android:paddingTop="4dp"
@@ -124,6 +109,7 @@
                         android:layout_marginBottom="15dp"
                         android:background="@drawable/background_fondo"
                         android:hint="Contraseña de administrador"
+                        android:enabled="false"
                         android:inputType="textPassword"
                         android:paddingStart="10dp"
                         android:paddingTop="4dp"
@@ -300,11 +286,11 @@
             android:textSize="12dp"
             android:textStyle="bold"/>
         <Button
-            android:id="@+id/perfil_config_btncancelar"
+            android:id="@+id/perfil_config_btncambiarpass"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:backgroundTint="@color/button"
-            android:text="Cancelar"
+            android:text="Cambiar contraseña"
             android:textColor="@color/fondo"
             android:textSize="12dp"
             android:textStyle="bold"/>

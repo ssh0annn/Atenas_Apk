@@ -22,11 +22,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
-//navController: NavController
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
+
 @Composable
-fun ticketScreen( navController: NavController, viewModel: TicketViewModel = hiltViewModel()){
+fun ticketScreen(navController: NavController,
+                 viewModel: TicketViewModel = hiltViewModel()){
+
     val busqueda = rememberSaveable { mutableStateOf("") }
 
     val rol = rememberSaveable { mutableStateOf("") }

@@ -3,9 +3,12 @@ package com.solidtype.atenas_apk_2.products.presentation.inventory
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
 import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
+import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,63 +20,142 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
+    private val casosProveedores: CasosProveedores
 ) : ViewModel() {
 
     private var fileSelectionListener2: FileSelectionListener2? = null
 
+    private var switch: Boolean = true
     var uiState = MutableStateFlow(ProductosViewStates())
         private set
-
 
     init {
         mostrarProductos()
     }
+    fun onEvent(event: InventariosEvent) {
+        when (event) {
+            is InventariosEvent.ActualizarCategoria -> {
+                agregarCategoria(event.catego)
+            }
+            is InventariosEvent.ActualizarProductos -> {
+                crearProductos(event.producto)
+            }
+            is InventariosEvent.AgregarCategorias -> {
+                agregarCategoria(event.catego)
+            }
 
-    fun crearProductos(
-        id_categoria: Long,
-        id_proveedor: Long,
-        nombre: String,
-        marca: String?,
-        modelo: String?,
-        cantidad: Int,
-        precio_compra: Double,
-        precio_venta: Double,
-        impuesto : Double,
-        descripcion: String?,
-        estado: Boolean
+            is InventariosEvent.AgregarProductos -> {
+                crearProductos(event.productos)
+            }
 
-    ) {
+            is InventariosEvent.EliminarProductos -> {
+                eliminarProductos(event.producto)
+            }
 
-        val entidad = inventario(
-            id_categoria=id_categoria,
-            id_proveedor=id_proveedor,
-            nombre=nombre,
-            marca=marca,
-            modelo=modelo,
-            cantidad=cantidad,
-            precio_compra=precio_compra,
-            precio_venta=precio_venta,
-            impuesto = impuesto,
-            descripcion=descripcion,
-            estado =estado
-        )
-        viewModelScope.launch {
-            casosInventario.createProductos(entidad)
-            withContext(Dispatchers.Default) {
-               // syncProductos()
+            InventariosEvent.GetCategorias -> {
+                getCategorias()
+            }
+
+            InventariosEvent.GetProductos -> {
+                mostrarProductos()
+            }
+
+            is InventariosEvent.eliminarCategoria -> {
+                eliminarCategoria(event.catego)
+            }
+
+            is InventariosEvent.BuscarCategoria -> {
+                buscarCategorias(event.any)
+
+            }
+
+            is InventariosEvent.BuscarProducto -> {
+                buscarProductos(event.any)
+            }
+
+            InventariosEvent.Getrpoveedores -> {
+                viewModelScope.launch {
+                    casosProveedores.getProveedores(switch).collect { proveedores ->
+                        uiState.update {
+                            it.copy(proveedores = proveedores)
+                        }
+                    }
+                }
+            }
+
+            is InventariosEvent.BuscarProveedores -> {
+                viewModelScope.launch {
+
+                    casosProveedores.buscarProveedores(event.any, switch).collect { proveedores ->
+                        uiState.update {
+                            it.copy(proveedores = proveedores)
+                        }
+
+                    }
+                }
+            }
+
+            is InventariosEvent.CrearProveedor -> {
+                viewModelScope.launch { casosProveedores.crearProveedor(event.provee) }
+
+            }
+            is InventariosEvent.EliminarProveedor -> {
+                viewModelScope.launch { casosProveedores.eliminarPersona(event.provee) }
+            }
+
+            InventariosEvent.Switch -> {
+                switch = !switch
+                uiState.update { it.copy(switch = switch) }
+                mostrarProductos()
+                getCategorias()
+                onEvent(InventariosEvent.Getrpoveedores)
             }
         }
+    }
+    private fun buscarCategorias(any:String){
 
+        viewModelScope.launch {
+            casosInventario.buscarCategorias(any).collect{ catego ->
+                uiState.update { it.copy(categoria = catego) }
+            }
+        }
+    }
+    private fun eliminarCategoria(catego: categoria){
+        viewModelScope.launch {
+            casosInventario.eliminarCategorias(catego)
+        }
     }
 
-    fun mostrarProductos() {
-        val productos = casosInventario.getProductos()
+    private fun getCategorias() {
+        viewModelScope.launch {
+            casosInventario.getCategorias(switch).collect { categoria ->
+                uiState.update { it.copy(categoria = categoria) }
+            }
+        }
+    }
 
+    private fun agregarCategoria(catego: categoria) {
+        viewModelScope.launch {
+            casosInventario.agregarCategoria(catego)
+        }
+    }
+
+   private fun crearProductos(
+        producto: inventario
+    ) {
+        viewModelScope.launch {
+            casosInventario.createProductos(producto)
+            withContext(Dispatchers.Default) {
+                // syncProductos()
+            }
+        }
+    }
+  private  fun mostrarProductos() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 //syncProductos()
             }
-            productos.collect { product ->
+            casosInventario.getProductos(switch).collect { product ->
                 uiState.update {
                     it.copy(products = product)
                 }
@@ -83,17 +165,13 @@ class InventarioViewModel @Inject constructor(
 
     fun exportarExcel() {
         viewModelScope.launch {
-            println("inicia viewScope en la funcion que exporta en viewmodel")
             withContext(Dispatchers.IO) {
-                println("withContext la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 val path = casosInventario.exportarExcel(uiState.value.products)
-                println("Se guardo el archivo en: ${path}")
                 uiState.update { it.copy(isLoading = false) }
-                println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
                     uiState.update {
-                        it.copy(uriPath = path.path.toString())
+                        it.copy(uriPath = path)
                     }
                 }
             }
@@ -101,7 +179,7 @@ class InventarioViewModel @Inject constructor(
         }
     }
 
-    fun eliminarProductos(producto: inventario) {
+   private fun eliminarProductos(producto: inventario) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 uiState.update { it.copy(isLoading = true) }
@@ -113,7 +191,7 @@ class InventarioViewModel @Inject constructor(
 
     fun buscarProductos(any: String) {
         viewModelScope.launch {
-            val busqueda = casosInventario.searchProductos(any)
+            val busqueda = casosInventario.searchProductos(any, switch)
             busqueda.collect { product ->
                 uiState.update {
                     it.copy(products = product)
@@ -123,39 +201,28 @@ class InventarioViewModel @Inject constructor(
     }
 
     fun syncProductos() {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-               // casosInventario.syncProductos()
-            }
-        }
     }
-
-
     fun importarExcel(filePath: Uri) {
-        // Aquí puedes realizar las operaciones necesarias con el archivo seleccionado
         fileSelectionListener2?.onFileSelected(filePath)
-        println("Este esl el patchFile $filePath")
-        println("Se llamo el fileSelected")
         viewModelScope.launch {
-            uiState.update { it.copy(isLoading = true) }
             withContext(Dispatchers.IO) {
+                uiState.update { it.copy(isLoading = true) }
                 if (casosInventario.importarExcelFile(filePath)) {
                     syncProductos()
+                    uiState.update {
+                        it.copy(
+                            isLoading = false, messages = "Se inserto con exito!!"
+                        )
+                    }
                 } else {
                     uiState.update {
                         it.copy(
-                            isLoading = false, errorMessages = "Formato invalido"
+                            isLoading = false, messages = "Formato invalido"
                         )
                     }
-
                 }
-                casosInventario.importarExcelFile(filePath)
-                uiState.update { it.copy(isLoading = false) }
-
             }
-
         }
-
     }
 
     interface FileSelectionListener2 {

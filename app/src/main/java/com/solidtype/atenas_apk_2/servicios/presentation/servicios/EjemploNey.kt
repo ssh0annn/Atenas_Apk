@@ -81,9 +81,9 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
     var tipoPago by rememberSaveable { mutableStateOf("") }
     var vendedor by rememberSaveable { mutableStateOf("") }
-    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
+   // var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
 
-
+    val mo by rememberSaveable { mutableStateOf(true) }
 
     var search by rememberSaveable {
         mutableStateOf("")
@@ -141,6 +141,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(ScrollState(1))) {
+
         SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "",
             listOf(state.usuario).let {
              it.map { user ->
@@ -330,40 +331,46 @@ fun SelectorMio(
                     }
                     Spacer(modifier = Modifier.padding(top=55.dp))
                     // Este es el Box que queremos que esté fijo en la parte inferior
-                    if (onClickAgregar != null  ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                 // Asegúrate de que tenga un fondo para que sea visible
-               .border(width = 1.dp, color = PurpleGrey80)
-                                .padding(bottom = 10.dp, top = 10.dp)
-                                .clickable(onClick = {
-                                    onClickAgregar()
-                                    expanded.value = false
-                                    keyboardController?.hide()
-                                })
-                        ) {
-                            Row(
+
+
+
+
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
+                                    .fillMaxWidth()
+                                    .border(width = 1.dp, color = PurpleGrey80)
+                                    .padding(bottom = 10.dp, top = 10.dp)
+                                    .clickable(onClick = {
+                                            if (onClickAgregar != null) {
+                                                onClickAgregar()
+                                            }
+
+                                        expanded.value = false
+                                        keyboardController?.hide()
+                                    })
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "Add",
-                                    tint = AzulGris
-                                )
-                                Text(
-                                    text = "Agregar",
-                                    color = AzulGris,
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.ExtraBold
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
-                            }
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Add",
+                                        tint = AzulGris
+                                    )
+                                    Text(
+                                        text = "Agregar",
+                                        color = AzulGris,
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.ExtraBold
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                }
                         }
                     }
+
                 }
             }
 
@@ -429,7 +436,7 @@ fun SelectorMio(
 
 
     }
-}
+
 
 @Composable
 fun <T> componente(data:T, onClick:() ->Unit ){

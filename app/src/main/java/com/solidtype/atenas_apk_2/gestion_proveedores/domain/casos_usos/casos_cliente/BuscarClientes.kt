@@ -6,12 +6,10 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteP
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class BuscarClientes  @Inject constructor(private val repo: ClienteProveedorRepository) {
+class BuscarClientes @Inject constructor(private val repo: ClienteProveedorRepository) {
 
-    operator fun invoke(any:String) =
-
-        repo.buscarPersonaTipo("cliente", any).map {
-                clientes ->
-            clientes.map { cliente -> cliente.toClienteUI() }
+    operator fun invoke(any: String, estado:Boolean) =
+        repo.buscarPersonaTipo("cliente", any).map { clientes ->
+            clientes.filter { it.estado == estado && it.tipo_persona=="cliente"}.map { cliente -> cliente.toClienteUI() }
         }
 }

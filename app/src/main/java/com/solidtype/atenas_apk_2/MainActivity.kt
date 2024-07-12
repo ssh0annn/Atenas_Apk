@@ -7,33 +7,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.core.app.ActivityCompat
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.servicios.presentation.servicios.servicios
 
 
-import com.solidtype.atenas_apk_2.servicios.presentation.ticket.ticketScreen
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewmodel by viewModels<InventarioViewModel>()
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-
         setContent {
 
-servicios()
-       // Navigation()
+             Navigation()
+
 
         }
-
     }
 
     @Deprecated("Deprecated in Java")
@@ -61,17 +54,16 @@ servicios()
         return if (uri.scheme != "file") {
             uri.path
         } else {
-
             null
         }
     }
-}
 
-@Composable
-fun ImeiBoton(imei: () -> Unit) {
-
-    Button(onClick = { imei() }) {
-        Text(text = "Imprime IMEI")
+    private fun mierda() {
+        ActivityCompat.startActivityForResult(
+            this,
+            Intent(this, BluetoothScanner::class.java),
+            5,
+            null
+        )
     }
-
 }

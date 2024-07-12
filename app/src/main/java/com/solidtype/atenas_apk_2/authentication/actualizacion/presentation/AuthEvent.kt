@@ -10,5 +10,6 @@ sealed class AuthEvent {
 
     object IsAutenticatedEvent:AuthEvent()
 
+    data class ForgetPassword(val email:String):AuthEvent()
 
 }

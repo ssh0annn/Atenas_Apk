@@ -36,9 +36,6 @@ fun TableProviders(
     mostrarConfirmar: MutableState<Boolean>,
     idProveedor: MutableState<String>
 ) {
-    println("tabla Cliente")
-    println(Providers)
-    println("")
     Box(
         modifier = Modifier
             .fillMaxWidth()

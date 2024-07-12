@@ -14,5 +14,5 @@ data class persona (
     val direccion :String?,
     val telefono :String?,
     val email :String?,
-    @ColumnInfo(defaultValue = "true") val estado :Boolean
+    @ColumnInfo(defaultValue = "true") var estado :Boolean
 )

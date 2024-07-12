@@ -39,7 +39,7 @@ fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(430.dp)
+            .height(300.dp)
             .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(

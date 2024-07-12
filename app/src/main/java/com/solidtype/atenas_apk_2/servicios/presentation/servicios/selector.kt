@@ -144,6 +144,7 @@ fun selector(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .verticalScroll(rememberScrollState())
+
                         ) {
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
@@ -408,7 +409,7 @@ fun selector(
                                             SelectorMio("Seleccinar Servicio", search, state.listaServicios.let {
                                                 it.map { dato -> dato.nombre
                                                 }
-                                            },false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
+                                            },true, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
                                                     selecion ->
                                                 val service = state.listaServicios.find { it.nombre == selecion }
                                                 service?.let {
@@ -1086,7 +1087,7 @@ fun selector(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 1100.dp, top = 530.dp)
+            .padding(start = 1100.dp, top = 400.dp)
     ) {
 
 

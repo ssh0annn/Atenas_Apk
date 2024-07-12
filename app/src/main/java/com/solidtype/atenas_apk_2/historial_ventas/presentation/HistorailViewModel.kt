@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentasImpl
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
 import com.solidtype.atenas_apk_2.util.toIsoDate
+import com.solidtype.atenas_apk_2.util.toLocalDate
 //import com.solidtype.atenas_apk_2.util.toMapa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -41,18 +42,18 @@ class HistorailViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 uiState.update { it.copy(isLoading = true) }
-                val corr: Uri = if (uiState.value.ventasOTicket) {
-                    casosHistorialReportes.exportarTickets(uiState.value.Ticket)
-
-                } else {
-                    casosHistorialReportes.exportarVentas(uiState.value.Historial)
-                }
+//                val corr: Uri = if (uiState.value.ventasOTicket) {
+//                    casosHistorialReportes.exportarTickets(uiState.value.Ticket)
+//
+//                } else {
+//                    casosHistorialReportes.exportarVentas(uiState.value.Historial)
+//                }
                 uiState.update { it.copy(isLoading = false) }
 
                 withContext(Dispatchers.IO) {
-                    uiState.update {
-                        it.copy(uriPath = corr.path.toString())
-                    }
+//                    uiState.update {
+//                        it.copy(uriPath = corr)
+//                    }
                 }
             }
         }
@@ -80,15 +81,15 @@ class HistorailViewModel @Inject constructor(
             println("Campo vaio :fecha inicio $fechaInicio <- o fecha final $fechaFinal <-")
             job = viewModelScope.launch {
                 var total = 0.0
-                casosHistorialReportes.buscarporFechCatego(fechaInicio.toIsoDate(), fechaFinal.toIsoDate())
+                casosHistorialReportes.buscarporFechCatego(fechaInicio.toIsoDate().toLocalDate(), fechaFinal.toIsoDate().toLocalDate())
                     .collect { product ->
                         for (i in product) {
-                            total += i.total
+                            //total += i.total
                         }
                         println("Qui lo que se pidio : $product")
-                        uiState.update {
-                            it.copy(Historial = product, isLoading = false)
-                        }
+//                        uiState.update {
+//                            it.copy(Historial = product, isLoading = false)
+//                        }
 
                     }
                 uiState.update {
@@ -117,17 +118,16 @@ class HistorailViewModel @Inject constructor(
                 )
             }
            job = viewModelScope.launch {
-                val productosRangoticket =
-                    casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal)
+//                val productosRangoticket =
+//                    casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal)
                 var deuda  = 0.0
-                productosRangoticket.collect { product ->
+             //   productosRangoticket.collect { product ->
 //                    for (i in product) {
 //                        deuda += i.total
 //                    }
-                    uiState.update {
-                        it.copy(Ticket = product, isLoading = false, total2 = deuda)
-                    }
-                }
+//                    uiState.update {
+//                        it.copy(Ticket = product, isLoading = false, total2 = deuda)
+//                    }
             }
         }
     }
@@ -146,14 +146,14 @@ class HistorailViewModel @Inject constructor(
 
             mostrarHistory.collect { product ->
                 for (i in product) {
-                    total += i.total
+                   // total += i.total
                     println(i)
                 }
-                uiState.update {
-                    it.copy(
-                        Historial = product, isLoading = false, total = total, ventasOTicket = false
-                    )
-                }
+//                uiState.update {
+//                    it.copy(
+//                        Historial = product, isLoading = false, total = total, ventasOTicket = false
+//                    )
+//                }
                 println("total" + total)
             }
             casosHistorialReportes.syncronizacion()
@@ -172,11 +172,11 @@ class HistorailViewModel @Inject constructor(
 //                for (i in product) {
 //                    deuda += i.total
 //                }
-                uiState.update {
-                    it.copy(
-                        Ticket = product, isLoading = false, total2 = deuda, ventasOTicket = true
-                    )
-                }
+//                uiState.update {
+//                    it.copy(
+//                        Ticket = product, isLoading = false, total2 = deuda, ventasOTicket = true
+//                    )
+//                }
             }
             uiState.update {
                 it.copy(isLoading = false)

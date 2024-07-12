@@ -11,5 +11,7 @@ data class CasosInventario(
     val importarExcelFile: ImportarExcelFile,
     val syncProductos: SyncProductos,
     val agregarCategoria: CrearCategoria,
-    val getCategorias: GetCategorias
+    val getCategorias: GetCategorias,
+    val eliminarCategorias: EliminarCategorias,
+    val buscarCategorias: BuscarCategorias
 )
