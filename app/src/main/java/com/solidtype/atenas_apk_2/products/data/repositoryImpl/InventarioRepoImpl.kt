@@ -55,6 +55,10 @@ class InventarioRepoImpl @Inject constructor(
         return true//hay que manejarlo
     }
 
+    override suspend fun deleteProductLista(listaProductos: List<inventario>) {
+        daoProductos.deleteInventario(listaProductos)
+    }
+
     override suspend fun updateProduct(producto: inventario): Boolean {
         daoProductos.updateInventario(producto)
         return true //hay que manejarlo
@@ -178,7 +182,6 @@ class InventarioRepoImpl @Inject constructor(
                 try {
                     for ((index, i) in datos.withIndex()) {
                         if (index > 0) {
-
                             val categoid =  async{buscaCreaCategoria(i[0]).id_categoria}.await()
                             val proveeID = async{buscaCreaProveedor(i[1]).id_persona}.await()
                             listaProductos.add(
