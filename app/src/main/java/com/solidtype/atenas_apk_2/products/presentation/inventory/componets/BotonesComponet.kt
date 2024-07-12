@@ -31,8 +31,10 @@ fun Botones(
     marca: MutableState<String>,
     cantidad: MutableState<String>,
     impuesto: MutableState<String>,
-    estado: MutableState<String>,
-    provider: MutableState<String>
+//    estado: MutableState<String>,
+    provider: MutableState<String>,
+    idCategoria: MutableState<String>,
+    idProveedor: MutableState<String>
 ) {
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -65,8 +67,10 @@ fun Botones(
                 marca.value = ""
                 cantidad.value = ""
                 impuesto.value = ""
-                estado.value = "Activo"
+                //estado.value = "Activo"
                 provider.value = ""
+                idCategoria.value = ""
+                idProveedor.value = ""
             }
         }
     }
