@@ -15,4 +15,16 @@ data class persona (
     val telefono :String?,
     val email :String?,
     @ColumnInfo(defaultValue = "true") var estado :Boolean
-)
+){
+    constructor() : this(
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true
+    )
+}

@@ -1,10 +1,15 @@
 package com.solidtype.atenas_apk_2.util
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.google.firebase.Timestamp
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import kotlin.reflect.KParameter
@@ -188,6 +193,19 @@ inline fun <reified T : Any> Map<String, Any?>.toDataClass(): T? {
     return constructor.call(*args)
 }
 
+
+// funcion de time stamp a local date
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+fun Timestamp.toLocalDate(): LocalDate {
+    val instant = Instant.ofEpochSecond(seconds, nanoseconds.toLong())
+    return LocalDate.ofInstant(instant, ZoneId.systemDefault())
+}
+
+//funcion de localDate a timeStamp
+fun LocalDate.toTimestamp(): Timestamp {
+    val instant = this.atStartOfDay(ZoneId.systemDefault()).toInstant()
+    return Timestamp(Date.from(instant))
+}
 
 
 

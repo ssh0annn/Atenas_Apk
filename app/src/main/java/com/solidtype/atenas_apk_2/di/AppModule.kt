@@ -16,7 +16,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
-import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
@@ -113,6 +113,8 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.Sync
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTicketsPorFechas
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.VerTodosTickets
 import com.solidtype.atenas_apk_2.perfil_administrador.data.PerfilAdminRepoImpl
+import com.solidtype.atenas_apk_2.perfil_administrador.data.ddLocalAdmin.AdminDataBaseImpl
+import com.solidtype.atenas_apk_2.perfil_administrador.data.mediadorAdmin.mediadorAdmin
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.casos_usos.AdminUseCases
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.casos_usos.GetAdminInfo
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.casos_usos.UpdateAdmin
@@ -500,6 +502,22 @@ object AppModule {
         return db.DaoTicketsTransacciones
     }
 
-
-
+//    @Provides
+//    fun provideDataCloudImpl(firestore: FirebaseFirestore): DataCloudImpl {
+//        return DataCloudImpl(firestore)
+//    }
+//
+//    @Provides
+//    fun provideAdminDatabaseImpl(database: DaoTransacciones): AdminDataBaseImpl {
+//        return AdminDataBaseImpl(database)
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun mediadorAdmin(
+//        dataCloudImpl: DataCloudImpl,
+//        adminDB: AdminDataBaseImpl
+//    ): mediadorAdmin {
+//        return mediadorAdmin(dataCloudImpl, adminDB)
+//    }
 }

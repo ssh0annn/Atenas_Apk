@@ -18,6 +18,9 @@ interface personaDao {
     @Query("select * from persona")
     fun getPersonas(): Flow<List<persona>>
 
+    @Query("select * from persona")
+    fun getPersona(): List<persona>
+
     @Query("select * from persona where tipo_persona == LOWER(:tipoPersona)")
     fun getPersonasTipo(tipoPersona:String): Flow<List<persona>>
 

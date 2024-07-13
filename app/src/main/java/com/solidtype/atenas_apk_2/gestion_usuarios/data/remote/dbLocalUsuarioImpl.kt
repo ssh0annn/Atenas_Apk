@@ -1,9 +1,12 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.data.remote
 
-import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.UsuariosRelation
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class dbLocalUsuarioImpl @Inject constructor(
@@ -52,16 +55,19 @@ class dbLocalUsuarioImpl @Inject constructor(
     }
 
 
-
-
-
-
-
-    private suspend fun getAllUsuarios(): List<UsuariosRelation>{
-            return coroutineScope {
-                val listUsuarios = async { dao.getAllUsuarios() }
-                return@coroutineScope listUsuarios.await()
-            }
+     suspend fun getAllUsuarios(): List<UsuariosRelation>{
+         return withContext(Dispatchers.Default){
+             dao.getAllUsuarios()
+         }
     }
 
+    suspend fun insertAllUsuarios(usuarios: List<UsuariosRelation>){
+        if (usuarios.isNotEmpty()){
+            withContext(Dispatchers.Default){
+                usuarios.forEach {
+                    dao.crearUsuario(it)
+                }
+            }
+        }
+    }
 }

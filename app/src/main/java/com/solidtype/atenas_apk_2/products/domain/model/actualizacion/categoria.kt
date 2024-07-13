@@ -10,4 +10,12 @@ data class categoria (
     @ColumnInfo val nombre :String,
     @ColumnInfo val descripcion :String?,
     @ColumnInfo(defaultValue = "true") var estado :Boolean
-)
+){
+    // Constructor sin argumentos necesario para Firestore
+    constructor() : this(
+        id_categoria = 0,
+        nombre = "",
+        descripcion = null,
+        estado = true
+    )
+}

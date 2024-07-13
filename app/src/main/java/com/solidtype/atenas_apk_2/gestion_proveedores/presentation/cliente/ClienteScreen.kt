@@ -347,12 +347,7 @@ fun ClienteScreen(
             }
         }
     }
-    Button(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = {viewModel.testTiceket()}
-    ){
-        Text("Prueba")
-    }
+
     //MenuLateral(navController)
 }
 

@@ -64,4 +64,6 @@ class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAu
     override suspend fun olvideMiPassword(email: String): Boolean {
         return autenticacion.olvideMiPassword(email)
     }
+
+
 }

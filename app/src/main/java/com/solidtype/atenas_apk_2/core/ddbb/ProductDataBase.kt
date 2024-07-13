@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.perfil_administrador.data.administradorDao
 import com.solidtype.atenas_apk_2.dispositivos.data.ddbb.DispositivoDao
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao
@@ -42,7 +42,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
     categoria::class, detalle_venta::class, inventario::class, persona::class,
     roll_usuarios::class, servicio::class, ticket::class, tipo_venta::class,
     usuario::class, venta::class, administrador::class, Dispositivo::class
-], version = 25, exportSchema = false)
+], version = 26, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
     abstract val ProductDao :ProductDao
@@ -63,16 +63,16 @@ abstract class ProductDataBase : RoomDatabase() {
     abstract val dispositivoDao: DispositivoDao
     abstract val DaoTicketsTransacciones: DaoTransacciones
 
-    companion object{
-        @Volatile
-        private var DDBB: ProductDataBase? = null
-        fun getDataBase(context: Context):ProductDataBase {
-            return DDBB ?: synchronized(this) {
-                Room.databaseBuilder(context, ProductDataBase::class.java, "Atenas_Database")
-                    .fallbackToDestructiveMigration()
-                    .build()
-                    .also { DDBB = it }
-            }
-        }
-    }
+//    companion object{
+//        @Volatile
+//        private var DDBB: ProductDataBase? = null
+//        fun getDataBase(context: Context):ProductDataBase {
+//            return DDBB ?: synchronized(this) {
+//                Room.databaseBuilder(context, ProductDataBase::class.java, "Atenas_Database")
+//                    .fallbackToDestructiveMigration()
+//                    .build()
+//                    .also { DDBB = it }
+//            }
+//        }
+//    }
 }

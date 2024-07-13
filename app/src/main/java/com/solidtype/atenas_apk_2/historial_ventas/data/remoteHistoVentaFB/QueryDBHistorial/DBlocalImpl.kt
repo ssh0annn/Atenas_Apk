@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.QueryDBHistorial
 
-import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.VentaRelationTransacciones
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

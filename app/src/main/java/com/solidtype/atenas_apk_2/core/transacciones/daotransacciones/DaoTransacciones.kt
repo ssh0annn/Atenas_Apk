@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones
+package com.solidtype.atenas_apk_2.core.transacciones.daotransacciones
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -17,8 +17,10 @@ import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DaoTransacciones {
@@ -54,17 +56,51 @@ interface DaoTransacciones {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCategia(categoria: categoria)
 
+    //Funciones Inventario
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addCategorias(categoria: List<categoria>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPersona(provedoor: persona)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addPersonas(provedoor: List<persona>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addInventario(inventario: inventario)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addInventarios(inventario: List<inventario>)
+
 
     @Transaction
     suspend fun crearInventario(addInventario: InventarioModeloRelation){
+        println("este es el dato que el inventario en crear inventario Dao -> $addInventario ")
         addCategia(addInventario.categoria)
         addPersona(addInventario.provedor)
         addInventario(addInventario.inventario)
+        println("*****************************************************************************************")
+        println("datos categoria -> ${addInventario.categoria}")
+        println("datos persona -> ${addInventario.provedor}")
+        println("datos inventario -> ${addInventario.inventario}")
+
+        println("este es el dato que el inventario en crear inventario Dao ")
+        println("***************************************************************************************** ")
+    }
+
+    @Transaction
+    suspend fun crearInventarios(inventarios: List<InventarioModeloRelation>){
+
+        println("datos inventarios en la funcio de transaccion -> $inventarios")
+        val categoria:List<categoria> = inventarios.map{ it.categoria}
+        val persona:List<persona> = inventarios.map{ it.provedor}
+        val inventario:List<inventario> = inventarios.map{ it.inventario}
+        println("datos categoria -> $categoria")
+        println("datos persona -> $persona")
+        println("datos inventario -> $inventario")
+        addCategorias(categoria)
+        addPersonas(persona)
+        addInventarios(inventario)
     }
 
     @Transaction
@@ -107,14 +143,23 @@ interface DaoTransacciones {
     suspend fun addRollUsuario(roll: usuario)
 
     @Transaction
-    suspend fun crearUsuarios(usuariosRelation: UsuariosRelation){
+    suspend fun crearUsuario(usuariosRelation: UsuariosRelation){
         addRollUsuario(usuariosRelation.roll_usuario)
         addRollUsuario(usuariosRelation.usuarios)
-
     }
+
     @Transaction
     @Query("SELECT * FROM usuario")
     suspend fun getAllUsuarios(): List<UsuariosRelation>
 
+    //funciones administrador
+    @Query("SELECT * FROM administrador")
+    suspend fun getAdmins(): List<administrador>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addAdministradore(admin : administrador)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addOneAdmin(adminsitrador:administrador)
 
 }

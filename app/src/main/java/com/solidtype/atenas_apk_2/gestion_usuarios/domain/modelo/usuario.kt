@@ -18,4 +18,7 @@ data class usuario (
     val clave :String,
     val telefono :String,
     @ColumnInfo(defaultValue = "true") var estado :Boolean
-)
+){
+    // Constructor vacío necesario para Firestore
+    constructor() : this(0, 0, "", "", "", "", "", false)
+}

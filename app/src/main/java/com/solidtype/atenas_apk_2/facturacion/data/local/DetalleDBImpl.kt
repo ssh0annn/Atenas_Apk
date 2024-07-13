@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.facturacion.data.local
 
-import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.DetalleVentaRelation
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.InventarioModeloRelation
 import com.solidtype.atenas_apk_2.util.toDataClassToMap

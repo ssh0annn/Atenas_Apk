@@ -27,4 +27,19 @@ data class inventario (
     val impuesto : Double,
     val descripcion :String?,
     @ColumnInfo(defaultValue = "true") var estado :Boolean
-)
+){
+    constructor():this(
+        0,
+        0,
+        0,
+        null,
+        null,
+        null,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        null,
+        true
+    )
+}

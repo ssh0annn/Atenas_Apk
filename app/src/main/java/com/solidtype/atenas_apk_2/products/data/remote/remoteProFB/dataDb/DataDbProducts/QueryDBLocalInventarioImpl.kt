@@ -1,13 +1,15 @@
 package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts
 
-import com.solidtype.atenas_apk_2.core.transacciones.daoTransacciones.DaoTransacciones
+import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.InventarioModeloRelation
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.util.toDataClassToMap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class QueryDBLocalInventarioImpl @Inject constructor(
@@ -35,12 +37,22 @@ class QueryDBLocalInventarioImpl @Inject constructor(
      * @return  List<InventarioModeloRelation>
      * @funcion: captura todos los datos de la tabla inventario y los debuelve en una lista de objetos InventarioModeloRelation.
      */
-    private suspend fun datosInventoryRelations(): List<InventarioModeloRelation> {
+     suspend fun datosInventoryRelations(): List<InventarioModeloRelation> {
         return coroutineScope {
             val listInventario = async { Dao.getAllInventario() }
             return@coroutineScope listInventario.await()
         }
     }
+
+    suspend fun insertInventoryRelations( inventarios: List<InventarioModeloRelation> ){
+        println("datos inventarios en la funcio de inserccion -> $inventarios")
+        if (inventarios.isNotEmpty()){
+                inventarios.forEach {
+                    Dao.crearInventario(it)
+                }
+        }
+    }
+
 
     private fun listasMaptoTrasnsaccion(dataOfFirebase: MutableList<Map<String, Map<String, Any>>>): List<InventarioModeloRelation?> {
         var listDatosRelacionados: MutableList<InventarioModeloRelation?> = mutableListOf()

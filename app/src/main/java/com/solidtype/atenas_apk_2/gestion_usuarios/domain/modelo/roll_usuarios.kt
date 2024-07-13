@@ -10,4 +10,9 @@ data class roll_usuarios (
     val nombre : String, //roll: administrador, vendedor, tecnico
     val descripcion : String, //
     @ColumnInfo(defaultValue = "true") val estado : Boolean
-)
+){
+    // Constructor sin argumentos necesario para Firestore
+    constructor() : this(
+        0, "", "", false
+    )
+}

@@ -157,8 +157,12 @@ dependencies {
     //reflect para la funcion de extecion para la conversion de las data classes a maps
     implementation(kotlin("reflect"))
 
+    //work manager
+    implementation ("androidx.work:work-runtime-ktx:2.9.0")
 
     //testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+
+    implementation ("com.google.code.gson:gson:2.8.9")
 
 }
 

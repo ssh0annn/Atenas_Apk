@@ -13,4 +13,7 @@ data class UsuariosRelation (
         entityColumn = "id_roll_usuario",
     )
     val roll_usuario: roll_usuarios,
-)
+){
+    // Constructor sin argumentos necesario para Firestore
+    constructor() : this(usuario(), roll_usuarios())
+}

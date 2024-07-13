@@ -3,18 +3,38 @@ package com.solidtype.atenas_apk_2.core.remote.dataCloud
 import android.content.Context
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.toObjects
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.InventarioModeloRelation
+import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.UsuariosRelation
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
+import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.time.ZoneId
+import java.util.Date
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * @constructor:private val fireStore: FirebaseFirestore,
@@ -27,14 +47,13 @@ import javax.inject.Inject
  */
 
 class DataCloudImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val fireStore: FirebaseFirestore,
 
     ) : DataCloud {
 
 
-//    private val uidUser: String = autenticador.getCurrentUser()!!.uid
-        //donde esta la funcion que guarda la refereacia dur epila buscando el problema y era aqui palomo
+    //    private val uidUser: String = autenticador.getCurrentUser()!!.uid
+    //donde esta la funcion que guarda la refereacia dur epila buscando el problema y era aqui palomo
     private var uidUser: String = "johan@labestia.com"
     private var licencia: String = "licensias"
     private var DDBB: String = "db"
@@ -86,6 +105,82 @@ class DataCloudImpl @Inject constructor(
         }
 
 
+    suspend fun getallDataDocumentsAdmin(): DocumentSnapshot? =
+        withContext(Dispatchers.Default) {
+            println("Este es el uid actual DataCloudImpl $uidUser <----")
+            try {
+                return@withContext fireStore.collection("usuarios")
+                    .document(uidUser)
+                    .get()
+                    .await()
+            } catch (e: Exception) {
+                Log.e("FirebaseError", "Error al obtener datos de Firebase", e)
+                throw Exception("no se pudo obtener los datos desde firebase $e")
+            }
+        }
+
+   suspend fun insertAdministradorInFirestore(administrador: administrador) {
+        val db = FirebaseFirestore.getInstance()
+        val docRef = db.collection("administradores").document(uidUser)
+
+        val fechaCompra = administrador.fecha_compra?.let {
+            Timestamp(Date.from(it.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+        }
+        val fechaCaduca = administrador.fecha_caduca?.let {
+            Timestamp(Date.from(it.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+        }
+
+
+        val adminMap = hashMapOf(
+            "id_administrador" to administrador.id_administrador,
+            "nombre" to administrador.nombre,
+            "apellido" to administrador.apellido,
+            "correo" to administrador.correo,
+            "telefono" to administrador.telefono,
+            "clave" to administrador.clave,
+            "direccion_negocio" to administrador.direccion_negocio,
+            "nombre_negocio" to administrador.nombre_negocio,
+            "licencia" to administrador.licencia,
+            "fecha_compra" to fechaCompra,
+            "fecha_caduca" to fechaCaduca,
+            "estado" to administrador.estado
+        )
+
+         val dataAdmin = getallDataDocumentsAdmin()
+
+
+
+       if (!dataAdmin!!.exists()) {
+           docRef.set(adminMap)
+               .addOnSuccessListener {
+                   println("Documento insertado con éxito")
+                   // Documento insertado con éxito
+               }
+               .addOnFailureListener { e ->
+                   // Error al insertar el documento
+                   println("Error al insertar el documento: ")
+               }
+       }else if (dataAdmin.data!!.isEmpty()) {
+           docRef.set(adminMap)
+           docRef.set(adminMap)
+               .addOnSuccessListener {
+                   println("Documento insertado con éxito")
+                   // Documento insertado con éxito
+               }
+               .addOnFailureListener { e ->
+                   // Error al insertar el documento
+                   println("Error al insertar el documento: ")
+               }
+       }else{
+           println("tiene datos")
+       }
+
+
+    }
+
+
+
+
     /**
     @param: String, List<Map<String, String>>, String
     @return: Unit
@@ -130,7 +225,7 @@ class DataCloudImpl @Inject constructor(
 
     override suspend fun insertAllToCloud2(
         collection: String,
-        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        dataToInsert: MutableList<Map<String, Map<String, Any>>>,
         idDocumento: String
     ) {
 
@@ -139,8 +234,8 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 println("idDocument: $idDocumento")
-                dataToInsert.forEach{
-                    val llaves =   it.keys
+                dataToInsert.forEach {
+                    val llaves = it.keys
                     for (i in llaves) {
 
                         val coleccion = i
@@ -154,19 +249,19 @@ class DataCloudImpl @Inject constructor(
                         )
 
 
-                        val reference =  fireStore.collection("usuarios")
+                        val reference = fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
                             .document(coleccion)
 
                         lote.set(reference, ticketData)
 
-                        val ticket:Any? =  it[i]?.get("ticket")
-                        val usuario:Any? =  it[i]?.get("usuario")
-                        val servicio:Any? =  it[i]?.get("servicio")
-                        val persona:Any? =  it[i]?.get("persona")
-                        val tipo_venta:Any? =  it[i]?.get("tipo_venta")
-                        val tipo_dispositivo:Any? =  it[i]?.get("tipo_dispositivo")
+                        val ticket: Any? = it[i]?.get("ticket")
+                        val usuario: Any? = it[i]?.get("usuario")
+                        val servicio: Any? = it[i]?.get("servicio")
+                        val persona: Any? = it[i]?.get("persona")
+                        val tipo_venta: Any? = it[i]?.get("tipo_venta")
+                        val tipo_dispositivo: Any? = it[i]?.get("tipo_dispositivo")
                         println("estos datos son el for dataInsert")
                         println(coleccion)
                         println(ticket)
@@ -192,10 +287,9 @@ class DataCloudImpl @Inject constructor(
     }
 
 
-
     override suspend fun insertAllToCloud3(
         collection: String,
-        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        dataToInsert: MutableList<Map<String, Map<String, Any>>>,
         idDocumento: String
     ) {
 
@@ -204,8 +298,8 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 println("idDocument: $idDocumento")
-                dataToInsert.forEach{
-                    val llaves =   it.keys
+                dataToInsert.forEach {
+                    val llaves = it.keys
                     for (i in llaves) {
 
                         val coleccion = i
@@ -216,16 +310,16 @@ class DataCloudImpl @Inject constructor(
                         )
 
 
-                        val reference =  fireStore.collection("usuarios")
+                        val reference = fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
                             .document(coleccion)
 
                         lote.set(reference, ticketData)
 
-                        val Inventario:Any? =  it[i]?.get("Inventario")
-                        val Categoria:Any? =  it[i]?.get("Categoria")
-                        val Persona:Any? =  it[i]?.get("Persona")
+                        val Inventario: Any? = it[i]?.get("Inventario")
+                        val Categoria: Any? = it[i]?.get("Categoria")
+                        val Persona: Any? = it[i]?.get("Persona")
                         println("estos datos son el for dataInsert")
                         println(coleccion)
                         println(Inventario)
@@ -249,7 +343,7 @@ class DataCloudImpl @Inject constructor(
 
     override suspend fun insertAllToCloudDetalleVenta(
         collection: String,
-        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        dataToInsert: MutableList<Map<String, Map<String, Any>>>,
         idDocumento: String
     ) {
 
@@ -258,8 +352,8 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 println("idDocument: $idDocumento")
-                dataToInsert.forEach{
-                    val llaves =   it.keys
+                dataToInsert.forEach {
+                    val llaves = it.keys
                     for (i in llaves) {
 
                         val coleccion = i
@@ -271,17 +365,17 @@ class DataCloudImpl @Inject constructor(
                         )
 
 
-                        val reference =  fireStore.collection("usuarios")
+                        val reference = fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
                             .document(coleccion)
 
                         lote.set(reference, ticketData)
 
-                        val Detalle_venta:Any? =  it[i]?.get("Detalle_venta")
-                        val venta:Any? =  it[i]?.get("venta")
-                        val Inventario:Any? =  it[i]?.get("Inventario")
-                        val Tipo_venta:Any? =  it[i]?.get("Tipo_venta")
+                        val Detalle_venta: Any? = it[i]?.get("Detalle_venta")
+                        val venta: Any? = it[i]?.get("venta")
+                        val Inventario: Any? = it[i]?.get("Inventario")
+                        val Tipo_venta: Any? = it[i]?.get("Tipo_venta")
                         println("estos datos son el for dataInsert")
                         println(coleccion)
                         println(Detalle_venta)
@@ -307,7 +401,7 @@ class DataCloudImpl @Inject constructor(
 
     override suspend fun insertAllToCloudUsuarios(
         collection: String,
-        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        dataToInsert: MutableList<Map<String, Map<String, Any>>>,
         idDocumento: String
     ) {
 
@@ -316,8 +410,8 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 println("idDocument: $idDocumento")
-                dataToInsert.forEach{
-                    val llaves =   it.keys
+                dataToInsert.forEach {
+                    val llaves = it.keys
                     for (i in llaves) {
 
                         val coleccion = i
@@ -327,17 +421,17 @@ class DataCloudImpl @Inject constructor(
                         )
 
 
-                        val reference =  fireStore.collection("usuarios")
+                        val reference = fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
                             .document(coleccion)
 
                         lote.set(reference, ticketData)
 
-                        val usuario:Any? =  it[i]?.get("usuario")
-                        val roll_usuario:Any? =  it[i]?.get("roll_usuario")
-                        val Inventario:Any? =  it[i]?.get("Inventario")
-                        val Tipo_venta:Any? =  it[i]?.get("Tipo_venta")
+                        val usuario: Any? = it[i]?.get("usuario")
+                        val roll_usuario: Any? = it[i]?.get("roll_usuario")
+                        val Inventario: Any? = it[i]?.get("Inventario")
+                        val Tipo_venta: Any? = it[i]?.get("Tipo_venta")
                         println("estos datos son el for dataInsert")
                         println(coleccion)
                         println(usuario)
@@ -359,10 +453,9 @@ class DataCloudImpl @Inject constructor(
     }
 
 
-
     override suspend fun insertAllToCloudVentas(
         collection: String,
-        dataToInsert: MutableList<Map<String,Map<String,Any>>>,
+        dataToInsert: MutableList<Map<String, Map<String, Any>>>,
         idDocumento: String
     ) {
 
@@ -371,8 +464,8 @@ class DataCloudImpl @Inject constructor(
             withContext(Dispatchers.Default) {
                 val lote = fireStore.batch()
                 println("idDocument: $idDocumento")
-                dataToInsert.forEach{
-                    val llaves =   it.keys
+                dataToInsert.forEach {
+                    val llaves = it.keys
                     for (i in llaves) {
 
                         val coleccion = i
@@ -384,17 +477,17 @@ class DataCloudImpl @Inject constructor(
                         )
 
 
-                        val reference =  fireStore.collection("usuarios")
+                        val reference = fireStore.collection("usuarios")
                             .document(uidUser)
                             .collection(collection)
                             .document(coleccion)
 
                         lote.set(reference, ticketData)
 
-                        val venta:Any? =  it[i]?.get("venta")
-                        val usuario:Any? =  it[i]?.get("usuario")
-                        val persona:Any? =  it[i]?.get("persona")
-                        val tipo_venta:Any? =  it[i]?.get("tipo_venta")
+                        val venta: Any? = it[i]?.get("venta")
+                        val usuario: Any? = it[i]?.get("usuario")
+                        val persona: Any? = it[i]?.get("persona")
+                        val tipo_venta: Any? = it[i]?.get("tipo_venta")
                         println("estos datos son el for dataInsert")
                         println(coleccion)
                         println(venta)
@@ -479,9 +572,10 @@ class DataCloudImpl @Inject constructor(
         querySnapshot: QuerySnapshot?,
         licensia: String
     ): QueryDocumentSnapshot? {
-        val list = querySnapshot?.find { it.data["noLicencia"].toString() == licensia
+        val list = querySnapshot?.find {
+            it.data["noLicencia"].toString() == licensia
         }
-        for(i in querySnapshot!!.documents){
+        for (i in querySnapshot!!.documents) {
             println("datos ${i.data}")
 
         }
@@ -549,4 +643,253 @@ class DataCloudImpl @Inject constructor(
 
     //Por implementar
 
+    // persona desde room a data cloud
+    suspend fun getSubColletionPersona(subCollection: String): List<persona> =
+        withContext(Dispatchers.Default) {
+            suspendCancellableCoroutine { continuation ->
+                fireStore.collection("usuarios").document(uidUser).collection(subCollection).get()
+                    .addOnSuccessListener { snapshots ->
+                        val personas = snapshots.toObjects(persona::class.java)
+                        continuation.resume(personas)
+                    }
+                    .addOnFailureListener { exception ->
+                        continuation.resumeWithException(exception)
+                    }
+            }
+        }
+
+    fun getSubCollectionPersonaRealtime(subCollection: String): Flow<List<persona>> = flow {
+        val personasFlow = MutableStateFlow<List<persona>>(emptyList())
+        var listenerRegistration: ListenerRegistration? = null
+
+        try {
+            listenerRegistration = fireStore.collection("usuarios").document(uidUser).collection(subCollection)
+                .addSnapshotListener { snapshots, error ->
+                    if (error != null) {
+                        // Manejar error
+                        return@addSnapshotListener
+                    }
+
+                    if (snapshots != null) {
+                        val personas = mutableListOf<persona>()
+                        for (doc in snapshots) {
+                            val persona = doc.toObject(persona::class.java)
+                            personas.add(persona)
+                        }
+                        personasFlow.value = personas
+                    }
+                }
+
+            // Emitir flujo de datos inicialmente vacío (o con datos actuales si se desea)
+            emit(personasFlow.value)
+
+            // Esperar a que el flujo se cancele para eliminar el listener
+            awaitCancellation()
+        } finally {
+            // Eliminar el listener al finalizar
+            listenerRegistration?.remove()
+        }
+    }
+
+    //insertar persona desde room a data cloud
+    suspend fun insertarPersona(personas: List<persona>, subColletion: String) {
+        println("insertar persona desde room a data cloud")
+        println()
+        println("estas son las personas a insertar $personas")
+        withContext(Dispatchers.IO) {
+            if (personas.isNotEmpty()) {
+                val jobs = personas.map { persona ->
+                    async {
+                        try {
+                            fireStore.collection("usuarios")
+                                .document(uidUser)
+                                .collection(subColletion)
+                                .document(persona.id_persona.toString())
+                                .set(persona)
+                                .await()  // Utilizando await para esperar a que cada operación termine
+                        } catch (e: Exception) {
+                            Log.e(
+                                "error firebase",
+                                "Error al insertar persona: ${persona.id_persona}",
+                                e
+                            )
+                        }
+                    }
+                }
+                jobs.awaitAll() // Espera a que todas las operaciones terminen
+            } else {
+                Log.e("error firebase", "No hay personas para insertar")
+            }
+        }
+    }
+
+    //funciones personas
+    suspend fun updatePersonaFirestorePersona(persona: persona,subColletion:String) {
+        try {
+            fireStore.collection("usuarios").document(uidUser).collection(subColletion)
+                .document(persona.id_persona.toString())
+                .set(persona)
+                .await()
+        } catch (e: Exception) {
+            // Manejar errores de actualización en Firestore
+        }
+    }
+
+    suspend fun deletePersonaFromFirestorePersona(persona: persona,subColletion:String) {
+        try {
+            fireStore.collection("usuarios").document(uidUser).collection(subColletion)
+                .document(persona.id_persona.toString())
+                .delete()
+                .await()
+        } catch (e: Exception) {
+            // Manejar errores de eliminación en Firestore
+        }
+
+    }
+
+
+    //funciones usuarios
+    suspend fun getAllUsuariosDataCloud(subColletion: String): List<UsuariosRelation>{
+       return withContext(Dispatchers.Default) {
+            suspendCancellableCoroutine {continuation ->
+                fireStore.collection("usuarios").document(uidUser).collection(subColletion).get()
+                .addOnSuccessListener { snapshots ->
+                    val usuariosRelation = snapshots.toObjects(UsuariosRelation::class.java)
+                    continuation.resume(usuariosRelation)
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+            }
+       }
+    }
+
+    suspend fun insertUsuariosTodataCloud(usuarios: List<UsuariosRelation>, subColletion: String) {
+        println("insertar UsuariosRelation desde room a data cloud")
+        println()
+        println("estas son las UsuariosRelation a insertar $usuarios")
+        withContext(Dispatchers.IO) {
+            if (usuarios.isNotEmpty()) {
+                val jobs = usuarios.map { usuariosRelation ->
+                    async {
+                        try {
+                            fireStore.collection("usuarios")
+                                .document(uidUser)
+                                .collection(subColletion)
+                                .document(usuariosRelation.usuarios.id_usuario.toString())
+                                .set(usuariosRelation)
+                                .await()  // Utilizando await para esperar a que cada operación termine
+                        } catch (e: Exception) {
+                            Log.e(
+                                "error firebase",
+                                "Error al insertar UsuariosRelation: ${usuariosRelation.usuarios.id_usuario}",
+                                e
+                            )
+                        }
+                    }
+                }
+                jobs.awaitAll() // Espera a que todas las operaciones terminen
+            } else {
+                Log.e("error firebase", "No hay personas para UsuariosRelation")
+            }
+        }
+    }
+
+    //funciones inventarios
+    suspend fun getAllInventarios( subCollection:String):List<InventarioModeloRelation> {
+        return withContext(Dispatchers.Default) {
+            suspendCancellableCoroutine {continuation ->
+                fireStore.collection("usuarios").document(uidUser).collection(subCollection).get()
+                    .addOnSuccessListener { snapshots ->
+                        val InventarioRelation = snapshots.toObjects(InventarioModeloRelation::class.java)
+                        continuation.resume(InventarioRelation)
+                    }
+                    .addOnFailureListener { exception ->
+                        continuation.resumeWithException(exception)
+                    }
+            }
+        }
+
+    }
+
+    suspend fun insertInventarioTodataCloud(Inventarios: List<InventarioModeloRelation>, subColletion: String) {
+        println("insertar InventarioModeloRelation desde room a data cloud")
+        println()
+        println("estas son las InventarioModeloRelation a insertar $Inventarios")
+        withContext(Dispatchers.IO) {
+            if (Inventarios.isNotEmpty()) {
+                val jobs = Inventarios.map { InventarioModeloRelation ->
+                    async {
+                        try {
+                            fireStore.collection("usuarios")
+                                .document(uidUser)
+                                .collection(subColletion)
+                                .document(InventarioModeloRelation.inventario.id_inventario.toString())
+                                .set(InventarioModeloRelation)
+                                .await()  // Utilizando await para esperar a que cada operación termine
+                        } catch (e: Exception) {
+                            Log.e(
+                                "error firebase",
+                                "Error al insertar InventarioModeloRelation: ${InventarioModeloRelation.inventario.id_inventario}",
+                                e
+                            )
+                        }
+                    }
+                }
+                jobs.awaitAll() // Espera a que todas las operaciones terminen
+            } else {
+                Log.e("error firebase", "No hay personas para InventarioModeloRelation")
+            }
+        }
+    }
+
+    //funciones administrador
+
+    suspend fun uploadAdminDataToFirestore(admin: administrador) {
+
+        // Convertir el objeto a un mapa de datos adecuado para Firestore
+        val adminData = mapOf(
+            "id_administrador" to admin.id_administrador,
+            "nombre" to admin.nombre,
+            "apellido" to admin.apellido,
+            "correo" to admin.correo,
+            "telefono" to admin.telefono,
+            "clave" to admin.clave,
+            "direccion_negocio" to admin.direccion_negocio,
+            "nombre_negocio" to admin.nombre_negocio,
+            "licencia" to admin.licencia,
+            "fecha_compra" to admin.fecha_compra?.toString(),
+            "fecha_caduca" to admin.fecha_caduca?.toString()
+        )
+
+        try {
+            withContext(Dispatchers.IO) {
+                fireStore.collection("usuarios").document(uidUser).set(adminData).await()
+                println("Datos del administrador subidos a Firestore correctamente")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("Error al subir los datos del administrador a Firestore: ${e.message}")
+        }
+    }
+
+    suspend fun getDataAdminFromCloud(): administrador? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val documentSnapshot = fireStore.collection("usuarios").document(uidUser).get().await()
+                if (documentSnapshot.exists()) {
+                    documentSnapshot.toObject(administrador::class.java)
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }!!
+        }
+    }
+
 }
+
+
+

@@ -7,14 +7,19 @@ import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.solidtype.atenas_apk_2.gestion_proveedores.data.remote.mediadorPersonaImpl
+import com.solidtype.atenas_apk_2.gestion_usuarios.data.remote.mediadorUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EliminarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
+import com.solidtype.atenas_apk_2.perfil_administrador.data.mediadorAdmin.mediadorAdmin
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.mediatorInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,7 +30,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsuariosViewmodel @Inject constructor(
-    private val casos: UsuarioUseCases, @ApplicationContext private val context: Context
+    private val casos: UsuarioUseCases, @ApplicationContext private val context: Context,
+    private val mediadoruser : mediadorUsuario,
+    private val mediadorInve : mediatorInventario,
+    private val mediadorAdmin: mediadorAdmin,
+    private val mediadorPersona: mediadorPersonaImpl
 ) : ViewModel() {
 
     var uiState: MutableStateFlow<UserStatesUI> = MutableStateFlow(UserStatesUI())
@@ -47,7 +56,13 @@ class UsuariosViewmodel @Inject constructor(
                """
             )
         }
+
+        getSyncpersona()
+
+
+
     }
+
 
     fun onUserEvent(evento: UserEvent) {
         when (evento) {
@@ -197,6 +212,15 @@ class UsuariosViewmodel @Inject constructor(
 
         }.launchIn(viewModelScope)
     }
+
+     fun getSyncpersona() {
+         println("entre a la 1ra funcion")
+        viewModelScope.launch {
+            mediadorAdmin.syncDataAdmin()
+            mediadorInve.syncInventario()
+        }
+    }
+
     private fun buscarUsuarios(any: String) {
         userJob?.cancel()
         userJob = casos.buscarUsuario(any).onEach { users ->
@@ -213,4 +237,6 @@ class UsuariosViewmodel @Inject constructor(
             }
         }
     }
+
+
 }
