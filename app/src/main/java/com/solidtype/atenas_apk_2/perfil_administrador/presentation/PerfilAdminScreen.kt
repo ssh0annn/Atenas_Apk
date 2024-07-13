@@ -159,7 +159,8 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
             ){
                 Titulo(text = "No hay datos de Administrador")
             }
-            MenuLateral(navController)
+
         }
+        MenuLateral(navController)
     }
 }

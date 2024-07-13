@@ -303,10 +303,10 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "¿No tienes cuenta?",
+                        text = "¿Olvidaste la contraseña?",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = AzulGris
+                        color = AzulGris,
                     )
                 }
                 Spacer(modifier = Modifier.height(100.dp))
