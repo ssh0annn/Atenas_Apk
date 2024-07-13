@@ -106,32 +106,34 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                         ) {
                             Titulo("Menú", Icons.Outlined.Inventory2)
                         }
-
                         Spacer(modifier = Modifier.height(20.dp))
-                        Boton(
-                            "Servicios",
-                            anchoTotal = true,
-                            //Si la pantalla actual es diferente a la pantalla de Servicios
-                            habilitar = navController.currentDestination?.route != Screens.Servicio.route
-                        ) {
-                            mostrarMenu.value = false
-                            navController.navigate(Screens.Servicio.route)
-                        }
-                        Boton(
-                            "Ventas",
-                            anchoTotal = true,
-                            habilitar = navController.currentDestination?.route != Screens.Ventas.route
-                        ) {
-                            mostrarMenu.value = false
-                            navController.navigate(Screens.Ventas.route)
-                        }
-                        Boton(
-                            "Vista de Tickets",
-                            anchoTotal = true,
-                            habilitar = navController.currentDestination?.route != Screens.VistaTicket.route
-                        ) {
-                            mostrarMenu.value = false
-                            navController.navigate(Screens.VistaTicket.route)
+
+                        if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+                            Boton(
+                                "Servicios",
+                                anchoTotal = true,
+                                //Si la pantalla actual es diferente a la pantalla de Servicios
+                                habilitar = navController.currentDestination?.route != Screens.Servicio.route
+                            ) {
+                                mostrarMenu.value = false
+                                navController.navigate(Screens.Servicio.route)
+                            }
+                            Boton(
+                                "Ventas",
+                                anchoTotal = true,
+                                habilitar = navController.currentDestination?.route != Screens.Ventas.route
+                            ) {
+                                mostrarMenu.value = false
+                                navController.navigate(Screens.Ventas.route)
+                            }
+                            Boton(
+                                "Vista de Tickets",
+                                anchoTotal = true,
+                                habilitar = navController.currentDestination?.route != Screens.VistaTicket.route
+                            ) {
+                                mostrarMenu.value = false
+                                navController.navigate(Screens.VistaTicket.route)
+                            }
                         }
 
                         if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
@@ -140,7 +142,8 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                                 "Configuración del Perfil",
                                 anchoTotal = true,
                                 habilitar = navController.currentDestination?.route != Screens.PerfilAdmin.route
-                            ) {mostrarMenu.value = false
+                            ) {
+                                mostrarMenu.value = false
                                 navController.navigate(Screens.PerfilAdmin.route)
                             }
                             Boton(
@@ -210,8 +213,12 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .clickable {
-                                    navController.popBackStack()
-                                    navController.navigate(Screens.Login.route)
+                                    navController.navigate(Screens.Login.route) {
+                                        popUpTo(Screens.Login.route) {
+                                            inclusive =true
+                                        }
+                                        launchSingleTop = true
+                                    }
                                     viewModel.onEvent()
                                 }
                         )
