@@ -14,6 +14,6 @@ class GetCurrentUserEmail @Inject constructor(private val usuarioCasos: UsuarioU
     Esta funcion es temporal para resolver u problema, Pero debe ser refactorizada.
      */
      fun getUser(correo :String): Flow<List<usuario>> {
-        return usuarioCasos.buscarUsuario(correo)
+        return usuarioCasos.buscarUsuario(correo, true)
     }
 }

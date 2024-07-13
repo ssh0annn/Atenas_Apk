@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory
 
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 
@@ -31,8 +32,12 @@ sealed class InventariosEvent {
 
     object Getrpoveedores:InventariosEvent()
     data class BuscarProveedores(val any:String):InventariosEvent()
+    data class CrearProveedor(val provee:Personastodas.Proveedor):InventariosEvent()
+    data class EliminarProveedor(val provee:Personastodas.Proveedor):InventariosEvent()
 
+    object Switch:InventariosEvent()
 
+    object LimpiarMensaje:InventariosEvent()
 
 
 

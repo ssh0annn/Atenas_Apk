@@ -26,5 +26,3 @@ class AtenasAplication : Application (){
     }
 }
 
-
-

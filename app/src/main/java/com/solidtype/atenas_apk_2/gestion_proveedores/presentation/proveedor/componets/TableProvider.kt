@@ -25,20 +25,16 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun TableProviders(
-    Providers: List<Personastodas.Proveedor>,
+    providers: List<Personastodas.Proveedor>,
     mostrarDialogo: MutableState<Boolean>,
     editar: MutableState<Boolean>,
     nombre: MutableState<String>,
-    Tipodocumento: MutableState<String>,
-    Numdocumento: MutableState<String>,
-    Email: MutableState<String>,
-    Telefono: MutableState<String>,
+    numDocumento: MutableState<String>,
+    email: MutableState<String>,
+    telefono: MutableState<String>,
     mostrarConfirmar: MutableState<Boolean>,
     idProveedor: MutableState<String>
 ) {
-    println("tabla Cliente")
-    println(Providers)
-    println("")
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -88,7 +84,7 @@ fun TableProviders(
                 )
                 Text(
                     "",
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(0.5f)
                 )
             }
             LazyColumn(
@@ -97,16 +93,15 @@ fun TableProviders(
                     .fillMaxSize()
                     .background(GrisOscuro)
             ) {
-                items(Providers) { provider ->
+                items(providers) { provider ->
                     MyProviderItem(
-                        Provider = provider,
+                        provider = provider,
                         mostrarDialogo = mostrarDialogo,
                         editar = editar,
                         nombre,
-                        Tipodocumento,
-                        Numdocumento,
-                        Email,
-                        Telefono,
+                        numDocumento,
+                        email,
+                        telefono,
                         mostrarConfirmar,
                         idProveedor
                     )

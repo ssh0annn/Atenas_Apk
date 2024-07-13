@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.facturacion.data
 
 import com.solidtype.atenas_apk_2.facturacion.data.local.dao.detalle_ventaDao
+import com.solidtype.atenas_apk_2.facturacion.domain.model.VentasRelacionadas
 import com.solidtype.atenas_apk_2.facturacion.domain.model.detalle_venta
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.actualizacion.ventaDao
@@ -14,18 +15,16 @@ class FacturaRepositoryImpl @Inject constructor(
     private val venta: ventaDao
     ) : FacturaRepository {
     override fun busqueda(
-        fechaini: LocalDate,
-        fechafinal: LocalDate,
+        desde: LocalDate,
+        hasta: LocalDate,
         datoSemejante: String
-    ): Flow<List<venta>> {
-            return venta.getVentasByIdsAndFecha(datoSemejante, fechaini, fechafinal)
+    ): Flow<List<VentasRelacionadas>> {
+            return venta.buscarVentaWithRelation(datoSemejante, desde, hasta)
     }
-    override fun MostrarTodos(): Flow<List<venta>> {
-        return venta.getVentas()
+    override fun MostrarTodos(): Flow<List<VentasRelacionadas>> {
+        return venta.getVentaWithRelation()
     }
 
-    override suspend fun DetalleFactura(numeroFactura: Long): detalle_venta {
-       return  detalleVenta.getDetalleVentaByIdVenta(numeroFactura)
-    }
+
 
 }

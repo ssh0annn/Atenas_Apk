@@ -81,7 +81,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     var nuevoDatosDelTicket by rememberSaveable { mutableStateOf(false) }
     var tipoPago by rememberSaveable { mutableStateOf("") }
     var vendedor by rememberSaveable { mutableStateOf("") }
-    var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
+   // var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
 
 
 
@@ -334,8 +334,8 @@ fun SelectorMio(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                 // Asegúrate de que tenga un fondo para que sea visible
-               .border(width = 1.dp, color = PurpleGrey80)
+                                // Asegúrate de que tenga un fondo para que sea visible
+                                .border(width = 1.dp, color = PurpleGrey80)
                                 .padding(bottom = 10.dp, top = 10.dp)
                                 .clickable(onClick = {
                                     onClickAgregar()
@@ -441,10 +441,13 @@ fun <T> componente(data:T, onClick:() ->Unit ){
 @Composable
 fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
     var nombre by remember { mutableStateOf("") }
-    var documento by remember { mutableStateOf("") }
+    val documento by remember { mutableStateOf("") }
     var telefono by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var openDialog = remember { mutableStateOf( false) }
+    val openDialog = remember { mutableStateOf( false) }
+    val tipoDocumento by remember {
+        mutableStateOf("")
+    }
 
 
     if (!openDialog.value) {
@@ -527,7 +530,7 @@ fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
                             .padding(5.dp),
 
                             onClick = {
-                                    val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
+                                    val cliente = Personastodas.ClienteUI(nombre= nombre, tipo_documento = tipoDocumento, documento = documento, telefono = telefono, email = email)
                                   onSubmit(cliente)
 
                             }) {

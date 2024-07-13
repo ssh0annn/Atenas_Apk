@@ -8,5 +8,6 @@ data class CasosProveedores(
     val crearProveedor: CrearProveedor,
     val getProveedores: GetProveedores,
     val eliminarPersona: EliminarPersona,
-    val editarProveedores: EditarProveedores
+    val editarProveedores: EditarProveedores,
+    val proveedoresTodos: ProveedoresTodos
 )

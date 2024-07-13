@@ -42,8 +42,7 @@ class UsuariosViewmodel @Inject constructor(
 
     private var recentlyDelete: usuario? = null
     private var userJob: Job? = null
-
-
+    private var switch:Boolean = uiState.value.switch
     private val LICENCIA: String = "licencia"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
 
@@ -66,20 +65,9 @@ class UsuariosViewmodel @Inject constructor(
 
     fun onUserEvent(evento: UserEvent) {
         when (evento) {
-            is UserEvent.AgregarNuevoRol -> {
-                agregarRol(evento.rol)
-
-            }
-
-            is UserEvent.EditarRol -> {
-                editarRol(evento.rol)
-
-            }
-
-            UserEvent.MostrarUserEvent -> {
-                getUsuarios()
-            }
-
+            is UserEvent.AgregarNuevoRol -> agregarRol(evento.rol)
+            is UserEvent.EditarRol ->  editarRol(evento.rol)
+            UserEvent.MostrarUserEvent ->  getUsuarios()
             is UserEvent.BuscarUsuario -> {
                 if (evento.any.isNotEmpty()) {
                     buscarUsuarios(evento.any)
@@ -87,36 +75,13 @@ class UsuariosViewmodel @Inject constructor(
                     getUsuarios()
                 }
             }
-
-            is UserEvent.BorrarUsuario -> {
-                borrarUsuario(evento.usuario)
-            }
-
-            UserEvent.RestaurarUsuario -> {
-                restaurarUsuario()
-            }
-
-            is UserEvent.AgregarUsuario -> {
-                agregarUsuario(evento.usuario)
-
-            }
-
-            is UserEvent.EditarUsuario -> {
-                editarUsuario(evento.usuario)
-            }
-
-             UserEvent.GetRoles -> {
-                getRoles()
-            }
-
-            is UserEvent.RolSelecionado -> {
-                rolSelecionado(evento.rol)
-            }
-
-            is UserEvent.ElimnarRoll -> {
-                elimanarRoll(evento.rol)
-
-            }
+            is UserEvent.BorrarUsuario -> borrarUsuario(evento.usuario)
+            UserEvent.RestaurarUsuario -> restaurarUsuario()
+            is UserEvent.AgregarUsuario -> agregarUsuario(evento.usuario)
+            is UserEvent.EditarUsuario -> editarUsuario(evento.usuario)
+             UserEvent.GetRoles -> getRoles()
+            is UserEvent.RolSelecionado -> rolSelecionado(evento.rol)
+            is UserEvent.ElimnarRoll -> elimanarRoll(evento.rol)
 
             UserEvent.GetQr -> {
                 uiState.update {
@@ -126,8 +91,9 @@ class UsuariosViewmodel @Inject constructor(
                    """
                     )
                 }
-
             }
+            UserEvent.Switch -> uiState.update { it.copy(switch = !switch) }
+            UserEvent.LimpiarMensaje -> uiState.update { it.copy(razones = "") }
         }
     }
 
@@ -207,7 +173,7 @@ class UsuariosViewmodel @Inject constructor(
 
     private fun getUsuarios() {
         userJob?.cancel()
-        userJob = casos.mostrarUsuarios().onEach { users ->
+        userJob = casos.mostrarUsuarios(!switch).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
 
         }.launchIn(viewModelScope)
@@ -223,11 +189,10 @@ class UsuariosViewmodel @Inject constructor(
 
     private fun buscarUsuarios(any: String) {
         userJob?.cancel()
-        userJob = casos.buscarUsuario(any).onEach { users ->
+        userJob = casos.buscarUsuario(any, !switch).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
 
         }.launchIn(viewModelScope)
-
     }
 
     private fun getRoles() {

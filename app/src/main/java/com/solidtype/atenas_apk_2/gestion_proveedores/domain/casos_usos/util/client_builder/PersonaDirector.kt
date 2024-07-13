@@ -16,6 +16,7 @@ class PersonaDirector {
                                 .id_persona(persona.id_cliente)
                                 .ipo_persona("cliente")
                                 .nombre(persona.nombre)
+                                .tipo_documento(persona.tipo_documento)
                                 .documento(persona.documento)
                                 .telefono(persona.telefono)
                                 .email(persona.email)
@@ -26,10 +27,10 @@ class PersonaDirector {
                             .id_persona(persona.id_cliente)
                             .ipo_persona("cliente")
                             .nombre(persona.nombre)
+                            .tipo_documento(persona.tipo_documento)
                             .documento(persona.documento)
                             .telefono(persona.telefono)
                             .builder()
-
                     }
                     return builder
                         .reset()

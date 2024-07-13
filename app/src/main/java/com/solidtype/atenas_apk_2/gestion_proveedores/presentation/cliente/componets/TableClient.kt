@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,135 +24,100 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
-val listClients : List<Personastodas.ClienteUI> = listOf(
-    Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    ),   Personastodas.ClienteUI(
-        1,
-        "Johan Diaz",
-        "423-4234-324",
-        "3242343",
-        "therealdiaz@live.com",
-    )
-)
 
- @Composable
-    fun TableClients(
-     Clients: List<Personastodas.ClienteUI>,
-     mostrarDialogo: MutableState<Boolean>,
-     editar: MutableState<Boolean>,
-     nombre: MutableState<String>,
-     Tipodocumento: MutableState<String>,
-     Numdocumento: MutableState<String>,
-     Email: MutableState<String>,
-     Telefono: MutableState<String>,
-     mostrarConfirmar: MutableState<Boolean>,
-     idCliente: MutableState<String>
-
- ) {
-
-     println("tabla Cliente")
-     println(Clients)
-     println("")
-
-        Box(
+@Composable
+fun TableClients(
+    clients: List<Personastodas.ClienteUI>,
+    mostrarDialogo: MutableState<Boolean>,
+    editar: MutableState<Boolean>,
+    nombre: MutableState<String>,
+    tipoDocumento: MutableState<String>,
+    numDocumento: MutableState<String>,
+    email: MutableState<String>,
+    telefono: MutableState<String>,
+    mostrarConfirmar: MutableState<Boolean>,
+    idCliente: MutableState<String>
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(Pantalla.ancho - 800.dp)
+            .background(AzulGris, shape = RoundedCornerShape(20.dp))
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(Pantalla.ancho - 800.dp)
-                .background(AzulGris, shape = RoundedCornerShape(20.dp))
+                .padding(10.dp)
+                .fillMaxSize()
+                .background(GrisOscuro, shape = RoundedCornerShape(20.dp))
         ) {
-            Column(
+            Row(
                 modifier = Modifier
                     .padding(10.dp)
-                    .fillMaxSize()
-                    .background(GrisOscuro, shape = RoundedCornerShape(20.dp))
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxWidth()
-
-                ) {
-                    Text(
-                        text = "ID",
-                        modifier = Modifier.weight(1f),
-                        color = Blanco,
-                        textAlign = TextAlign.Center
+                Text(
+                    text = "ID",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Nombre",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Documento",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Email",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Telefono",
+                    modifier = Modifier.weight(1f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "",
+                    modifier = Modifier.weight(0.5f),
+                    color = Blanco,
+                    textAlign = TextAlign.Center
+                )
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxSize()
+                    .background(GrisOscuro)
+            ) {
+                items(clients) { cliente ->
+                    MyClientItem(
+                        client = cliente,
+                        mostrarDialogo = mostrarDialogo,
+                        editar = editar,
+                        nombre,
+                        tipoDocumento,
+                        numDocumento,
+                        email,
+                        telefono,
+                        mostrarConfirmar,
+                        idCliente
                     )
-
-                    Text(
-                        text = "Nombre",
-                        modifier = Modifier.weight(1f),
-                        color = Blanco,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Documento",
-                        modifier = Modifier.weight(1f),
-                        color = Blanco,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Email",
-                        modifier = Modifier.weight(1f),
-                        color = Blanco,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Telefono",
-                        modifier = Modifier.weight(1f),
-                        color = Blanco,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Text(
-                        "",
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .fillMaxSize()
-                        .background(GrisOscuro)
-                ) {
-                   items(Clients){cliente->
-                       MyClientItem(Client = cliente, mostrarDialogo =  mostrarDialogo, editar =  editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar,idCliente)
-
-                   }
                 }
 
             }
         }
     }
+}
 
 
 

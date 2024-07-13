@@ -22,10 +22,4 @@ class DetalleVentaRelation (
     )
     val inventario: inventario,
 
-    @Relation(
-        parentColumn = "id_tipo_venta",
-        entityColumn = "id_tipo_venta"
-    )
-    val tipo_venta: tipo_venta,
-
     )

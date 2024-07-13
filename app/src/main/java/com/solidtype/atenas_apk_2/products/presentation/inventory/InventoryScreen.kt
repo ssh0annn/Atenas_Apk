@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inventory2
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,15 +31,22 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.DialogoProveedor
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoCategoria
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarCategoria
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AvatarConBotones
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Detalles
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Botones
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProducto
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProveedor
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoProducto
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.Components.SnackbarAnimado
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.SnackbarAnimado
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,7 +63,7 @@ fun InventoryScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val busqueda = rememberSaveable { mutableStateOf("") }
-    val mostrar = rememberSaveable { mutableStateOf(false) }
+    val mostrarEjemplar = rememberSaveable { mutableStateOf(false) }
 
     if (busqueda.value.isNotBlank())
         viewModel.onEvent(InventariosEvent.BuscarProducto(busqueda.value))
@@ -70,9 +76,11 @@ fun InventoryScreen(
         Toast.LENGTH_LONG
     ).show()
 
+    val mostrarProducto = rememberSaveable { mutableStateOf(false) }
+    val mostrarConfirmarProducto = rememberSaveable { mutableStateOf(false) }
+    val editar = rememberSaveable { mutableStateOf(false) }
+
     val idInventario = rememberSaveable { mutableStateOf("") }
-    val idCatalogo = rememberSaveable { mutableStateOf("") }
-    val idProveedor = rememberSaveable { mutableStateOf("") }
     val categoria = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
     val descripcion = rememberSaveable { mutableStateOf("") }
@@ -82,8 +90,27 @@ fun InventoryScreen(
     val marca = rememberSaveable { mutableStateOf("") }
     val cantidad = rememberSaveable { mutableStateOf("") }
     val impuesto = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("") }
+    //val estado = rememberSaveable { mutableStateOf("Activo") }
     val provider = rememberSaveable { mutableStateOf("") }
+
+    val mostrarCategoria = rememberSaveable { mutableStateOf(false) }
+
+    val idCategoria = rememberSaveable { mutableStateOf("") }
+    val nombreCategoria = rememberSaveable { mutableStateOf("") }
+    val descripcionCategoria = rememberSaveable { mutableStateOf("") }
+    val estadoCategoria = rememberSaveable { mutableStateOf("Activo") }
+    val mostrarConfirmarCategoria = rememberSaveable { mutableStateOf(false) }
+
+    val mostrarProveedor = rememberSaveable { mutableStateOf(false) }
+
+    val idProveedor = rememberSaveable { mutableStateOf("") }
+    val nombreProveedor = rememberSaveable { mutableStateOf("") }
+    val tipoDocumentoProveedor = rememberSaveable { mutableStateOf("") }
+    val documentoProveedor = rememberSaveable { mutableStateOf("") }
+    val direccionProveedor = rememberSaveable { mutableStateOf("") }
+    val telefonoProveedor = rememberSaveable { mutableStateOf("") }
+    val emailProveedor = rememberSaveable { mutableStateOf("") }
+    val mostrarConfirmarProveedor = rememberSaveable { mutableStateOf(false) }
 
     val showSnackbar = rememberSaveable { mutableStateOf(false) }
 
@@ -92,20 +119,22 @@ fun InventoryScreen(
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
 
-    val listEstados = listOf("Activo", "No Activo")
+    if (uiState.messages.isNotEmpty()) {
+        Toast.makeText(context, uiState.messages, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(InventariosEvent.LimpiarMensaje)
+    }
 
-    if(uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
-    if(uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
+    if (uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
+    if (uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
 
     if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
         if (showSnackbarIni.value) {
@@ -135,50 +164,147 @@ fun InventoryScreen(
                 Titulo("Inventario", Icons.Outlined.Inventory2)
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
-                    Column {
-                        Buscador(busqueda.value) { busqueda.value = it }
-                        AreaProductos(
-                            uiState,
-                            idInventario,
-                            idCatalogo,
-                            idProveedor,
-                            nombre,
-                            marca,
-                            modelo,
-                            cantidad,
-                            costo,
-                            precio,
-                            impuesto,
-                            descripcion,
-                            estado
-                        )
+                    Buscador(busqueda.value) { busqueda.value = it }
+                    SwitchInactivos(uiState.switch){
+                        viewModel.onEvent(InventariosEvent.Switch)
                     }
-                    Detalles(
-                        viewModel,
-                        categoria,
-                        uiState.categoria,
-                        nombre,
-                        idInventario,
-                        descripcion,
-                        costo,
-                        precio,
-                        modelo,
-                        marca,
-                        cantidad,
-                        idCatalogo,
-                        idProveedor,
-                        impuesto,
-                        estado,
-                        context,
-                        provider,
-                        uiState.proveedores,
-                        listEstados
-                    )
                 }
-                AvatarConBotones(context, viewModel, showSnackbarIni, mostrar)
+                AreaProductos(
+                    uiState,
+                    idInventario,
+                    nombre,
+                    marca,
+                    modelo,
+                    cantidad,
+                    costo,
+                    precio,
+                    impuesto,
+                    descripcion,
+                    //estado,
+                    mostrarProducto,
+                    editar,
+                    categoria,
+                    provider,
+                    mostrarConfirmarProducto,
+                    idCategoria,
+                    idProveedor
+                )
+                Botones(
+                    context,
+                    viewModel,
+                    showSnackbarIni,
+                    mostrarEjemplar,
+                    mostrarProducto,
+                    editar,
+                    idInventario,
+                    categoria,
+                    nombre,
+                    descripcion,
+                    costo,
+                    precio,
+                    modelo,
+                    marca,
+                    cantidad,
+                    impuesto,
+                    //estado,
+                    provider,
+                    idCategoria,
+                    idProveedor
+                )
             }
         }
-        DialogoExcel(mostrar)
+        DialogoProducto(
+            mostrarProducto,
+            viewModel,
+            categoria,
+            uiState,
+            nombre,
+            idInventario,
+            descripcion,
+            costo,
+            precio,
+            modelo,
+            marca,
+            cantidad,
+            idCategoria,
+            idProveedor,
+            impuesto,
+            //estado,
+            context,
+            provider,
+            //listOf("Activo", "Inactivo"),
+            mostrarCategoria,
+            mostrarProveedor,
+            idCategoria,
+            idProveedor
+        )
+        DialogoConfirmarProducto(
+            mostrarConfirmarProducto,
+            viewModel,
+            idInventario,
+            idCategoria,
+            idProveedor,
+            nombre,
+            marca,
+            modelo,
+            cantidad,
+            costo,
+            precio,
+            impuesto,
+            descripcion,
+            //estado,
+            categoria,
+            provider,
+            context,
+            uiState.switch
+        )
+        DialogoExcel(mostrarEjemplar)
+        DialogoCategoria(
+            mostrarCategoria,
+            idCategoria,
+            nombreCategoria,
+            descripcionCategoria,
+            estadoCategoria,
+            uiState,
+            viewModel,
+            context,
+            mostrarConfirmarCategoria
+        )
+        DialogoConfirmarCategoria(
+            mostrarConfirmarCategoria,
+            viewModel,
+            idCategoria,
+            nombreCategoria,
+            descripcionCategoria,
+            estadoCategoria,
+            context
+        )
+        DialogoProveedor(
+            mostrarProveedor,
+            nombreProveedor,
+            tipoDocumentoProveedor,
+            documentoProveedor,
+            direccionProveedor,
+            telefonoProveedor,
+            emailProveedor,
+            viewModel,
+            context,
+            uiState,
+            mostrarConfirmarProveedor,
+            idProveedor
+        )
+        DialogoConfirmarProveedor(
+            mostrarConfirmarProveedor,
+            viewModel,
+            idProveedor,
+            nombreProveedor,
+            tipoDocumentoProveedor,
+            documentoProveedor,
+            direccionProveedor,
+            telefonoProveedor,
+            emailProveedor,
+            context
+        )
         MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }

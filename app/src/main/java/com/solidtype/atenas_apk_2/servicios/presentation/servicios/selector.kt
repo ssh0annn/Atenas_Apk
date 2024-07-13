@@ -118,17 +118,14 @@ fun selector(
     else if (nuevoDispositivo){
         NuevoDevice(){dispositivo -> viewmodel.onDevice(DeviceEvent.CrearDispositivo(dispositivo))
             nuevoDispositivo = !nuevoDispositivo}
-
     }
     if (mostrar1.value) {
         Box(
             modifier = Modifier.fillMaxWidth()
-
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 AlertDialog(
                     onDismissRequest = {
                         mostrar1.value = false
@@ -723,7 +720,7 @@ fun selector(
                                         viewmodel.onPayment(
                                             PagosEvent.DatosDelPago(
                                                 tipo_venta(
-                                                    presupuesto = precio.toDouble(),
+                                                    subtotal = precio.toDouble(),
                                                 )
                                             )
                                         )

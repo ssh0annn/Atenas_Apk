@@ -107,6 +107,8 @@ dependencies {
     implementation ("androidx.compose.material:material-icons-extended:1.6.4")
     implementation ("androidx.compose.material:material-icons-core:1.6.4")
 
+    testImplementation ("com.google.firebase:firebase-auth:21.0.3")
+
 
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
@@ -161,8 +163,10 @@ dependencies {
     implementation ("androidx.work:work-runtime-ktx:2.9.0")
 
     //testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    //Sincronizacion el worker
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
 
-    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation("com.github.kenglxn.QRGen:android:3.0.1") //QR
 
 }
 

@@ -11,8 +11,10 @@ import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -24,27 +26,22 @@ class InventarioViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var fileSelectionListener2: FileSelectionListener2? = null
-
     var uiState = MutableStateFlow(ProductosViewStates())
         private set
-
+    var job : Job? = null
+    private var switch: Boolean = uiState.value.switch
 
     init {
         mostrarProductos()
     }
-
-
     fun onEvent(event: InventariosEvent) {
         when (event) {
             is InventariosEvent.ActualizarCategoria -> {
                 agregarCategoria(event.catego)
             }
-
             is InventariosEvent.ActualizarProductos -> {
                 crearProductos(event.producto)
-
             }
-
             is InventariosEvent.AgregarCategorias -> {
                 agregarCategoria(event.catego)
             }
@@ -80,12 +77,10 @@ class InventarioViewModel @Inject constructor(
 
             InventariosEvent.Getrpoveedores -> {
                 viewModelScope.launch {
-
-                    casosProveedores.getProveedores().collect { proveedores ->
+                    casosProveedores.proveedoresTodos().collect{ proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
-
                     }
                 }
             }
@@ -93,7 +88,7 @@ class InventarioViewModel @Inject constructor(
             is InventariosEvent.BuscarProveedores -> {
                 viewModelScope.launch {
 
-                    casosProveedores.buscarProveedores(event.any).collect { proveedores ->
+                    casosProveedores.buscarProveedores(event.any, !switch).collect { proveedores ->
                         uiState.update {
                             it.copy(proveedores = proveedores)
                         }
@@ -101,6 +96,26 @@ class InventarioViewModel @Inject constructor(
                     }
                 }
             }
+
+            is InventariosEvent.CrearProveedor -> {
+                viewModelScope.launch { casosProveedores.crearProveedor(event.provee) }
+
+            }
+            is InventariosEvent.EliminarProveedor -> {
+                viewModelScope.launch { casosProveedores.eliminarPersona(event.provee) }
+            }
+
+            InventariosEvent.Switch -> {
+                switch = !switch
+                uiState.update { it.copy(switch = switch) }
+                mostrarProductos()
+
+                println("Estado: ${!switch}")
+                println(uiState.value.products)
+
+            }
+
+            InventariosEvent.LimpiarMensaje -> uiState.update { it.copy(messages = "") }
         }
     }
     private fun buscarCategorias(any:String){
@@ -109,8 +124,6 @@ class InventarioViewModel @Inject constructor(
             casosInventario.buscarCategorias(any).collect{ catego ->
                 uiState.update { it.copy(categoria = catego) }
             }
-
-
         }
     }
     private fun eliminarCategoria(catego: categoria){
@@ -121,7 +134,7 @@ class InventarioViewModel @Inject constructor(
 
     private fun getCategorias() {
         viewModelScope.launch {
-            casosInventario.getCategorias().collect { categoria ->
+            casosInventario.getCategorias(!switch).collect { categoria ->
                 uiState.update { it.copy(categoria = categoria) }
             }
         }
@@ -138,36 +151,28 @@ class InventarioViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             casosInventario.createProductos(producto)
-            withContext(Dispatchers.Default) {
-                // syncProductos()
-            }
         }
-
     }
-
   private  fun mostrarProductos() {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                //syncProductos()
-            }
-            casosInventario.getProductos().collect { product ->
+      job?.cancel()
+       job= viewModelScope.launch {
+
+            casosInventario.getProductos(!switch).collect { product ->
                 uiState.update {
                     it.copy(products = product)
+
                 }
             }
+
         }
     }
 
     fun exportarExcel() {
         viewModelScope.launch {
-            println("inicia viewScope en la funcion que exporta en viewmodel")
             withContext(Dispatchers.IO) {
-                println("withContext la funcion que exporta en viewmodel")
                 uiState.update { it.copy(isLoading = true) }
                 val path = casosInventario.exportarExcel(uiState.value.products)
-                println("Se guardo el archivo en: ${path}")
                 uiState.update { it.copy(isLoading = false) }
-                println("Salgo del withcontext la funcion que exporta en viewmodel")
                 withContext(Dispatchers.Main) {
                     uiState.update {
                         it.copy(uriPath = path)
@@ -190,7 +195,7 @@ class InventarioViewModel @Inject constructor(
 
     fun buscarProductos(any: String) {
         viewModelScope.launch {
-            val busqueda = casosInventario.searchProductos(any)
+            val busqueda = casosInventario.searchProductos(any, switch)
             busqueda.collect { product ->
                 uiState.update {
                     it.copy(products = product)
@@ -200,16 +205,12 @@ class InventarioViewModel @Inject constructor(
     }
 
     fun syncProductos() {
-
-
     }
     fun importarExcel(filePath: Uri) {
         fileSelectionListener2?.onFileSelected(filePath)
-        println("Este esl el patchFile $filePath")
-        println("Se llamo el fileSelected")
         viewModelScope.launch {
-            uiState.update { it.copy(isLoading = true) }
             withContext(Dispatchers.IO) {
+                uiState.update { it.copy(isLoading = true, messages = "Espere...") }
                 if (casosInventario.importarExcelFile(filePath)) {
                     syncProductos()
                     uiState.update {

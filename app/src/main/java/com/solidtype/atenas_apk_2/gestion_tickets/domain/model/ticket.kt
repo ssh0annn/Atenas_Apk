@@ -40,4 +40,4 @@ data class ticket (
     var fecha_inicio : LocalDate,
     var fecha_final : LocalDate,
     @ColumnInfo(defaultValue = "true") var estado :Boolean
-)
+    )

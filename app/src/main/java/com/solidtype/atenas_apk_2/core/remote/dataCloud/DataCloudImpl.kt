@@ -889,6 +889,18 @@ class DataCloudImpl @Inject constructor(
         }
     }
 
+    override suspend fun registrarNuevoDevice(id: String, licencia:String) {
+        try {
+            val encontrada = encuentraDocLicencia(getAllLicencia(), licencia)
+            if (encontrada?.get("estadoLicencia") == true) {
+                val refe = encontrada.reference
+                refe.update("idDevice", id).await()
+            }
+        }catch (e:Exception){
+            println("No se pudo cambiar el dispositivo")
+        }
+    }
+
 }
 
 

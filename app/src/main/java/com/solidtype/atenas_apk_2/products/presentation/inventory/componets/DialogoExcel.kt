@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.R
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable

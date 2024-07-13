@@ -25,10 +25,6 @@ class QueryDBlocalImpl @Inject constructor(
      * Los elementos deben ser igual a 9.
      */
 
-
-
-
-
     private fun entityConvert(it: List<String>): ProductEntity {
         if (it.size == 9) {
             try {
