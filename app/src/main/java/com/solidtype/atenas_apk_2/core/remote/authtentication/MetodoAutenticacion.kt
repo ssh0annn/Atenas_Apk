@@ -13,7 +13,7 @@ interface MetodoAutenticacion {
             success : Boolean,
             razon:String?
             )->Unit)
-
     suspend fun olvideMiPassword(email:String):Boolean
+    suspend fun registrarNewDispositivo(id:String, licencia: String)
 
 }

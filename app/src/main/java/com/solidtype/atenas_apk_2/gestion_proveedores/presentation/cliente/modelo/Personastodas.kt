@@ -5,6 +5,7 @@ sealed class Personastodas {
     data class ClienteUI(
         var id_cliente :Long = 0,
         val nombre: String?,
+        val tipo_documento: String?,
         val documento: String?,
         val telefono: String?,
         val email: String?

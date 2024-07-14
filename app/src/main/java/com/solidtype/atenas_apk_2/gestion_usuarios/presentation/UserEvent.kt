@@ -24,6 +24,9 @@ sealed class UserEvent{
 
    object GetQr:UserEvent()
 
+   object Switch:UserEvent()
+
+   object LimpiarMensaje:UserEvent()
 
 
 }

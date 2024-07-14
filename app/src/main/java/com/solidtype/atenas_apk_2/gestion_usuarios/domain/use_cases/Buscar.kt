@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class Buscar @Inject constructor(private val repo: GestionUserRepository) {
 
-    operator fun invoke(any: String): Flow<List<usuario>> {
-        return repo.buscarUsuario(any).map { data -> data.filter { it.estado } }
+    operator fun invoke(any: String, switch:Boolean): Flow<List<usuario>> {
+        return repo.buscarUsuario(any).map { data -> data.filter { it.estado == switch } }
     }
 }

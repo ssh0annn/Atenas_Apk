@@ -32,6 +32,7 @@ class GetDispositivosTest {
     fun ObtenerTodosLosDispositivosDeLaBaseDedatosBacios(): Unit =
         runBlocking { //Cuando usamos corrutinas
 
+
             //Given
             coEvery {
                 repo.getDispositivos()

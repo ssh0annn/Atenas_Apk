@@ -9,5 +9,7 @@ data class AuthUIStates(
     val razones: String? = null,
     val correoGuardado: String? = "",
     val licenciaGuardada: Boolean = false,
-    val enviado:Boolean = false
+    val enviado:Boolean = false,
+    val dispositivo:Boolean = true
+
 )

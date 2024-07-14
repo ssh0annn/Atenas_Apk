@@ -42,9 +42,29 @@ interface inventarioDao {
 
     @Update
     suspend fun updateInventario(inventario: inventario)
+    @Update
+    suspend fun updateInventario(inventario: List<inventario>)
     @Transaction
     suspend fun deleteInventario(inventario: inventario){
         inventario.estado = false
         updateInventario(inventario)
+    }
+    @Transaction
+    suspend fun deleteInventario(inventario: List<inventario>){
+        val inven:List<inventario> = inventario.map { inventario(
+            id_inventario=it.id_inventario,
+            id_categoria=it.id_categoria,
+            id_proveedor=it.id_proveedor,
+            nombre=it.nombre,
+            marca=it.marca,
+            modelo=it.modelo,
+            cantidad=it.cantidad,
+            precio_compra=it.precio_compra,
+            precio_venta=it.precio_venta,
+            impuesto=it.impuesto,
+            descripcion=it.descripcion,
+            estado=false
+        ) }
+        updateInventario(inven)
     }
 }

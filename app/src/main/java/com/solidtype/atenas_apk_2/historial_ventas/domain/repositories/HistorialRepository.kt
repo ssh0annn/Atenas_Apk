@@ -1,24 +1,28 @@
 package com.solidtype.atenas_apk_2.historial_ventas.domain.repositories
 
 import android.net.Uri
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.TipoVentaTicket
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.TipoVentaVenta
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 interface HistorialRepository {
-    fun mostrarTodasVentas(): Flow<List<venta>>
-    suspend fun exportarVentas(listaProductos: List<venta>): Uri
-    suspend fun exportarHistorialTickets(listaProductos: List<ticket>): Uri
+    fun mostrarTodasVentas(): Flow<List<TipoVentaVenta>>
+    suspend fun exportarVentas(listaProductos: List<TipoVentaVenta>): Uri
+    suspend fun exportarHistorialTickets(listaProductos: List<TipoVentaTicket>): Uri
     fun buscarPorFechasCategoriasVentas(
-        Fecha_inicio: String,
-        fecha_final: String
-    ): Flow<List<venta>>
+        desde: LocalDate,
+        hasta: LocalDate
+    ): Flow<List<TipoVentaVenta>>
 
-    fun mostrarTickets(): Flow<List<ticket>>
+    fun mostrarTickets(): Flow<List<TipoVentaTicket>>
     fun mostrarTicketsPorFecha(
-        fechaIni: String,
-        fechaFinal: String,
-    ): Flow<List<ticket>>
+        desde: LocalDate,
+        hasta: LocalDate,
+    ): Flow<List<TipoVentaTicket>>
 
     suspend fun sync()
 
