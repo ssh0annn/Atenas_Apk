@@ -1,6 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_facturar.domain
 
-interface BluetoothManager {
+interface BluetoothManagers {
 
     fun scannDevices()
     fun isPrinterConnected():Boolean
