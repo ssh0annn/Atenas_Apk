@@ -4,7 +4,6 @@ interface BluetoothManager {
 
     fun scannDevices()
     fun isPrinterConnected():Boolean
-
     fun permisosGranted():Boolean
 
 
