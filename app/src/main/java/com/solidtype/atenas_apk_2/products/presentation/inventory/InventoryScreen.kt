@@ -164,9 +164,16 @@ fun InventoryScreen(
                 Titulo("Inventario", Icons.Outlined.Inventory2)
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
-                    Buscador(busqueda.value) { busqueda.value = it }
-                    SwitchInactivos(uiState.switch){
-                        viewModel.onEvent(InventariosEvent.Switch)
+                    Box(modifier = Modifier.weight(3f)) {
+                        Buscador(busqueda.value) { busqueda.value = it }
+                    }
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        SwitchInactivos(uiState.switch) {
+                            viewModel.onEvent(InventariosEvent.Switch)
+                        }
                     }
                 }
                 AreaProductos(

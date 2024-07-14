@@ -23,7 +23,7 @@ fun SwitchInactivos(
         modifier = Modifier.padding(top = 10.dp)
     ) {
         Text(
-            text = "Mostrar productos inactivos",
+            text = "Inactivos",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = AzulGris,
