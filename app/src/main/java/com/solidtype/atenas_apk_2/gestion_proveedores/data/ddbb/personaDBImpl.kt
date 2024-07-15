@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class personaDBImpl @Inject constructor(
+class
+personaDBImpl @Inject constructor(
     private val personaDB: personaDao
 )  {
 
