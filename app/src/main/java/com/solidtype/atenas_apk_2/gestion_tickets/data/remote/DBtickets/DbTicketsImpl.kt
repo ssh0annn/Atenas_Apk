@@ -1,16 +1,8 @@
 package com.solidtype.atenas_apk_2.gestion_tickets.data.remote.DBtickets
 
-import com.google.gson.Gson
-import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
-import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
-import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransacciones
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.TicketModeloRelation
-import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
-import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
-import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
-import com.solidtype.atenas_apk_2.servicios.modelo.servicio
+
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

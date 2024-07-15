@@ -8,6 +8,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
+import com.solidtype.atenas_apk_2.products.domain.userCases.dataInventarioAsync
 import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class InventarioViewModel @Inject constructor(
     private val casosInventario: CasosInventario,
-    private val casosProveedores: CasosProveedores
+    private val casosProveedores: CasosProveedores,
+    private val dataInventarioAsync: dataInventarioAsync
 ) : ViewModel() {
 
     private var fileSelectionListener2: FileSelectionListener2? = null
@@ -156,14 +158,15 @@ class InventarioViewModel @Inject constructor(
   private  fun mostrarProductos() {
       job?.cancel()
        job= viewModelScope.launch {
-
             casosInventario.getProductos(!switch).collect { product ->
                 uiState.update {
                     it.copy(products = product)
 
                 }
             }
-
+           withContext(Dispatchers.IO) {
+               dataInventarioAsync
+           }
         }
     }
 

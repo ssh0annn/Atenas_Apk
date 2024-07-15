@@ -13,6 +13,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.EliminarRoll
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.UsuarioUseCases
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.use_cases.dataUsuariosAsync
 import com.solidtype.atenas_apk_2.perfil_administrador.data.mediadorAdmin.mediadorAdmin
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.mediatorInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,10 +32,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UsuariosViewmodel @Inject constructor(
     private val casos: UsuarioUseCases, @ApplicationContext private val context: Context,
-    private val mediadoruser : mediadorUsuario,
+    private val dataUsuariosAsync: dataUsuariosAsync,
     private val mediadorInve : mediatorInventario,
-    private val mediadorAdmin: mediadorAdmin,
-    private val mediadorPersona: mediadorPersonaImpl
 ) : ViewModel() {
 
     var uiState: MutableStateFlow<UserStatesUI> = MutableStateFlow(UserStatesUI())
@@ -55,11 +54,7 @@ class UsuariosViewmodel @Inject constructor(
                """
             )
         }
-
         getSyncpersona()
-
-
-
     }
 
 
@@ -175,14 +170,15 @@ class UsuariosViewmodel @Inject constructor(
         userJob?.cancel()
         userJob = casos.mostrarUsuarios(!switch).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
-
+            withContext(Dispatchers.IO){
+                dataUsuariosAsync
+            }
         }.launchIn(viewModelScope)
     }
 
      fun getSyncpersona() {
          println("entre a la 1ra funcion")
         viewModelScope.launch {
-            mediadorAdmin.syncDataAdmin()
             mediadorInve.syncInventario()
         }
     }

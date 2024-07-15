@@ -140,12 +140,21 @@ interface DaoTransacciones {
     suspend fun addRollUsuario(roll: roll_usuarios)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addRollUsuario(roll: usuario)
+    suspend fun addUsuario(roll: usuario)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addUsuarios(usuarios: List<usuario>)
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addRollUsuarios(roll: List<roll_usuarios>)
+
+
 
     @Transaction
     suspend fun crearUsuario(usuariosRelation: UsuariosRelation){
         addRollUsuario(usuariosRelation.roll_usuario)
-        addRollUsuario(usuariosRelation.usuarios)
+        addUsuario(usuariosRelation.usuarios)
     }
 
     @Transaction

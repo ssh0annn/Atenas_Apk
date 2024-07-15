@@ -18,11 +18,9 @@ class AtenasAplication : Application (){
     }
 
     private fun setupPeriodicSync() {
-        println("entre a la funcion setupPeridodicSync")
-
-        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(10, TimeUnit.SECONDS).build()
+        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.SECONDS).build()
         WorkManager.getInstance(this).enqueue(syncRequest)
-
+        println("entre a la funcion setupPeridodicSync")
     }
 }
 

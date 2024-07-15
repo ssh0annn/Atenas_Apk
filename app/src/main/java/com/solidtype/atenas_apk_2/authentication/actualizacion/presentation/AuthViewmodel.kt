@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.DatosAdmin
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewmodel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val casosAuth: AuthCasos
+    private val casosAuth: AuthCasos,
+    private val datosAdmin: DatosAdmin
 ) : ViewModel() {
 
     var uiStates: MutableStateFlow<AuthUIStates> = MutableStateFlow(AuthUIStates())
@@ -202,15 +204,19 @@ class AuthViewmodel @Inject constructor(
             }
 
             else -> {
-                uiStates.update {
-                    it.copy(
-                        isAutenticated = Usuario(
-                            correo = checkListAuth.emailUsuario,
-                            tipoUser = checkListAuth.tipoUser
-                        ),
-                        razones = "Bienvenido usuario: ${checkListAuth.emailUsuario}."
-                    )
+                viewModelScope.launch {
+                      datosAdmin()
+                    uiStates.update {
+                        it.copy(
+                            isAutenticated = Usuario(
+                                correo = checkListAuth.emailUsuario,
+                                tipoUser = checkListAuth.tipoUser
+                            ),
+                            razones = "Bienvenido usuario: ${checkListAuth.emailUsuario}."
+                        )
+                    }
                 }
+
                 true
             }
         }

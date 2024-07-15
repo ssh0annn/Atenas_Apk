@@ -32,10 +32,9 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
+//import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.Carrito
-
 
 @Composable
 fun AreaProductos(
@@ -134,7 +133,6 @@ fun AreaProductos(
                             modifier = Modifier
                                 .padding(start = 20.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
                                 .clip(RoundedCornerShape(10.dp))
-
                                 .background(GrisClaro),
                             verticalAlignment = Alignment.CenterVertically
                         ) {

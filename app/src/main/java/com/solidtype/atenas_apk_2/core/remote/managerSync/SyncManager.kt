@@ -19,6 +19,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.data.remote.mediadorUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.perfil_administrador.data.mediadorAdmin.mediadorAdmin
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
+import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.mediator.mediatorInventario
 import com.solidtype.atenas_apk_2.util.toDataListToMapList
 import com.solidtype.atenas_apk_2.util.toTimestamp
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -48,7 +49,6 @@ class SyncWorker @Inject constructor (
     override suspend fun doWork(): Result {
         return try {
             println("Entro a la funcion doWork")
-
             Result.success()
         } catch (e: Exception) {
             Result.retry()

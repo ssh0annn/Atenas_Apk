@@ -7,8 +7,11 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.util.toDataClassToMap
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -44,12 +47,56 @@ class QueryDBLocalInventarioImpl @Inject constructor(
         }
     }
 
-    suspend fun insertInventoryRelations( inventarios: List<InventarioModeloRelation> ){
-        println("datos inventarios en la funcio de inserccion -> $inventarios")
-        if (inventarios.isNotEmpty()){
-                inventarios.forEach {
-                    Dao.crearInventario(it)
+//    suspend fun insertInventoryRelations( inventarios: List<InventarioModeloRelation> ){
+//        println("datos inventarios en la funcio de inserccion -> $inventarios")
+//        if (inventarios.isNotEmpty()){
+//
+//                val listaCategorias = inventarios.map { it.categoria }
+//                val listaPersonas = inventarios.map { it.provedor }
+//               val listInventario = inventarios.map { it.inventario }
+//                Dao.addCategorias(listaCategorias)
+//                Dao.addPersonas(listaPersonas)
+//                Dao.addInventarios(listInventario)
+//
+//        }
+//    }
+
+    suspend fun insertInventoryRelations(inventarios: List<InventarioModeloRelation>) {
+        println("Datos de inventarios en la función de inserción -> $inventarios")
+
+        if (inventarios.isNotEmpty()) {
+            val listaCategorias = inventarios.map { it.categoria }
+            val listaPersonas = inventarios.map { it.provedor }
+            val listInventario = inventarios.map { it.inventario }
+
+            val supervisorJob = SupervisorJob()
+
+            // Utilizamos el contexto del supervisorJob
+            withContext(supervisorJob) {
+                // Lanzamos un sub-job para agregar categorías
+                val jobCategorias = launch(Dispatchers.Default) {
+                    Dao.addCategorias(listaCategorias)
                 }
+
+                // Esperamos a que termine el sub-job de categorías
+                jobCategorias.join()
+
+                // Lanzamos un sub-job para agregar personas
+                val jobPersonas = launch(Dispatchers.Default) {
+                    Dao.addPersonas(listaPersonas)
+                }
+
+                // Esperamos a que termine el sub-job de personas
+                jobPersonas.join()
+
+                // Lanzamos un sub-job para agregar inventarios
+                val jobInventarios = launch(Dispatchers.Default) {
+                    Dao.addInventarios(listInventario)
+                }
+
+                // Esperamos a que termine el sub-job de inventarios
+                jobInventarios.join()
+            }
         }
     }
 
@@ -87,9 +134,9 @@ class QueryDBLocalInventarioImpl @Inject constructor(
                                 id_inventario = inventario["id_inventario"] as? Long ?: 0L,
                                 id_categoria = inventario["id_categoria"] as? Long ?: 0L,
                                 id_proveedor = inventario["id_proveedor"] as? Long ?: 0L,
-                                nombre = inventario["nombre"] as? String?,
-                                marca = inventario["marca"] as? String?,
-                                modelo = inventario["modelo"] as? String?,
+                                nombre = inventario["nombre"] as String,
+                                marca = inventario["marca"] as String,
+                                modelo = inventario["modelo"] as String,
                                 cantidad = pendejo.toInt(),
                                 precio_compra = inventario["precio_compra"] as Double,
                                 precio_venta = inventario["precio_venta"] as Double,

@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.core.remote.dataCloud
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.google.firebase.Firebase
@@ -10,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObjects
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
@@ -17,7 +19,10 @@ import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.Inventa
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.UsuariosRelation
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.solidtype.atenas_apk_2.util.toFirestoreTimestamp
+import com.solidtype.atenas_apk_2.util.toLocalDate2
+import com.solidtype.atenas_apk_2.util.toLocalDate3
+
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -30,6 +35,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import javax.inject.Inject
@@ -593,15 +600,66 @@ class DataCloudImpl @Inject constructor(
         if (encontrada?.get("idDevice") == dispositivo) {
             checker.deviceRegistrado = true
         }
+
+        val fechaFinal = convertAnyToTimestamp(encontrada?.get("fechaFinal")!!)
+        val fechaFinalFormatted = convertTimestampToLocalDate(fechaFinal!!)
+        println("fecha final dataCLoud $fechaFinalFormatted")
+        println("fecha actual ${LocalDate.now()}")
         if (encontrada?.get("estadoLicencia") == true) {
-            checker.licensiaActiva = true
+            if (fechaFinalFormatted >= LocalDate.now()) {
+                encontrada.reference.update("estadoLicencia", false)
+                checker.licensiaActiva = false
+            } else {
+                checker.licensiaActiva = true
+            }
         }
+
         checker.tipoUser = tipoUsurio(encontrada?.get("direcionDB").toString(), email)
         checker.emailUsuario = email
         checker.autenticado = true
         println("Asi esta el checker $checker")
         return checker
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun convertAnyToTimestamp(value: Any): Timestamp? {
+        return when (value) {
+            is Timestamp -> value
+            is Date -> Timestamp(value)
+            is Long -> Timestamp(Date(value))
+            else -> null
+        }
+    }
+
+    fun LocalDateNowToTimestampWithNanoseconds(): Timestamp {
+        // Obtener la fecha actual
+        val localDate = LocalDate.now()
+
+        // Convertir LocalDate a LocalDateTime al inicio del día
+        val localDateTime = localDate.atStartOfDay()
+
+        // Convertir LocalDateTime a Instant en la zona horaria del sistema
+        val instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant()
+
+        // Obtener los segundos y nanosegundos desde la época (1970-01-01T00:00:00Z)
+        val seconds = instant.epochSecond
+        val nanoseconds = instant.nano
+
+        // Crear y devolver un Timestamp con los segundos y nanosegundos
+        return Timestamp(seconds, nanoseconds)
+    }
+
+    private val TIME_ZONE = ZoneId.systemDefault()
+
+    fun convertTimestampToLocalDate(timestamp: Timestamp): LocalDate {
+        // Convertir Timestamp a Date
+        val date = timestamp.toDate()
+
+        // Convertir Date a LocalDate usando la zona horaria del sistema
+        return date.toInstant().atZone(TIME_ZONE).toLocalDate()
+    }
+
+
 
 
     private suspend fun tipoUsurio(direcionDb: String, email: String): TipoUser {
@@ -900,6 +958,8 @@ class DataCloudImpl @Inject constructor(
             println("No se pudo cambiar el dispositivo")
         }
     }
+
+
 
 }
 

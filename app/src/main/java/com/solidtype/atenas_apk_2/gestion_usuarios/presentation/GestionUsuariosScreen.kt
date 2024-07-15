@@ -41,9 +41,10 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Dialo
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoRol
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoUsuario
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 
 @Composable

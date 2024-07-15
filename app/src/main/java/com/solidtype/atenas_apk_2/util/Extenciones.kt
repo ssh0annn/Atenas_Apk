@@ -236,3 +236,5 @@ fun String.desencriptar(key: String): String {
     return String(original, Charsets.UTF_8)
 }
 
+
+

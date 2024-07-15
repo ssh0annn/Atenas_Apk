@@ -4,8 +4,10 @@ import com.solidtype.atenas_apk_2.core.transacciones.daotransacciones.DaoTransac
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.UsuariosRelation
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -61,13 +63,41 @@ class dbLocalUsuarioImpl @Inject constructor(
          }
     }
 
+//    suspend fun insertAllUsuarios(usuarios: List<UsuariosRelation>){
+//        if (usuarios.isNotEmpty()){
+//            withContext(Dispatchers.Default){
+//                usuarios.forEach {
+//                    dao.crearUsuario(it)
+//                }
+//            }
+//        }
+//    }
+
+
     suspend fun insertAllUsuarios(usuarios: List<UsuariosRelation>){
         if (usuarios.isNotEmpty()){
-            withContext(Dispatchers.Default){
-                usuarios.forEach {
-                    dao.crearUsuario(it)
-                }
+            val listaRoles= usuarios.map {
+                it.roll_usuario
             }
+            val listaUsuarios = usuarios.map {
+                it.usuarios
+            }
+
+            val supervisorJob = SupervisorJob()
+            withContext(supervisorJob){
+                val jobRollUsuarios = launch(Dispatchers.Default){
+                    dao.addRollUsuarios(listaRoles)
+                }
+
+                jobRollUsuarios.join()
+
+                val jobUsuarios = launch(Dispatchers.Default){
+                    dao.addUsuarios(listaUsuarios)
+                }
+
+                jobUsuarios.join()
+            }
+
         }
     }
 }
