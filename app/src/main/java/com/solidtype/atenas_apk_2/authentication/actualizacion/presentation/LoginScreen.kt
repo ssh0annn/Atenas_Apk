@@ -4,6 +4,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,7 +53,8 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoDipositivo
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.components.DialogoDipositivo
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.components.DialogoForget
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
@@ -77,6 +79,8 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
 
     val checked = rememberSaveable { mutableStateOf(!uiState.correoGuardado.isNullOrEmpty()) }
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
+
+    val mostrarForget = rememberSaveable { mutableStateOf(false) }
 
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
     else painterResource(id = R.drawable.ic_visibility_true)
@@ -293,10 +297,14 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "¿No tienes cuenta?",
+                text = "¿Olvidó la contraseña?",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = AzulGris
+                color = AzulGris,
+                modifier = Modifier
+                    .clickable {
+                        mostrarForget.value = true
+                    }
             )
         }
         if (uiState.isLoading) Loading()
@@ -305,5 +313,14 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
         mostrar = !uiState.dispositivo,
         aceptar = { viewModel.onEvent(AuthEvent.RegistrarNuevoDevice) },
         cancelar = { viewModel.onEvent(AuthEvent.CancelarRegistro) }
+    )
+    DialogoForget(
+        mostrar = mostrarForget,
+        email = email,
+        aceptar = {
+            viewModel.onEvent(AuthEvent.ForgetPassword(email.value))
+            mostrarForget.value = false
+        },
+        cancelar = { mostrarForget.value = false }
     )
 }
