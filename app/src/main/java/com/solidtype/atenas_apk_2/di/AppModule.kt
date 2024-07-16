@@ -64,8 +64,8 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
-import com.solidtype.atenas_apk_2.gestion_facturar.data.CasoBlueTooth
-import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.casos_usos.bluetooth.data.AndroidBluetoothController
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.casos_usos.bluetooth.domain.BluetoothController
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.repositoryimpl.ClienteProveedorRepoImpl
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.EliminarPersona
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
@@ -493,8 +493,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBluetoothManager(context:Context): BluetoothManager = CasoBlueTooth(context)
-
+    fun provideBluetoothController(@ApplicationContext context: Context): BluetoothController {
+        return AndroidBluetoothController(context)
+    }
 
 
 

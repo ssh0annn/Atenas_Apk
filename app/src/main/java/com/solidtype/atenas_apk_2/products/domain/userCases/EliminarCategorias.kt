@@ -6,5 +6,7 @@ import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import javax.inject.Inject
 
 class EliminarCategorias  @Inject constructor(private val repo: InventarioRepo) {
-    suspend operator fun invoke(catego: categoria)=repo.eliminarCategoria(catego)
+    suspend operator fun invoke(catego: categoria){
+        repo.eliminarCategoria(catego)
+    }
 }

@@ -138,14 +138,22 @@ class AuthViewmodel @Inject constructor(
 
     private fun forgetPassword(email: String) {
         viewModelScope.launch {
-            if (casosAuth.forgotPassword(email)) {
-                uiStates.update {
-                    it.copy(enviado = true)
+            casosAuth.forgotPassword(email){success, cancel, execption ->
+                println("""
+                    success :$success, 
+                    cancel:$cancel, 
+                    execption: $execption
+                """.trimIndent())
+                if(success){
+                    uiStates.update {
+                        it.copy(enviado = true, razones = "Correo enviado!")
+                        }
+                } else {
+                    uiStates.update {
+                        it.copy(enviado = cancel, razones = execption)
+                    }
                 }
-            } else {
-                uiStates.update {
-                    it.copy(enviado = false, razones = "Correo no valido")
-                }
+
             }
         }
     }
