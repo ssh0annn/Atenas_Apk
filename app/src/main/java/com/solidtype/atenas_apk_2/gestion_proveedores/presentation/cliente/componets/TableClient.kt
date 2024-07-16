@@ -40,7 +40,7 @@ fun TableClients(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Pantalla.ancho - 800.dp)
+            .height(Pantalla.alto - 250.dp)
             .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
