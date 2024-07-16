@@ -104,6 +104,7 @@ fun ProveedorScreen(
             //All
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .background(GrisClaro),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
