@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets
 
 import android.content.Context
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -110,7 +111,15 @@ fun DialogoProveedor(
                     }
                 }
                 Row {
-                    BotonBlanco("Guardar") {
+                    BotonBlanco(
+                        text = "Guardar",
+                        habilitar = nombreProveedor.value != "" &&
+                                tipoDocumentoProveedor.value != "" &&
+                                documentoProveedor.value != "" &&
+                                direccionProveedor.value != "" &&
+                                telefonoProveedor.value != "" &&
+                                Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
+                        ) {
                         try {
                             if (nombreProveedor.value.isEmpty() || tipoDocumentoProveedor.value.isEmpty() || documentoProveedor.value.isEmpty() || direccionProveedor.value.isEmpty() || telefonoProveedor.value.isEmpty() || emailProveedor.value.isEmpty()) {
                                 throw Exception("Campos vacios.")

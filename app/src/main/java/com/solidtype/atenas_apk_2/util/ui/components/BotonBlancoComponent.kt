@@ -10,21 +10,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
+import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 
 @Composable
 fun BotonBlanco(
     text: String,
     modifier: Modifier = Modifier,
     size: Int = -1,
+    habilitar: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
+        enabled = habilitar,
         elevation =  ButtonDefaults.buttonElevation(
             defaultElevation = 5.dp
         ),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Blanco, contentColor = AzulGris
+            containerColor = Blanco, contentColor = AzulGris,
+            disabledContainerColor = BlancoOpaco, disabledContentColor = GrisOscuro
         ),
         modifier = modifier
     ) {
