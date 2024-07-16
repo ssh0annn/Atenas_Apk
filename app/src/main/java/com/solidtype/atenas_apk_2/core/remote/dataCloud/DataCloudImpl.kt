@@ -19,9 +19,7 @@ import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.Inventa
 import com.solidtype.atenas_apk_2.core.transacciones.modeloTransacciones.UsuariosRelation
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
-import com.solidtype.atenas_apk_2.util.toFirestoreTimestamp
-import com.solidtype.atenas_apk_2.util.toLocalDate2
-import com.solidtype.atenas_apk_2.util.toLocalDate3
+
 
 
 import kotlinx.coroutines.Dispatchers
@@ -605,6 +603,8 @@ class DataCloudImpl @Inject constructor(
         val fechaFinalFormatted = convertTimestampToLocalDate(fechaFinal!!)
         println("fecha final dataCLoud $fechaFinalFormatted")
         println("fecha actual ${LocalDate.now()}")
+
+
         if (encontrada?.get("estadoLicencia") == true) {
             if (fechaFinalFormatted >= LocalDate.now()) {
                 encontrada.reference.update("estadoLicencia", false)
