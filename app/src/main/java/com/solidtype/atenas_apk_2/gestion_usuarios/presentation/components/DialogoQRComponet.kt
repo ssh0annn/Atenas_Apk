@@ -24,7 +24,7 @@ fun DialogoQR(
         Box(
             contentAlignment = Alignment.Center,
         ) {
-            val qr: Bitmap = QRCode.from(qrStr).withSize(700, 700).bitmap()
+            val qr: Bitmap = QRCode.from(qrStr).withSize(500, 500).bitmap()
             Image(
                 bitmap = qr.asImageBitmap(),
                 contentDescription = "QR"
