@@ -154,7 +154,7 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.Productos.route)
                             }
-                            Boton(
+                            /*Boton(
                                 "Historial",
                                 anchoTotal = true,
                                 habilitar = navController.currentDestination?.route != Screens.HistorialVentasTickets.route
@@ -177,7 +177,7 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             ) {
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionUsuarios.route)
-                            }
+                            }*/
                             Boton(
                                 "Gestion de Clientes",
                                 anchoTotal = true,
@@ -186,14 +186,14 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionCliente.route)
                             }
-                            Boton(
+                            /*Boton(
                                 "Gestion de Proveedores",
                                 anchoTotal = true,
                                 habilitar = navController.currentDestination?.route != Screens.GestionProveedores.route
                             ) {
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.GestionProveedores.route)
-                            }
+                            }*/
                         }
                     }
                     Row(
