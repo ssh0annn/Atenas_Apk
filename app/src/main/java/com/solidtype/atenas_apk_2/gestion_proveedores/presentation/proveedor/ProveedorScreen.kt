@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor
 
 import android.annotation.SuppressLint
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -231,9 +232,16 @@ fun ProveedorScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 val camposCompletos =
-                    nombre.value.isNotEmpty() && numDocumento.value.isNotEmpty() && email.value.isNotEmpty() && telefono.value.isNotEmpty() && direccion.value.isNotEmpty()
+                        nombre.value.isNotEmpty() &&
+                        numDocumento.value.isNotEmpty() &&
+                        Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
+                        telefono.value.isNotEmpty() &&
+                        direccion.value.isNotEmpty()
                 if (editar.value)
-                    Boton("Editar") {
+                    Boton(
+                        "Editar",
+                        camposCompletos
+                    ) {
                         try {
                             if (!camposCompletos) {
                                 throw Exception("Campos vacios.")
@@ -262,7 +270,7 @@ fun ProveedorScreen(
                         }
                     }
                 else
-                    Boton("Agregar", habilitar = camposCompletos) {
+                    Boton("Agregar", camposCompletos) {
                         try {
                             if (!camposCompletos) {
                                 throw Exception("Campos vacios.")

@@ -80,7 +80,20 @@ fun DialogoProducto(
                 mostrarProveedor
             )
             Row {
-                Boton("Guardar") {
+                Boton(
+                    "Guardar",
+                    idInventario.value != "" &&
+                            idCategoriaText.value != "" &&
+                            idProveedorText.value != "" &&
+                            nombre.value != "" &&
+                            marca.value != "" &&
+                            modelo.value != "" &&
+                            cantidad.value != "" &&
+                            costo.value != "" &&
+                            precio.value != "" &&
+                            impuesto.value != "" &&
+                            descripcion.value != ""
+                ) {
                     try {
                         viewModel.onEvent(
                             InventariosEvent.AgregarProductos(

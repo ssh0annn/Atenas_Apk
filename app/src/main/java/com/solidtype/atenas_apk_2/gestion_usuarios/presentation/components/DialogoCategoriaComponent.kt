@@ -91,7 +91,10 @@ fun DialogoCategoria(
                     }
                 }
                 Row {
-                    BotonBlanco("Guardar") {
+                    BotonBlanco(
+                        text = "Guardar",
+                        habilitar = idCategoria.value != "" && nombreCategoria.value != "" && descripcionCategoria.value != "" && estadoCategoria.value != "",
+                    ) {
                         try {
                             if (idCategoria.value.isEmpty() || nombreCategoria.value.isEmpty() || descripcionCategoria.value.isEmpty() || estadoCategoria.value.isEmpty()) {
                                 throw Exception("Campos vacios.")
