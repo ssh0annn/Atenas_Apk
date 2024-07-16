@@ -95,8 +95,11 @@ class MetodoAutenticacionImpl @Inject constructor(
 
     override suspend fun olvideMiPassword(email: String): Boolean {
         var success = false
-        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
-            success = it.isSuccessful
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener{
+          println("Success : ${it.isSuccessful}")
+           println("Canceled: ${it.isCanceled}")
+           println("Excepcion: ${ it.exception?.message}")
+
         }
         return success
     }
