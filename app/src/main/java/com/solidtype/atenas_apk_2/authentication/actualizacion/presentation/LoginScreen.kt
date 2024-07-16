@@ -51,12 +51,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoDipositivo
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
 import com.solidtype.atenas_apk_2.ui.theme.Transparente
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
 
 object TipoUserSingleton {
     var tipoUser: TipoUser? = null
@@ -300,4 +301,9 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
         }
         if (uiState.isLoading) Loading()
     }
+    DialogoDipositivo(
+        mostrar = !uiState.dispositivo,
+        aceptar = { viewModel.onEvent(AuthEvent.RegistrarNuevoDevice) },
+        cancelar = { viewModel.onEvent(AuthEvent.CancelarRegistro) }
+    )
 }
