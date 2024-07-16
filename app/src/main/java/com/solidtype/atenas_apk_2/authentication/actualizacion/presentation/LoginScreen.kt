@@ -308,6 +308,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
             )
         }
         if (uiState.isLoading) Loading()
+        Spacer(modifier = Modifier.height(16.dp))
     }
     DialogoDipositivo(
         mostrar = !uiState.dispositivo,
