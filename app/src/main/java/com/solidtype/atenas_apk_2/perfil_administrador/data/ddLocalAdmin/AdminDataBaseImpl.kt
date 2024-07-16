@@ -33,7 +33,7 @@ class AdminDataBaseImpl @Inject constructor(
        }
 
     private fun entityConvert(it: List<String>): administrador {
-        if (it.size == 12) {
+        if (it.isNotEmpty()) {
             try {
 
                 return administrador(
