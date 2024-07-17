@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -64,7 +63,6 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     val btnpasscancel = dialog.findViewById<ImageView>(R.id.dialog_volver)
                     val dclave = dialog.findViewById<EditText>(R.id.dialog_password)
                     val dnewclave = dialog.findViewById<EditText>(R.id.dialog_new_password)
-                    val dconfirnewclave = dialog.findViewById<EditText>(R.id.dialog_confir_password)
 
                     //VARIABLE INICIADAS DE PERFILADMIN
                     val btng = view.findViewById<Button>(R.id.perfil_config_btnguardar)
@@ -79,7 +77,6 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     val estado : EditText = view.findViewById(R.id.txt_perfil_estado_licencia_admin)
                     val fechacaduca  : EditText = view.findViewById(R.id.txt_perfil_fecha_caduca_admin)
                     val fechacompra : EditText = view.findViewById(R.id.txt_perfil_fecha_compra_admin)
-
                     if(!uiState.mensaje.isNullOrEmpty()){
                         Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
                         viewModel.onEvent(PerfilEvent.CleanMensaje)
@@ -103,7 +100,6 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         fechacaduca.text = uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable() ?: "".toEditable()
                         fechacompra.text = uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable() ?: "".toEditable()
                     }
-
 
                     //ACCION DE LOS BOTONES TANTO DIALOGO COMO
                     btng.setOnClickListener {
@@ -159,7 +155,6 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
             ){
                 Titulo(text = "No hay datos de Administrador")
             }
-
         }
         MenuLateral(navController)
     }
