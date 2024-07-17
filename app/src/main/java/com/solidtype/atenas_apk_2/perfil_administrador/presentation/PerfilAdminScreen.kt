@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.perfil_administrador.presentation
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.text.Editable
 import android.widget.Button
@@ -31,6 +32,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
+@SuppressLint("SetTextI18n")
 @Composable
 fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -134,44 +136,30 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         dialog.dismiss()
                     }
                     btnpassc.setOnClickListener {
-                        if (dclave.text.toString() != "" && dclave.text.toString() == claveadmin.text.toString()) {
-                            if (dnewclave.text.toString() != "" && dconfirnewclave.text.toString() != "") {
-                                if (dnewclave.text.toString() == dconfirnewclave.text.toString() && dnewclave.text.toString() != dclave.text.toString()) {
-                                    //CAMBIAR CONTRASEÑA DE USUARIO
-                                    //Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
-                                    println("""
-                                        Lo que max no podia hacer : 
-                                       correo:${correoadmin.text.toString()}
-                                       claveD:${dclave.text.toString()}
-                                       claveDnew:${dnewclave.text.toString()}
-                                    """.trimIndent())
-                                    viewModel.onEvent(
-                                        PerfilEvent.ChangePassword(
-                                            correoadmin.text.toString(),
-                                            dclave.text.toString(),
-                                            dnewclave.text.toString()
-                                        )
-                                    )
-                                    dialog.dismiss()
-
-                                }else{
-                                    Toast.makeText(context,"Contraseña nueva no son iguales",Toast.LENGTH_SHORT).show()
-                                }
-                            }else{
-                                Toast.makeText(context,"Contraseña nueva vacia",Toast.LENGTH_SHORT).show()
-                            }
+                        //CAMBIAR CONTRASEÑA DE USUARIO
+                        if (dclave.text.length >= 8 && dnewclave.text.length >= 8) {
+                            viewModel.onEvent(
+                                PerfilEvent.ChangePassword(
+                                    correoadmin.text.toString(),
+                                    dclave.text.toString(),
+                                    dnewclave.text.toString()
+                                )
+                            )
+                            dialog.dismiss()
                         }else{
-                            Toast.makeText(context,"Contraseña anterior incorrecta",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context,"La tienes muy corta",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             )
-        } else
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ){
-            Titulo(text = "No hay datos de Administrador")
+        } else{
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                Titulo(text = "No hay datos de Administrador")
+            }
+
         }
         MenuLateral(navController)
     }
