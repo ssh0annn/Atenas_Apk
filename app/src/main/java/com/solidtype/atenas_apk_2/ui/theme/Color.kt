@@ -23,3 +23,11 @@ val GrisClaro = Color(0xFFD7D7D9)
 val semiTransparente = Color(0x88000000)
 val VerdePalido = Color(0xFF77FF77)
 val RojoPalido = Color(0xFFFF7777)
+
+//Maxwell's colors
+val BotonEliminar = Color(0xff990000)
+val Boton = Color(0xff141E26)
+val Fondo = Color(0xffD7D7D9)
+val Paneles = Color(0xffA3A1A6)
+val SubPaneles = Color(0xff727A8C)
+val SubFondo = Color(0xff343341)
