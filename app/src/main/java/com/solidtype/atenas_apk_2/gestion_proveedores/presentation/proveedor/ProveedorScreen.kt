@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -198,6 +199,7 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Numero de documento",
                         valor = numDocumento.value,
+                        tipo = KeyboardType.Number
                     ) {
                         numDocumento.value = it
                     }
@@ -205,6 +207,7 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Email",
                         valor = email.value,
+                        tipo = KeyboardType.Email
                     ) {
                         email.value = it
                     }
@@ -212,6 +215,7 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Telefono",
                         valor = telefono.value,
+                        tipo = KeyboardType.Phone
                     ) {
                         telefono.value = it
                     }
@@ -234,9 +238,10 @@ fun ProveedorScreen(
             ) {
                 val camposCompletos =
                         nombre.value.isNotEmpty() &&
-                        numDocumento.value.isNotEmpty() &&
+                        tipoDocumento.value.isNotEmpty() &&
+                        numDocumento.value.matches("[0-9]+".toRegex()) &&
                         Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
-                        telefono.value.isNotEmpty() &&
+                        telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
                         direccion.value.isNotEmpty()
                 if (editar.value)
                     Boton(

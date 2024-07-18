@@ -114,12 +114,13 @@ fun DialogoProveedor(
                 Row {
                     BotonBlanco(
                         text = "Guardar",
-                        habilitar = nombreProveedor.value != "" &&
-                                tipoDocumentoProveedor.value != "" &&
-                                documentoProveedor.value.matches("\\d+".toRegex()) &&
-                                direccionProveedor.value != "" &&
-                                telefonoProveedor.value.matches("8\\d9\\d{7}".toRegex()) &&
-                                Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
+                        habilitar =
+                            nombreProveedor.value != "" &&
+                            tipoDocumentoProveedor.value != "" &&
+                            documentoProveedor.value.matches("\\d+".toRegex()) &&
+                            direccionProveedor.value != "" &&
+                            telefonoProveedor.value.matches("8\\d9\\d{7}".toRegex()) &&
+                            Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
                         ) {
                         try {
                             if (nombreProveedor.value.isEmpty() || tipoDocumentoProveedor.value.isEmpty() || documentoProveedor.value.isEmpty() || direccionProveedor.value.isEmpty() || telefonoProveedor.value.isEmpty() || emailProveedor.value.isEmpty()) {
