@@ -172,7 +172,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
 
                 }
             },
-            false,onClickAgregar = {nuevoCliente= !nuevoCliente}
+            false,onClickAgregar = {nuevoCliente = !nuevoCliente}
         ) {
             selecion ->
             val cliente = state.listaClientes.find { it?.nombre == selecion }
@@ -194,7 +194,7 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
 
         SelectorMio("Servicio", search, state.listaServicios.let {
             it.map { dato -> dato.nombre }
-        }, false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
+        }, true, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
             selecion ->
             val service = state.listaServicios.find { it.nombre == selecion }
             service?.let { viewModel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
@@ -332,19 +332,14 @@ fun SelectorMio(
                     Spacer(modifier = Modifier.padding(top=55.dp))
                     // Este es el Box que queremos que esté fijo en la parte inferior
 
-
-
-
+                    if (onClickAgregar != null) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .border(width = 1.dp, color = PurpleGrey80)
                                     .padding(bottom = 10.dp, top = 10.dp)
                                     .clickable(onClick = {
-                                            if (onClickAgregar != null) {
-                                                onClickAgregar()
-                                            }
-
+                                        onClickAgregar()
                                         expanded.value = false
                                         keyboardController?.hide()
                                     })
@@ -368,6 +363,8 @@ fun SelectorMio(
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                 }
+
+                            }
                         }
                     }
 

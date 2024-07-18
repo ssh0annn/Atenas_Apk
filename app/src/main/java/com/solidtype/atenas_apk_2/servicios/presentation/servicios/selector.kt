@@ -29,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,9 +61,9 @@ import com.solidtype.atenas_apk_2.ui.theme.Rojo
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
 fun selector(
+    openDialog: MutableState<Boolean>,
     viewmodel: ServiciosViewModel = hiltViewModel(), listaSericios: List<servicio>,
     listaCliente: List<Personastodas.ClienteUI?>, listaDispositivos: List<Dispositivo?>
-
 ) {
     val palomo = LocalContext.current
 
@@ -76,7 +77,7 @@ fun selector(
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     val listacliente = state.listaClientes
     //modal
-    val openDialog = remember { mutableStateOf(false) }
+//    val openDialog = remember { mutableStateOf(false) }
     val open = remember { mutableStateOf(false) }
     val mostrar = remember { mutableStateOf(false) }
     val altura = remember { mutableStateOf(400.dp) }
@@ -106,7 +107,7 @@ fun selector(
     var agra_modelo by rememberSaveable { mutableStateOf("") }
     var nom_comercial by rememberSaveable { mutableStateOf("") }
 
-
+    val context = LocalContext.current
 
     //modal cliente existente
     if (nuevoServicios){
@@ -236,9 +237,6 @@ fun selector(
                                                             textAlign = TextAlign.Center
 
                                                         )
-
-
-
                                                         Box(
                                                             modifier = Modifier
                                                                 .weight(0.5f)
@@ -409,7 +407,7 @@ fun selector(
                                             SelectorMio("Seleccinar Servicio", search, state.listaServicios.let {
                                                 it.map { dato -> dato.nombre
                                                 }
-                                            },true, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
+                                            },false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
                                                     selecion ->
                                                 val service = state.listaServicios.find { it.nombre == selecion }
                                                 service?.let {
@@ -724,7 +722,7 @@ fun selector(
 
                             onClick = {
                                     if(precio == "0.0" || dia == "0" || descrp.isEmpty()){
-
+                                        Toast.makeText(context, "Campos Vacios", Toast.LENGTH_SHORT).show()
                                     }else{
                                         viewmodel.onPayment(
                                             PagosEvent.DatosDelPago(
@@ -1084,22 +1082,51 @@ fun selector(
     }
 
 
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding()
+//    ) {
+//
+//
+//        Icon(imageVector = Icons.Filled.AddCircle,
+//            contentDescription = "",
+//            tint = AzulGris,
+//            modifier = Modifier
+//                .padding(top = 0.dp)
+//                .size(60.dp)
+//                //abrir modal
+//                .clickable {
+//                    openDialog.value = true
+//                })
+//    }
+    
+
+}
+
+@Composable
+fun Bot (openDialog: MutableState<Boolean>){
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 1100.dp, top = 400.dp)
+            .padding()
     ) {
-
-
         Icon(imageVector = Icons.Filled.AddCircle,
             contentDescription = "",
             tint = AzulGris,
             modifier = Modifier
                 .padding(top = 0.dp)
                 .size(60.dp)
-                //abrir modal
                 .clickable {
                     openDialog.value = true
-                })
+                }
+        )
     }
 }
+
+
+
+
+
+
