@@ -61,7 +61,11 @@ class AuthRepositoryImpl @Inject constructor(private val autenticacion: MetodoAu
 
     }
 
-    override suspend fun olvideMiPassword(email: String): Boolean {
-        return autenticacion.olvideMiPassword(email)
+    override suspend fun olvideMiPassword(email: String, respuesta:(Boolean, Boolean, String?)-> Unit): Boolean {
+        return autenticacion.olvideMiPassword(email, respuesta)
+    }
+
+    override suspend fun nuevoDevice(id: String, licencia: String) {
+           autenticacion.registrarNewDispositivo(id, licencia)
     }
 }

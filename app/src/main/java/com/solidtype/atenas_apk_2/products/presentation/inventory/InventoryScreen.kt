@@ -80,9 +80,6 @@ fun InventoryScreen(
     val mostrarConfirmarProducto = rememberSaveable { mutableStateOf(false) }
     val editar = rememberSaveable { mutableStateOf(false) }
 
-    val idCategoriaText = rememberSaveable { mutableStateOf("") }
-    val idProveedorText = rememberSaveable { mutableStateOf("") }
-
     val idInventario = rememberSaveable { mutableStateOf("") }
     val categoria = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
@@ -93,7 +90,7 @@ fun InventoryScreen(
     val marca = rememberSaveable { mutableStateOf("") }
     val cantidad = rememberSaveable { mutableStateOf("") }
     val impuesto = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("") }
+    //val estado = rememberSaveable { mutableStateOf("Activo") }
     val provider = rememberSaveable { mutableStateOf("") }
 
     val mostrarCategoria = rememberSaveable { mutableStateOf(false) }
@@ -101,7 +98,7 @@ fun InventoryScreen(
     val idCategoria = rememberSaveable { mutableStateOf("") }
     val nombreCategoria = rememberSaveable { mutableStateOf("") }
     val descripcionCategoria = rememberSaveable { mutableStateOf("") }
-    val estadoCategoria = rememberSaveable { mutableStateOf("") }
+    val estadoCategoria = rememberSaveable { mutableStateOf("Activo") }
     val mostrarConfirmarCategoria = rememberSaveable { mutableStateOf(false) }
 
     val mostrarProveedor = rememberSaveable { mutableStateOf(false) }
@@ -121,6 +118,11 @@ fun InventoryScreen(
     var snackbarJob: Job by remember { mutableStateOf(Job()) }
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
+
+    if (uiState.messages.isNotEmpty()) {
+        Toast.makeText(context, uiState.messages, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(InventariosEvent.LimpiarMensaje)
+    }
 
     if (uiState.categoria.isEmpty()) viewModel.onEvent(InventariosEvent.GetCategorias)
     if (uiState.proveedores.isEmpty()) viewModel.onEvent(InventariosEvent.Getrpoveedores)
@@ -164,9 +166,16 @@ fun InventoryScreen(
                 Titulo("Inventario", Icons.Outlined.Inventory2)
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
-                    Buscador(busqueda.value) { busqueda.value = it }
-                    SwitchInactivos(uiState.switch){
-                        viewModel.onEvent(InventariosEvent.Switch)
+                    Box(modifier = Modifier.weight(3f)) {
+                        Buscador(busqueda.value) { busqueda.value = it }
+                    }
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        SwitchInactivos(uiState.switch) {
+                            viewModel.onEvent(InventariosEvent.Switch)
+                        }
                     }
                 }
                 AreaProductos(
@@ -180,12 +189,14 @@ fun InventoryScreen(
                     precio,
                     impuesto,
                     descripcion,
-                    estado,
+                    //estado,
                     mostrarProducto,
                     editar,
                     categoria,
                     provider,
-                    mostrarConfirmarProducto
+                    mostrarConfirmarProducto,
+                    idCategoria,
+                    idProveedor
                 )
                 Botones(
                     context,
@@ -204,8 +215,10 @@ fun InventoryScreen(
                     marca,
                     cantidad,
                     impuesto,
-                    estado,
-                    provider
+                    //estado,
+                    provider,
+                    idCategoria,
+                    idProveedor
                 )
             }
         }
@@ -222,13 +235,13 @@ fun InventoryScreen(
             modelo,
             marca,
             cantidad,
-            idCategoriaText,
-            idProveedorText,
+            idCategoria,
+            idProveedor,
             impuesto,
-            estado,
+            //estado,
             context,
             provider,
-            listOf("Activo", "Inactivo"),
+            //listOf("Activo", "Inactivo"),
             mostrarCategoria,
             mostrarProveedor,
             idCategoria,
@@ -238,8 +251,8 @@ fun InventoryScreen(
             mostrarConfirmarProducto,
             viewModel,
             idInventario,
-            idCategoriaText,
-            idProveedorText,
+            idCategoria,
+            idProveedor,
             nombre,
             marca,
             modelo,
@@ -248,10 +261,11 @@ fun InventoryScreen(
             precio,
             impuesto,
             descripcion,
-            estado,
+            //estado,
             categoria,
             provider,
-            context
+            context,
+            uiState.switch
         )
         DialogoExcel(mostrarEjemplar)
         DialogoCategoria(

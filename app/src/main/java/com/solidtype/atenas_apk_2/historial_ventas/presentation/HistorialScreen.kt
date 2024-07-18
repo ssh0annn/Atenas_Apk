@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.historial_ventas.presentation
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HistoryEdu
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
@@ -76,6 +76,11 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
     var snackbarJob: Job by remember { mutableStateOf(Job()) }
 
     val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
+
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+        //viewModel.limpiaMessages()
+    }
 
     if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
         navController.navigate(Screens.Login.route)

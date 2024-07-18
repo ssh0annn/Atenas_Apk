@@ -38,10 +38,10 @@ fun DialogoProducto(
     idCategoriaText: MutableState<String>,
     idProveedorText: MutableState<String>,
     impuesto: MutableState<String>,
-    estado: MutableState<String>,
+    //estado: MutableState<String>,
     context: Context,
     provider: MutableState<String>,
-    listEstados: List<String>,
+    //listEstados: List<String>,
     mostrarCategoria: MutableState<Boolean>,
     mostrarProveedor: MutableState<Boolean>,
     idCategoria: MutableState<String>,
@@ -75,14 +75,25 @@ fun DialogoProducto(
                 idCategoriaText,
                 idProveedorText,
                 impuesto,
-                estado,
                 provider,
-                listEstados,
                 mostrarCategoria,
                 mostrarProveedor
             )
             Row {
-                Boton("Guardar") {
+                Boton(
+                    "Guardar",
+                    idInventario.value != "" &&
+                            idCategoriaText.value != "" &&
+                            idProveedorText.value != "" &&
+                            nombre.value != "" &&
+                            marca.value != "" &&
+                            modelo.value != "" &&
+                            cantidad.value != "" &&
+                            costo.value != "" &&
+                            precio.value != "" &&
+                            impuesto.value != "" &&
+                            descripcion.value != ""
+                ) {
                     try {
                         viewModel.onEvent(
                             InventariosEvent.AgregarProductos(
@@ -98,7 +109,7 @@ fun DialogoProducto(
                                     precio_venta = precio.value.toDouble(),
                                     impuesto = impuesto.value.toDouble(),
                                     descripcion = descripcion.value,
-                                    estado = estado.value == "Activo"
+                                    estado = true
                                 )
                             )
                         )
@@ -113,7 +124,7 @@ fun DialogoProducto(
                         precio.value = ""
                         impuesto.value = ""
                         descripcion.value = ""
-                        estado.value = ""
+                        //estado.value = "Activo"
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,

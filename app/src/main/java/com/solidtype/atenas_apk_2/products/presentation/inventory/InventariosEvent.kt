@@ -37,6 +37,8 @@ sealed class InventariosEvent {
 
     object Switch:InventariosEvent()
 
+    object LimpiarMensaje:InventariosEvent()
+
 
 
 }

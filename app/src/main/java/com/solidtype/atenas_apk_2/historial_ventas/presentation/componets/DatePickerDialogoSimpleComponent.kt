@@ -35,20 +35,20 @@ fun DatePickerDialogoSimple(
                 "FechaIni" -> fechaIni.value = datePickerState.selectedDateMillis.formatearFecha()
                 "FechaFin" -> fechaFin.value = datePickerState.selectedDateMillis.formatearFecha()
             }
-            when (selected.value) {
-                "Ventas" -> {
-                    viewModel.buscarProductosVenta(
-                        fechaInicio = fechaIni.value.formatoDDBB(),
-                        fechaFinal = fechaFin.value.formatoDDBB(),
-                    )
-                }
-                "Ticket" -> {
-                    viewModel.buscarProductosTicket(
-                        fechaIni = fechaIni.value.formatoDDBB(),
-                        fechaFinal = fechaFin.value.formatoDDBB(),
-                    )
-                }
-            }
+//            when (selected.value) {
+//                "Ventas" -> {
+//                    viewModel.buscarProductosVenta(
+//                        fechaInicio = fechaIni.value.formatoDDBB(),
+//                        fechaFinal = fechaFin.value.formatoDDBB(),
+//                    )
+//                }
+//                "Ticket" -> {
+//                    viewModel.buscarProductosTicket(
+//                        fechaIni = fechaIni.value.formatoDDBB(),
+//                        fechaFinal = fechaFin.value.formatoDDBB(),
+//                    )
+//                }
+//            }
             Toast.makeText(context, "No olvides selecionar las fechas.", Toast.LENGTH_SHORT)
                 .show()
         }

@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class ForgotPassword @Inject constructor(private val repo: AuthRepository) {
 
-    suspend operator fun invoke(email:String) = repo.olvideMiPassword(email)
+    suspend operator fun invoke(email:String, respuesta:(success:Boolean,cancel: Boolean,excepcion:String?)-> Unit) = repo.olvideMiPassword(email, respuesta)
 
 }

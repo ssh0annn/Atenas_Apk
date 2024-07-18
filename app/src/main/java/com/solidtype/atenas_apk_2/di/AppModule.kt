@@ -15,6 +15,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.ForgotPassword
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Login
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.Logout
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.RegistraNuevoDevice
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.WhoIs
 import com.solidtype.atenas_apk_2.products.data.repositoryImpl.InventarioRepoImpl
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
@@ -63,8 +64,8 @@ import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.DetallesFacturas
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.MostrarTodo
 import com.solidtype.atenas_apk_2.facturacion.domain.repositorio.FacturaRepository
-import com.solidtype.atenas_apk_2.gestion_facturar.data.CasoBlueTooth
-import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.casos_usos.bluetooth.data.AndroidBluetoothController
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.casos_usos.bluetooth.domain.BluetoothController
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.repositoryimpl.ClienteProveedorRepoImpl
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.EliminarPersona
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_cliente.BuscarClientes
@@ -77,6 +78,7 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_pr
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CrearProveedor
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.EditarProveedores
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.GetProveedores
+import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.ProveedoresTodos
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.repository.ClienteProveedorRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl.TicketRepositoryImpl
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
@@ -399,7 +401,9 @@ object AppModule {
         getProveedores = GetProveedores(repo),
         crearProveedor = CrearProveedor(repo),
         eliminarPersona = EliminarPersona(repo),
-        editarProveedores = EditarProveedores(repo)
+        editarProveedores = EditarProveedores(repo),
+        proveedoresTodos= ProveedoresTodos(repo)
+
     )
 
     //Perfil admnistrador
@@ -476,7 +480,8 @@ object AppModule {
         logout= Logout(repo),
         whoIs = WhoIs(repo),
         forgotPassword = ForgotPassword(repo),
-        cambiarPassword= CambiarPassword(repo)
+        cambiarPassword= CambiarPassword(repo),
+        nuevoDevice= RegistraNuevoDevice(repo)
     )
 
     @Singleton
@@ -488,8 +493,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBluetoothManager(context:Context): BluetoothManager = CasoBlueTooth(context)
-
+    fun provideBluetoothController(@ApplicationContext context: Context): BluetoothController {
+        return AndroidBluetoothController(context)
+    }
 
 
 

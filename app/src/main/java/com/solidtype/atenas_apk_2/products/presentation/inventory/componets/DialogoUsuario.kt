@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.content.Context
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,7 +66,17 @@ fun DialogoUsuario(
                 estado
             )
             Row {
-                Boton("Guardar") {
+                Boton(
+                    "Guardar",
+                    idUsuario.value != "" &&
+                            nombre.value != "" &&
+                            apellido.value != "" &&
+                            Patterns.EMAIL_ADDRESS.matcher(correo.value).matches() &&
+                            clave.value.length >= 8 &&
+                            telefono.value != "" &&
+                            estado.value != "" &&
+                            rol.value != ""
+                ) {
                     try {
                         if (idUsuario.value.isEmpty() || nombre.value.isEmpty() || apellido.value.isEmpty() || correo.value.isEmpty() || clave.value.isEmpty() || telefono.value.isEmpty() || estado.value.isEmpty() || rol.value.isEmpty()) {
                             throw Exception("Campos vacios.")
@@ -121,7 +132,7 @@ fun DialogoUsuario(
                         correo.value = ""
                         clave.value = ""
                         telefono.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,

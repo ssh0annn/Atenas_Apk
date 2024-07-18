@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +32,11 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaU
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Botones
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarRol
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoQR
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoRol
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoUsuario
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
@@ -59,12 +60,12 @@ fun GestionUsuariosScreen(
     val correo = rememberSaveable { mutableStateOf("") }
     val clave = rememberSaveable { mutableStateOf("") }
     val telefono = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("") }
+    val estado = rememberSaveable { mutableStateOf("Activo") }
 
     val idRollUsuario = rememberSaveable { mutableStateOf("") }
     val nombreRollUsuario = rememberSaveable { mutableStateOf("") }
     val descripcion = rememberSaveable { mutableStateOf("") }
-    val estadoRollUsuario = rememberSaveable { mutableStateOf("") }
+    val estadoRollUsuario = rememberSaveable { mutableStateOf("Activo") }
 
     val editar = rememberSaveable { mutableStateOf(false) }
     val mostrarUsuario = rememberSaveable { mutableStateOf(false) }
@@ -72,6 +73,11 @@ fun GestionUsuariosScreen(
     val mostrarRol = rememberSaveable { mutableStateOf(false) }
     val mostrarConfirmarRol = rememberSaveable { mutableStateOf(false) }
     val mostrarQR = rememberSaveable { mutableStateOf(false) }
+
+    if (!uiState.razones.isNullOrEmpty()) {
+        Toast.makeText(context, uiState.razones, Toast.LENGTH_LONG).show()
+        viewModel.onUserEvent(UserEvent.LimpiarMensaje)
+    }
 
     if (busqueda.value.isNotBlank()) {
         viewModel.onUserEvent(UserEvent.BuscarUsuario(busqueda.value))
@@ -197,18 +203,7 @@ fun GestionUsuariosScreen(
             estadoRollUsuario,
             context
         )
-        Dialogo(
-            titulo = "QR de Técnico",
-            mostrar = mostrarQR.value,
-            onCerrarDialogo = { mostrarQR.value = false },
-            max = false
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-            ) {
-                //QR
-            }
-        }
+        DialogoQR(mostrarQR, uiState.qr.toString())
         MenuLateral(navController)
     }
 }

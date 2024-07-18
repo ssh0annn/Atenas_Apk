@@ -5,12 +5,12 @@ import dagger.hilt.android.HiltAndroidApp
 
 
 @HiltAndroidApp
-class AtenasAplication : Application (){
-    override fun onCreate() {
-        super.onCreate()
-       // Printooth.init(this)
-    }
-}
+class AtenasAplication : Application ()
+//    override fun onCreate() {
+//        super.onCreate()
+//       // Printooth.init(this)
+//    }
+
 
 /*
   override fun onCreate() {

@@ -57,7 +57,20 @@ class AuthViewmodel @Inject constructor(
             is AuthEvent.Recuerdame -> recuerdame(event.email)
             is AuthEvent.EliminarRecuerdos -> eliminarRecuerdos()
             is AuthEvent.ForgetPassword -> forgetPassword(event.email)
+            AuthEvent.RegistrarNuevoDevice -> registraNuevoDivice(getDeviceId().toString())
+            AuthEvent.CancelarRegistro -> {
+                uiStates.update { it.copy(dispositivo = true)  }
+                eliminarLicencia()
+                logout()
+            }
             else -> viewModelScope.launch { casosAuth.logout() }
+        }
+    }
+
+    private fun registraNuevoDivice(id:String){
+        viewModelScope.launch {
+            casosAuth.nuevoDevice(id, recuerdame.getString(LICENCIA, "").toString())
+            uiStates.update { it.copy(dispositivo = true) }
         }
     }
     private fun handleAuthenticationEvent() {
@@ -125,14 +138,22 @@ class AuthViewmodel @Inject constructor(
 
     private fun forgetPassword(email: String) {
         viewModelScope.launch {
-            if (casosAuth.forgotPassword(email)) {
-                uiStates.update {
-                    it.copy(enviado = true)
+            casosAuth.forgotPassword(email){success, cancel, execption ->
+                println("""
+                    success :$success, 
+                    cancel:$cancel, 
+                    execption: $execption
+                """.trimIndent())
+                if(success){
+                    uiStates.update {
+                        it.copy(enviado = true, razones = "Correo enviado!")
+                        }
+                } else {
+                    uiStates.update {
+                        it.copy(enviado = cancel, razones = execption)
+                    }
                 }
-            } else {
-                uiStates.update {
-                    it.copy(enviado = false, razones = "Correo no valido")
-                }
+
             }
         }
     }
@@ -177,13 +198,12 @@ class AuthViewmodel @Inject constructor(
             }
 
             !checkListAuth.deviceRegistrado -> {
-                eliminarLicencia()
-                logout()
                 uiStates.update {
                     it.copy(
                         isAutenticated = null,
                         razones = "Dispositivo no registrado: '${getDeviceId()}' ",
-                        licenciaGuardada = false
+                        licenciaGuardada = false,
+                        dispositivo = false
                     )
                 }
                 false
@@ -218,7 +238,6 @@ class AuthViewmodel @Inject constructor(
             context.contentResolver,
             Settings.Secure.ANDROID_ID
         )
-
         return deviceId
     }
 

@@ -14,4 +14,6 @@ sealed class ClienteEvent {
 
     object MostrarClientesEvent : ClienteEvent()
     object Switch : ClienteEvent()
+
+    object LimpiarMensaje: ClienteEvent()
 }

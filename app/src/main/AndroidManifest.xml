@@ -6,19 +6,37 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_BASIC_PHONE_STATE" /> <!-- Permiso para acceder al Amacenamiento Externa -->
     <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- Permisos BLuetooth para android 11 y 12 en adelante -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!-- Request legacy Bluetooth permissions on older devices. -->
+
+
+    <uses-permission android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_SCAN"
-        android:required="false" />
+
+    <!-- Needed only if your app looks for Bluetooth devices. -->
+   <uses-permission
+       android:name="android.permission.BLUETOOTH_SCAN"
+       android:required="false"
+       android:usesPermissionFlags="neverForLocation"
+       tools:targetApi="s" />
+
+   <!-- Needed only if your app communicates with already-paired Bluetooth
+       devices. -->
     <uses-permission
         android:name="android.permission.BLUETOOTH_CONNECT"
         android:required="false" />
+
+    <!-- Needed only if your app makes the device discoverable to Bluetooth
+       devices. -->
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADVERTISE"
+        android:maxSdkVersion="30"
         android:required="false" />
 
     <uses-feature
@@ -43,6 +61,7 @@
         android:required="false" />
 
     <application
+
         android:name="com.solidtype.AtenasAplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -56,6 +75,16 @@
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gestion_facturar.domain.casos_usos.bluetooth.presentation.BluetoothActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
@@ -68,14 +97,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".Splash"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -12,6 +12,7 @@ interface InventarioRepo {
     fun searchProductsLike(datos:String):Flow<List<inventario>>
     suspend fun createProducts(prodcuto: inventario):Boolean
     suspend fun deleteProduct(codigo:inventario):Boolean
+    suspend fun deleteProductLista(listaProductos:List<inventario>)
     suspend fun updateProduct(producto:inventario): Boolean
     suspend fun exportarExcel(productos: List<inventario>):Uri
     suspend fun importarExcel(path:Uri):Boolean

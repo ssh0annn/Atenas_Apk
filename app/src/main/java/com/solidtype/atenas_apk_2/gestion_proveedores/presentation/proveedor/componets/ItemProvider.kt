@@ -1,15 +1,15 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,79 +18,87 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
+import com.solidtype.atenas_apk_2.ui.theme.Blanco
 
 @Composable
 fun MyProviderItem(
-    Provider: Personastodas.Proveedor,
+    provider: Personastodas.Proveedor,
     mostrarDialogo: MutableState<Boolean>,
     editar: MutableState<Boolean>,
     nombre: MutableState<String>,
-    Tipodocumento: MutableState<String>,
-    Numdocumento: MutableState<String>,
-    Email: MutableState<String>,
-    Telefono: MutableState<String>,
+    numDocumento: MutableState<String>,
+    email: MutableState<String>,
+    telefono: MutableState<String>,
     mostrarConfirmar: MutableState<Boolean>,
     idProveedor: MutableState<String>
-){
-    Card(
+) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-
-        shape = RoundedCornerShape(corner = CornerSize(16.dp))
-
-    ){
+            .padding(horizontal = 14.dp, vertical = 12.dp)
+    ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .background(Blanco, RoundedCornerShape(16.dp))
+                .padding(vertical = 16.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = Provider.id_proveedor.toString(),
+                    text = provider.id_proveedor.toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f).padding(start = 40.dp), maxLines = 1
+                    modifier = Modifier.weight(1f), maxLines = 1,
+                    textAlign = TextAlign.Center
                 )
 
                 Text(
-                    text = Provider.nombre.toString(),
+                    text = provider.nombre.toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f), maxLines = 1
+                    modifier = Modifier.weight(1f), maxLines = 1,
+                    textAlign = TextAlign.Center
                 )
                 Text(
-                    text = Provider.documento.toString(),
+                    text = provider.documento.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f),
-                    maxLines = 1
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
                 )
                 Text(
-                    text = Provider.email.toString(),
+                    text = provider.email.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f),
-                    maxLines = 1
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
                 )
                 Text(
-                    text = Provider.telefono.toString(),
+                    text = provider.telefono.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.weight(1f),
-                    maxLines = 1
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
                 )
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.weight(0.5f)
+                ) {
                     IconButton(onClick = {
                         mostrarDialogo.value = true
                         editar.value = true
                         //formulario onEdit
-                        idProveedor.value = Provider.id_proveedor.toString()
-                        nombre.value = Provider.nombre!!
-                        Numdocumento.value = Provider.documento!!
-                        Telefono.value = Provider.telefono!!
-                        Email.value = Provider.email!!
+                        idProveedor.value = provider.id_proveedor.toString()
+                        nombre.value = provider.nombre!!
+                        numDocumento.value = provider.documento!!
+                        telefono.value = provider.telefono!!
+                        email.value = provider.email!!
 
                     }) {
                         Icon(
@@ -102,11 +110,11 @@ fun MyProviderItem(
                     IconButton(onClick = {
                         mostrarConfirmar.value = true
                         //formulario onDelete
-                        idProveedor.value = Provider.id_proveedor.toString()
-                        nombre.value = Provider.nombre!!
-                        Numdocumento.value = Provider.documento!!
-                        Telefono.value = Provider.telefono!!
-                        Email.value = Provider.email!!
+                        idProveedor.value = provider.id_proveedor.toString()
+                        nombre.value = provider.nombre!!
+                        numDocumento.value = provider.documento!!
+                        telefono.value = provider.telefono!!
+                        email.value = provider.email!!
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,

@@ -10,6 +10,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usua
 import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -41,12 +42,10 @@ class MetodoAutenticacionImpl @Inject constructor(
             }
             check
         } catch (e: Exception) {
-           println("Excption $e")
+            println("Excption $e")
             CheckListAuth()
         }
     }
-
-
 
 
     override suspend fun signout() {
@@ -57,7 +56,7 @@ class MetodoAutenticacionImpl @Inject constructor(
     }
 
     override suspend fun eliminarUsuario(email: String, password: String) {
-       // reautenticarYEliminarUsuario(email, password)
+        // reautenticarYEliminarUsuario(email, password)
     }
 
     override suspend fun cambiarPassword(
@@ -77,10 +76,12 @@ class MetodoAutenticacionImpl @Inject constructor(
                                 true,
                                 "Contraseña cambiada exitosamente!!"
                             )
-                            else ->  callback(
-                                    false,
-                                    updateTask.exception?.message
-                                        ?: "Error al cambiar la contraseña")
+
+                            else -> callback(
+                                false,
+                                updateTask.exception?.message
+                                    ?: "Error al cambiar la contraseña"
+                            )
 
                         }
                     }
@@ -93,12 +94,23 @@ class MetodoAutenticacionImpl @Inject constructor(
         }
     }
 
-    override suspend fun olvideMiPassword(email: String): Boolean {
-        var success = false
+    override suspend fun olvideMiPassword(
+        email: String,
+        respuesta: ( Boolean, Boolean, String?) -> Unit
+    ): Boolean {
+
         firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
-            success = it.isSuccessful
+            println("Success: ${it.isSuccessful}")
+            println("Canceled: ${it.isCanceled}")
+            println("Exception: ${it.exception?.message}")
+            respuesta(
+                it.isSuccessful,
+                it.isCanceled,
+                it.exception?.message
+            )
         }
-        return success
+
+        return true
     }
 
 
@@ -125,5 +137,9 @@ class MetodoAutenticacionImpl @Inject constructor(
             UsuarioActual.emailUsuario,
             UsuarioActual.tipoUser
         )
+    }
+
+    override suspend fun registrarNewDispositivo(id: String, licencia: String) {
+        dataCloud.registrarNuevoDevice(id, licencia)
     }
 }

@@ -12,48 +12,48 @@ fun Ejemplo(
 
     Button(
         onClick = {
-            viewModel.onUserEvent(
-                ClienteEvent.AgregarClientes(
-                    Personastodas.ClienteUI(
-                        0,
-                        "johan",
-                        "fewfwe",
-                        "dasdas",
-                        "sdasdas"
-                    )
-                )
-            )
+//            viewModel.onUserEvent(
+//                ClienteEvent.AgregarClientes(
+//                    Personastodas.ClienteUI(
+//                        0,
+//                        "johan",
+//                        "fewfwe",
+//                        "dasdas",
+//                        "sdasdas"
+//                    )
+//                )
+//            )
         }
     ) {
         Button(
             onClick = {
-                viewModel.onUserEvent(
-                    ClienteEvent.EditarClientes(
-                        Personastodas.ClienteUI(
-                            0,
-                            "johan",
-                            "fewfwe",
-                            "dasdas",
-                            "sdasdas"
-                        )
-                    )
-                )
+//                viewModel.onUserEvent(
+//                    ClienteEvent.EditarClientes(
+//                        Personastodas.ClienteUI(
+//                            0,
+//                            "johan",
+//                            "fewfwe",
+//                            "dasdas",
+//                            "sdasdas"
+//                        )
+//                    )
+//                )
             }
         ) {
 
             Button(
                 onClick = {
-                    viewModel.onUserEvent(
-                        ClienteEvent.BorrarClientes(
-                            Personastodas.ClienteUI(
-                                0,
-                                "johan",
-                                "fewfwe",
-                                "dasdas",
-                                "sdasdas"
-                            )
-                        )
-                    )
+//                    viewModel.onUserEvent(
+//                        ClienteEvent.BorrarClientes(
+//                            Personastodas.ClienteUI(
+//                                0,
+//                                "johan",
+//                                "fewfwe",
+//                                "dasdas",
+//                                "sdasdas"
+//                            )
+//                        )
+//                    )
                 }
             ) {
                 Button(

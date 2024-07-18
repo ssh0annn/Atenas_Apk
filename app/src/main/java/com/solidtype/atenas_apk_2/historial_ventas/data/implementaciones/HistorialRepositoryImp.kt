@@ -23,7 +23,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class HistorialRepositoryImp @Inject constructor(
-    private val dao:tipo_ventaDao,
+    private val dao: tipo_ventaDao,
     private val excel: XlsManeger,
     private val daoTickets: ticketDao,
     private val sync1: MediatorHistorialVentas,
@@ -34,33 +34,39 @@ class HistorialRepositoryImp @Inject constructor(
         return dao.getTipoVentas()
     }
 
-    override suspend fun exportarVentas(listaProductos:List<TipoVentaVenta>): Uri {
+    override suspend fun exportarVentas(listaProductos: List<TipoVentaVenta>): Uri {
         val columnas = listOf(
-            "id_venta",
-            "id_vendedor",
-            "id_cliente",
-            "id_tipo_venta",
-            "cantidad",
-            "fecha",
-            "estado")
+            "id_venta", "id_cliente", "cantidad", "tipo_pago", "No. Transaccion", "subtotal",
+            "descuento", "impuesto", "total", "abono", "restante", "fecha"
+        )
 
-        val productosVendidos:MutableList<List<String>> = mutableListOf()
+
+        val productosVendidos: MutableList<List<String>> = mutableListOf()
         try {
-            for(productos in listaProductos ){
+            for (productos in listaProductos) {
                 val temp = mutableListOf<String>()
                 temp.add(productos.venta.id_venta.toString())
-                temp.add(productos.venta.id_vendedor.toString())
                 temp.add(productos.venta.id_cliente.toString())
-                temp.add(productos.venta.id_tipo_venta.toString())
+                temp.add(productos.venta.id_cliente.toString())
                 temp.add(productos.venta.cantidad.toString())
-                temp.add(productos.venta.fecha.toString())
-                temp.add(productos.venta.estado.toString())
+                temp.add(productos.tipoVenta.tipo_pago)
+                temp.add(productos.tipoVenta.numeroTransaccion)
+                temp.add(productos.tipoVenta.subtotal.toString())
+                temp.add(productos.tipoVenta.descuento.toString())
+                temp.add(productos.tipoVenta.impuesto.toString())
+                temp.add(productos.tipoVenta.total.toString())
+                temp.add(productos.tipoVenta.abono.toString())
+                temp.add(productos.tipoVenta.fecha.toString())
                 productosVendidos.add(temp)
 
             }
 
-            return excel.crearXls("Ventas_${System.currentTimeMillis()}", columnas,productosVendidos )
-        }catch( _ : Exception){
+            return excel.crearXls(
+                "Ventas_${System.currentTimeMillis()}",
+                columnas,
+                productosVendidos
+            )
+        } catch (_: Exception) {
             println("Error en la conversion de datos")
         }
 
@@ -69,24 +75,28 @@ class HistorialRepositoryImp @Inject constructor(
 
     override suspend fun exportarHistorialTickets(listaProductos: List<TipoVentaTicket>): Uri {
         val columnas = ListaTicket()
-
-        val productosVendidos:MutableList<List<String>> = mutableListOf()
+        val productosVendidos: MutableList<List<String>> = mutableListOf()
         try {
-            for(productos in listaProductos ){
+            for (productos in listaProductos) {
                 val temp = mutableListOf<String>()
 
                 temp.add(productos.venta.id_ticket.toString())
-                temp.add(productos.venta.id_vendedor.toString())
-                temp.add(productos.venta.id_cliente.toString())
-                temp.add(productos.venta.id_tipo_venta.toString())
-                productos.venta.assesorios.let { temp.add(it) }
-                temp.add(productos.venta.fecha_inicio.toString())
-                temp.add(productos.venta.fecha_final.toString())
-                temp.add(productos.venta.estado.toString())
+                temp.add(productos.servicios)
+                temp.add(productos.venta.falla)
+                temp.add(productos.tipoVenta.tipo_pago)
+                temp.add(productos.tipoVenta.numeroTransaccion)
+                temp.add(productos.tipoVenta.subtotal.toString())
+                temp.add(productos.tipoVenta.descuento.toString())
+                temp.add(productos.tipoVenta.impuesto.toString())
+                temp.add(productos.tipoVenta.total.toString())
+                temp.add(productos.tipoVenta.abono.toString())
+                temp.add(productos.tipoVenta.restantante.toString())
+                temp.add(productos.tipoVenta.fecha.toString())
+                temp.add(if (productos.tipoVenta.estado) "open" else "closed")
                 productosVendidos.add(temp)
             }
-            return excel.crearXls("HistorialTickets", columnas,productosVendidos )
-        }catch( _ : Exception){
+            return excel.crearXls("HistorialTickets", columnas, productosVendidos)
+        } catch (_: Exception) {
             println("Error en la conversion de datos")
         }
 
@@ -100,7 +110,7 @@ class HistorialRepositoryImp @Inject constructor(
 
         ): Flow<List<TipoVentaVenta>> {
 
-       return dao.buscarTiposVentasFecha(desde, hasta)
+        return dao.buscarTiposVentasFecha(desde, hasta)
 
     }
 
@@ -114,7 +124,7 @@ class HistorialRepositoryImp @Inject constructor(
         hasta: LocalDate
     ): Flow<List<TipoVentaTicket>> {
         //Aqui cambie porque actualize la base de datos.
-       return daoTickets.getTicketsByFechas(desde, hasta)
+        return daoTickets.getTicketsByFechas(desde, hasta)
     }
 
     override suspend fun sync() {

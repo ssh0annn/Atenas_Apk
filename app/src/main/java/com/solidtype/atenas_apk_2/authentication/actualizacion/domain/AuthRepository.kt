@@ -10,8 +10,8 @@ interface AuthRepository {
     suspend fun cambiarPassword(email: String, oldPassword: String, newPassworld: String, callback:(
         Boolean, String?
     ) -> Unit)
-    suspend fun olvideMiPassword(email: String): Boolean
-
+    suspend fun olvideMiPassword(email: String, respuesta:(Boolean, Boolean, String?)-> Unit): Boolean
+    suspend fun nuevoDevice(id: String, licencia: String)
 
 
 

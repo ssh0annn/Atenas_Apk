@@ -332,8 +332,21 @@ fun SelectorMio(
                     Spacer(modifier = Modifier.padding(top=55.dp))
                     // Este es el Box que queremos que esté fijo en la parte inferior
 
-                    if (onClickAgregar != null) {
-                            Box(
+                    if (onClickAgregar != null  ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                // Asegúrate de que tenga un fondo para que sea visible
+                                .border(width = 1.dp, color = PurpleGrey80)
+                                .padding(bottom = 10.dp, top = 10.dp)
+                                .clickable(onClick = {
+                                    onClickAgregar()
+                                    expanded.value = false
+                                    keyboardController?.hide()
+                                })
+                        ) {
+                            Row(
+
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .border(width = 1.dp, color = PurpleGrey80)
@@ -372,62 +385,6 @@ fun SelectorMio(
             }
 
 
-//            Box {
-//                ExposedDropdownMenu(
-//                    modifier = Modifier
-//                        .height(200.dp)
-//                        .background(Blanco),
-//                    expanded = expanded.value,
-//                    onDismissRequest = {
-//                        // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
-//                    }
-//                ) {
-//                    for (item in filteredItems) {
-//                        DropdownMenuItem(
-//                            text = { Text(item) }, onClick = {
-//                                searchText = item
-//                                expanded.value = false
-//                                onSelectionChange(item)
-//                            })
-//                    }
-//
-//                    Box(
-//                       modifier = Modifier
-//
-//
-//
-//                    ) {
-//                        if (onClickAgregar != null)
-//                            Row(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(5.dp)
-//                                    .clickable(onClick = {
-//                                        onClickAgregar()
-//                                        expanded.value = false
-//                                        //Debería hacer un back
-//                                        keyboardController?.hide()
-//                                    }),
-//                                horizontalArrangement = Arrangement.Center,
-//                                verticalAlignment = Alignment.CenterVertically
-//                            ) {
-//                                Icon(
-//                                    imageVector = Icons.Default.Add,
-//                                    contentDescription = "Add",
-//                                    tint = AzulGris
-//                                )
-//                                Text(
-//                                    text = "Agregar",
-//                                    color = AzulGris,
-//                                    fontSize = 15.sp,
-//                                    fontWeight = FontWeight.ExtraBold,
-//                                    modifier = Modifier
-//                                )
-//                                Spacer(modifier = Modifier.width(10.dp))
-//                            }
-//                    }
-//                }
-//            }
 
         }
 
@@ -445,10 +402,13 @@ fun <T> componente(data:T, onClick:() ->Unit ){
 @Composable
 fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
     var nombre by remember { mutableStateOf("") }
-    var documento by remember { mutableStateOf("") }
+    val documento by remember { mutableStateOf("") }
     var telefono by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var openDialog = remember { mutableStateOf( false) }
+    val openDialog = remember { mutableStateOf( false) }
+    val tipoDocumento by remember {
+        mutableStateOf("")
+    }
 
 
     if (!openDialog.value) {
@@ -531,7 +491,7 @@ fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
                             .padding(5.dp),
 
                             onClick = {
-                                    val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
+                                    val cliente = Personastodas.ClienteUI(nombre= nombre, tipo_documento = tipoDocumento, documento = documento, telefono = telefono, email = email)
                                   onSubmit(cliente)
 
                             }) {
@@ -953,5 +913,6 @@ fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
                 "".toLocalDate()
             }
     }
+}
 }
 

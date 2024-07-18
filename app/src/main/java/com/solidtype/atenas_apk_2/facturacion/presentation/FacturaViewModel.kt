@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.memoryCacheSettings
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
@@ -34,6 +35,7 @@ class  FacturaViewModel @Inject constructor(
         when(event){
             is FacturasEvent.BuscarFacturas -> buscarfacturas(event.desde, event.hasta, event.semejante)
             FacturasEvent.GetFacturas -> mostrarFactura()
+            FacturasEvent.LimpiarMensaje -> uiState.update { it.copy(mensaje = "") }
         }
     }
   private fun mostrarFactura() {

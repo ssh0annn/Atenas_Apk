@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.RestoreFromTrash
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -31,7 +32,7 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoActivo
+//import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.Carrito
 
@@ -47,12 +48,14 @@ fun AreaProductos(
     precio: MutableState<String>,
     impuesto: MutableState<String>,
     descripcion: MutableState<String>,
-    estado: MutableState<String>,
+    //estado: MutableState<String>,
     mostrarProducto: MutableState<Boolean>,
     editar: MutableState<Boolean>,
     categoria: MutableState<String>,
     provider: MutableState<String>,
-    mostrarConfirmarProducto: MutableState<Boolean>
+    mostrarConfirmarProducto: MutableState<Boolean>,
+    idCategoria: MutableState<String>,
+    idProveedor: MutableState<String>
 ) {
     Box(
         modifier = Modifier
@@ -161,38 +164,12 @@ fun AreaProductos(
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
-                            //Iconos de editar y eliminar
+                            //Iconos de editar, eliminar y restaurar
                             Row(
                                 modifier = Modifier.weight(0.5f),
                                 horizontalArrangement = Arrangement.End
                             ) {
-                                IconButton(onClick = {
-                                    mostrarProducto.value = true
-                                    editar.value = true
-
-                                    idInventario.value = producto.id_inventario.toString()
-                                    nombre.value = producto.nombre
-                                    marca.value = producto.marca!!
-                                    modelo.value = producto.modelo!!
-                                    cantidad.value = producto.cantidad.toString()
-                                    costo.value = producto.precio_compra.toString()
-                                    precio.value = producto.precio_venta.toString()
-                                    impuesto.value = producto.impuesto.toString()
-                                    descripcion.value = producto.descripcion!!
-                                    estado.value = producto.estado.formatoActivo()
-                                    //filtrar el nombre proveedor y la categoria con el id del producto de uiState.proveedores y uiState.categoria
-                                    provider.value =
-                                        uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
-                                    categoria.value =
-                                        uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre ?: ""
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Edit,
-                                        contentDescription = null,
-                                        tint = AzulGris
-                                    )
-                                }
-                                if (producto.estado)
+                                if(uiState.switch) {
                                     IconButton(onClick = {
                                         mostrarConfirmarProducto.value = true
 
@@ -205,11 +182,72 @@ fun AreaProductos(
                                         precio.value = producto.precio_venta.toString()
                                         impuesto.value = producto.impuesto.toString()
                                         descripcion.value = producto.descripcion!!
-                                        estado.value = producto.estado.formatoActivo()
+                                        //estado.value = producto.estado.formatoActivo()
                                         provider.value =
                                             uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
                                         categoria.value =
-                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre ?: ""
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                                ?: ""
+                                        idCategoria.value = producto.id_categoria.toString()
+                                        idProveedor.value = producto.id_proveedor.toString()
+                                    }){
+                                        Icon(
+                                            imageVector = Icons.Filled.RestoreFromTrash,
+                                            contentDescription = null,
+                                            tint = AzulGris
+                                        )
+                                    }
+                                }
+                                else {
+                                    IconButton(onClick = {
+                                        mostrarProducto.value = true
+                                        editar.value = true
+
+                                        idInventario.value = producto.id_inventario.toString()
+                                        nombre.value = producto.nombre
+                                        marca.value = producto.marca!!
+                                        modelo.value = producto.modelo!!
+                                        cantidad.value = producto.cantidad.toString()
+                                        costo.value = producto.precio_compra.toString()
+                                        precio.value = producto.precio_venta.toString()
+                                        impuesto.value = producto.impuesto.toString()
+                                        descripcion.value = producto.descripcion!!
+                                        //estado.value = producto.estado.formatoActivo()
+                                        //filtrar el nombre proveedor y la categoria con el id del producto de uiState.proveedores y uiState.categoria
+                                        provider.value =
+                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                        categoria.value =
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                                ?: ""
+                                        idCategoria.value = producto.id_categoria.toString()
+                                        idProveedor.value = producto.id_proveedor.toString()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Edit,
+                                            contentDescription = null,
+                                            tint = AzulGris
+                                        )
+                                    }
+                                    IconButton(onClick = {
+                                        mostrarConfirmarProducto.value = true
+
+                                        idInventario.value = producto.id_inventario.toString()
+                                        nombre.value = producto.nombre
+                                        marca.value = producto.marca!!
+                                        modelo.value = producto.modelo!!
+                                        cantidad.value = producto.cantidad.toString()
+                                        costo.value = producto.precio_compra.toString()
+                                        precio.value = producto.precio_venta.toString()
+                                        impuesto.value = producto.impuesto.toString()
+                                        descripcion.value = producto.descripcion!!
+                                        //estado.value = producto.estado.formatoActivo()
+                                        provider.value =
+                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                        categoria.value =
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                                ?: ""
+                                        idCategoria.value = producto.id_categoria.toString()
+                                        idProveedor.value = producto.id_proveedor.toString()
                                     }) {
                                         Icon(
                                             imageVector = Icons.Filled.Delete,
@@ -217,6 +255,7 @@ fun AreaProductos(
                                             tint = AzulGris
                                         )
                                     }
+                                }
                             }
                         }
                     }

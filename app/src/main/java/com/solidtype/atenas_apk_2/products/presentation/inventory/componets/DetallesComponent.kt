@@ -40,9 +40,7 @@ fun Detalles(
     idCatalogo: MutableState<String>,
     idProveedor: MutableState<String>,
     impuesto: MutableState<String>,
-    estado: MutableState<String>,
     provider: MutableState<String>,
-    listEstados: List<String>,
     mostrarCategoria: MutableState<Boolean>,
     mostrarProveedor: MutableState<Boolean>
 ) {
@@ -81,17 +79,27 @@ fun Detalles(
                             AutocompleteSelect(
                                 "Categoría",
                                 categoria.value,
-                                if (uiState.categoria.isNotEmpty()) uiState.categoria.map { it.nombre } else listOf(
-                                    ""
-                                ),
+                                if (
+                                    uiState.categoria.isNotEmpty() &&
+                                    uiState.categoria
+                                        .filter { it.estado }
+                                        .map { it.nombre }
+                                        .isNotEmpty()
+                                )
+                                    uiState.categoria
+                                        .filter { it.estado }
+                                        .map { it.nombre }
+                                else
+                                    listOf(""),
                                 true,
                                 onClickAgregar = {
                                     mostrarCategoria.value = true
                                 },
-                            ) {
-                                categoria.value = it
-                                if(categoria.value != "")
-                                    idCatalogo.value = uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
+                            ) { valor ->
+                                categoria.value = valor
+                                if (categoria.value != "")
+                                    idCatalogo.value =
+                                        uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             InputDetalle(
@@ -120,10 +128,11 @@ fun Detalles(
                             onClickAgregar = {
                                 mostrarProveedor.value = true
                             },
-                        ) {
-                            provider.value = it
-                            if(provider.value != "")
-                                idProveedor.value = uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
+                        ) { valor ->
+                            provider.value = valor
+                            if (provider.value != "")
+                                idProveedor.value =
+                                    uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
                         Spacer(modifier = Modifier.height(5.dp))
                         InputDetalle("Costo", costo.value) {
@@ -144,11 +153,6 @@ fun Detalles(
                         InputDetalle("Cantidad", cantidad.value) {
                             cantidad.value = it
                         }
-                        Spacer(modifier = Modifier.height(5.dp))
-                        AutocompleteSelect("Estado", estado.value,  listEstados) {
-                            estado.value = it
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
             }

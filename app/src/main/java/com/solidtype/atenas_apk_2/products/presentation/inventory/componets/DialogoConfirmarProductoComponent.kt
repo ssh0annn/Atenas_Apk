@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,7 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
+//import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
@@ -40,10 +41,11 @@ fun DialogoConfirmarProducto(
     precio: MutableState<String>,
     impuesto: MutableState<String>,
     descripcion: MutableState<String>,
-    estado: MutableState<String>,
+    //estado: MutableState<String>,
     categoria: MutableState<String>,
     provider: MutableState<String>,
-    context: Context
+    context: Context,
+    inactivo: Boolean
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -60,7 +62,7 @@ fun DialogoConfirmarProducto(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "¿Estás seguro que deseas eliminar este producto?",
+                text = "¿Estás seguro que deseas ${if (inactivo) "restaurar" else "eliminar"} este producto?",
                 textAlign = TextAlign.Center,
                 color = AzulGris,
                 fontSize = 24.sp
@@ -69,24 +71,47 @@ fun DialogoConfirmarProducto(
             Row {
                 Boton("Aceptar") {
                     try {
-                        viewModel.onEvent(
-                            InventariosEvent.EliminarProductos(
-                                inventario(
-                                    idInventario.value.toLong(),
-                                    idCategoriaText.value.toLong(),
-                                    idProveedorText.value.toLong(),
-                                    nombre.value,
-                                    marca.value,
-                                    modelo.value,
-                                    cantidad.value.toInt(),
-                                    costo.value.toDouble(),
-                                    precio.value.toDouble(),
-                                    impuesto.value.toDouble(),
-                                    descripcion.value,
-                                    estado.value.formatoActivoDDBB()
+                        if(inactivo){
+                            Log.i("ErrorInventario", "idInventario: ${idInventario.value}, idCategoria: ${idCategoriaText.value}, idProveedor: ${idProveedorText.value}, nombre: ${nombre.value}, marca: ${marca.value}, modelo: ${modelo.value}, cantidad: ${cantidad.value}, costo: ${costo.value}, precio: ${precio.value}, impuesto: ${impuesto.value}, descripcion: ${descripcion.value}")
+                            viewModel.onEvent(
+                                InventariosEvent.AgregarProductos(
+                                    inventario(
+                                        id_inventario = idInventario.value.toLong(),
+                                        id_categoria = idCategoriaText.value.toLong(),
+                                        id_proveedor = idProveedorText.value.toLong(),
+                                        nombre = nombre.value,
+                                        marca = marca.value,
+                                        modelo = modelo.value,
+                                        cantidad = cantidad.value.toInt(),
+                                        precio_compra = costo.value.toDouble(),
+                                        precio_venta = precio.value.toDouble(),
+                                        impuesto = impuesto.value.toDouble(),
+                                        descripcion = descripcion.value,
+                                        estado = true
+                                    )
                                 )
                             )
-                        )
+                        }
+                        else {
+                            viewModel.onEvent(
+                                InventariosEvent.EliminarProductos(
+                                    inventario(
+                                        idInventario.value.toLong(),
+                                        idCategoriaText.value.toLong(),
+                                        idProveedorText.value.toLong(),
+                                        nombre.value,
+                                        marca.value,
+                                        modelo.value,
+                                        cantidad.value.toInt(),
+                                        costo.value.toDouble(),
+                                        precio.value.toDouble(),
+                                        impuesto.value.toDouble(),
+                                        descripcion.value,
+                                        false
+                                    )
+                                )
+                            )
+                        }
 
                         idInventario.value = ""
                         categoria.value = ""
@@ -98,20 +123,22 @@ fun DialogoConfirmarProducto(
                         marca.value = ""
                         cantidad.value = ""
                         impuesto.value = ""
-                        estado.value = ""
+                        //estado.value = "Activo"
                         provider.value = ""
+                        idCategoriaText.value = ""
+                        idProveedorText.value = ""
 
                         mostrarConfirmarProducto.value = false
 
                         Toast.makeText(
                             context,
-                            "Se eliminó el producto",
+                            "Se ${if (inactivo) "restauró" else "eliminó"} correctamente",
                             Toast.LENGTH_LONG
                         ).show()
                     } catch (e: Exception) {
                         Toast.makeText(
                             context,
-                            "No se pudo eliminar",
+                            "No se pudo ${if (inactivo) "restaurar" else "eliminar"} el producto",
                             Toast.LENGTH_LONG
                         ).show()
                     }

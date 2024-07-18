@@ -86,7 +86,13 @@ fun DialogoRol(
                     }
                 }
                 Row{
-                    BotonBlanco("Guardar") {
+                    BotonBlanco(
+                        text = "Guardar",
+                        habilitar = idRollUsuario.value != "" &&
+                                nombreRollUsuario.value != "" &&
+                                descripcion.value != "" &&
+                                estadoRollUsuario.value != ""
+                    ) {
                         try {
                             if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
                                 throw Exception("Campos vacios.")
@@ -122,7 +128,7 @@ fun DialogoRol(
                             idRollUsuario.value = ""
                             nombreRollUsuario.value = ""
                             descripcion.value = ""
-                            estadoRollUsuario.value = ""
+                            estadoRollUsuario.value = "Activo"
 
                             Toast.makeText(
                                 context,
