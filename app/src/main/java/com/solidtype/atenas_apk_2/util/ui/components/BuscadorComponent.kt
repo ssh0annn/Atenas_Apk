@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.util.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -30,6 +31,7 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 @Composable
 fun Buscador(
     busqueda: String,
+    largo: Boolean = false,
     onBusquedaChange: (String) -> Unit
 ) {
     val isFocused = rememberSaveable { mutableStateOf(false) }
@@ -38,7 +40,13 @@ fun Buscador(
         value = busqueda,
         onValueChange = onBusquedaChange,
         singleLine = true,
-        modifier = Modifier
+        modifier =
+        if (largo) Modifier
+            .fillMaxWidth()
+            .height(66.dp)
+            .padding(start = 25.dp, end = 5.dp, top = 4.dp, bottom = 4.dp)
+            .onFocusChanged { isFocused.value = it.isFocused }
+        else Modifier
             .width(Pantalla.ancho - 525.dp)
             .height(66.dp)
             .padding(start = 25.dp, end = 5.dp, top = 4.dp, bottom = 4.dp)
@@ -49,7 +57,7 @@ fun Buscador(
                 text = "Buscar...",
                 style = TextStyle(
                     textAlign = TextAlign.Start,
-                    color = if(isFocused.value) GrisClaro else Blanco,
+                    color = if (isFocused.value) GrisClaro else Blanco,
                     fontSize = 16.sp
                 )
             )

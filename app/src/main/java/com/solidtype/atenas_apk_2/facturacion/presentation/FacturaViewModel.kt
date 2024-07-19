@@ -2,16 +2,12 @@ package com.solidtype.atenas_apk_2.facturacion.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.memoryCacheSettings
 import com.solidtype.atenas_apk_2.facturacion.domain.casosUsos.FacturacionCasosdeUso
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.FacturaConDetalle
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
@@ -89,16 +90,16 @@ fun DialogoProveedor(
                                 tipoDocumentoProveedor.value = it
                             }
                             Spacer(modifier = Modifier.height(5.dp))
-                            InputDetalle("Documento", documentoProveedor.value) {
+                            InputDetalle("Documento", documentoProveedor.value, tipo = KeyboardType.Number) {
                                 documentoProveedor.value = it
                             }
                             InputDetalle("Dirección", direccionProveedor.value) {
                                 direccionProveedor.value = it
                             }
-                            InputDetalle("Teléfono", telefonoProveedor.value) {
+                            InputDetalle("Teléfono", telefonoProveedor.value, tipo = KeyboardType.Phone) {
                                 telefonoProveedor.value = it
                             }
-                            InputDetalle("Email", emailProveedor.value) {
+                            InputDetalle("Email", emailProveedor.value, tipo = KeyboardType.Email) {
                                 emailProveedor.value = it
                             }
                             /*Spacer(modifier = Modifier.height(5.dp))
@@ -113,12 +114,13 @@ fun DialogoProveedor(
                 Row {
                     BotonBlanco(
                         text = "Guardar",
-                        habilitar = nombreProveedor.value != "" &&
-                                tipoDocumentoProveedor.value != "" &&
-                                documentoProveedor.value != "" &&
-                                direccionProveedor.value != "" &&
-                                telefonoProveedor.value != "" &&
-                                Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
+                        habilitar =
+                            nombreProveedor.value != "" &&
+                            tipoDocumentoProveedor.value != "" &&
+                            documentoProveedor.value.matches("\\d+".toRegex()) &&
+                            direccionProveedor.value != "" &&
+                            telefonoProveedor.value.matches("8\\d9\\d{7}".toRegex()) &&
+                            Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
                         ) {
                         try {
                             if (nombreProveedor.value.isEmpty() || tipoDocumentoProveedor.value.isEmpty() || documentoProveedor.value.isEmpty() || direccionProveedor.value.isEmpty() || telefonoProveedor.value.isEmpty() || emailProveedor.value.isEmpty()) {

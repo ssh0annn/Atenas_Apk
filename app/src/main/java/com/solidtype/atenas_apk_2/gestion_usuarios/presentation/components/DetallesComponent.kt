@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
@@ -72,14 +73,26 @@ fun Detalles(
                     Column(
                         modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 0.dp)
                     ) {
-                        InputDetalle("Id del Usuario", idUsuario.value) { idUsuario.value = it }
+                        InputDetalle(
+                            "Id del Usuario",
+                            idUsuario.value,
+                            tipo = KeyboardType.Number
+                        ) { idUsuario.value = it }
                         InputDetalle("Nombre", nombre.value) { nombre.value = it }
                         InputDetalle("Apellido", apellido.value) {
                             apellido.value = it
                         }
-                        InputDetalle("Correo", correo.value) { correo.value = it }
+                        InputDetalle(
+                            "Correo",
+                            correo.value,
+                            tipo = KeyboardType.Email
+                        ) { correo.value = it }
                         InputDetalle("Clave", clave.value, pass = true) { clave.value = it }
-                        InputDetalle("Teléfono", telefono.value) {
+                        InputDetalle(
+                            "Teléfono",
+                            telefono.value,
+                            tipo = KeyboardType.Phone
+                        ) {
                             telefono.value = it
                         }
                         Spacer(modifier = Modifier.height(5.dp))

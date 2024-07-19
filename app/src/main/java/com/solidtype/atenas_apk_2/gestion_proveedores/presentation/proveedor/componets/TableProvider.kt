@@ -33,7 +33,9 @@ fun TableProviders(
     email: MutableState<String>,
     telefono: MutableState<String>,
     mostrarConfirmar: MutableState<Boolean>,
-    idProveedor: MutableState<String>
+    idProveedor: MutableState<String>,
+    tipoDocumento: MutableState<String>,
+    direccion: MutableState<String>
 ) {
     Box(
         modifier = Modifier
@@ -103,7 +105,9 @@ fun TableProviders(
                         email,
                         telefono,
                         mostrarConfirmar,
-                        idProveedor
+                        idProveedor,
+                        tipoDocumento,
+                        direccion
                     )
                 }
             }

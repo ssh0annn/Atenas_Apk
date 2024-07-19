@@ -34,7 +34,9 @@ fun MyProviderItem(
     email: MutableState<String>,
     telefono: MutableState<String>,
     mostrarConfirmar: MutableState<Boolean>,
-    idProveedor: MutableState<String>
+    idProveedor: MutableState<String>,
+    tipoDocumento: MutableState<String>,
+    direccion: MutableState<String>
 ) {
     Box(
         modifier = Modifier
@@ -99,7 +101,8 @@ fun MyProviderItem(
                         numDocumento.value = provider.documento!!
                         telefono.value = provider.telefono!!
                         email.value = provider.email!!
-
+                        tipoDocumento.value = provider.tipo_documento!!
+                        direccion.value = provider.direccion!!
                     }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
