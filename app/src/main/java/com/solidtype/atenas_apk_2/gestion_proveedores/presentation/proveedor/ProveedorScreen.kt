@@ -134,7 +134,9 @@ fun ProveedorScreen(
                         email,
                         telefono,
                         mostrarConfirmar,
-                        idProveedor
+                        idProveedor,
+                        tipoDocumento,
+                        direccion
                     )
                     Box(
                         modifier = Modifier.fillMaxWidth(),

@@ -250,7 +250,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 )
             )
             Text(
-                text = "Recordar",
+                text = "Recuérdame",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = AzulGris
@@ -280,8 +280,11 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .width(430.dp)
                 .height(100.dp)
                 .padding(top = 30.dp),
-            enabled = Patterns.EMAIL_ADDRESS.matcher(email.value)
-                .matches() && pass.value.length >= 8 && !uiState.isLoading
+            enabled =
+                    Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
+                    pass.value.length >= 8 &&
+                    !uiState.isLoading /*&&
+                    licencia.value.isNotEmpty()*/
         ) {
             Text(
                 "Iniciar Sesión",
