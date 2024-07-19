@@ -37,8 +37,6 @@ sealed class PagosEvent{
     data class Abono(val abono:Double):PagosEvent()
     data class DatosDelPago(val finaciero:tipo_venta):PagosEvent()
 
-
-
 }
 
 
