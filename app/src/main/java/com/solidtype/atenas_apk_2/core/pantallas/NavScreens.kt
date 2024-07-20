@@ -70,7 +70,7 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route) {
-            servicios()
+            servicios(navController)
         }
         composable(route = Screens.Ticket.route) {
             Ticket(navController)

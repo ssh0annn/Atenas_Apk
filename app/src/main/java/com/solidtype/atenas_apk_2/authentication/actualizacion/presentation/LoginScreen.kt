@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -100,8 +101,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     }
     Column(
         Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(Blanco),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -308,6 +308,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
             )
         }
         if (uiState.isLoading) Loading()
+        Spacer(modifier = Modifier.height(16.dp))
     }
     DialogoDipositivo(
         mostrar = !uiState.dispositivo,

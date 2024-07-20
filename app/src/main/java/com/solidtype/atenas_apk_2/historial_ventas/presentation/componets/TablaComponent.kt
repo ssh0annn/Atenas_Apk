@@ -29,7 +29,7 @@ fun Tabla(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Pantalla.ancho - 820.dp)
+            .height(Pantalla.alto - 250.dp)
             .background(Blanco, RoundedCornerShape(16.dp))
     ) {
         when (selected.value) {

@@ -48,7 +48,7 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Pantalla.ancho - 800.dp)
+            .height(Pantalla.alto - 250.dp)
             .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
