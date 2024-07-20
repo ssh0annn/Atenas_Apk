@@ -18,6 +18,8 @@ class TicketViewModel @Inject constructor(private val casosTicket: TicketsManege
     var uiState: MutableStateFlow<TicketUIState> = MutableStateFlow(TicketUIState())
         private set
 
+    private val switch:Boolean = uiState.value.switch
+
     var job: Job? = null
 
     init {
@@ -32,13 +34,15 @@ class TicketViewModel @Inject constructor(private val casosTicket: TicketsManege
             TicketEvents.GetTickets -> {
                 getTickets()
             }
+
+            TicketEvents.Switch -> uiState.update { it.copy(switch = !switch) }
         }
     }
     private fun getTickets() {
         job?.cancel()
         job = viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                casosTicket.getDetalleTicket().collect { tickets ->
+                casosTicket.getDetalleTicket(!switch).collect { tickets ->
                     uiState.update { it.copy(tickets = tickets) }
                 }
             }
@@ -49,7 +53,7 @@ class TicketViewModel @Inject constructor(private val casosTicket: TicketsManege
         job?.cancel()
         job = viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                casosTicket.buscarTickets(anny).collect { tickets ->
+                casosTicket.buscarTickets(anny, !switch).collect { tickets ->
                     uiState.update { it.copy(tickets = tickets) }
                 }
             }

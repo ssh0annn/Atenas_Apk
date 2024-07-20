@@ -13,7 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TicketViewModel @Inject constructor(private val casos:CasosTicket):ViewModel() {
     var uiStates:MutableStateFlow<TicketUiStates> = MutableStateFlow(TicketUiStates())
-    private var switch:MutableStateFlow<Boolean> = MutableStateFlow(uiStates.value.switch)
+        private set
+    private var switch:Boolean = uiStates.value.switch
     init {
         getTickets()
     }
@@ -24,7 +25,7 @@ class TicketViewModel @Inject constructor(private val casos:CasosTicket):ViewMod
             TicketEvents.Getickets -> getTickets()
             is TicketEvents.PaymentInfo -> getPaymentInfo(event.tick)
             is TicketEvents.Search -> searchTickets(event.any)
-            TicketEvents.Switch -> switch.value = !uiStates.value.switch
+            TicketEvents.Switch ->  uiStates.update { it.copy(switch = !switch) }
             is TicketEvents.UpdatePago -> updatePayment(event.pago)
         }
     }
@@ -38,7 +39,7 @@ class TicketViewModel @Inject constructor(private val casos:CasosTicket):ViewMod
 
     private fun searchTickets(any: String) {
         viewModelScope.launch {
-            casos.buscarTickets(any, !switch.value).collect{ tickets ->
+            casos.buscarTickets(any, !switch).collect{ tickets ->
             uiStates.update { it.copy(tickets = tickets.map { data ->
                 data.ticket }) }
             }
@@ -54,7 +55,7 @@ class TicketViewModel @Inject constructor(private val casos:CasosTicket):ViewMod
 
     private fun getTickets() {
         viewModelScope.launch {
-            casos.getTickets(!switch.value).collect{ data ->
+            casos.getTickets(!switch).collect{ data ->
                 uiStates.update { it.copy(tickets = data.map { it.ticket }) }
             }
         }

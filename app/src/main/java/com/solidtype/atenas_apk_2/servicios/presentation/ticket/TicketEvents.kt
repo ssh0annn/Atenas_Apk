@@ -5,4 +5,6 @@ sealed class TicketEvents {
     object GetTickets:TicketEvents()
     data class BuscarTicket(val semejante:String):TicketEvents()
 
+    data object Switch:TicketEvents()
+
 }

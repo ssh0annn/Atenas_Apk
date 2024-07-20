@@ -38,6 +38,7 @@ class ServiciosViewModel @Inject constructor(
 
     var ticket: MutableStateFlow<ServicioTicket> = MutableStateFlow(ServicioTicket())
         private set
+
     private val CORREO: String = "correo"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
 
@@ -103,7 +104,7 @@ class ServiciosViewModel @Inject constructor(
 
     private fun getTickets() {
         viewModelScope.launch {
-          casosTicket.getDetalleTicket().map { listaTicket ->
+          casosTicket.getDetalleTicket(true).map { listaTicket ->
                 if (listaTicket.isNotEmpty()) {
                     listaTicket.map { tic ->
                         TicketVista(

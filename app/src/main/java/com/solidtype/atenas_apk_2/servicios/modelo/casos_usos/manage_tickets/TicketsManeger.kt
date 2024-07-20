@@ -44,17 +44,13 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
         casosTicket.crearTicket(transaction)
     }
-
     suspend fun completarPago(ticket: tipo_venta) {
         casosTicket.completarPago(ticket)
     }
-
-    fun getDetalleTicket(): Flow<List<TicketwithRelation>> {
-        return casosTicket.getTickets()
+    fun getDetalleTicket(switch:Boolean): Flow<List<TicketwithRelation>> {
+        return casosTicket.getTickets(switch)
     }
-
-    fun buscarTickets(any: String) =
-        casosTicket.buscarTickets(any)
-
+    fun buscarTickets(any: String, switch:Boolean) =
+        casosTicket.buscarTickets(any, switch)
 }
 
