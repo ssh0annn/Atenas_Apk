@@ -14,6 +14,7 @@ import java.time.temporal.TemporalField
 import javax.inject.Inject
 class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
+    suspend fun getInfoPago(tick:ticket):tipo_venta = casosTicket.getPaymentInfo(tick)
     suspend fun crearTicket(ticket: ServicioTicket) {
 
         val newTicket = ticket(
