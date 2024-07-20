@@ -3,6 +3,7 @@ package com.solidtype.atenas_apk_2.authentication.actualizacion.data.remote_auth
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.UsuarioActual
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
@@ -98,15 +99,15 @@ class MetodoAutenticacionImpl @Inject constructor(
         email: String,
         respuesta: ( Boolean, Boolean, String?) -> Unit
     ): Boolean {
-
         firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
-            println("Success: ${it.isSuccessful}")
-            println("Canceled: ${it.isCanceled}")
-            println("Exception: ${it.exception?.message}")
+            val exceptionMessage = when (it.exception) {
+                is FirebaseAuthInvalidUserException -> "El correo no está registrado."
+                else -> it.exception?.message
+            }
             respuesta(
                 it.isSuccessful,
                 it.isCanceled,
-                it.exception?.message
+                exceptionMessage
             )
         }
 

@@ -52,7 +52,7 @@ fun tablatick(listaT: List<TicketwithRelation> = listOf()) {
 Box(
 modifier = Modifier
     .fillMaxWidth()
-    .height(430.dp)
+    .height(Pantalla.alto * 0.55f)
     .background(AzulGris, shape = RoundedCornerShape(20.dp))
 ) {
     Box(
@@ -75,7 +75,7 @@ modifier = Modifier
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(350.dp)
+                            .height(300.dp)
                             .padding(start = 20.dp, top = 25.dp)
                             .background(AzulGris, shape = RoundedCornerShape(20.dp)),
 
@@ -84,7 +84,7 @@ modifier = Modifier
                     Box(
                         modifier = Modifier
                             .width(300.dp)
-                            .height(500.dp)
+                            .height(300.dp)
                             .padding(15.dp)
                             .background(GrisAzulado)
 
