@@ -86,6 +86,7 @@ import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CasosTick
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CloseTicket
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CompletarPago
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CrearTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetPaymentInfo
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.GetTickets
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.buscarTickets
 import com.solidtype.atenas_apk_2.gestion_usuarios.data.repositoryImpl.GestionUserRepoImpl
@@ -441,8 +442,8 @@ object AppModule {
     //Tickets Manejador
     @Provides
     @Singleton
-    fun provideTicketRepository(ticket:ticketDao):TicketRepository =
-        TicketRepositoryImpl(ticket)
+    fun provideTicketRepository(ticket:ticketDao, venta:tipo_ventaDao):TicketRepository =
+        TicketRepositoryImpl(ticket,venta )
 
     @Provides
     @Singleton
@@ -451,7 +452,8 @@ object AppModule {
         crearTicket= CrearTicket(repo),
         completarPago= CompletarPago(repo),
         closeTicket= CloseTicket(repo),
-        buscarTickets= buscarTickets(repo)
+        buscarTickets= buscarTickets(repo),
+        getPaymentInfo = GetPaymentInfo(repo)
     )
 
     //Servicios y tipos servicios

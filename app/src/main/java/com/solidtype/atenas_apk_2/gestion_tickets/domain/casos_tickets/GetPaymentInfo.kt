@@ -4,10 +4,8 @@ import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import javax.inject.Inject
-
-class CompletarPago@Inject constructor(private val repo: TicketRepository)  {
-
-    suspend operator fun invoke(ticketPagado:tipo_venta){
-       repo.completarPagoPendiente(ticketPagado)
+class GetPaymentInfo @Inject constructor(private val repo:TicketRepository) {
+    suspend operator fun invoke(tick: ticket):tipo_venta{
+        return repo.getPaymentInfo(tick)
     }
 }

@@ -7,9 +7,7 @@ import javax.inject.Inject
 class CloseTicket @Inject constructor(private val repo:TicketRepository) {
 
     suspend operator fun invoke(ticket:ticket){
-
         ticket.estado = false
-
         repo.closeTicket(ticket)
     }
 }
