@@ -181,13 +181,11 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             VendedorEvent.GetCurrentUser -> {
                 viewModelScope.launch {
-                   casoCurrentUser.getUser(recuerdame.getString(CORREO, "").toString()).collect{  usuarioss ->
+                   casoCurrentUser.getUser(recuerdame.getString(CORREO, "").toString()).collect{ usuarioss ->
                        usuarioss.forEach {  user ->
                            uiStates.update { it.copy(usuario = user) }
                            ticket.update { it.copy(vendedor = user) } }
-
                     }
-
                 }
             }
         }
