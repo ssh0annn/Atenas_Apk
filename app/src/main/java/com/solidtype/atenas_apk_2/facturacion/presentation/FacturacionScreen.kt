@@ -34,7 +34,6 @@ import com.solidtype.atenas_apk_2.facturacion.presentation.componets.BotonesFina
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.DatePickerDialogoSimple
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Inputs
 import com.solidtype.atenas_apk_2.facturacion.presentation.componets.Tabla
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral

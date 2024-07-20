@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
@@ -113,7 +114,8 @@ fun Detalles(
                     ) {// Codigo, Descripción, Precio y Cantidad
                         InputDetalle(
                             "Código",
-                            idInventario.value
+                            idInventario.value,
+                            tipo = KeyboardType.Number
                         ) { idInventario.value = it }
                         InputDetalle(
                             "Descripción", descripcion.value
@@ -135,13 +137,13 @@ fun Detalles(
                                     uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
                         Spacer(modifier = Modifier.height(5.dp))
-                        InputDetalle("Costo", costo.value) {
+                        InputDetalle("Costo", costo.value, tipo = KeyboardType.Number) {
                             costo.value = it
                         }
-                        InputDetalle("Precio de Venta", precio.value) {
+                        InputDetalle("Precio de Venta", precio.value, tipo = KeyboardType.Number) {
                             precio.value = it
                         }
-                        InputDetalle("Impuesto", impuesto.value) {
+                        InputDetalle("Impuesto", impuesto.value, tipo = KeyboardType.Number) {
                             impuesto.value = it
                         }
                         InputDetalle("Modelo", modelo.value) {
@@ -150,7 +152,7 @@ fun Detalles(
                         InputDetalle("Marca", marca.value) {
                             marca.value = it
                         }
-                        InputDetalle("Cantidad", cantidad.value) {
+                        InputDetalle("Cantidad", cantidad.value, tipo = KeyboardType.Number) {
                             cantidad.value = it
                         }
                     }

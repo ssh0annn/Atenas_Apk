@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
@@ -68,7 +69,11 @@ fun DialogoRol(
                             modifier = Modifier
                                 .padding(10.dp)
                         ) {
-                            InputDetalle("ID", idRollUsuario.value) { idRollUsuario.value = it }
+                            InputDetalle(
+                                "ID",
+                                idRollUsuario.value,
+                                tipo = KeyboardType.Number
+                            ) { idRollUsuario.value = it }
                             InputDetalle(
                                 "Rol",
                                 nombreRollUsuario.value
@@ -88,7 +93,7 @@ fun DialogoRol(
                 Row{
                     BotonBlanco(
                         text = "Guardar",
-                        habilitar = idRollUsuario.value != "" &&
+                        habilitar = idRollUsuario.value.matches("[0-9]+".toRegex()) &&
                                 nombreRollUsuario.value != "" &&
                                 descripcion.value != "" &&
                                 estadoRollUsuario.value != ""

@@ -42,6 +42,7 @@ fun InputDetalle(
     valor: String,
     corto: Boolean = false,
     pass: Boolean = false,
+    tipo: KeyboardType = KeyboardType.Text,
     onValueChange: (String) -> Unit
 ) {
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
@@ -93,13 +94,23 @@ fun InputDetalle(
                 }
             },
             visualTransformation =
-                if (pass)
-                    if (passwordVisible.value) VisualTransformation.None
-                    else PasswordVisualTransformation()
-                else VisualTransformation.None,
+            if (pass)
+                if (passwordVisible.value) VisualTransformation.None
+                else PasswordVisualTransformation()
+            else VisualTransformation.None,
             keyboardOptions =
-                if (pass) KeyboardOptions(keyboardType = KeyboardType.Password)
-                else KeyboardOptions.Default
+            if (pass) KeyboardOptions(keyboardType = KeyboardType.Password)
+            else
+                when (tipo) {
+                    KeyboardType.Number -> KeyboardOptions(keyboardType = KeyboardType.Number)
+                    KeyboardType.NumberPassword -> KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
+                    KeyboardType.Phone -> KeyboardOptions(keyboardType = KeyboardType.Phone)
+                    KeyboardType.Text -> KeyboardOptions(keyboardType = KeyboardType.Text)
+                    KeyboardType.Email -> KeyboardOptions(keyboardType = KeyboardType.Email)
+                    KeyboardType.Password -> KeyboardOptions(keyboardType = KeyboardType.Password)
+                    KeyboardType.Uri -> KeyboardOptions(keyboardType = KeyboardType.Uri)
+                    else -> KeyboardOptions(keyboardType = KeyboardType.Text)
+                }
         )
     }
 }
