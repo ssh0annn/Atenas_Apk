@@ -20,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes,
-    private val classesAsyncs: MediatorHistorialVentasImpl
+    private val casosHistorialReportes: CasosHistorialReportes
 
 ) : ViewModel() {
 
@@ -33,6 +32,7 @@ class HistorailViewModel @Inject constructor(
     init {
 
          onEvent(HistorialEvent.GetTodosTodasVentas)
+         onEvent(HistorialEvent.GetTodosTickets)
     }
 
     fun onEvent(event: HistorialEvent){
@@ -159,7 +159,9 @@ class HistorailViewModel @Inject constructor(
                         subtotal = ventaTicket.sumOf { it.tipoVenta.subtotal },
                         restante = ventaTicket.sumOf { it.tipoVenta.restantante },
                         ventasOTicket = true,
-                        Ticket = ventaTicket
+                        Ticket = ventaTicket,
+                        isLoading = false
+
                     )
                 }
             }

@@ -234,369 +234,65 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
 
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectorMio(
-    text: String,
-    variableStr: String,
-    items: List<String>,
-    corto: Boolean = false,
-    expanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    onClickAgregar: (() -> Unit)? = null,
-    onSelectionChange: (String) -> Unit
-) {
-    var searchText: String by rememberSaveable { mutableStateOf(variableStr) }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
+fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
+    var imei by remember { mutableStateOf("") }
+    var falla by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var nota by remember { mutableStateOf("") }
+    var assesorios by remember { mutableStateOf("") }
 
-    ExposedDropdownMenuBox(
-        modifier = Modifier .background(Blanco),
-        expanded = expanded.value,
-        onExpandedChange = {
-            expanded.value = !expanded.value
-        }
-    ) {
+    Column(modifier = Modifier.padding(16.dp)) {
         TextField(
-            value = searchText,
-            onValueChange = {
-                searchText = it
-                expanded.value = true
-            },
-            singleLine = true,
-            textStyle = TextStyle(
-                color = AzulGris,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            ), label = {
-                Text(
-                    text = text,
-                    color = AzulGris,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-            },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded.value
-                )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Blanco,
-                unfocusedBorderColor = Blanco,
-            ),
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .onFocusChanged { focusState ->
-                    if (!focusState.isFocused) {
-                        expanded.value = false
-                    }
-                }
-                .menuAnchor()
-                .width(
-                    when (corto) {
-                        true -> 250.dp
-                        false -> 300.dp
-                    }
-                )
-                .background(Color(0xFFFFFFFF), RoundedCornerShape(15.dp))
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .clip(RoundedCornerShape(15.dp))
-        )
-        val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
-        if (filteredItems.isNotEmpty()) {
-            Box(
 
-            ) {
-                Column {
-                    // Este es el Dropdown Menu
-                    ExposedDropdownMenu(
-                        modifier = Modifier
-                            .height(200.dp)
-                            .background(Blanco),
-                        expanded = expanded.value,
-                        onDismissRequest = {
-                            // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
-                        }
-                    ) {
-                        for (item in filteredItems) {
-                            DropdownMenuItem(
-                                text = { Text(item) }, onClick = {
-                                    searchText = item
-                                    expanded.value = false
-                                    onSelectionChange(item)
-                                })
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(top=55.dp))
-                    // Este es el Box que queremos que esté fijo en la parte inferior
+            value = imei,
+            onValueChange = { imei = it },
+            label = { Text("imei") },
 
-
-                    if (onClickAgregar != null) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .border(width = 1.dp, color = PurpleGrey80)
-                                    .padding(bottom = 10.dp, top = 10.dp)
-                                    .clickable(onClick = {
-                                        onClickAgregar()
-                                        expanded.value = false
-                                        keyboardController?.hide()
-                                    })
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Add,
-                                        contentDescription = "Add",
-                                        tint = AzulGris
-                                    )
-                                    Text(
-                                        text = "Agregar",
-                                        color = AzulGris,
-                                        fontSize = 15.sp,
-                                        fontWeight = FontWeight.ExtraBold
-                                    )
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                }
-
-                            }
-                        }
-                    }
-
-                }
-            }
-
-
-//            Box {
-//                ExposedDropdownMenu(
-//                    modifier = Modifier
-//                        .height(200.dp)
-//                        .background(Blanco),
-//                    expanded = expanded.value,
-//                    onDismissRequest = {
-//                        // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
-//                    }
-//                ) {
-//                    for (item in filteredItems) {
-//                        DropdownMenuItem(
-//                            text = { Text(item) }, onClick = {
-//                                searchText = item
-//                                expanded.value = false
-//                                onSelectionChange(item)
-//                            })
-//                    }
-//
-//                    Box(
-//                       modifier = Modifier
-//
-//
-//
-//                    ) {
-//                        if (onClickAgregar != null)
-//                            Row(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(5.dp)
-//                                    .clickable(onClick = {
-//                                        onClickAgregar()
-//                                        expanded.value = false
-//                                        //Debería hacer un back
-//                                        keyboardController?.hide()
-//                                    }),
-//                                horizontalArrangement = Arrangement.Center,
-//                                verticalAlignment = Alignment.CenterVertically
-//                            ) {
-//                                Icon(
-//                                    imageVector = Icons.Default.Add,
-//                                    contentDescription = "Add",
-//                                    tint = AzulGris
-//                                )
-//                                Text(
-//                                    text = "Agregar",
-//                                    color = AzulGris,
-//                                    fontSize = 15.sp,
-//                                    fontWeight = FontWeight.ExtraBold,
-//                                    modifier = Modifier
-//                                )
-//                                Spacer(modifier = Modifier.width(10.dp))
-//                            }
-//                    }
-//                }
-//            }
-
-        }
-
-
-    }
-
-
-@Composable
-fun <T> componente(data:T, onClick:() ->Unit ){
-
-
-}
-
-@OptIn(ExperimentalMultiplatform::class)
-@Composable
-fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
-    var nombre by remember { mutableStateOf("") }
-    val documento by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    val openDialog = remember { mutableStateOf( false) }
-    val tipoDocumento by remember {
-        mutableStateOf("")
-    }
-
-
-    if (!openDialog.value) {
-        Box(
             modifier = Modifier.fillMaxWidth()
+        )
 
-        ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                AlertDialog(
-                    onDismissRequest = {
-                        openDialog.value = false
-                    },
-                    text = {
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .verticalScroll(rememberScrollState())
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                //titulo
-                                Spacer(modifier = Modifier.padding(top = 15.dp))
-                                Text(
-                                    text = "Nuevo Cliente",
-                                    color = AzulGris,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    fontSize = 35.sp,
-                                )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = falla,
+            onValueChange = { falla = it },
+            label = { Text("Teléfono") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = descripcion,
+            onValueChange = { descripcion = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = nota,
+            onValueChange = { nota = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = assesorios,
+            onValueChange = { assesorios = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-                                //cuerpo1
-//                        Column(
-//                            modifier = Modifier.padding(top = 25.dp)
-//                        ) {
-                                Spacer(modifier = Modifier.height(30.dp))
-                                Input(
-                                    label = "Nombre",
-                                    valor = nombre,
-                                    derecho = true,
-                                    modifier = Modifier
-                                ){
-                                    nombre = it
-                                }
-
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Input(
-                                    label = "Telefono",
-                                    valor = telefono,
-                                    derecho = true,
-                                    modifier = Modifier
-                                ){
-                                    telefono = it
-                                }
-
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Input(
-                                    label = "Email",
-                                    valor = email,
-                                    derecho = true,
-                                    modifier = Modifier
-                                ){
-                                    email = it
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                            //}
-                        }
-                    },
-
-                    confirmButton = {
-                        TextButton(modifier = Modifier
-                            .background(
-                                AzulGris, shape = RoundedCornerShape(20.dp)
-                            )
-                            .padding(5.dp),
-
-                            onClick = {
-                                    val cliente = Personastodas.ClienteUI(nombre= nombre, tipo_documento = tipoDocumento, documento = documento, telefono = telefono, email = email)
-                                  onSubmit(cliente)
-
-                            }) {
-                            Text("Guardar", color = Blanco)
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            modifier = Modifier
-                                .background(Rojo, shape = RoundedCornerShape(20.dp))
-                                .padding(5.dp),
-                            onClick = {
-                                openDialog.value = true
-                            },
-                        ) {
-                            Text("Salir", color = Blanco)
-                        }
-                    },
-
-                    modifier = Modifier
-                        .width(400.dp)
-                        .height(450.dp)
-                )
-            }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
+            onSubmit(dispositivo)
+        }) {
+            Text("Crear Cliente")
+            "".toLocalDate()
         }
     }
-
-
-
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        TextField(
-//            value = nombre,
-//            onValueChange = { nombre = it },
-//            label = { Text("Nombre") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = telefono,
-//            onValueChange = { telefono = it },
-//            label = { Text("Teléfono") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = email,
-//            onValueChange = { email = it },
-//            label = { Text("Email") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
-//            onSubmit(cliente)
-//        }) {
-//            Text("Crear Cliente")
-//        }
-//    }
 }
+
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
@@ -686,7 +382,7 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
 
                             onClick = {
                                 val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca, estado = true)
-                                 onSubmit(dispositivo)
+                                onSubmit(dispositivo)
 
                             }) {
                             Text("Guardar", color = Blanco)
@@ -710,45 +406,133 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
                         .height(450.dp)
                 )
             }
+        }
+    }
+}
 
+@OptIn(ExperimentalMultiplatform::class)
+@Composable
+fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
+    var nombre by remember { mutableStateOf("") }
+    val documento by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    val openDialog = remember { mutableStateOf( false) }
+    val tipoDocumento by remember {
+        mutableStateOf("")
+    }
+
+    if (!openDialog.value) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog.value = false
+                    },
+                    text = {
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                //titulo
+                                Spacer(modifier = Modifier.padding(top = 15.dp))
+                                Text(
+                                    text = "Nuevo Cliente",
+                                    color = AzulGris,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 35.sp,
+                                )
+
+                                //cuerpo1
+//                        Column(
+//                            modifier = Modifier.padding(top = 25.dp)
+//                        ) {
+                                Spacer(modifier = Modifier.height(30.dp))
+                                Input(
+                                    label = "Nombre",
+                                    valor = nombre,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    nombre = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Telefono",
+                                    valor = telefono,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    telefono = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Email",
+                                    valor = email,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    email = it
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                            //}
+                        }
+                    },
+
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+
+                            onClick = {
+                                val cliente = Personastodas.ClienteUI(nombre= nombre, tipo_documento = tipoDocumento, documento = documento, telefono = telefono, email = email)
+                                onSubmit(cliente)
+
+                            }) {
+                            Text("Guardar", color = Blanco)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                openDialog.value = true
+                            },
+                        ) {
+                            Text("Salir", color = Blanco)
+                        }
+                    },
+
+                    modifier = Modifier
+                        .width(400.dp)
+                        .height(450.dp)
+                )
+            }
         }
     }
 
 
-
-
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        TextField(
-//            value = nombre,
-//            onValueChange = { nombre = it },
-//            label = { Text("Nombre") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = modelo,
-//            onValueChange = { modelo = it },
-//            label = { Text("Teléfono") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = marca,
-//            onValueChange = { marca = it },
-//            label = { Text("Email") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
-//            onSubmit(dispositivo)
-//        }) {
-//            Text("Crear Cliente")
-//        }
-//    }
 }
+
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
 fun NuevoServicio(onSubmit: (servicio) -> Unit) {
@@ -757,205 +541,255 @@ fun NuevoServicio(onSubmit: (servicio) -> Unit) {
     var marca by remember { mutableStateOf(true) }
     var openDialog1 = remember { mutableStateOf( false) }
 
-
     if (!openDialog1.value) {
         Box(
             modifier = Modifier.fillMaxWidth()
 
         ) {
-        Box(
-        modifier = Modifier.fillMaxWidth()
-        ) {
-        AlertDialog(
-            onDismissRequest = {
-                openDialog1.value = false
-            },
-            text = {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                AlertDialog(
+                    onDismissRequest = {
+                        openDialog1.value = false
+                    },
+                    text = {
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        //titulo
-                        Spacer(modifier = Modifier.padding(top = 15.dp))
-                        Text(
-                            text = "Nuevo Servicio",
-                            color = AzulGris,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 35.sp,
-                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                //titulo
+                                Spacer(modifier = Modifier.padding(top = 15.dp))
+                                Text(
+                                    text = "Nuevo Servicio",
+                                    color = AzulGris,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 35.sp,
+                                )
 
-                        //cuerpo1
+                                //cuerpo1
 //                        Column(
 //                            modifier = Modifier.padding(top = 25.dp)
 //                        ) {
-                        Spacer(modifier = Modifier.height(30.dp))
-                            Input(
-                                label = "Nombre",
-                                valor = nombre,
-                                derecho = true,
-                                modifier = Modifier
-                            ){
-                                nombre = it
+                                Spacer(modifier = Modifier.height(30.dp))
+                                Input(
+                                    label = "Nombre",
+                                    valor = nombre,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    nombre = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Descripcion",
+                                    valor = modelo,
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    modelo = it
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Input(
+                                    label = "Estado",
+                                    valor = marca.toString(),
+                                    derecho = true,
+                                    modifier = Modifier
+                                ){
+                                    marca = true
+                                }
+                                Spacer(modifier = Modifier.height(16.dp))
                             }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Input(
-                            label = "Descripcion",
-                            valor = modelo,
-                            derecho = true,
-                            modifier = Modifier
-                        ){
-                            modelo = it
+                            //}
                         }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Input(
-                            label = "Estado",
-                            valor = marca.toString(),
-                            derecho = true,
-                            modifier = Modifier
-                        ){
-                            marca = true
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        }
-                    //}
-                }
-            },
-
-            confirmButton = {
-                TextButton(modifier = Modifier
-                    .background(
-                        AzulGris, shape = RoundedCornerShape(20.dp)
-                    )
-                    .padding(5.dp),
-
-                    onClick = {
-                        val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
-                        onSubmit(dispositivo)
-
-                    }) {
-                    Text("Guardar", color = Blanco)
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    modifier = Modifier
-                        .background(Rojo, shape = RoundedCornerShape(20.dp))
-                        .padding(5.dp),
-                    onClick = {
-                        openDialog1.value = true
                     },
-                ) {
-                    Text("Salir", color = Blanco)
-                }
-            },
 
-            modifier = Modifier
-                .width(400.dp)
-                .height(450.dp)
-        )
-    }
+                    confirmButton = {
+                        TextButton(modifier = Modifier
+                            .background(
+                                AzulGris, shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(5.dp),
+
+                            onClick = {
+                                val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
+                                onSubmit(dispositivo)
+
+                            }) {
+                            Text("Guardar", color = Blanco)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            modifier = Modifier
+                                .background(Rojo, shape = RoundedCornerShape(20.dp))
+                                .padding(5.dp),
+                            onClick = {
+                                openDialog1.value = true
+                            },
+                        ) {
+                            Text("Salir", color = Blanco)
+                        }
+                    },
+
+                    modifier = Modifier
+                        .width(400.dp)
+                        .height(450.dp)
+                )
+            }
         }
     }
 
-
-
-
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        TextField(
-//            value = nombre,
-//            onValueChange = { nombre = it },
-//            label = { Text("Nombre") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = modelo,
-//            onValueChange = { modelo = it },
-//            label = { Text("Teléfono") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = marca.toString(),
-//            onValueChange = { marca = true },
-//            label = { Text("Email") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
-//            onSubmit(dispositivo)
-//        }) {
-//            Text("Crear Cliente")
-//        }
-//    }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NuevoDatosDelTicket(onSubmit: (InfoTicket) -> Unit) {
-    var imei by remember { mutableStateOf("") }
-    var falla by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
-    var nota by remember { mutableStateOf("") }
-    var assesorios by remember { mutableStateOf("") }
+fun SelectorMio(
+text: String,
+variableStr: String,
+items: List<String>,
+corto: Boolean = false,
+expanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
+onClickAgregar: (() -> Unit)? = null,
+onSelectionChange: (String) -> Unit
+) {
+    var searchText: String by rememberSaveable { mutableStateOf(variableStr) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            TextField(
-                value = imei,
-                onValueChange = { imei = it },
-                label = { Text("imei") },
-                modifier = Modifier.fillMaxWidth()
-            )
+    ExposedDropdownMenuBox(
+        modifier = Modifier.background(Blanco),
+        expanded = expanded.value,
+        onExpandedChange = {
+            expanded.value = !expanded.value
+        }
+    ) {
+        TextField(
+            value = searchText,
+            onValueChange = {
+                searchText = it
+                expanded.value = true
+            },
+            singleLine = true,
+            textStyle = TextStyle(
+                color = AzulGris,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            ), label = {
+                Text(
+                    text = text,
+                    color = AzulGris,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = expanded.value
+                )
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Blanco,
+                unfocusedBorderColor = Blanco,
+            ),
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState ->
+                    if (!focusState.isFocused) {
+                        expanded.value = false
+                    }
+                }
+                .menuAnchor()
+                .width(
+                    when (corto) {
+                        true -> 250.dp
+                        false -> 300.dp
+                    }
+                )
+                .background(Color(0xFFFFFFFF), RoundedCornerShape(15.dp))
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clip(RoundedCornerShape(15.dp))
+        )
 
-
-        Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = falla,
-                onValueChange = { falla = it },
-                label = { Text("Teléfono") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = descripcion,
-                onValueChange = { descripcion = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            TextField(
-                value = nota,
-                onValueChange = { nota = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            TextField(
-                value = assesorios,
-                onValueChange = { assesorios = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {
-                val dispositivo = InfoTicket(imei, falla, descripcion, nota, assesorios)
-                onSubmit(dispositivo)
-            }) {
-                Text("Crear Cliente")
-                "".toLocalDate()
+        val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
+        ExposedDropdownMenu(
+            modifier = Modifier
+                .height(200.dp)
+                .background(Blanco),
+            expanded = expanded.value,
+            onDismissRequest = {
+                // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
             }
+        ) {
+            for (item in filteredItems) {
+                DropdownMenuItem(
+                    text = { Text(item) }, onClick = {
+                        searchText = item
+                        expanded.value = false
+                        onSelectionChange(item)
+                    })
+            }
+        }
+
+
+    // Este es el Box que queremos que esté fijo en la parte inferior
+    if (onClickAgregar != null) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(width = 1.dp, color = PurpleGrey80)
+                .padding(bottom = 10.dp, top = 60.dp)
+                .clickable(onClick = {
+                    onClickAgregar()
+                    expanded.value = false
+                    keyboardController?.hide()
+                })
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(width = 1.dp, color = PurpleGrey80)
+                    .padding(bottom = 10.dp, top = 10.dp)
+                    .clickable(onClick = {
+                        onClickAgregar()
+                        expanded.value = false
+                        keyboardController?.hide()
+                    })
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        tint = AzulGris
+                    )
+                    Text(
+                        text = "Agregar",
+                        color = AzulGris,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
+            }
+        }
     }
 }
+}
+
 
