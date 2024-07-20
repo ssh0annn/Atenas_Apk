@@ -83,7 +83,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     var vendedor by rememberSaveable { mutableStateOf("") }
    // var tipo_pago by rememberSaveable { mutableStateOf(tipo_venta()) }
 
-
+    val mo by rememberSaveable { mutableStateOf(true) }
 
     var search by rememberSaveable {
         mutableStateOf("")
@@ -102,17 +102,17 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     }
 
     if (nuevoServicios){
-        NuevoServicio {
-            viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
-            nuevoServicios = !nuevoServicios
-        }
+//        NuevoServicio {
+//            viewModel.onServiceEvent(ServiceEvent.CreateServicio(it))
+//            nuevoServicios = !nuevoServicios
+//        }
 
     }
    else if(nuevoDatosDelTicket){
-        NuevoDatosDelTicket{
-            viewModel.onTicket(OnTicket.InforTicket(it))
-            nuevoDatosDelTicket = !nuevoDatosDelTicket
-        }
+//        NuevoDatosDelTicket{
+//            viewModel.onTicket(OnTicket.InforTicket(it))
+//            nuevoDatosDelTicket = !nuevoDatosDelTicket
+//        }
 
     }
    else if (nuevoTicket){
@@ -120,15 +120,15 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
 
     }
    else if (nuevoDispositivo){
-        NuevoDevice(){dispositivo -> viewModel.onDevice(DeviceEvent.CrearDispositivo(dispositivo))
-            nuevoDispositivo = !nuevoDispositivo}
+//        NuevoDevice(){dispositivo -> viewModel.onDevice(DeviceEvent.CrearDispositivo(dispositivo))
+//            nuevoDispositivo = !nuevoDispositivo}
 
     }
 
    else if(nuevoCliente){
-        ClienteForm(onSubmit ={cliente -> viewModel.onCliente(ClientEvents.CrearCliente(cliente))
-        nuevoCliente = !nuevoCliente
-        })
+//        ClienteForm(onSubmit ={cliente -> viewModel.onCliente(ClientEvents.CrearCliente(cliente))
+//        nuevoCliente = !nuevoCliente
+//        })
     }else{
 
 
@@ -141,6 +141,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(ScrollState(1))) {
+
         SelectorMio("Vendedor", stateTicket.vendedor?.nombre ?: "",
             listOf(state.usuario).let {
              it.map { user ->
@@ -171,7 +172,7 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
 
                 }
             },
-            false,onClickAgregar = {nuevoCliente= !nuevoCliente}
+            false,onClickAgregar = {nuevoCliente = !nuevoCliente}
         ) {
             selecion ->
             val cliente = state.listaClientes.find { it?.nombre == selecion }
@@ -193,7 +194,7 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
 
         SelectorMio("Servicio", search, state.listaServicios.let {
             it.map { dato -> dato.nombre }
-        }, false, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
+        }, true, onClickAgregar = {nuevoServicios = !nuevoServicios} ) {
             selecion ->
             val service = state.listaServicios.find { it.nombre == selecion }
             service?.let { viewModel.onServiceEvent(ServiceEvent.ServicioSelecionado(it)) }
@@ -330,40 +331,44 @@ fun SelectorMio(
                     }
                     Spacer(modifier = Modifier.padding(top=55.dp))
                     // Este es el Box que queremos que esté fijo en la parte inferior
-                    if (onClickAgregar != null  ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                // Asegúrate de que tenga un fondo para que sea visible
-                                .border(width = 1.dp, color = PurpleGrey80)
-                                .padding(bottom = 10.dp, top = 10.dp)
-                                .clickable(onClick = {
-                                    onClickAgregar()
-                                    expanded.value = false
-                                    keyboardController?.hide()
-                                })
-                        ) {
-                            Row(
+
+
+                    if (onClickAgregar != null) {
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
+                                    .fillMaxWidth()
+                                    .border(width = 1.dp, color = PurpleGrey80)
+                                    .padding(bottom = 10.dp, top = 10.dp)
+                                    .clickable(onClick = {
+                                        onClickAgregar()
+                                        expanded.value = false
+                                        keyboardController?.hide()
+                                    })
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "Add",
-                                    tint = AzulGris
-                                )
-                                Text(
-                                    text = "Agregar",
-                                    color = AzulGris,
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.ExtraBold
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Add",
+                                        tint = AzulGris
+                                    )
+                                    Text(
+                                        text = "Agregar",
+                                        color = AzulGris,
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.ExtraBold
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                }
+
                             }
                         }
                     }
+
                 }
             }
 
@@ -429,7 +434,7 @@ fun SelectorMio(
 
 
     }
-}
+
 
 @Composable
 fun <T> componente(data:T, onClick:() ->Unit ){

@@ -10,16 +10,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,14 +36,15 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.model
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun tablaserv(listaTiket: List<TicketVista?> = listOf()) {
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(430.dp)
+            .width(Pantalla.ancho * 0.85f)
+            .height(Pantalla.alto * 0.65f)
             .background(AzulGris, shape = RoundedCornerShape(20.dp))
     ) {
         Column(
@@ -244,3 +249,5 @@ fun card(clienteUI: Personastodas.ClienteUI, onclick: () -> Unit) {
         )
     }
 }
+
+
