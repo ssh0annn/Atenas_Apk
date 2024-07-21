@@ -36,9 +36,6 @@ sealed class PagosEvent{
     data class Impuestos(val impuestos:Boolean):PagosEvent()
     data class Abono(val abono:Double):PagosEvent()
     data class DatosDelPago(val finaciero:tipo_venta):PagosEvent()
-
-
-
 }
 
 
