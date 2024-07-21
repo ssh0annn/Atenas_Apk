@@ -146,39 +146,32 @@ fun EjemploNey(viewModel: ServiciosViewModel = hiltViewModel()) {
                     it.map { user ->
                         user?.nombre.toString()
                     }
-
                 }, true) {
             }
+
             SelectorMio(" Seleccionar Dispos", search, state.listaDispositivos.let {
                 it.map { persona ->
                     persona?.nombre_comercial.toString()
-
-                }
-            }, false, onClickAgregar = {nuevoDispositivo = !nuevoDispositivo}) {
+                } },false, onClickAgregar = {nuevoDispositivo = !nuevoDispositivo}) {
                     selectedName ->
                 val dispositivo = state.listaDispositivos.find { it?.nombre_comercial == selectedName }
                 dispositivo?.let {
                     viewModel.onDevice(DeviceEvent.DispositivoSelecionado(it))
                     println("Esto fue lo que se seleciono: $it")
                 }
-
             }
 
             SelectorMio("Seleccionar Cliente", search,
                 state.listaClientes.let {
                     it.map { persona ->
                         persona?.nombre.toString()
-
                     }
-                },
-                false,onClickAgregar = {nuevoCliente= !nuevoCliente}
-            ) {
-                    selecion ->
+                }, false,onClickAgregar = {nuevoCliente= !nuevoCliente}
+            ) { selecion ->
                 val cliente = state.listaClientes.find { it?.nombre == selecion }
                 cliente?.let {
                     viewModel.onCliente(ClientEvents.ClienteSelecionado(it))
                 }
-
             }
 
             @Composable
@@ -250,7 +243,7 @@ fun SelectorMio(
     val focusRequester = remember { FocusRequester() }
 
     ExposedDropdownMenuBox(
-        modifier = Modifier .background(Blanco),
+        modifier = Modifier.background(Blanco),
         expanded = expanded.value,
         onExpandedChange = {
             expanded.value = !expanded.value
@@ -267,7 +260,8 @@ fun SelectorMio(
                 color = AzulGris,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
-            ), label = {
+            ),
+            label = {
                 Text(
                     text = text,
                     color = AzulGris,
@@ -293,10 +287,7 @@ fun SelectorMio(
                 }
                 .menuAnchor()
                 .width(
-                    when (corto) {
-                        true -> 250.dp
-                        false -> 300.dp
-                    }
+                    if (corto) 250.dp else 300.dp
                 )
                 .background(Color(0xFFFFFFFF), RoundedCornerShape(15.dp))
                 .fillMaxWidth()
@@ -304,65 +295,57 @@ fun SelectorMio(
                 .clip(RoundedCornerShape(15.dp))
         )
         val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
-        if (filteredItems.isNotEmpty()) {
-            Box(
-
+        Column {
+            ExposedDropdownMenu(
+                modifier = Modifier
+                    .height(200.dp)
+                    .background(Blanco),
+                expanded = expanded.value,
+                onDismissRequest = {
+                    // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
+                }
             ) {
-                Column {
-                    // Este es el Dropdown Menu
-                    ExposedDropdownMenu(
-                        modifier = Modifier
-                            .height(200.dp)
-                            .background(Blanco),
-                        expanded = expanded.value,
-                        onDismissRequest = {
-                            // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
-                        }
+                filteredItems.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(item) }, onClick = {
+                            searchText = item
+                            expanded.value = false
+                            onSelectionChange(item)
+                        })
+                }
+            }
+            Spacer(modifier = Modifier.padding(top=55.dp))
+            // Este es el Box que queremos que esté fijo en la parte inferior
+            if (onClickAgregar != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        // Asegúrate de que tenga un fondo para que sea visible
+                        .border(width = 1.dp, color = PurpleGrey80)
+                        .padding(vertical = 10.dp)
+                        .clickable(onClick = {
+                            onClickAgregar()
+                            expanded.value = false
+                            keyboardController?.hide()
+                        })
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        for (item in filteredItems) {
-                            DropdownMenuItem(
-                                text = { Text(item) }, onClick = {
-                                    searchText = item
-                                    expanded.value = false
-                                    onSelectionChange(item)
-                                })
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(top=55.dp))
-                    // Este es el Box que queremos que esté fijo en la parte inferior
-                    if (onClickAgregar != null  ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                // Asegúrate de que tenga un fondo para que sea visible
-                                .border(width = 1.dp, color = PurpleGrey80)
-                                .padding(bottom = 10.dp, top = 10.dp)
-                                .clickable(onClick = {
-                                    onClickAgregar()
-                                    expanded.value = false
-                                    keyboardController?.hide()
-                                })
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "Add",
-                                    tint = AzulGris
-                                )
-                                Text(
-                                    text = "Agregar",
-                                    color = AzulGris,
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.ExtraBold
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
-                            }
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add",
+                            tint = AzulGris
+                        )
+                        Text(
+                            text = "Agregar",
+                            color = AzulGris,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
             }
@@ -489,39 +472,6 @@ fun ClienteForm(onSubmit: (Personastodas.ClienteUI) -> Unit) {
         }
     }
 
-
-
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        TextField(
-//            value = nombre,
-//            onValueChange = { nombre = it },
-//            label = { Text("Nombre") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = telefono,
-//            onValueChange = { telefono = it },
-//            label = { Text("Teléfono") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = email,
-//            onValueChange = { email = it },
-//            label = { Text("Email") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            val cliente = Personastodas.ClienteUI(nombre= nombre, documento = documento, telefono = telefono, email = email)
-//            onSubmit(cliente)
-//        }) {
-//            Text("Crear Cliente")
-//        }
-//    }
 }
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
@@ -640,40 +590,6 @@ fun NuevoDevice(onSubmit: (Dispositivo) -> Unit) {
         }
     }
 
-
-
-
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        TextField(
-//            value = nombre,
-//            onValueChange = { nombre = it },
-//            label = { Text("Nombre") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = modelo,
-//            onValueChange = { modelo = it },
-//            label = { Text("Teléfono") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = marca,
-//            onValueChange = { marca = it },
-//            label = { Text("Email") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            val dispositivo = Dispositivo(nombre_comercial = nombre, modelo = modelo, marca = marca)
-//            onSubmit(dispositivo)
-//        }) {
-//            Text("Crear Cliente")
-//        }
-//    }
 }
 @OptIn(ExperimentalMultiplatform::class)
 @Composable
@@ -791,41 +707,6 @@ fun NuevoServicio(onSubmit: (servicio) -> Unit) {
             }
         }
     }
-
-
-
-
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        TextField(
-//            value = nombre,
-//            onValueChange = { nombre = it },
-//            label = { Text("Nombre") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = modelo,
-//            onValueChange = { modelo = it },
-//            label = { Text("Teléfono") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        TextField(
-//            value = marca.toString(),
-//            onValueChange = { marca = true },
-//            label = { Text("Email") },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            val dispositivo = servicio(nombre = nombre, descripcion = modelo, estado = marca)
-//            onSubmit(dispositivo)
-//        }) {
-//            Text("Crear Cliente")
-//        }
-//    }
 }
 
 @Composable

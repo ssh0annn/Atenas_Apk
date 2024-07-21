@@ -35,8 +35,7 @@ class MainActivity : ComponentActivity() {
 
         }
         setContent {
-        servicios()
-        // Navigation()
+         Navigation()
         }
 
     }

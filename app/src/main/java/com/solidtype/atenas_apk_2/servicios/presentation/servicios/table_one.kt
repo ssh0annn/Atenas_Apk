@@ -22,10 +22,10 @@ import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 
-//navController: NavController,
+
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class)
-fun complementari(  viewmodel: ServiciosViewModel = hiltViewModel()) {
+fun complementari(navController: NavController,  viewmodel: ServiciosViewModel = hiltViewModel()) {
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
 
     val openDialog = remember { mutableStateOf(false) }
@@ -72,7 +72,7 @@ fun complementari(  viewmodel: ServiciosViewModel = hiltViewModel()) {
 
     selector(openDialog, viewmodel, state.listaServicios, state.listaClientes, state.listaDispositivos)
 
-  //MenuLateral(navController)
+  MenuLateral(navController)
 
 }
 

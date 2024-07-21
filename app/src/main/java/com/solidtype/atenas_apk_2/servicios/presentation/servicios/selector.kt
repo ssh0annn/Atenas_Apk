@@ -606,7 +606,10 @@ fun selector(
                                         Row(
                                             modifier = Modifier.padding(top = 0.dp)
                                         ) {
-                                            Box() {
+                                            Box(
+                                                modifier = Modifier .padding(top = 15.dp)
+                                            ) {
+
                                                 NumericTextField3(
                                                     label = "Abono",
                                                     valor = state.abono.toString(),
@@ -620,17 +623,12 @@ fun selector(
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
                                             Box() {
-                                                Input(
+                                                Inputnoeditable(
                                                     label = "Subtotal",
-                                                    valor = stateTicket.datosFinance?.subtotal.toString(),
-                                                    derecho = true,
-                                                    
+                                                    valor = stateTicket.datosFinance?.subtotal.toString(),                                                   derecho = true,
                                                     modifier = Modifier
-                                                ) {
-
-                                                }
+                                                )
                                             }
-
                                         }
                                         //cuerpo6
                                         Row(
@@ -655,19 +653,16 @@ fun selector(
 
 
                                             Box() {
-                                                Input(
+                                                Inputnoeditable(
                                                     label = "Total",
                                                     valor = stateTicket.datosFinance?.total.toString(),                                                   derecho = true,
                                                     modifier = Modifier
-
-                                                ) {
-
-                                                }
+                                                )
                                             }
                                             Spacer(modifier = Modifier.padding(20.dp))
                                             Box(modifier = Modifier
                                                 .width(240.dp)
-                                                .padding(top = 10.dp)
+                                                .padding(top = 25.dp)
                                                 .clip(RoundedCornerShape(20.dp))){
                                                 SelectorMio("Forma de pago", search,
                                                     FormaPagos.entries.map {
@@ -678,23 +673,37 @@ fun selector(
                                                 }
                                             }
                                         }
-                                        Box(
-                                            modifier = Modifier .padding(start = 150.dp)
-                                        ){
-                                            Row() {
-                                                   Checkbox(
-                                                       checked = state.impuestos,
-                                                       onCheckedChange = {
-                                                          viewmodel.onPayment(PagosEvent.Impuestos(
-                                                              it
-                                                          ))
-                                                       })
-                                                Box(modifier = Modifier .padding(top = 15.dp)){
-                                                    Text(text = "Impuesto")
-                                                }
-
+                                        Row(
+                                            modifier = Modifier.padding(top = 7.dp)
+                                        ) {
+                                            Box() {
+                                                Inputnoeditable(
+                                                    label = "Restante",
+                                                    valor = stateTicket.datosFinance?.restantante.toString(),                                                   derecho = true,
+                                                    modifier = Modifier
+                                                ) 
 
                                             }
+                                            Spacer(modifier = Modifier.padding(23.dp))
+                                            Box(
+                                                modifier = Modifier .padding(start = 110.dp)
+                                            ){
+                                                Row() {
+                                                    Checkbox(
+                                                        checked = state.impuestos,
+                                                        onCheckedChange = {
+                                                            viewmodel.onPayment(PagosEvent.Impuestos(
+                                                                it
+                                                            ))
+                                                        })
+                                                    Box(modifier = Modifier .padding(top = 15.dp)){
+                                                        Text(text = "Impuesto")
+                                                    }
+
+
+                                                }
+                                            }
+
                                         }
                                     }
                                 }
@@ -746,50 +755,7 @@ fun selector(
                                             )
                                         )
                                         open.value = true
-//                                        viewmodel.onTicket(
-//                                            OnTicket.CrearTicket(
-//                                                ServicioTicket(
-//                                                    cliente = stateTicket.cliente,
-//                                                    dispositivo = stateTicket.dispositivo,
-//                                                    vendedor = stateTicket.vendedor,
-//                                                    detalles = stateTicket.detalles,
-//                                                    servicio = stateTicket.servicio,
-//                                                    datosFinance = stateTicket.datosFinance
-//                                                )
-//                                            )
-//                                        )
-
                                     }
-
-
-
-                                //--------------------------555
-//                                if (!nota.isNullOrEmpty()) {
-//                                    viewmodel.onEvent(
-//                                        ServiceEvent.CrearTicket(
-//                                            ticket(
-//                                                id_vendedor = 1,
-//                                                id_cliente = 1,
-//                                                id_tipo_venta = 1,
-//                                                id_dispositivo = 1,
-//                                                imei = email,
-//                                                falla = falla,
-//                                                descripcion = descrp,
-//                                                nota = nota,
-//                                                assesorios = accesorios,
-//                                                total = total.toDouble(),
-//                                                abono = abono.toDouble(),
-//                                                presupuesto = precio.toDouble(),
-//                                                subtotal = sub.toDouble(),
-//                                                impuesto = impuesto.toDouble(),
-//                                                fecha_inicio = LocalDate.now(),
-//                                                fecha_final = LocalDate.now(),
-//                                                estado = true
-//                                            )
-//                                        )
-//                                    )
-//                                }
-
 
                             }) {
                             if (!mostrar.value) {
@@ -1077,28 +1043,6 @@ fun selector(
             }
         }
     }
-
-
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding()
-//    ) {
-//
-//
-//        Icon(imageVector = Icons.Filled.AddCircle,
-//            contentDescription = "",
-//            tint = AzulGris,
-//            modifier = Modifier
-//                .padding(top = 0.dp)
-//                .size(60.dp)
-//                //abrir modal
-//                .clickable {
-//                    openDialog.value = true
-//                })
-//    }
-    
-
 }
 
 @Composable

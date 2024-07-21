@@ -9,10 +9,10 @@ import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun servicios (){
-//navController: NavController
-//    complementari(navController)
-complementari()
+fun servicios (navController: NavController){
+
+    complementari(navController)
+//complementari()
 }
 
 
