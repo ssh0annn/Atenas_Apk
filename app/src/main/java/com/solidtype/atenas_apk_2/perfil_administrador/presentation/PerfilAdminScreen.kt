@@ -25,8 +25,9 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.perfil_administrador.domain.modelo.administrador
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.AdminViewModel
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.ui.PerfilEvent
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
@@ -40,11 +41,10 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Loading(true)
         }
     } else {
         if (uiState.perfilAdmin.isNotEmpty()) {
@@ -78,6 +78,15 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                     val fechacaduca  : EditText = view.findViewById(R.id.txt_perfil_fecha_caduca_admin)
                     val fechacompra : EditText = view.findViewById(R.id.txt_perfil_fecha_compra_admin)
 
+                    if(!uiState.mensaje.isNullOrEmpty()){
+                        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+                        viewModel.onEvent(PerfilEvent.CleanMensaje)
+                    }
+                    if(uiState.showDialogo){
+                        dialog.show()
+                        viewModel.onEvent(PerfilEvent.CleanDialog)
+                    }
+
                     //VERIFICA SI LOS DATOS ESTAN PARA RELLENARLO
                     if (uiState.perfilAdmin.first() != null) {
                         nombreadmin.text = uiState.perfilAdmin[0]?.nombre?.toEditable() ?: "".toEditable()
@@ -92,6 +101,7 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         fechacaduca.text = uiState.perfilAdmin[0]?.fecha_caduca?.toString()?.toEditable() ?: "".toEditable()
                         fechacompra.text = uiState.perfilAdmin[0]?.fecha_compra?.toString()?.toEditable() ?: "".toEditable()
                     }
+
 
                     //ACCION DE LOS BOTONES TANTO DIALOGO COMO
                     btng.setOnClickListener {
@@ -124,11 +134,17 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                         dialog.dismiss()
                     }
                     btnpassc.setOnClickListener {
-                        if (!dclave.text.equals("") && dclave.text.equals(uiState.perfilAdmin[0]?.clave?.toEditable())) {
-                            if (!dnewclave.text.equals("") && !dconfirnewclave.text.equals("")) {
-                                if (dnewclave.text.equals(dconfirnewclave) && !dnewclave.text.equals(dclave)) {
+                        if (dclave.text.toString() != "" && dclave.text.toString() == claveadmin.text.toString()) {
+                            if (dnewclave.text.toString() != "" && dconfirnewclave.text.toString() != "") {
+                                if (dnewclave.text.toString() == dconfirnewclave.text.toString() && dnewclave.text.toString() != dclave.text.toString()) {
                                     //CAMBIAR CONTRASEÑA DE USUARIO
-                                    Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
+                                    //Toast.makeText(context, "Contraseña guardada", Toast.LENGTH_SHORT).show()
+                                    println("""
+                                        Lo que max no podia hacer : 
+                                       correo:${correoadmin.text.toString()}
+                                       claveD:${dclave.text.toString()}
+                                       claveDnew:${dnewclave.text.toString()}
+                                    """.trimIndent())
                                     viewModel.onEvent(
                                         PerfilEvent.ChangePassword(
                                             correoadmin.text.toString(),
@@ -137,8 +153,15 @@ fun PerfilAdminScreen(navController: NavController, viewModel: AdminViewModel = 
                                         )
                                     )
                                     dialog.dismiss()
+
+                                }else{
+                                    Toast.makeText(context,"Contraseña nueva no son iguales",Toast.LENGTH_SHORT).show()
                                 }
+                            }else{
+                                Toast.makeText(context,"Contraseña nueva vacia",Toast.LENGTH_SHORT).show()
                             }
+                        }else{
+                            Toast.makeText(context,"Contraseña anterior incorrecta",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

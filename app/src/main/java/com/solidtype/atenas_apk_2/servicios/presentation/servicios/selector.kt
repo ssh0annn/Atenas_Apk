@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.servicios.presentation.servicios
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -53,13 +56,16 @@ import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.ui.theme.Rojo
 
+
+
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 @Composable
 fun selector(
+    openDialog: MutableState<Boolean>,
     viewmodel: ServiciosViewModel = hiltViewModel(), listaSericios: List<servicio>,
     listaCliente: List<Personastodas.ClienteUI?>, listaDispositivos: List<Dispositivo?>
-
 ) {
+    val palomo = LocalContext.current
 
     var search by rememberSaveable { mutableStateOf("") }
     var nuevoServicios by rememberSaveable { mutableStateOf(false) }
@@ -71,7 +77,7 @@ fun selector(
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
     val listacliente = state.listaClientes
     //modal
-    val openDialog = remember { mutableStateOf(false) }
+//    val openDialog = remember { mutableStateOf(false) }
     val open = remember { mutableStateOf(false) }
     val mostrar = remember { mutableStateOf(false) }
     val altura = remember { mutableStateOf(400.dp) }
@@ -101,7 +107,7 @@ fun selector(
     var agra_modelo by rememberSaveable { mutableStateOf("") }
     var nom_comercial by rememberSaveable { mutableStateOf("") }
 
-
+    val context = LocalContext.current
 
     //modal cliente existente
     if (nuevoServicios){
@@ -118,17 +124,14 @@ fun selector(
     else if (nuevoDispositivo){
         NuevoDevice(){dispositivo -> viewmodel.onDevice(DeviceEvent.CrearDispositivo(dispositivo))
             nuevoDispositivo = !nuevoDispositivo}
-
     }
     if (mostrar1.value) {
         Box(
             modifier = Modifier.fillMaxWidth()
-
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 AlertDialog(
                     onDismissRequest = {
                         mostrar1.value = false
@@ -139,6 +142,7 @@ fun selector(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .verticalScroll(rememberScrollState())
+
                         ) {
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
@@ -230,9 +234,6 @@ fun selector(
                                                             textAlign = TextAlign.Center
 
                                                         )
-
-
-
                                                         Box(
                                                             modifier = Modifier
                                                                 .weight(0.5f)
@@ -718,12 +719,12 @@ fun selector(
 
                             onClick = {
                                     if(precio == "0.0" || dia == "0" || descrp.isEmpty()){
-
+                                        Toast.makeText(context, "Campos Vacios", Toast.LENGTH_SHORT).show()
                                     }else{
                                         viewmodel.onPayment(
                                             PagosEvent.DatosDelPago(
                                                 tipo_venta(
-                                                    presupuesto = precio.toDouble(),
+                                                    subtotal = precio.toDouble(),
                                                 )
                                             )
                                         )
@@ -1078,22 +1079,51 @@ fun selector(
     }
 
 
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding()
+//    ) {
+//
+//
+//        Icon(imageVector = Icons.Filled.AddCircle,
+//            contentDescription = "",
+//            tint = AzulGris,
+//            modifier = Modifier
+//                .padding(top = 0.dp)
+//                .size(60.dp)
+//                //abrir modal
+//                .clickable {
+//                    openDialog.value = true
+//                })
+//    }
+    
+
+}
+
+@Composable
+fun Bot (openDialog: MutableState<Boolean>){
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 1100.dp, top = 530.dp)
+            .padding()
     ) {
-
-
         Icon(imageVector = Icons.Filled.AddCircle,
             contentDescription = "",
             tint = AzulGris,
             modifier = Modifier
                 .padding(top = 0.dp)
                 .size(60.dp)
-                //abrir modal
                 .clickable {
                     openDialog.value = true
-                })
+                }
+        )
     }
 }
+
+
+
+
+
+

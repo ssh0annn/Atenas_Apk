@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-object Pantalla {
+object  Pantalla {
     val ancho: Dp
         @Composable
         get() = LocalConfiguration.current.screenWidthDp.dp

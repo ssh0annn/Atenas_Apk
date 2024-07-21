@@ -12,7 +12,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
-import com.solidtype.atenas_apk_2.util.ui.Components.SelecionarFecha
+import com.solidtype.atenas_apk_2.util.ui.components.SelecionarFecha
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +33,6 @@ fun Inputs(
     Row(
         modifier = modifier
             .padding(top = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         SelecionarFecha(
             "Fecha Inicial",
@@ -52,7 +51,7 @@ fun Inputs(
             showDatePicker2.value = true
             identificador.value = "FechaFin"
         }
-        Spacer(modifier = Modifier.width(Pantalla.ancho * 0.18f))
+        Spacer(modifier = Modifier.width(16.dp))
         SelectorVentaTicket(selected, ventasTickerTitulo, viewModel, fechaIni, fechaFin)
     }
 }

@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.products.domain.userCases
 
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.domain.repository.InventarioRepo
 import javax.inject.Inject

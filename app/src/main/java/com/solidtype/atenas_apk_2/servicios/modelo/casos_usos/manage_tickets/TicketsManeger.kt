@@ -1,7 +1,6 @@
 package com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets
 
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
-import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util.client_builder.PersonaBuilder
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util.client_builder.PersonaDirector
 
@@ -13,8 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import java.time.temporal.TemporalField
 import javax.inject.Inject
-class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket, private val prueba: BluetoothManager) {
+class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
+    suspend fun getInfoPago(tick:ticket):tipo_venta = casosTicket.getPaymentInfo(tick)
     suspend fun crearTicket(ticket: ServicioTicket) {
 
         val newTicket = ticket(
@@ -45,20 +45,13 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket, p
 
         casosTicket.crearTicket(transaction)
     }
-
-    suspend fun completarPago(ticket: ticket) {
+    suspend fun completarPago(ticket: tipo_venta) {
         casosTicket.completarPago(ticket)
     }
-
-
-    fun getDetalleTicket(): Flow<List<TicketwithRelation>> {
-        prueba.permisosGranted()
-        return casosTicket.getTickets()
+    fun getDetalleTicket(switch:Boolean): Flow<List<TicketwithRelation>> {
+        return casosTicket.getTickets(switch)
     }
-
-    fun buscarTickets(any: String) =
-        casosTicket.buscarTickets(any)
-
-
+    fun buscarTickets(any: String, switch:Boolean) =
+        casosTicket.buscarTickets(any, switch)
 }
 

@@ -3,8 +3,6 @@ package com.solidtype.atenas_apk_2.util
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.solidtype.atenas_apk_2.MainActivity
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +13,11 @@ import javax.inject.Inject
 @HiltViewModel
 class YourViewModel @Inject constructor(private val casosInventario: CasosInventario): ViewModel() {
     var fileSelectionListener: FileSelectionListener? = null
+    private val switch: Boolean = true
 
     init {
 
-         casosInventario.getProductos()
+         casosInventario.getProductos(switch)
 
     }
 

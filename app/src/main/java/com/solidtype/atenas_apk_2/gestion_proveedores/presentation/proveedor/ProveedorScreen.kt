@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor
 
 import android.annotation.SuppressLint
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.FactCheck
 import androidx.compose.material.icons.filled.LocalShipping
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,17 +34,21 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
+import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.TableProviders
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Buscador
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
-import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
-import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
+import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.Loading
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 @OptIn(ExperimentalMultiplatform::class)
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
@@ -52,8 +56,7 @@ import com.solidtype.atenas_apk_2.util.ui.Components.Titulo
 fun ProveedorScreen(
     navController: NavController,
     viewModel: ProveedorViewModel = hiltViewModel()
-
-){
+) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -63,157 +66,183 @@ fun ProveedorScreen(
     //formulario proveedor
     val idProveedor = rememberSaveable { mutableStateOf("") }
     val nombre = rememberSaveable { mutableStateOf("") }
-    val Tipodocumento = rememberSaveable { mutableStateOf("") }
-    val Numdocumento = rememberSaveable { mutableStateOf("") }
-    val Email = rememberSaveable { mutableStateOf("") }
-    val Telefono = rememberSaveable { mutableStateOf("") }
-    val Direccion = rememberSaveable { mutableStateOf("") }
+    val tipoDocumento = rememberSaveable { mutableStateOf("") }
+    val numDocumento = rememberSaveable { mutableStateOf("") }
+    val email = rememberSaveable { mutableStateOf("") }
+    val telefono = rememberSaveable { mutableStateOf("") }
+    val direccion = rememberSaveable { mutableStateOf("") }
 
     //LISTA SELECTOR
-    val DocumetSelector = listOf("Cédula", "Pasaporte")
+    val documetSelector = listOf("Cédula", "Pasaporte")
     //estado busqueda
-    val Busqueda = rememberSaveable { mutableStateOf("") }
+    val busqueda = rememberSaveable { mutableStateOf("") }
 
     val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
 
-    if(Busqueda.value.isNotBlank()) {
-        viewModel.onUserEvent(ProveedorEvent.BuscarProveedor(Busqueda.value))
-    }else{
+    if (uiState.mensaje.isNotEmpty()) {
+        Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
+        viewModel.onUserEvent(ProveedorEvent.LimpiarMensaje)
+    }
+
+    if (busqueda.value.isNotBlank()) {
+        viewModel.onUserEvent(ProveedorEvent.BuscarProveedor(busqueda.value))
+    } else {
         viewModel.onUserEvent(ProveedorEvent.MostrarProveedorEvent)
     }
 
-    Column(
-        //All
-        modifier = Modifier
-            .fillMaxSize()
-            .background(GrisClaro),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+        navController.navigate(Screens.Login.route)
+    } else if (uiState.isLoading) {
         Box(
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Loading(true)
+        }
+    } else {
+        Column(
+            //All
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 50.dp, vertical = 25.dp)
-        ) {//Contenedor
-            Column {
-                Titulo("Proveedor", Icons.Default.LocalShipping)
-
-                Box (
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.BottomEnd
-                ){
-                    Buscador(busqueda = Busqueda.value) {
-                        Busqueda.value = it
+                .verticalScroll(rememberScrollState())
+                .background(GrisClaro),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 50.dp, vertical = 25.dp)
+            ) {//Contenedor
+                Column {
+                    Titulo("Proveedor", Icons.Default.LocalShipping)
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        Buscador(busqueda = busqueda.value) {
+                            busqueda.value = it
+                        }
                     }
-                }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    TableProviders(
+                        uiState.proveedores,
+                        mostrarDialogo,
+                        editar,
+                        nombre,
+                        numDocumento,
+                        email,
+                        telefono,
+                        mostrarConfirmar,
+                        idProveedor
+                    )
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        Boton("Agregar") {
+                            mostrarDialogo.value = true
+                            editar.value = false
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                TableProviders(uiState.proveedores, mostrarDialogo, editar,nombre,Tipodocumento,Numdocumento,Email,Telefono,mostrarConfirmar,idProveedor)
-
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    Boton("Agregar"){
-                        mostrarDialogo.value = true
-                        editar.value = false
-
-                        idProveedor.value = ""
-                        nombre.value = ""
-                        Direccion.value = ""
-                        Numdocumento.value = ""
-                        Telefono.value = ""
-                        Email.value = ""
-                        Tipodocumento.value = ""
-
+                            idProveedor.value = ""
+                            nombre.value = ""
+                            direccion.value = ""
+                            numDocumento.value = ""
+                            telefono.value = ""
+                            email.value = ""
+                            tipoDocumento.value = ""
+                        }
                     }
+                    Spacer(modifier = Modifier.height(40.dp))
                 }
-
-                Spacer(modifier = Modifier.height(40.dp))
             }
         }
-    }
-    Dialogo(max = false,titulo = if (editar.value)  "Editar Proveedor" else  "Nuevo Proveedor", mostrar = mostrarDialogo.value, onCerrarDialogo = { mostrarDialogo.value = false }, clickable = true) {
-        Column(
-            modifier = Modifier
-                .background(Color(0xFFEEEEEE), RoundedCornerShape(20.dp))
-                .width(400.dp)
-                .height(300.dp)
-                .padding(10.dp)
-            ,
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Dialogo(
+            max = false,
+            titulo = if (editar.value) "Editar Proveedor" else "Nuevo Proveedor",
+            mostrar = mostrarDialogo.value,
+            onCerrarDialogo = { mostrarDialogo.value = false },
+            clickable = true,
+            sinBoton = true
         ) {
-            //cuerpo1
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .background(Color(0xFFEEEEEE), RoundedCornerShape(20.dp))
+                    .width(400.dp)
+                    .height(300.dp)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-
-                InputDetalle(
-
-                    label = "Nombre",
-                    valor = nombre.value,
+                //cuerpo1
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    nombre.value = it
+                    InputDetalle(
+                        label = "Nombre",
+                        valor = nombre.value,
+                    ) {
+                        nombre.value = it
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    AutocompleteSelect(
+                        text = "Tipo de Documento",
+                        variableStr = tipoDocumento.value,
+                        items = documetSelector,
+                    ) {
+                        tipoDocumento.value = it
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    InputDetalle(
+                        label = "Numero de documento",
+                        valor = numDocumento.value,
+                    ) {
+                        numDocumento.value = it
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    InputDetalle(
+                        label = "Email",
+                        valor = email.value,
+                    ) {
+                        email.value = it
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    InputDetalle(
+                        label = "Telefono",
+                        valor = telefono.value,
+                    ) {
+                        telefono.value = it
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    InputDetalle(
+                        label = "Dirección",
+                        valor = direccion.value,
+                    ) {
+                        direccion.value = it
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                AutocompleteSelect(
-                    text = "Tipo de Documento",
-                    variableStr = Tipodocumento.value,
-                    items = DocumetSelector,
-                ) {
-                    Tipodocumento.value = it
-                }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                InputDetalle(
-                    label = "Numero de documento",
-                    valor = Numdocumento.value,
-                ) {
-                    Numdocumento.value = it
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-                InputDetalle(
-                    label = "Email",
-                    valor = Email.value,
-                ) {
-                    Email.value = it
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                InputDetalle(
-                    label = "Telefono",
-                    valor = Telefono.value,
-                ) {
-                    Telefono.value = it
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                InputDetalle(
-                    label = "Dirección",
-                    valor = Direccion.value,
-                ) {
-                    Direccion.value = it
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                val camposCompletos = nombre.value.isNotEmpty() && Numdocumento.value.isNotEmpty() && Email.value.isNotEmpty() && Telefono.value.isNotEmpty()
-
-
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(400.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                val camposCompletos =
+                        nombre.value.isNotEmpty() &&
+                        numDocumento.value.isNotEmpty() &&
+                        Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
+                        telefono.value.isNotEmpty() &&
+                        direccion.value.isNotEmpty()
                 if (editar.value)
-                    Boton("Editar") {
-
+                    Boton(
+                        "Editar",
+                        camposCompletos
+                    ) {
                         try {
                             if (!camposCompletos) {
                                 throw Exception("Campos vacios.")
@@ -223,24 +252,26 @@ fun ProveedorScreen(
                                     Personastodas.Proveedor(
                                         idProveedor.value.toLong(),
                                         nombre.value,
-                                        Tipodocumento.value,
-                                        Numdocumento.value,
-                                        Direccion.value,
-                                        Telefono.value,
-                                        Email.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        direccion.value,
+                                        telefono.value,
+                                        email.value,
                                     )
                                 )
                             )
                             mostrarDialogo.value = false
-                            Toast.makeText(context, "El proveedor fue editado con exito", Toast.LENGTH_SHORT).show()
-
-                        }catch (e: Exception) {
+                            Toast.makeText(
+                                context,
+                                "El proveedor fue editado con éxito",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } catch (e: Exception) {
                             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
-
                     }
                 else
-                    Boton("Agregar", habilitar = camposCompletos) {
+                    Boton("Agregar", camposCompletos) {
                         try {
                             if (!camposCompletos) {
                                 throw Exception("Campos vacios.")
@@ -250,89 +281,91 @@ fun ProveedorScreen(
                                     Personastodas.Proveedor(
                                         0,
                                         nombre.value,
-                                        Tipodocumento.value,
-                                        Numdocumento.value,
-                                        Direccion.value,
-                                        Telefono.value,
-                                        Email.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        direccion.value,
+                                        telefono.value,
+                                        email.value,
                                     )
                                 )
                             )
 
                             nombre.value = ""
-                            Numdocumento.value = ""
-                            Email.value = ""
-                            Telefono.value = ""
+                            tipoDocumento.value = ""
+                            numDocumento.value = ""
+                            direccion.value = ""
+                            email.value = ""
+                            telefono.value = ""
                         } catch (e: Exception) {
                             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                         }
-
                     }
 
+                Spacer(modifier = Modifier.width(20.dp))
+                Boton("Cancelar") {
+                    mostrarDialogo.value = false
+                }
             }
         }
-
-
-    }
-
-    Dialogo(
-        titulo = "Confirma",
-        mostrar = mostrarConfirmar.value,
-        onCerrarDialogo = { mostrarConfirmar.value = false },
-        max = false,
-        sinBoton = true
-    ) {
-        Column(
-            modifier = Modifier
-                .width(400.dp)
-                .padding(16.dp, 16.dp, 16.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Dialogo(
+            titulo = "Confirma",
+            mostrar = mostrarConfirmar.value,
+            onCerrarDialogo = { mostrarConfirmar.value = false },
+            max = false,
+            sinBoton = true
         ) {
-            Text(
-                text = "¿Estás seguro que deseas eliminar este proveedor?",
-                textAlign = TextAlign.Center,
-                color = AzulGris,
-                fontSize = 24.sp
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Row {
-                Boton("Aceptar") {
-                    try {
-                        mostrarConfirmar.value = false
+            Column(
+                modifier = Modifier
+                    .width(400.dp)
+                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "¿Estás seguro que deseas eliminar este proveedor?",
+                    textAlign = TextAlign.Center,
+                    color = AzulGris,
+                    fontSize = 24.sp
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Row {
+                    Boton("Aceptar") {
+                        try {
+                            mostrarConfirmar.value = false
 
-                        viewModel.onUserEvent(
-                            ProveedorEvent.BorrarProveedor(
-                                Personastodas.Proveedor(
-                                    idProveedor.value.toLong(),
-                                    nombre.value,
-                                    Tipodocumento.value,
-                                    Numdocumento.value,
-                                    Direccion.value,
-                                    Telefono.value,
-                                    Email.value,
+                            viewModel.onUserEvent(
+                                ProveedorEvent.BorrarProveedor(
+                                    Personastodas.Proveedor(
+                                        idProveedor.value.toLong(),
+                                        nombre.value,
+                                        tipoDocumento.value,
+                                        numDocumento.value,
+                                        direccion.value,
+                                        telefono.value,
+                                        email.value,
+                                    )
                                 )
                             )
-                        )
-                        Toast.makeText(
-                            context,
-                            "Se eliminó el proveedor",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "No se pudo eliminar",
-                            Toast.LENGTH_LONG
-                        ).show()
+                            Toast.makeText(
+                                context,
+                                "Se eliminó el proveedor",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                context,
+                                "No se pudo eliminar",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Boton("Cancelar") {
-                    mostrarConfirmar.value = false
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Boton("Cancelar") {
+                        mostrarConfirmar.value = false
+                    }
                 }
             }
         }
+        MenuLateral(navController)
     }
-    MenuLateral(navController)
 }

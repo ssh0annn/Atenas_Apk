@@ -1,7 +1,7 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.RestoreFromTrash
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -27,16 +32,14 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoActivo
-import com.solidtype.atenas_apk_2.util.ui.Components.Carrito
+//import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
+import com.solidtype.atenas_apk_2.util.ui.components.Carrito
 
 @Composable
 fun AreaProductos(
     uiState: ProductosViewStates,
     idInventario: MutableState<String>,
-    idCatalogo: MutableState<String>,
-    idProveedor: MutableState<String>,
     nombre: MutableState<String>,
     marca: MutableState<String>,
     modelo: MutableState<String>,
@@ -45,12 +48,19 @@ fun AreaProductos(
     precio: MutableState<String>,
     impuesto: MutableState<String>,
     descripcion: MutableState<String>,
-    estado: MutableState<String>
+    //estado: MutableState<String>,
+    mostrarProducto: MutableState<Boolean>,
+    editar: MutableState<Boolean>,
+    categoria: MutableState<String>,
+    provider: MutableState<String>,
+    mostrarConfirmarProducto: MutableState<Boolean>,
+    idCategoria: MutableState<String>,
+    idProveedor: MutableState<String>
 ) {
     Box(
         modifier = Modifier
             .padding(start = 20.dp)
-            .width(Pantalla.ancho - 550.dp)
+            .fillMaxWidth()
             .height(Pantalla.alto - 250.dp)
             .background(AzulGris, RoundedCornerShape(20.dp))
     ) {
@@ -73,7 +83,6 @@ fun AreaProductos(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(5.dp))
                         .background(GrisOscuro)
-
                 ) {
                     Text(
                         text = "Imagen",
@@ -105,6 +114,12 @@ fun AreaProductos(
                         color = Blanco,
                         textAlign = TextAlign.Center
                     )
+                    Text(
+                        text = "",
+                        modifier = Modifier.weight(0.5f),
+                        color = Blanco,
+                        textAlign = TextAlign.Center
+                    )
                 }
                 LazyColumn(
                     modifier = Modifier
@@ -113,56 +128,135 @@ fun AreaProductos(
                         .clip(RoundedCornerShape(5.dp))
                         .background(GrisOscuro)
                 ) { //buscar componente para agregar filas de cards
-                    items(uiState.products) {
+                    items(uiState.products) { producto ->
                         Row(
                             modifier = Modifier
                                 .padding(start = 20.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(GrisClaro)
-                                .clickable {
-                                    idInventario.value =
-                                        it.id_inventario.toString()
-                                    idCatalogo.value =
-                                        it.id_categoria.toString()
-                                    idProveedor.value =
-                                        it.id_proveedor.toString()
-                                    nombre.value = it.nombre
-                                    marca.value = it.marca!!
-                                    modelo.value = it.modelo!!
-                                    cantidad.value = it.cantidad.toString()
-                                    costo.value = it.precio_compra.toString()
-                                    precio.value = it.precio_venta.toString()
-                                    impuesto.value = it.impuesto.toString()
-                                    descripcion.value = it.descripcion!!
-                                    estado.value = it.estado.formatoActivo()
-                                },
+                                .background(GrisClaro),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(10.dp),
+                                contentAlignment = Alignment.Center
                             ) {
                                 Carrito(false)
                             }// Aquí debería ir la imagen del producto
                             Text(
-                                text = it.id_inventario.toString(),
+                                text = producto.id_inventario.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = it.nombre,
+                                text = producto.nombre,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = it.precio_venta.toString(),
+                                text = producto.precio_venta.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = it.cantidad.toString(),
+                                text = producto.cantidad.toString(),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
+                            //Iconos de editar, eliminar y restaurar
+                            Row(
+                                modifier = Modifier.weight(0.5f),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                if(uiState.switch) {
+                                    IconButton(onClick = {
+                                        mostrarConfirmarProducto.value = true
+
+                                        idInventario.value = producto.id_inventario.toString()
+                                        nombre.value = producto.nombre
+                                        marca.value = producto.marca!!
+                                        modelo.value = producto.modelo!!
+                                        cantidad.value = producto.cantidad.toString()
+                                        costo.value = producto.precio_compra.toString()
+                                        precio.value = producto.precio_venta.toString()
+                                        impuesto.value = producto.impuesto.toString()
+                                        descripcion.value = producto.descripcion!!
+                                        //estado.value = producto.estado.formatoActivo()
+                                        provider.value =
+                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                        categoria.value =
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                                ?: ""
+                                        idCategoria.value = producto.id_categoria.toString()
+                                        idProveedor.value = producto.id_proveedor.toString()
+                                    }){
+                                        Icon(
+                                            imageVector = Icons.Filled.RestoreFromTrash,
+                                            contentDescription = null,
+                                            tint = AzulGris
+                                        )
+                                    }
+                                }
+                                else {
+                                    IconButton(onClick = {
+                                        mostrarProducto.value = true
+                                        editar.value = true
+
+                                        idInventario.value = producto.id_inventario.toString()
+                                        nombre.value = producto.nombre
+                                        marca.value = producto.marca!!
+                                        modelo.value = producto.modelo!!
+                                        cantidad.value = producto.cantidad.toString()
+                                        costo.value = producto.precio_compra.toString()
+                                        precio.value = producto.precio_venta.toString()
+                                        impuesto.value = producto.impuesto.toString()
+                                        descripcion.value = producto.descripcion!!
+                                        //estado.value = producto.estado.formatoActivo()
+                                        //filtrar el nombre proveedor y la categoria con el id del producto de uiState.proveedores y uiState.categoria
+                                        provider.value =
+                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                        categoria.value =
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                                ?: ""
+                                        idCategoria.value = producto.id_categoria.toString()
+                                        idProveedor.value = producto.id_proveedor.toString()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Edit,
+                                            contentDescription = null,
+                                            tint = AzulGris
+                                        )
+                                    }
+                                    IconButton(onClick = {
+                                        mostrarConfirmarProducto.value = true
+
+                                        idInventario.value = producto.id_inventario.toString()
+                                        nombre.value = producto.nombre
+                                        marca.value = producto.marca!!
+                                        modelo.value = producto.modelo!!
+                                        cantidad.value = producto.cantidad.toString()
+                                        costo.value = producto.precio_compra.toString()
+                                        precio.value = producto.precio_venta.toString()
+                                        impuesto.value = producto.impuesto.toString()
+                                        descripcion.value = producto.descripcion!!
+                                        //estado.value = producto.estado.formatoActivo()
+                                        provider.value =
+                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                        categoria.value =
+                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                                ?: ""
+                                        idCategoria.value = producto.id_categoria.toString()
+                                        idProveedor.value = producto.id_proveedor.toString()
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Delete,
+                                            contentDescription = null,
+                                            tint = AzulGris
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }

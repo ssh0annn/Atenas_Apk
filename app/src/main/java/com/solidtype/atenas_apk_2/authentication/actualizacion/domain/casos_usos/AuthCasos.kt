@@ -5,7 +5,7 @@ data class AuthCasos (
     val logout: Logout,
     val whoIs: WhoIs,
     val forgotPassword: ForgotPassword,
-    val cambiarPassword: CambiarPassword
-
+    val cambiarPassword: CambiarPassword,
+    val nuevoDevice: RegistraNuevoDevice
 
 )

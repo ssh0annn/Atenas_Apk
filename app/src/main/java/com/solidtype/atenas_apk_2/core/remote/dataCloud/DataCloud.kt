@@ -19,5 +19,7 @@ interface DataCloud {
          */
         suspend fun autenticacionCloud(email:String, licencia:String,dispositivo:String): CheckListAuth
 
+        suspend fun registrarNuevoDevice(id:String, licencia:String)
+
 
 }

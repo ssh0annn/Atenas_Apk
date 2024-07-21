@@ -10,22 +10,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
-import com.solidtype.atenas_apk_2.util.ui.Components.MenuLateral
 
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMultiplatform::class)
-fun complementari(navController: NavController, viewmodel: ServiciosViewModel = hiltViewModel()) {
-
+fun complementari( viewmodel: ServiciosViewModel = hiltViewModel()) {
     val state by viewmodel.uiStates.collectAsStateWithLifecycle()
 
+    val openDialog = remember { mutableStateOf(false) }
     if(state.listaTickets.isEmpty()){
         viewmodel.onTicket(OnTicket.GetTickets)
     }
@@ -59,6 +59,7 @@ fun complementari(navController: NavController, viewmodel: ServiciosViewModel = 
             Column {
                 Spacer(modifier = Modifier.height(70.dp))
                 tablaserv(listaTiket = state.listaTickets)
+                Bot(openDialog = openDialog)
             }
         }
       //primera opcion
@@ -66,9 +67,9 @@ fun complementari(navController: NavController, viewmodel: ServiciosViewModel = 
     }
 
 
-    selector(viewmodel, state.listaServicios, state.listaClientes, state.listaDispositivos)
+    selector(openDialog, viewmodel, state.listaServicios, state.listaClientes, state.listaDispositivos)
 //    NavPlato("Servicios")
-    MenuLateral(navController)
+//    MenuLateral(navController)
 
 }
 

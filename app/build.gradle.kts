@@ -104,8 +104,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation ("androidx.compose.material:material-icons-extended:1.6.4")
-    implementation ("androidx.compose.material:material-icons-core:1.6.4")
+    implementation("androidx.compose.material:material-icons-extended:1.6.4")
+    implementation("androidx.compose.material:material-icons-core:1.6.4")
+
+    testImplementation("com.google.firebase:firebase-auth:21.0.3")
 
 
     //firebase
@@ -115,15 +117,15 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 
     //Serializacion para json
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     //Corrutinas
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
-    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     //LoginViewModel
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.4")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.4")
 
     //Dagger hilt
     implementation("com.google.dagger:hilt-android:2.51")
@@ -143,19 +145,27 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     //Excel maneger
     implementation("org.apache.poi:poi:5.2.5") // Para trabajar con formatos de archivo de Excel (XLS)
-    implementation ("org.apache.poi:poi-ooxml:5.2.5") // Para trabajar con formatos de archivo de Excel (XLSX)
-    implementation ("com.google.android.gms:play-services-base:17.6.0")
-    implementation ("com.google.firebase:firebase-messaging:22.0.0")
+    implementation("org.apache.poi:poi-ooxml:5.2.5") // Para trabajar con formatos de archivo de Excel (XLSX)
+    implementation("com.google.android.gms:play-services-base:17.6.0")
+    implementation("com.google.firebase:firebase-messaging:22.0.0")
 
     //Lotti y animaciones :
     implementation("com.airbnb.android:lottie-compose:6.0.1")
 
     //Printer
 
-   // implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-
+    // implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     //testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+
+    //Sincronizacion el worker
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+
+    implementation("com.github.kenglxn.QRGen:android:3.0.1") //QR
+
+    //TEsteando Impresora :
+    //implementation("com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.3.0")
+    //implementation("com.github.mazenrashed:Printooth:1.3.1")
 
 }
 

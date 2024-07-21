@@ -8,6 +8,7 @@ import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,13 +33,13 @@ class AuthViewmodel @Inject constructor(
     private val LICENCIA: String = "licencia"
     private val CORREO: String = "correo"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
-    private  var conteoConexion = false
+    private var conteoConexion = false
 
 
     init {
-        if(recuerdame.getString(CORREO, "") == ""){
+        if (recuerdame.getString(CORREO, "") == "") {
             uiStates.update { it.copy(licenciaGuardada = false) }
-        }else{
+        } else {
             uiStates.update { it.copy(licenciaGuardada = true) }
         }
         uiStates.update {
@@ -49,99 +50,113 @@ class AuthViewmodel @Inject constructor(
         onEvent(AuthEvent.IsAutenticatedEvent)
     }
 
+
     fun onEvent(event: AuthEvent) {
         when (event) {
-            AuthEvent.IsAutenticatedEvent -> {
-                uiStates.update { it.copy(isLoading = true) }
-                if (isNetworkAvailable()) {
-                    uiStates.update { it.copy(network = true) }
-                    if(conteoConexion){
-                        uiStates.update { it.copy(razones = "Conexion restablecida!") }
-                        conteoConexion = false
-                    }
-                    isAutenticated()
-                } else {
-                    viewModelScope.launch {
-                        uiStates.update { it.copy(isLoading = false) }
-                        conteoConexion = true
-                        delay(2000)
-                        uiStates.update { it.copy(network = true) }
-                        onEvent(AuthEvent.IsAutenticatedEvent)
-                    }
-                }
+            AuthEvent.IsAutenticatedEvent -> handleAuthenticationEvent()
+            is AuthEvent.LoginEvent -> handleLoginEvent(event)
+            is AuthEvent.Recuerdame -> recuerdame(event.email)
+            is AuthEvent.EliminarRecuerdos -> eliminarRecuerdos()
+            is AuthEvent.ForgetPassword -> forgetPassword(event.email)
+            AuthEvent.RegistrarNuevoDevice -> registraNuevoDivice(getDeviceId().toString())
+            AuthEvent.CancelarRegistro -> {
+                uiStates.update { it.copy(dispositivo = true)  }
+                eliminarLicencia()
+                logout()
             }
-
-            is AuthEvent.LoginEvent -> {
-
-                uiStates.update { it.copy(isLoading = true) }
-                if (isNetworkAvailable()) {
-                    uiStates.update { it.copy(network = true) }
-                    if(conteoConexion){
-                        uiStates.update { it.copy(razones = "Conexion restablecida!") }
-                        conteoConexion = false
-                    }
-
-                    if (event.licencia.isNotBlank()) {
-                        licencia(event.licencia)
-                        login(event.email, event.password, event.licencia)
-
-                    } else {
-                       login(event.email, event.password,recuerdame.getString(LICENCIA, "").toString() )
-                        println("Licencia temporal : ${recuerdame.getString(LICENCIA, "").toString()}")
-                    }
-                }  else {
-                    viewModelScope.launch {
-                        delay(1000)
-                        uiStates.update { it.copy(isLoading = false, network = false, razones = "No hay conexion...") }
-                        conteoConexion = true
-                        delay(10000)
-                        uiStates.update { it.copy(isLoading = true, network = true) }
-                        onEvent(AuthEvent.IsAutenticatedEvent)
-                    }
-                }
-
-            }
-
-            is AuthEvent.Recuerdame -> {
-                recuerdame(event.email)
-            }
-
-            is AuthEvent.EliminarRecuerdos -> {
-                eliminarRecuerdos()
-            }
-            is AuthEvent.ForgetPassword -> {
-                forgetPassword(event.email)
-            }
-
-            else -> {
-                viewModelScope.launch { casosAuth.logout() }
-
-            }
+            else -> viewModelScope.launch { casosAuth.logout() }
         }
     }
 
-    fun limpiaRazones(){
+    private fun registraNuevoDivice(id:String){
+        viewModelScope.launch {
+            casosAuth.nuevoDevice(id, recuerdame.getString(LICENCIA, "").toString())
+            uiStates.update { it.copy(dispositivo = true) }
+        }
+    }
+    private fun handleAuthenticationEvent() {
+        uiStates.update { it.copy(isLoading = true) }
+        if (isNetworkAvailable()) {
+            uiStates.update { it.copy(network = true) }
+            conteoConexion()
+            isAutenticated()
+        } else {
+            viewModelScope.launch {
+                uiStates.update { it.copy(isLoading = false) }
+                conteoConexion = true
+                delay(2000)
+                uiStates.update { it.copy(network = true) }
+                onEvent(AuthEvent.IsAutenticatedEvent)
+            }
+        }
+    }
+    private fun handleLoginEvent(event: AuthEvent.LoginEvent) {
+        uiStates.update { it.copy(isLoading = true) }
+        if (isNetworkAvailable()) {
+            uiStates.update { it.copy(network = true) }
+            conteoConexion()
+            val licencia = if (event.licencia.isNotBlank()) {
+                licencia(event.licencia)
+                event.licencia
+            } else {
+                recuerdame.getString(LICENCIA, "").toString()
+            }
+            login(event.email, event.password, licencia)
+
+        } else {
+            viewModelScope.launch {
+                delay(1000)
+                uiStates.update {
+                    it.copy(
+                        isLoading = false,
+                        network = false,
+                        razones = "No hay conexion..."
+                    )
+                }
+                conteoConexion = true
+                delay(10000)
+                uiStates.update { it.copy(isLoading = true, network = true) }
+                onEvent(AuthEvent.IsAutenticatedEvent)
+            }
+        }
+    }
+    private fun conteoConexion() {
+        if (conteoConexion) {
+            uiStates.update { it.copy(razones = "Conexion restablecida!") }
+            conteoConexion = false
+        }
+    }
+    fun limpiaRazones() {
         uiStates.update {
             it.copy(
-                razones =null
+                razones = null
             )
-        }
-        }
-    private fun forgetPassword(email:String){
-        viewModelScope.launch {
-           if(casosAuth.forgotPassword(email)){
-               uiStates.update {
-                   it.copy(enviado = true)
-               }
-           }else{
-               uiStates.update {
-                   it.copy(enviado = false, razones = "Correo no valido")
-               }
-           }
         }
     }
 
-    private fun login(email: String, pass: String, licencia:String) {
+    private fun forgetPassword(email: String) {
+        viewModelScope.launch {
+            casosAuth.forgotPassword(email){success, cancel, execption ->
+                println("""
+                    success :$success, 
+                    cancel:$cancel, 
+                    execption: $execption
+                """.trimIndent())
+                if(success){
+                    uiStates.update {
+                        it.copy(enviado = true, razones = "Correo enviado!")
+                        }
+                } else {
+                    uiStates.update {
+                        it.copy(enviado = cancel, razones = execption)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun login(email: String, pass: String, licencia: String) {
         viewModelScope.launch {
             uiStates.update { it.copy(isLoading = true) }
             withContext(Dispatchers.IO) {
@@ -156,66 +171,64 @@ class AuthViewmodel @Inject constructor(
     }
 
     private fun razonesDe(checkListAuth: CheckListAuth): Boolean {
-        when (checkListAuth.autenticado) {
-            true -> {
-                when (checkListAuth.licensiaActiva) {//REvision por usuarios de otra tablet.
-
-                    true -> {
-                        when (checkListAuth.deviceRegistrado) {
-
-                            true -> {
-                                uiStates.update {
-                                    it.copy(
-                                        isAutenticated = Usuario(
-                                            correo = checkListAuth.emailUsuario,
-                                            tipoUser = checkListAuth.tipoUser
-                                        ),
-                                        razones = "Bienvenido usuario: ${checkListAuth.emailUsuario}."
-                                    )
-                                }
-                                return true
-                            }
-                            false -> {
-                                eliminarLicencia()
-                                logout()
-                                uiStates.update {
-                                    it.copy(
-                                        isAutenticated = null,
-                                        razones = "Dispositivo no registrado: '${getDeviceId()}' ",
-                                        licenciaGuardada = false
-                                    )
-
-                                }
-                                return false
-                            }
-                        }
-                    }
-
-                    false -> {
-                        uiStates.update {
-                            it.copy(
-                                isAutenticated = null,
-                                razones = "Licencia no valida.",
-                                licenciaGuardada = false
-                            )
-                        }
-                        eliminarLicencia()
-                        logout()
-
-                        return false
-                    }
-                }
-
-            }
-
-            false -> {
+        return when {
+            !checkListAuth.autenticado -> {
                 uiStates.update {
                     it.copy(
                         isAutenticated = null,
-                        razones = "Usuario no identificado"
+                        razones = "Usuario no identificado" ,
+                        licenciaGuardada = false
                     )
                 }
-                return false
+                false
+            }
+            !checkListAuth.licensiaActiva -> {
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = null,
+                        razones = "Licencia no valida.",
+                        licenciaGuardada = false
+                    )
+                }
+                eliminarLicencia()
+                logout()
+                false
+            }
+            !checkListAuth.deviceRegistrado -> {
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = null,
+                        razones = "Dispositivo no registrado: '${getDeviceId()}' ",
+                        licenciaGuardada = false,
+                        dispositivo = false
+                    )
+                }
+                false
+            }
+            checkListAuth.tipoUser != TipoUser.UNKNOWN ->{
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = Usuario(
+                            correo = checkListAuth.emailUsuario,
+                            tipoUser = checkListAuth.tipoUser
+                        ),
+                        razones = "Bienvenido usuario: ${checkListAuth.emailUsuario}."
+                    )
+                }
+                true
+            }
+            else -> {
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = null,
+                        razones = "No autorizado!",
+                        licenciaGuardada = false,
+                        dispositivo = false
+                    )
+                }
+                eliminarLicencia()
+                logout()
+                false
             }
         }
     }
@@ -234,7 +247,6 @@ class AuthViewmodel @Inject constructor(
             context.contentResolver,
             Settings.Secure.ANDROID_ID
         )
-
         return deviceId
     }
 
@@ -251,7 +263,6 @@ class AuthViewmodel @Inject constructor(
     }
 
     private fun isNetworkAvailable(): Boolean {
-
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
@@ -260,6 +271,7 @@ class AuthViewmodel @Inject constructor(
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
             else -> false
         }
     }

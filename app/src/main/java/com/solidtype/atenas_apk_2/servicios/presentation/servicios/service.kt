@@ -7,9 +7,9 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun servicios (navController: NavController){
+fun servicios (){
 
-    complementari(navController)
+    complementari()
 
 }
 

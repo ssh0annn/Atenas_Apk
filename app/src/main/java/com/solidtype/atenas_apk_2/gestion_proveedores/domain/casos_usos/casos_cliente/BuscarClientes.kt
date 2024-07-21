@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class BuscarClientes @Inject constructor(private val repo: ClienteProveedorRepository) {
 
-    operator fun invoke(any: String) =
+    operator fun invoke(any: String, estado:Boolean) =
         repo.buscarPersonaTipo("cliente", any).map { clientes ->
-            clientes.filter { it.estado == true }.map { cliente -> cliente.toClienteUI() }
+            clientes.filter { it.estado == estado && it.tipo_persona=="cliente"}.map { cliente -> cliente.toClienteUI() }
         }
 }

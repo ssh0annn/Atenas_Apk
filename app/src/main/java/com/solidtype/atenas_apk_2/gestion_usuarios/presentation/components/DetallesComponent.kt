@@ -27,8 +27,8 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Boto
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.AutocompleteSelect
-import com.solidtype.atenas_apk_2.util.ui.Components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
+import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
@@ -43,15 +43,12 @@ fun Detalles(
     rol: MutableState<String>,
     uiState: UserStatesUI,
     mostrarDialogo: MutableState<Boolean>,
-    mostrarConfirmar: MutableState<Boolean>,
     estado: MutableState<String>,
-    viewModel: UsuariosViewmodel,
-    context: Context
 ) {
     Column(
         modifier = Modifier
             .padding(top = 0.dp)
-            .height(Pantalla.alto - 185.dp)
+            .height(Pantalla.alto * 0.6f)
     ) {
         Column(
             modifier = Modifier
@@ -81,7 +78,7 @@ fun Detalles(
                             apellido.value = it
                         }
                         InputDetalle("Correo", correo.value) { correo.value = it }
-                        InputDetalle("Clave", clave.value) { clave.value = it }
+                        InputDetalle("Clave", clave.value, pass = true) { clave.value = it }
                         InputDetalle("Teléfono", telefono.value) {
                             telefono.value = it
                         }
@@ -102,86 +99,9 @@ fun Detalles(
                             estado.value,
                             listOf("Activo", "Inactivo")
                         ) { estado.value = it }
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {//Botones de cerrar y guardar
-                BotonIconCircular(//Eliminar
-                    true,
-                    onClick = {
-                        mostrarConfirmar.value = true
-                    }
-                )
-                Spacer(modifier = Modifier.width(60.dp))
-                BotonIconCircular(false, onClick = {
-                    try {
-                        if (idUsuario.value.isEmpty() || nombre.value.isEmpty() || apellido.value.isEmpty() || correo.value.isEmpty() || clave.value.isEmpty() || telefono.value.isEmpty() || estado.value.isEmpty() || rol.value.isEmpty()) {
-                            throw Exception("Campos vacios.")
-                        }
-
-                        if (uiState.usuarios.find { it.id_usuario == idUsuario.value.toLong() } != null) {
-                            viewModel.onUserEvent(
-                                UserEvent.EditarUsuario(
-                                    usuario(
-                                        id_usuario = idUsuario.value.toLong(),
-                                        id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                            ?: 0,
-                                        nombre = nombre.value,
-                                        apellido = apellido.value,
-                                        email = correo.value,
-                                        clave = clave.value,
-                                        telefono = telefono.value,
-                                        estado = estado.value.formatoActivoDDBB()
-                                    )
-                                )
-                            )
-                            Toast.makeText(
-                                context,
-                                "Usuario editado",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } else {
-                            viewModel.onUserEvent(
-                                UserEvent.AgregarUsuario(
-                                    usuario(
-                                        id_usuario = idUsuario.value.toLong(),
-                                        id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                            ?: 0,
-                                        nombre = nombre.value,
-                                        apellido = apellido.value,
-                                        email = correo.value,
-                                        clave = clave.value,
-                                        telefono = telefono.value,
-                                        estado = estado.value.formatoActivoDDBB()
-                                    )
-                                )
-                            )
-                            Toast.makeText(
-                                context,
-                                "Usuario guardado",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-
-                        idUsuario.value = ""
-                        nombre.value = ""
-                        apellido.value = ""
-                        correo.value = ""
-                        clave.value = ""
-                        telefono.value = ""
-                        estado.value = ""
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "error: ${e.message}",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                    }
-                })
             }
         }
     }

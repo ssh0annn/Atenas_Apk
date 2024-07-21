@@ -1,21 +1,32 @@
 package com.solidtype.atenas_apk_2.gestion_facturar.data
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
-import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import android.content.Intent
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.Text
+import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.core.app.ActivityCompat
+import com.solidtype.atenas_apk_2.gestion_facturar.domain.BluetoothManagers
 
-class BluetoothDiscovery(private val context: Context) {
+class BluetoothDiscovery :ComponentActivity(){
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private val discoveredDevices = mutableListOf<BluetoothDevice>()
+
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -27,13 +38,61 @@ class BluetoothDiscovery(private val context: Context) {
         }
     }
 
-    fun startDiscovery() {
+    fun permisos() {
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        }
 
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            // Handle the result of the permission request
+            val granted = permissions.entries.all { it.value }
+            if (granted) {
+                // Permissions granted, proceed with Bluetooth operations
+
+//            val intent = Intent(
+//                this,
+//                MainActivity::class.java
+//            )
+//            startActivity(intent)
+                val bluetoothManager: BluetoothManager =
+                    getSystemService(BluetoothManager::class.java)
+                val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.getAdapter()
+                if (bluetoothAdapter == null) {
+                    // Device doesn't support Bluetooth
+                    println("Esta nulo")
+                }
+                if (bluetoothAdapter?.isEnabled == false) {
+                    println("No est abilitardo")
+
+                } else {
+                    println("Esta abilitado!! ")
+                }
+
+                println(" Permisos de bluetooth consedidos")
+            } else {
+                // Permissions denied, show a message to the user
+                Toast.makeText(this, "Permisos de bluetooth denegados", Toast.LENGTH_SHORT).show()
+                finishAndRemoveTask()
+            }
+
+        }
     }
 
     fun stopDiscovery() {
         if (ActivityCompat.checkSelfPermission(
-                context,
+                this,
                 Manifest.permission.BLUETOOTH_SCAN
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -47,7 +106,7 @@ class BluetoothDiscovery(private val context: Context) {
             return
         }
         bluetoothAdapter?.cancelDiscovery()
-        context.unregisterReceiver(receiver)
+        this.unregisterReceiver(receiver)
     }
 
     fun getDiscoveredDevices(): List<BluetoothDevice> {
@@ -55,7 +114,8 @@ class BluetoothDiscovery(private val context: Context) {
     }
 }
 
-class CasoBlueTooth @Inject constructor(@ApplicationContext private val context: Context) : BluetoothManager {
+class CasoBlueTooth @Inject constructor(@ApplicationContext private val context: Context) :
+    BluetoothManagers{
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private val discoveredDevices = mutableListOf<BluetoothDevice>()
 

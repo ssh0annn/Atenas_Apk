@@ -1,11 +1,12 @@
 package com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.dataDb.DataDbProducts
 
 
-import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
+import com.solidtype.atenas_apk_2.products.data.local.dao.inventarioDao
 import com.solidtype.atenas_apk_2.products.data.remote.remoteProFB.interfaces.QueryDBlocal
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 /**
@@ -14,7 +15,7 @@ import javax.inject.Inject
  * Esta clase esta atada a la data class ProductEntity y a la tabla Productos de RoomDatabase.
  */
 class QueryDBlocalImpl @Inject constructor(
-    private val dao: ProductDao
+    private val dao: inventarioDao
 ): QueryDBlocal {
     /**
      * @param: List<String>
@@ -25,25 +26,12 @@ class QueryDBlocalImpl @Inject constructor(
      * Los elementos deben ser igual a 9.
      */
 
-
-
-
-
-    private fun entityConvert(it: List<String>): ProductEntity {
+    private fun entityConvert(it: List<String>): inventario? {
         if (it.size == 9) {
             try {
+                //Reparar
 
-                return ProductEntity(
-                    Code_Product = it[0].toInt(),
-                    Name_Product = it[1],
-                    Description_Product = it[2],
-                    Category_Product = it[3],
-                    Price_Product = it[4].toDouble(),
-                    Model_Product = it[5],
-                    Price_Vending_Product = it[6].toDouble(),
-                    Tracemark_Product = it[7],
-                    Count_Product = it[8].toInt(),
-                )
+                return null
             } catch (e: Exception) {
                 println("Este es la razon lista: $it, size ${it.size}")
                 throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
@@ -59,20 +47,12 @@ class QueryDBlocalImpl @Inject constructor(
      * @funcionamiento Funcion de uso interno para convertir una entidad de tipo ProductEntity en una lista de lista de Strings.
      * Favor ver la data class ProductEntity.
      */
-    private fun entityToListString(data: List<ProductEntity>): List<List<String>> {
+    private fun entityToListString(data: List<inventario>): List<List<String>> {
         val mutableListData: MutableList<List<String>> = mutableListOf()
         if (data.isNotEmpty()) {
             data.forEach {
                 val mutableList = mutableListOf<String>()
-                mutableList.add(it.Code_Product.toString())
-                mutableList.add(it.Name_Product)//Aqui era el problema jajja
-                mutableList.add(it.Description_Product)
-                mutableList.add(it.Category_Product)
-                mutableList.add(it.Price_Product.toString())
-                mutableList.add(it.Model_Product)
-                mutableList.add(it.Price_Vending_Product.toString())
-                mutableList.add(it.Tracemark_Product)
-                mutableList.add(it.Count_Product.toString())
+
                 mutableListData.add(mutableList)
             }
 
@@ -89,9 +69,9 @@ class QueryDBlocalImpl @Inject constructor(
      */
     override suspend fun getAllProducts(): List<List<String>> {
         var mutableListData: List<List<String>> = emptyList()
-        var listaDeEntity = emptyList<ProductEntity>()
+        var listaDeEntity = emptyList<inventario>()
         coroutineScope {
-            val response = async { listaDeEntity = dao.getProductss() }
+            val response = async { dao.getInventario().collect{listaDeEntity = it} }
             response.await()
             if (listaDeEntity.isNotEmpty()) {
                 mutableListData = entityToListString(listaDeEntity)
@@ -108,17 +88,17 @@ class QueryDBlocalImpl @Inject constructor(
      * Esta funcion integra un hilo interno. Favor llamar desde una funcion suspendida.
      */
     override suspend fun insertAllProducts(dataToInsert: MutableList<List<String>>) {
-        val lista: MutableList<ProductEntity> = mutableListOf()
+        val lista: MutableList<inventario> = mutableListOf()
         dataToInsert.forEach {
             try {
-                lista.add(entityConvert(it))
+                entityConvert(it)?.let { it1 -> lista.add(it1) }
             } catch (e: Exception) {
                 throw Exception("El tipo de la lista no es compatible con la Entity producto $e")
             }
         }
         coroutineScope {
             println("Aqui veamos la lista: $lista y siez ${lista.size}")
-            val response = async { dao.insertAllProducts(lista) }
+            val response = async { dao.addInventarios(lista) }
             response.await()
         }
     }
@@ -130,16 +110,18 @@ class QueryDBlocalImpl @Inject constructor(
      * tomando la base de datos local como referencia de "Single true of trust". Luego debuelve en una lista los datos no iguales.
      */
     override suspend fun compararIntrusos(listIntrusos: MutableList<List<String>>): List<List<String>> {
-        val listaFirebaseMediatorproducts: MutableList<ProductEntity> = mutableListOf()
+        val listaFirebaseMediatorproducts: MutableList<inventario> = mutableListOf()
         val local = datosLocales()
         listIntrusos.forEach {
             val intrusosConvetido = entityConvert(it)
-            listaFirebaseMediatorproducts.add(intrusosConvetido)
+            if (intrusosConvetido != null) {
+                listaFirebaseMediatorproducts.add(intrusosConvetido)
+            }
         }
 
         val productosToDeleteInFirestore =
             listaFirebaseMediatorproducts.filterNot { firestoreproductos ->
-                local.any { it.Code_Product == firestoreproductos.Code_Product }
+                local.any { it.id_inventario == firestoreproductos.id_inventario }
             }
         return entityToListString(productosToDeleteInFirestore)
     }
@@ -152,13 +134,15 @@ class QueryDBlocalImpl @Inject constructor(
      * en base de dato local.
      */
     override suspend fun compararLocalParriba(listIntrusos: List<List<String>>): List<List<String>> {
-        val listaFirebaseMediatorproducts: MutableList<ProductEntity> = mutableListOf()
+        val listaFirebaseMediatorproducts: MutableList<inventario> = mutableListOf()
         val local = datosLocales()
         listIntrusos.forEach {
             val intrusosConvetido = entityConvert(it)
-            listaFirebaseMediatorproducts.add(intrusosConvetido)
+            if (intrusosConvetido != null) {
+                listaFirebaseMediatorproducts.add(intrusosConvetido)
+            }
         }
-        val listaNoMutable: List<ProductEntity> = listaFirebaseMediatorproducts
+        val listaNoMutable: List<inventario> = listaFirebaseMediatorproducts
         val productToAddInFirebase = local.filterNot { firestoreproductos ->
             listaNoMutable.any {
                 it == firestoreproductos
@@ -171,9 +155,9 @@ class QueryDBlocalImpl @Inject constructor(
      * @return  List<ProductEntity>
      * @funcion: captura todos los datos de la tabla Productos y los debuelve en una lista de objetos ProductEntity.
      */
-    private suspend fun datosLocales(): List<ProductEntity> {
+    private suspend fun datosLocales(): List<inventario> {
         return coroutineScope {
-            val listProduct = async { dao.getProductss() }
+            val listProduct = async { dao.getInventario().first() }
             return@coroutineScope listProduct.await()
 
         }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.historial_ventas.data.remoteHistoVentaFB.mediator.MediatorHistorialVentasImpl
 import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.CasosHistorialReportes
-import com.solidtype.atenas_apk_2.util.toIsoDate
 //import com.solidtype.atenas_apk_2.util.toMapa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,175 +14,137 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes,
-    private val classesAsyncs: MediatorHistorialVentasImpl
+    private val casosHistorialReportes: CasosHistorialReportes
 
 ) : ViewModel() {
 
     var uiState = MutableStateFlow(HistorialUIState())
         private set
 
-    private var job : Job? = null
-
-
     init {
-        MostrarHistoriar()
-        //  mostrarTicket()
+
+         onEvent(HistorialEvent.GetTodosTodasVentas)
+         onEvent(HistorialEvent.GetTodosTickets)
     }
 
+    fun onEvent(event: HistorialEvent){
+        println("Se marco evento historial $event")
+        when(event){
+            HistorialEvent.Exportar -> exportar()
+            is HistorialEvent.GetTicketsFechas -> buscarProductosTicket(event.desde, event.hasta)
+            HistorialEvent.GetTodosTickets -> mostrarTicket()
+            HistorialEvent.GetTodosTodasVentas -> mostrarHistoriar()
+            is HistorialEvent.GetVentasFechas -> buscarProductosVenta(event.desde, event.hasta)
+        }
+    }
 
-    fun Exportar() {
+    private fun exportar() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 uiState.update { it.copy(isLoading = true) }
                 val corr: Uri = if (uiState.value.ventasOTicket) {
                     casosHistorialReportes.exportarTickets(uiState.value.Ticket)
-
                 } else {
                     casosHistorialReportes.exportarVentas(uiState.value.Historial)
                 }
-                uiState.update { it.copy(isLoading = false) }
-
-                withContext(Dispatchers.IO) {
                     uiState.update {
-                        it.copy(uriPath = corr)
+                        it.copy(uriPath = corr,isLoading = false)
                     }
-                }
             }
         }
     }
 
-
-    fun buscarProductosVenta(
-        fechaInicio: String, fechaFinal: String
+    private  fun buscarProductosVenta(
+        desde: LocalDate, hasta: LocalDate
     ) {
-        job?.cancel()
-        if (fechaInicio.isBlank() || fechaFinal.isBlank()) {
-
-            uiState.update {
-                it.copy(
-                    error = "Campos vacio"
-                )
-            }
-            println("Campo vaio :fecha inicio $fechaInicio <- o fecha final $fechaFinal <-")
-        } else {
-            uiState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-            println("Campo vaio :fecha inicio $fechaInicio <- o fecha final $fechaFinal <-")
-            job = viewModelScope.launch {
-                var total = 0.0
-                casosHistorialReportes.buscarporFechCatego(fechaInicio.toIsoDate(), fechaFinal.toIsoDate())
-                    .collect { product ->
-                        for (i in product) {
-                            total += i.total
+         viewModelScope.launch {
+                casosHistorialReportes.buscarporFechCatego(desde, hasta)
+                    .collect { tipoVenta ->
+                        uiState.update { state ->
+                            state.copy(
+                                total = tipoVenta.sumOf { it.tipoVenta.total },
+                                abono = tipoVenta.sumOf { it.tipoVenta.abono },
+                                impuesto = tipoVenta.sumOf { it.tipoVenta.impuesto } ,
+                                subtotal =  tipoVenta.sumOf { it.tipoVenta.subtotal },
+                                Historial = tipoVenta,
+                                isLoading = false
+                            )
                         }
-                        println("Qui lo que se pidio : $product")
-                        uiState.update {
-                            it.copy(Historial = product, isLoading = false)
-                        }
-
                     }
-                uiState.update {
-                    it.copy(total = total)
-                }
-                println(uiState.value.total)
             }
-        }
     }
 
-    fun buscarProductosTicket(
-        fechaIni: String,
-        fechaFinal: String,
+    private  fun buscarProductosTicket(
+        desde: LocalDate,
+        hasta: LocalDate,
     ) {
-        job?.cancel()
-        if (fechaIni.isBlank() || fechaFinal.isBlank()) {
-            uiState.update {
-                it.copy(
-                    error = "Campos Vacios"
-                )
-            }
-        } else {
-            uiState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-           job = viewModelScope.launch {
-                val productosRangoticket =
-                    casosHistorialReportes.verTicketsPorFechas(fechaIni, fechaFinal)
-                var deuda  = 0.0
-                productosRangoticket.collect { product ->
-//                    for (i in product) {
-//                        deuda += i.total
-//                    }
-                    uiState.update {
-                        it.copy(Ticket = product, isLoading = false, total2 = deuda)
+        viewModelScope.launch {
+
+            casosHistorialReportes.verTicketsPorFechas(desde, hasta)
+                .collect { ventaTicket ->
+                    uiState.update { state ->
+                        state.copy(
+                            total = ventaTicket.sumOf { it.tipoVenta.total },
+                            abono = ventaTicket.sumOf { it.tipoVenta.abono },
+                            impuesto = ventaTicket.sumOf { it.tipoVenta.impuesto },
+                            subtotal = ventaTicket.sumOf { it.tipoVenta.subtotal },
+                            restante = ventaTicket.sumOf { it.tipoVenta.restantante },
+                            Ticket = ventaTicket
+                        )
                     }
+
                 }
-            }
+
         }
+
     }
-
-
-    fun MostrarHistoriar() {
-        job?.cancel()
-        val mostrarHistory = casosHistorialReportes.mostrarVentas()
-        var total = 0.0
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-        job= viewModelScope.launch {
-
-            mostrarHistory.collect { product ->
-                for (i in product) {
-                    total += i.total
-                    println(i)
-                }
-                uiState.update {
-                    it.copy(
-                        Historial = product, isLoading = false, total = total, ventasOTicket = false
-                    )
-                }
-                println("total" + total)
-            }
-            casosHistorialReportes.syncronizacion()
-
-
-        }
-    }
-
-    fun mostrarTicket() {
-        job?.cancel()
-        val mostrarTick = casosHistorialReportes.verTodosTickets()
-
-        var deuda = 0.0
-       job =  viewModelScope.launch {
-            mostrarTick.collect { product ->
-//                for (i in product) {
-//                    deuda += i.total
-//                }
-                uiState.update {
-                    it.copy(
-                        Ticket = product, isLoading = false, total2 = deuda, ventasOTicket = true
+    private fun mostrarHistoriar() {
+      viewModelScope.launch {
+            casosHistorialReportes.mostrarVentas().collect { tipoVenta ->
+                println("TipoVenta: $tipoVenta")
+                uiState.update { state ->
+                    state.copy(
+                        total = tipoVenta.sumOf { it.tipoVenta.total },
+                        abono = tipoVenta.sumOf { it.tipoVenta.abono },
+                        impuesto = tipoVenta.sumOf { it.tipoVenta.impuesto },
+                        subtotal = tipoVenta.sumOf { it.tipoVenta.subtotal },
+                        Historial = tipoVenta,
+                        isLoading = false,
+                        ventasOTicket = false
                     )
                 }
             }
-            uiState.update {
-                it.copy(isLoading = false)
+        }
+    }
+
+    private  fun mostrarTicket() {
+     viewModelScope.launch {
+            casosHistorialReportes.verTodosTickets().collect { ventaTicket ->
+                println("ventaTicket: $ventaTicket")
+                uiState.update { state ->
+                    state.copy(
+                        total = ventaTicket.sumOf { it.tipoVenta.total },
+                        abono = ventaTicket.sumOf { it.tipoVenta.abono },
+                        impuesto = ventaTicket.sumOf { it.tipoVenta.impuesto },
+                        subtotal = ventaTicket.sumOf { it.tipoVenta.subtotal },
+                        restante = ventaTicket.sumOf { it.tipoVenta.restantante },
+                        ventasOTicket = true,
+                        Ticket = ventaTicket,
+                        isLoading = false
+
+                    )
+                }
             }
         }
     }
 }
+
 
 
 

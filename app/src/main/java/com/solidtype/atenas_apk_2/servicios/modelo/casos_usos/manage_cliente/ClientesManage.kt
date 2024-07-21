@@ -12,10 +12,10 @@ class ClientesManage @Inject constructor(private val casosCliente:CasosClientes)
 
     }
     fun getListaClientes(): Flow<List<Personastodas.ClienteUI>> {
-        return casosCliente.getClientes()
+        return casosCliente.getClientes(true)
     }
 
     fun buscarClientes(any:String): Flow<List<Personastodas.ClienteUI>> {
-        return casosCliente.buscarClientes(any)
+        return casosCliente.buscarClientes(any, true)
     }
 }

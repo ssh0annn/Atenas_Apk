@@ -23,8 +23,8 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
-import com.solidtype.atenas_apk_2.util.ui.Components.Boton
-import com.solidtype.atenas_apk_2.util.ui.Components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
+import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
 @Composable
 fun DialogoConfirmarEliminarUsuario(
@@ -86,7 +86,7 @@ fun DialogoConfirmarEliminarUsuario(
                         correo.value = ""
                         clave.value = ""
                         telefono.value = ""
-                        estado.value = ""
+                        estado.value = "Activo"
 
                         mostrarConfirmar.value = false
 

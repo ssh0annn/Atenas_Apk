@@ -27,15 +27,15 @@ fun AreaVentas(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
-        Text(
-            text = when (selected.value) {
-                "Ventas" -> "${uiState.total} RD$"
-                "Ticket" -> "${uiState.total2} RD$"
-                else -> "0.0 RD$"
-            },
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic
-        )
+//        Text(
+//            text = when (selected.value) {
+//                "Ventas" -> "${uiState.total} RD$"
+//                "Ticket" -> "${uiState.total2} RD$"
+//                else -> "0.0 RD$"
+//            },
+//            fontSize = 24.sp,
+//            fontWeight = FontWeight.Bold,
+//            fontStyle = FontStyle.Italic
+//        )
     }
 }
