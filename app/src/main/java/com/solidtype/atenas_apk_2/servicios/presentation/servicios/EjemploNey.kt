@@ -366,75 +366,8 @@ fun SelectorMio(
                     }
                 }
             }
-
-
-//            Box {
-//                ExposedDropdownMenu(
-//                    modifier = Modifier
-//                        .height(200.dp)
-//                        .background(Blanco),
-//                    expanded = expanded.value,
-//                    onDismissRequest = {
-//                        // Nosotros no deberíamos ocultar el menú cuando el usuario ingresa o elimina algún carácter
-//                    }
-//                ) {
-//                    for (item in filteredItems) {
-//                        DropdownMenuItem(
-//                            text = { Text(item) }, onClick = {
-//                                searchText = item
-//                                expanded.value = false
-//                                onSelectionChange(item)
-//                            })
-//                    }
-//
-//                    Box(
-//                       modifier = Modifier
-//
-//
-//
-//                    ) {
-//                        if (onClickAgregar != null)
-//                            Row(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(5.dp)
-//                                    .clickable(onClick = {
-//                                        onClickAgregar()
-//                                        expanded.value = false
-//                                        //Debería hacer un back
-//                                        keyboardController?.hide()
-//                                    }),
-//                                horizontalArrangement = Arrangement.Center,
-//                                verticalAlignment = Alignment.CenterVertically
-//                            ) {
-//                                Icon(
-//                                    imageVector = Icons.Default.Add,
-//                                    contentDescription = "Add",
-//                                    tint = AzulGris
-//                                )
-//                                Text(
-//                                    text = "Agregar",
-//                                    color = AzulGris,
-//                                    fontSize = 15.sp,
-//                                    fontWeight = FontWeight.ExtraBold,
-//                                    modifier = Modifier
-//                                )
-//                                Spacer(modifier = Modifier.width(10.dp))
-//                            }
-//                    }
-//                }
-//            }
-
         }
-
-
     }
-}
-
-@Composable
-fun <T> componente(data:T, onClick:() ->Unit ){
-
-
 }
 
 @OptIn(ExperimentalMultiplatform::class)
