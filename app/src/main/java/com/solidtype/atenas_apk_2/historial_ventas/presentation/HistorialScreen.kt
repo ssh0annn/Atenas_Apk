@@ -79,7 +79,7 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
 
     if (uiState.mensaje.isNotEmpty()) {
         Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
-        //viewModel.limpiaMessages()
+        //viewModel.onEvent(HistorialEvent.LimpiarMensaje)
     }
 
     if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
