@@ -228,6 +228,8 @@ class ServiciosViewModel @Inject constructor(
                     datosRealeas.restantante = datosRealeas.total - datosRealeas.abono
                 }
                 ticket.update { it.copy(datosFinance = datosRealeas ) }
+                println("TOdos los datos de pago $datosRealeas")
+                println("REstante : ${datosRealeas.restantante}")
             }
 
             is PagosEvent.Impuestos -> {

@@ -53,6 +53,7 @@ class  FacturaViewModel @Inject constructor(
                         detalle = it.detalleVenta
                     ) }
                     uiState.update {
+                        println("Esto es lo que viene : ventas: $factura")
                         it.copy(facturaConDetalle = factura
                             ,isLoading = false)
                     }
@@ -96,15 +97,4 @@ class  FacturaViewModel @Inject constructor(
         }
     }
 
-//    private fun Flow<List<venta?>>.helper(): Flow<List<FacturaConDetalle?>> {
-//
-//        return this.map { listaFacturas ->
-//            listaFacturas.map { factura->
-//                FacturaConDetalle(
-//                    factura = factura,
-//                    detalle = factura?.let { detalle -> facturacionCasosdeUso.detallesFacturas(detalle.id_venta) }
-//                )
-//            }
-//        }
-//    }
 }

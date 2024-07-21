@@ -44,7 +44,6 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun tablatick(listaT: List<TicketwithRelation> = listOf()) {
-
     val scrollState = rememberScrollState()
     val ancho = 200.dp
 
@@ -95,7 +94,7 @@ modifier = Modifier
                             Row{
                                 Text(text = "Nfactura:", fontSize = 20.sp, color = BlancoOpaco)
                                 Spacer(modifier = Modifier.padding(start = 10.dp))
-                                Text(text = ticket?.ticket?.id_tipo_venta.toString(),fontSize = 20.sp, color = AzulGris)
+                                Text(text = ticket.ticket.id_tipo_venta.toString(),fontSize = 20.sp, color = AzulGris)
                             }
                             Row {
                                 Text(text = "Nombre:", fontSize = 20.sp, color = Blanco)
