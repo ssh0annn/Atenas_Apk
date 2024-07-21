@@ -1,5 +1,7 @@
 package com.solidtype.atenas_apk_2.gestion_tickets.data.repositoryImpl
 
+import com.solidtype.atenas_apk_2.core.daos.tipo_ventaDao
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.gestion_tickets.data.ticketDao
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.TicketRepository
 import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.TicketwithRelation
@@ -9,7 +11,9 @@ import javax.inject.Inject
 
 class TicketRepositoryImpl @Inject constructor(
     private val miticket:ticketDao,
+    private val tipoVenta:tipo_ventaDao
 ):TicketRepository {
+
     override fun getTickets(): Flow<List<TicketwithRelation>> {
         return miticket.getTicketswithRelation()
     }
@@ -27,7 +31,10 @@ class TicketRepositoryImpl @Inject constructor(
         miticket.updateTicket(ticket)
     }
 
-    override suspend fun completarPagoPendiente(ticket: ticket) {
-        miticket.updateTicket(ticket)
+    override suspend fun completarPagoPendiente(pagoInfo: tipo_venta) {
+        tipoVenta.updateTipoVenta(pagoInfo)
+    }
+    override suspend fun getPaymentInfo(tick: ticket): tipo_venta {
+      return tipoVenta.buscarTipoVentaPorId(tick.id_tipo_venta)
     }
 }

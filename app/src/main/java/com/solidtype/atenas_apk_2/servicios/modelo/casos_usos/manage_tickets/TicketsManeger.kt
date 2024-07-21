@@ -14,6 +14,7 @@ import java.time.temporal.TemporalField
 import javax.inject.Inject
 class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
+    suspend fun getInfoPago(tick:ticket):tipo_venta = casosTicket.getPaymentInfo(tick)
     suspend fun crearTicket(ticket: ServicioTicket) {
 
         val newTicket = ticket(
@@ -44,19 +45,13 @@ class TicketsManeger @Inject constructor(private val casosTicket: CasosTicket) {
 
         casosTicket.crearTicket(transaction)
     }
-
-    suspend fun completarPago(ticket: ticket) {
+    suspend fun completarPago(ticket: tipo_venta) {
         casosTicket.completarPago(ticket)
     }
-
-
-    fun getDetalleTicket(): Flow<List<TicketwithRelation>> {
-        return casosTicket.getTickets()
+    fun getDetalleTicket(switch:Boolean): Flow<List<TicketwithRelation>> {
+        return casosTicket.getTickets(switch)
     }
-
-    fun buscarTickets(any: String) =
-        casosTicket.buscarTickets(any)
-
-
+    fun buscarTickets(any: String, switch:Boolean) =
+        casosTicket.buscarTickets(any, switch)
 }
 

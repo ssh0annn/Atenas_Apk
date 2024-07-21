@@ -4,17 +4,14 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.casos_proveedores.CasosProveedores
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.domain.userCases.CasosInventario
-import com.solidtype.atenas_apk_2.products.domain.userCases.getProductos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -195,8 +192,7 @@ class InventarioViewModel @Inject constructor(
 
     fun buscarProductos(any: String) {
         viewModelScope.launch {
-            val busqueda = casosInventario.searchProductos(any, switch)
-            busqueda.collect { product ->
+           casosInventario.searchProductos(any, !switch).collect { product ->
                 uiState.update {
                     it.copy(products = product)
                 }

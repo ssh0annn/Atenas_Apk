@@ -29,24 +29,14 @@ import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.venta
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
-import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialTicketEntidad
-import com.solidtype.atenas_apk_2.historial_ventas.domain.model.HistorialVentaEntidad
-import com.solidtype.atenas_apk_2.products.data.local.dao.ProductDao
-import com.solidtype.atenas_apk_2.products.domain.model.ProductEntity
 
 @Database(entities = [
-    ProductEntity::class,HistorialVentaEntidad::class,HistorialTicketEntidad::class,
     categoria::class, detalle_venta::class, inventario::class, persona::class,
     roll_usuarios::class, servicio::class, ticket::class, tipo_venta::class,
     usuario::class, venta::class, administrador::class, Dispositivo::class
-], version = 28, exportSchema = false)
+], version = 29, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
-    abstract val ProductDao :ProductDao
-    abstract val HistorialVentaDao :HistorialVentaDAO
-    abstract val HistorialTicketDao :HistorialTicketDAO
     //nuevas bases de datos oficiales y centradas en el proyecto completas (version 1 de ellas)
     abstract val categoriaDAO: categoriaDao
     abstract val detalleVentaDAO: detalle_ventaDao
@@ -60,16 +50,16 @@ abstract class ProductDataBase : RoomDatabase() {
     abstract val ventaDAO: ventaDao
     abstract val adminDao: administradorDao
     abstract val dispositivoDao: DispositivoDao
-    companion object{
-        @Volatile
-        private var DDBB: ProductDataBase? = null
-        fun getDataBase(context: Context):ProductDataBase {
-            return DDBB ?: synchronized(this) {
-                Room.databaseBuilder(context, ProductDataBase::class.java, "Atenas_Database")
-                    .fallbackToDestructiveMigration()
-                    .build()
-                    .also { DDBB = it }
-            }
-        }
-    }
+//    companion object{
+//        @Volatile
+//        private var DDBB: ProductDataBase? = null
+//        fun getDataBase(context: Context):ProductDataBase {
+//            return DDBB ?: synchronized(this) {
+//                Room.databaseBuilder(context, ProductDataBase::class.java, "Atenas_Database")
+//                    .fallbackToDestructiveMigration()
+//                    .build()
+//                    .also { DDBB = it }
+//            }
+//        }
+//    }
 }

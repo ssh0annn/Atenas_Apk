@@ -20,22 +20,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorailViewModel @Inject constructor(
-    private val casosHistorialReportes: CasosHistorialReportes,
-    private val classesAsyncs: MediatorHistorialVentasImpl
+    private val casosHistorialReportes: CasosHistorialReportes
 
 ) : ViewModel() {
 
     var uiState = MutableStateFlow(HistorialUIState())
         private set
 
-    private var job : Job? = null
-
     init {
 
          onEvent(HistorialEvent.GetTodosTodasVentas)
+         onEvent(HistorialEvent.GetTodosTickets)
     }
 
     fun onEvent(event: HistorialEvent){
+        println("Se marco evento historial $event")
         when(event){
             HistorialEvent.Exportar -> exportar()
             is HistorialEvent.GetTicketsFechas -> buscarProductosTicket(event.desde, event.hasta)
@@ -61,18 +60,10 @@ class HistorailViewModel @Inject constructor(
         }
     }
 
-
     private  fun buscarProductosVenta(
         desde: LocalDate, hasta: LocalDate
     ) {
-        job?.cancel()
-        uiState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-            job = viewModelScope.launch {
-
+         viewModelScope.launch {
                 casosHistorialReportes.buscarporFechCatego(desde, hasta)
                     .collect { tipoVenta ->
                         uiState.update { state ->
@@ -85,25 +76,15 @@ class HistorailViewModel @Inject constructor(
                                 isLoading = false
                             )
                         }
-
-
                     }
             }
-
     }
 
     private  fun buscarProductosTicket(
         desde: LocalDate,
         hasta: LocalDate,
     ) {
-        job?.cancel()
-
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-        job = viewModelScope.launch {
+        viewModelScope.launch {
 
             casosHistorialReportes.verTicketsPorFechas(desde, hasta)
                 .collect { ventaTicket ->
@@ -124,14 +105,9 @@ class HistorailViewModel @Inject constructor(
 
     }
     private fun mostrarHistoriar() {
-        job?.cancel()
-        uiState.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-        job = viewModelScope.launch {
+      viewModelScope.launch {
             casosHistorialReportes.mostrarVentas().collect { tipoVenta ->
+                println("TipoVenta: $tipoVenta")
                 uiState.update { state ->
                     state.copy(
                         total = tipoVenta.sumOf { it.tipoVenta.total },
@@ -148,9 +124,9 @@ class HistorailViewModel @Inject constructor(
     }
 
     private  fun mostrarTicket() {
-        job?.cancel()
-        job = viewModelScope.launch {
+     viewModelScope.launch {
             casosHistorialReportes.verTodosTickets().collect { ventaTicket ->
+                println("ventaTicket: $ventaTicket")
                 uiState.update { state ->
                     state.copy(
                         total = ventaTicket.sumOf { it.tipoVenta.total },
@@ -159,7 +135,9 @@ class HistorailViewModel @Inject constructor(
                         subtotal = ventaTicket.sumOf { it.tipoVenta.subtotal },
                         restante = ventaTicket.sumOf { it.tipoVenta.restantante },
                         ventasOTicket = true,
-                        Ticket = ventaTicket
+                        Ticket = ventaTicket,
+                        isLoading = false
+
                     )
                 }
             }

@@ -138,14 +138,14 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
 
                         if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
 
-                            Boton(
-                                "Configuración del Perfil",
-                                anchoTotal = true,
-                                habilitar = navController.currentDestination?.route != Screens.PerfilAdmin.route
-                            ) {
-                                mostrarMenu.value = false
-                                navController.navigate(Screens.PerfilAdmin.route)
-                            }
+//                            Boton(
+//                                "Configuración del Perfil",
+//                                anchoTotal = true,
+//                                habilitar = navController.currentDestination?.route != Screens.PerfilAdmin.route
+//                            ) {
+//                                mostrarMenu.value = false
+//                                navController.navigate(Screens.PerfilAdmin.route)
+//                            }
                             Boton(
                                 "Inventario",
                                 anchoTotal = true,

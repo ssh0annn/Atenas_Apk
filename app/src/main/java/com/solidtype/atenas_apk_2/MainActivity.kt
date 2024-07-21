@@ -14,6 +14,9 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.solidtype.atenas_apk_2.core.pantallas.Navigation
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.servicios.presentation.servicios.servicios
+
+
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.sqrt
 
@@ -24,14 +27,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+
+
+
         if (!isTablet()) {
             Toast.makeText(this, "Pantalla muy pequeña para esta aplicación", Toast.LENGTH_LONG).show()
             finishAndRemoveTask()
-        } else {
-            setContent {
-                Navigation()
-            }
         }
+        setContent {
+            Navigation()
+        }
+
     }
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -62,7 +68,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun isTablet(): Boolean {
+   private fun isTablet(): Boolean {
         println("""
             isTabletByConfiguration: ${isTabletByConfiguration()}
             isTabletByUiMode: ${isTabletByUiMode(this)}
@@ -70,6 +76,23 @@ class MainActivity : ComponentActivity() {
             
         """.trimIndent())
         return  isTabletByConfiguration() || isTabletByUiMode(this)
+
+    }
+
+    fun isTabletBySize(context: Context): Boolean {
+        val displayMetrics = context.resources.displayMetrics
+        val widthPixels = displayMetrics.widthPixels
+        val heightPixels = displayMetrics.heightPixels
+        val xdpi = displayMetrics.xdpi
+        val ydpi = displayMetrics.ydpi
+        val widthInches = widthPixels / xdpi
+        val heightInches = heightPixels / ydpi
+        val diagonalInches = sqrt(widthInches * widthInches + heightInches * heightInches)
+        println("""
+            heightInch: $heightInches
+            diagonalInc: $diagonalInches
+        """.trimIndent())
+        return diagonalInches >= 7.0
     }
     fun isTabletByConfiguration(): Boolean {
         val configuration = resources.configuration
@@ -87,19 +110,5 @@ class MainActivity : ComponentActivity() {
         return currentModeType == Configuration.UI_MODE_TYPE_TELEVISION ||
                 (currentModeType == Configuration.UI_MODE_TYPE_NORMAL && isTabletBySize(context))
     }
-    fun isTabletBySize(context: Context): Boolean {
-        val displayMetrics = context.resources.displayMetrics
-        val widthPixels = displayMetrics.widthPixels
-        val heightPixels = displayMetrics.heightPixels
-        val xdpi = displayMetrics.xdpi
-        val ydpi = displayMetrics.ydpi
-        val widthInches = widthPixels / xdpi
-        val heightInches = heightPixels / ydpi
-        val diagonalInches = sqrt(widthInches * widthInches + heightInches * heightInches)
-        println("""
-            heightInch: $heightInches
-            diagonalInc: $diagonalInches
-        """.trimIndent())
-        return diagonalInches >= 7.0
-    }
+
 }

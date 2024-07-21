@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_ventas.domain
 
+
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import kotlinx.coroutines.flow.Flow
 

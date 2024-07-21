@@ -8,6 +8,7 @@ import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.solidtype.atenas_apk_2.authentication.actualizacion.data.modelo.CheckListAuth
+import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.casos_usos.AuthCasos
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.model.Usuario
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -101,9 +102,7 @@ class AuthViewmodel @Inject constructor(
                 recuerdame.getString(LICENCIA, "").toString()
             }
             login(event.email, event.password, licencia)
-            if (event.licencia.isBlank()) {
-                println("Licencia guardada: ${recuerdame.getString(LICENCIA, "").toString()}")
-            }
+
         } else {
             viewModelScope.launch {
                 delay(1000)
@@ -126,7 +125,6 @@ class AuthViewmodel @Inject constructor(
             uiStates.update { it.copy(razones = "Conexion restablecida!") }
             conteoConexion = false
         }
-
     }
     fun limpiaRazones() {
         uiStates.update {
@@ -178,12 +176,12 @@ class AuthViewmodel @Inject constructor(
                 uiStates.update {
                     it.copy(
                         isAutenticated = null,
-                        razones = "Usuario no identificado"
+                        razones = "Usuario no identificado" ,
+                        licenciaGuardada = false
                     )
                 }
                 false
             }
-
             !checkListAuth.licensiaActiva -> {
                 uiStates.update {
                     it.copy(
@@ -196,7 +194,6 @@ class AuthViewmodel @Inject constructor(
                 logout()
                 false
             }
-
             !checkListAuth.deviceRegistrado -> {
                 uiStates.update {
                     it.copy(
@@ -208,8 +205,7 @@ class AuthViewmodel @Inject constructor(
                 }
                 false
             }
-
-            else -> {
+            checkListAuth.tipoUser != TipoUser.UNKNOWN ->{
                 uiStates.update {
                     it.copy(
                         isAutenticated = Usuario(
@@ -220,6 +216,19 @@ class AuthViewmodel @Inject constructor(
                     )
                 }
                 true
+            }
+            else -> {
+                uiStates.update {
+                    it.copy(
+                        isAutenticated = null,
+                        razones = "No autorizado!",
+                        licenciaGuardada = false,
+                        dispositivo = false
+                    )
+                }
+                eliminarLicencia()
+                logout()
+                false
             }
         }
     }
@@ -262,6 +271,7 @@ class AuthViewmodel @Inject constructor(
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
             else -> false
         }
     }

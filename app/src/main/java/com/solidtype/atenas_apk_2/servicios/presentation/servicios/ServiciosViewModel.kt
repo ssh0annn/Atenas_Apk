@@ -38,6 +38,7 @@ class ServiciosViewModel @Inject constructor(
 
     var ticket: MutableStateFlow<ServicioTicket> = MutableStateFlow(ServicioTicket())
         private set
+
     private val CORREO: String = "correo"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
 
@@ -103,7 +104,7 @@ class ServiciosViewModel @Inject constructor(
 
     private fun getTickets() {
         viewModelScope.launch {
-          casosTicket.getDetalleTicket().map { listaTicket ->
+          casosTicket.getDetalleTicket(true).map { listaTicket ->
                 if (listaTicket.isNotEmpty()) {
                     listaTicket.map { tic ->
                         TicketVista(
@@ -180,13 +181,11 @@ class ServiciosViewModel @Inject constructor(
         when (event) {
             VendedorEvent.GetCurrentUser -> {
                 viewModelScope.launch {
-                   casoCurrentUser.getUser(recuerdame.getString(CORREO, "").toString()).collect{  usuarioss ->
+                   casoCurrentUser.getUser(recuerdame.getString(CORREO, "").toString()).collect{ usuarioss ->
                        usuarioss.forEach {  user ->
                            uiStates.update { it.copy(usuario = user) }
                            ticket.update { it.copy(vendedor = user) } }
-
                     }
-
                 }
             }
         }
@@ -229,6 +228,8 @@ class ServiciosViewModel @Inject constructor(
                     datosRealeas.restantante = datosRealeas.total - datosRealeas.abono
                 }
                 ticket.update { it.copy(datosFinance = datosRealeas ) }
+                println("TOdos los datos de pago $datosRealeas")
+                println("REstante : ${datosRealeas.restantante}")
             }
 
             is PagosEvent.Impuestos -> {

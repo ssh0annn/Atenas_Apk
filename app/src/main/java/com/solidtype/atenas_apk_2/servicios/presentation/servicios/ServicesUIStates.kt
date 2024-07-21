@@ -12,6 +12,7 @@ data class ServicesUIStates(
     val listaClientes: List<Personastodas.ClienteUI?> = emptyList(),
     val listaDispositivos: List<Dispositivo?> = emptyList(),
     val listaServicios: List<servicio> = emptyList(),
+
     val impuestos: Boolean = false,
     val abono: Double = 0.0,
     val subtotal: Double = 0.0,

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+<<<<<<< HEAD
       <entry key="MainActivity">
         <State />
       </entry>
@@ -20,6 +21,10 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-07-17T02:18:04.419264600Z" />
         </State>
+=======
+      <entry key="app">
+        <State />
+>>>>>>> Adderlis
       </entry>
     </value>
   </component>

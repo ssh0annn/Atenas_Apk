@@ -134,7 +134,9 @@ fun InventoryScreen(
             Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
+
             Loading(true)
+
         }
     } else {
         if (showSnackbarIni.value) {

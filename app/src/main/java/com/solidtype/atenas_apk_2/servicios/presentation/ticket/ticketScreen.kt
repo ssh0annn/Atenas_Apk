@@ -28,6 +28,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 @Composable
 fun ticketScreen(navController: NavController,
                  viewModel: TicketViewModel = hiltViewModel()){
+
     val busqueda = rememberSaveable { mutableStateOf("") }
 
     val rol = rememberSaveable { mutableStateOf("") }

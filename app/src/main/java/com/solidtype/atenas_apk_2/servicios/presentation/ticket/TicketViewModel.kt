@@ -2,6 +2,9 @@ package com.solidtype.atenas_apk_2.servicios.presentation.ticket
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.casos_tickets.CasosTicket
+import com.solidtype.atenas_apk_2.gestion_tickets.domain.model.ticket
 import com.solidtype.atenas_apk_2.servicios.modelo.casos_usos.manage_tickets.TicketsManeger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +21,8 @@ class TicketViewModel @Inject constructor(private val casosTicket: TicketsManege
     var uiState: MutableStateFlow<TicketUIState> = MutableStateFlow(TicketUIState())
         private set
 
+    private val switch:Boolean = uiState.value.switch
+
     var job: Job? = null
 
     init {
@@ -32,13 +37,30 @@ class TicketViewModel @Inject constructor(private val casosTicket: TicketsManege
             TicketEvents.GetTickets -> {
                 getTickets()
             }
+
+            TicketEvents.Switch -> uiState.update { it.copy(switch = !switch) }
+            is TicketEvents.Completarpago -> completarPago(events.pago)
+            is TicketEvents.GetPagoInfo -> getPagoInfo(events.tick)
         }
     }
+
+    private fun getPagoInfo(tick: ticket) {
+        viewModelScope.launch {
+            uiState.update { it.copy(infopago = casosTicket.getInfoPago(tick)) }
+        }
+    }
+
+    private fun completarPago(pago: tipo_venta) {
+        viewModelScope.launch {  casosTicket.completarPago(pago)
+        uiState.update { it.copy(razones = "Pago completado") }}
+
+    }
+
     private fun getTickets() {
         job?.cancel()
         job = viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                casosTicket.getDetalleTicket().collect { tickets ->
+                casosTicket.getDetalleTicket(!switch).collect { tickets ->
                     uiState.update { it.copy(tickets = tickets) }
                 }
             }
@@ -49,7 +71,7 @@ class TicketViewModel @Inject constructor(private val casosTicket: TicketsManege
         job?.cancel()
         job = viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                casosTicket.buscarTickets(anny).collect { tickets ->
+                casosTicket.buscarTickets(anny, !switch).collect { tickets ->
                     uiState.update { it.copy(tickets = tickets) }
                 }
             }

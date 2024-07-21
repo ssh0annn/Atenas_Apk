@@ -44,7 +44,6 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun tablatick(listaT: List<TicketwithRelation> = listOf()) {
-
     val scrollState = rememberScrollState()
     val ancho = 200.dp
 
@@ -52,7 +51,7 @@ fun tablatick(listaT: List<TicketwithRelation> = listOf()) {
 Box(
 modifier = Modifier
     .fillMaxWidth()
-    .height(430.dp)
+    .height(Pantalla.alto * 0.55f)
     .background(AzulGris, shape = RoundedCornerShape(20.dp))
 ) {
     Box(
@@ -75,7 +74,7 @@ modifier = Modifier
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(350.dp)
+                            .height(300.dp)
                             .padding(start = 20.dp, top = 25.dp)
                             .background(AzulGris, shape = RoundedCornerShape(20.dp)),
 
@@ -84,7 +83,7 @@ modifier = Modifier
                     Box(
                         modifier = Modifier
                             .width(300.dp)
-                            .height(500.dp)
+                            .height(300.dp)
                             .padding(15.dp)
                             .background(GrisAzulado)
 
@@ -95,7 +94,7 @@ modifier = Modifier
                             Row{
                                 Text(text = "Nfactura:", fontSize = 20.sp, color = BlancoOpaco)
                                 Spacer(modifier = Modifier.padding(start = 10.dp))
-                                Text(text = ticket?.ticket?.id_tipo_venta.toString(),fontSize = 20.sp, color = AzulGris)
+                                Text(text = ticket.ticket.id_tipo_venta.toString(),fontSize = 20.sp, color = AzulGris)
                             }
                             Row {
                                 Text(text = "Nombre:", fontSize = 20.sp, color = Blanco)
