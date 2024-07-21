@@ -94,7 +94,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     if (uiState.isAutenticated != null) {
         TipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
-            TipoUser.ADMIN -> navController.navigate(Screens.Inventario.route)
+            TipoUser.ADMIN -> navController.navigate(Screens.Productos.route)
                 //navController.navigate(Screens.PerfilAdmin.route)
             TipoUser.TECNICO, TipoUser.VENDEDOR -> navController.navigate(Screens.Ventas.route)
             else -> {}

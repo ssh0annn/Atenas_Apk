@@ -19,7 +19,6 @@ data class ProductosViewStates(
     val proveedores:List<Personastodas.Proveedor> = emptyList(),
     val switch:Boolean = false
 
-
 )
 
 
