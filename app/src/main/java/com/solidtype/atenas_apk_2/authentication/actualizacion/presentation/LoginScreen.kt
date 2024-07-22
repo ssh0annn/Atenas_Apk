@@ -5,13 +5,12 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -35,6 +34,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +53,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
-import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.components.DialogoDipositivo
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.components.DialogoForget
+import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
@@ -82,6 +82,9 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
 
     val mostrarForget = rememberSaveable { mutableStateOf(false) }
+
+
+    val noHoverInteractionSource = remember { MutableInteractionSource() }
 
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
     else painterResource(id = R.drawable.ic_visibility_true)
@@ -240,8 +243,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .padding(start = 20.dp, top = 10.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
-        )
-        {
+        ) {
             Checkbox(
                 checked = checked.value,
                 onCheckedChange = { checked.value = it },
@@ -253,7 +255,14 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 text = "Recuérdame",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = AzulGris
+                color = AzulGris,
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = noHoverInteractionSource,
+                        indication = null
+                    ) {
+                        checked.value = !checked.value
+                    }
             )
         }
         Button(
@@ -283,8 +292,10 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
             enabled =
                     Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
                     pass.value.length >= 8 &&
-                    !uiState.isLoading /*&&
-                    licencia.value.isNotEmpty()*/
+                    !uiState.isLoading && (
+                        uiState.licenciaGuardada ||
+                        licencia.value.isNotEmpty()
+                    ) // ~(~p ^ q) = p v ~q
         ) {
             Text(
                 "Iniciar Sesión",
