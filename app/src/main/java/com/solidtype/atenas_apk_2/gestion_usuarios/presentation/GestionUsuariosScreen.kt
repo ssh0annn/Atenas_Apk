@@ -34,6 +34,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Dialo
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoQR
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoRol
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoUsuario
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
@@ -59,7 +60,7 @@ fun GestionUsuariosScreen(
     val correo = rememberSaveable { mutableStateOf("") }
     val clave = rememberSaveable { mutableStateOf("") }
     val telefono = rememberSaveable { mutableStateOf("") }
-    val estado = rememberSaveable { mutableStateOf("Activo") }
+    //val estado = rememberSaveable { mutableStateOf("Activo") }
 
     val idRollUsuario = rememberSaveable { mutableStateOf("") }
     val nombreRollUsuario = rememberSaveable { mutableStateOf("") }
@@ -115,10 +116,17 @@ fun GestionUsuariosScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Column {
                     Row {
-                        Buscador(busqueda.value) { busqueda.value = it }
-                        /*SwitchInactivos(uiState.switch){
-                            viewModel.onUserEvent(UserEvent.Switch)
-                        }*/
+                        Box(modifier = Modifier.weight(3f)) {
+                            Buscador(busqueda.value) { busqueda.value = it }
+                        }
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            SwitchInactivos(uiState.switch){
+                                viewModel.onUserEvent(UserEvent.Switch)
+                            }
+                        }
                     }
                     AreaUsuarios(
                         uiState,
@@ -128,7 +136,7 @@ fun GestionUsuariosScreen(
                         correo,
                         clave,
                         telefono,
-                        estado,
+                        //estado,
                         rol,
                         mostrarUsuario,
                         editar,
@@ -144,7 +152,7 @@ fun GestionUsuariosScreen(
                     correo,
                     clave,
                     telefono,
-                    estado,
+                    //estado,
                     rol,
                     editar
                 )
@@ -161,7 +169,7 @@ fun GestionUsuariosScreen(
             rol,
             uiState,
             mostrarRol,
-            estado,
+            //estado,
             viewModel
         )
         DialogoConfirmarEliminarUsuario(
@@ -175,7 +183,8 @@ fun GestionUsuariosScreen(
             correo,
             clave,
             telefono,
-            estado
+            //estado,
+            uiState.switch
         )
         DialogoRol(
             mostrarRol,

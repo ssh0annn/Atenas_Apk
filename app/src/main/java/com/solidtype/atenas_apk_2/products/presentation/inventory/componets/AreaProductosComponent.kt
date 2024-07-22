@@ -175,13 +175,13 @@ fun AreaProductos(
 
                                         idInventario.value = producto.id_inventario.toString()
                                         nombre.value = producto.nombre
-                                        marca.value = producto.marca!!
-                                        modelo.value = producto.modelo!!
+                                        marca.value = producto.marca
+                                        modelo.value = producto.modelo
                                         cantidad.value = producto.cantidad.toString()
                                         costo.value = producto.precio_compra.toString()
                                         precio.value = producto.precio_venta.toString()
                                         impuesto.value = producto.impuesto.toString()
-                                        descripcion.value = producto.descripcion!!
+                                        descripcion.value = producto.descripcion
                                         //estado.value = producto.estado.formatoActivo()
                                         provider.value =
                                             uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
@@ -205,13 +205,13 @@ fun AreaProductos(
 
                                         idInventario.value = producto.id_inventario.toString()
                                         nombre.value = producto.nombre
-                                        marca.value = producto.marca!!
-                                        modelo.value = producto.modelo!!
+                                        marca.value = producto.marca
+                                        modelo.value = producto.modelo
                                         cantidad.value = producto.cantidad.toString()
                                         costo.value = producto.precio_compra.toString()
                                         precio.value = producto.precio_venta.toString()
                                         impuesto.value = producto.impuesto.toString()
-                                        descripcion.value = producto.descripcion!!
+                                        descripcion.value = producto.descripcion
                                         //estado.value = producto.estado.formatoActivo()
                                         //filtrar el nombre proveedor y la categoria con el id del producto de uiState.proveedores y uiState.categoria
                                         provider.value =
@@ -233,13 +233,13 @@ fun AreaProductos(
 
                                         idInventario.value = producto.id_inventario.toString()
                                         nombre.value = producto.nombre
-                                        marca.value = producto.marca!!
-                                        modelo.value = producto.modelo!!
+                                        marca.value = producto.marca
+                                        modelo.value = producto.modelo
                                         cantidad.value = producto.cantidad.toString()
                                         costo.value = producto.precio_compra.toString()
                                         precio.value = producto.precio_venta.toString()
                                         impuesto.value = producto.impuesto.toString()
-                                        descripcion.value = producto.descripcion!!
+                                        descripcion.value = producto.descripcion
                                         //estado.value = producto.estado.formatoActivo()
                                         provider.value =
                                             uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()

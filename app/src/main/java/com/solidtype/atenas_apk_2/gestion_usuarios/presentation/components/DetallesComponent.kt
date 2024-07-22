@@ -34,7 +34,7 @@ fun Detalles(
     rol: MutableState<String>,
     uiState: UserStatesUI,
     mostrarDialogo: MutableState<Boolean>,
-    estado: MutableState<String>,
+    //estado: MutableState<String>,
 ) {
     Column(
         modifier = Modifier
@@ -96,12 +96,12 @@ fun Detalles(
                                 mostrarDialogo.value = true
                             },
                         ) { rol.value = it }
-                        Spacer(modifier = Modifier.height(10.dp))
+                        /*Spacer(modifier = Modifier.height(10.dp))
                         AutocompleteSelect(
                             "Estado",
                             estado.value,
                             listOf("Activo", "Inactivo")
-                        ) { estado.value = it }
+                        ) { estado.value = it }*/
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }

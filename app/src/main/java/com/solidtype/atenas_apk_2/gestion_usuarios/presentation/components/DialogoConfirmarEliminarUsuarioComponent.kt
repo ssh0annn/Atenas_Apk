@@ -20,7 +20,6 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
@@ -36,7 +35,8 @@ fun DialogoConfirmarEliminarUsuario(
     correo: MutableState<String>,
     clave: MutableState<String>,
     telefono: MutableState<String>,
-    estado: MutableState<String>
+    //estado: MutableState<String>,
+    inactivo: Boolean
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -53,7 +53,7 @@ fun DialogoConfirmarEliminarUsuario(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "¿Estás seguro que deseas eliminar este usuario?",
+                text = "¿Estás seguro que deseas ${if (inactivo) "restaurar" else "eliminar"} este usuario?",
                 textAlign = TextAlign.Center,
                 color = AzulGris,
                 fontSize = 24.sp
@@ -62,31 +62,51 @@ fun DialogoConfirmarEliminarUsuario(
             Row {
                 Boton("Aceptar") {
                     try {
-                        viewModel.onUserEvent(
-                            UserEvent.BorrarUsuario(
-                                usuario(
-                                    id_usuario = idUsuario.value.toLong(),
-                                    id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                        ?: 0,
-                                    nombre = nombre.value,
-                                    apellido = apellido.value,
-                                    email = correo.value,
-                                    clave = clave.value,
-                                    telefono = telefono.value,
-                                    estado = estado.value.formatoActivoDDBB()
+                        if (inactivo) {
+                            viewModel.onUserEvent(
+                                UserEvent.EditarUsuario(
+                                    usuario(
+                                        id_usuario = idUsuario.value.toLong(),
+                                        id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
+                                            ?: 0,
+                                        nombre = nombre.value,
+                                        apellido = apellido.value,
+                                        email = correo.value,
+                                        clave = clave.value,
+                                        telefono = telefono.value,
+                                        estado = true
+                                    )
                                 )
                             )
-                        )
+                        } else {
+                            viewModel.onUserEvent(
+                                UserEvent.BorrarUsuario(
+                                    usuario(
+                                        id_usuario = idUsuario.value.toLong(),
+                                        id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
+                                            ?: 0,
+                                        nombre = nombre.value,
+                                        apellido = apellido.value,
+                                        email = correo.value,
+                                        clave = clave.value,
+                                        telefono = telefono.value,
+                                        estado = false
+                                    )
+                                )
+                            )
+                        }
+
                         idUsuario.value = ""
                         nombre.value = ""
                         apellido.value = ""
                         correo.value = ""
                         clave.value = ""
                         telefono.value = ""
-                        estado.value = "Activo"
+                        //estado.value = "Activo"
 
                         mostrarConfirmar.value = false
-                    } catch (_: Exception) { }
+                    } catch (_: Exception) {
+                    }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {

@@ -19,7 +19,7 @@ fun Botones(
     correo: MutableState<String>,
     clave: MutableState<String>,
     telefono: MutableState<String>,
-    estado: MutableState<String>,
+    //estado: MutableState<String>,
     rol: MutableState<String>,
     editar: MutableState<Boolean>
 ) {
@@ -41,7 +41,7 @@ fun Botones(
                 correo.value = ""
                 clave.value = ""
                 telefono.value = ""
-                estado.value = "Activo"
+                //estado.value = "Activo"
                 rol.value = ""
             }
         }
