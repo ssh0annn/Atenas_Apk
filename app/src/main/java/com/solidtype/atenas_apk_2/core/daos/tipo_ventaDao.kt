@@ -22,12 +22,10 @@ interface tipo_ventaDao {
     @Transaction
     @Query("select * from venta")
     fun getTipoVentas(): Flow<List<TipoVentaVenta>>
-
     @Update
     suspend fun updateTipoVenta(tipoVenta : tipo_venta)
     @Delete
     suspend fun deleteTipoVenta(tipoVenta : tipo_venta)
-
     //Otra baina bien
     @Transaction
     @Query("SELECT * FROM venta WHERE fecha BETWEEN :desde AND :hasta")

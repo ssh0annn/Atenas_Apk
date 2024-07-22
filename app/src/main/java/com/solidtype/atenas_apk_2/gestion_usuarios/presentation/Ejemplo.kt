@@ -29,6 +29,7 @@ fun EjemploDeEvento(viewmodel: UsuariosViewmodel = hiltViewModel()){
           uiState.rolSelecionado?.let { rol ->
               viewmodel.onUserEvent(
                   UserEvent.AgregarUsuario(usuario(
+                      id_roll_usuario = rol.id_roll_usuario,
                       nombre = "Pepito",
                       apellido = "Perez",
                       email = "Quien sabe",

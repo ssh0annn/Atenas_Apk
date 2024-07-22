@@ -69,8 +69,8 @@ fun DialogoConfirmarEliminarUsuario(
                             UserEvent.BorrarUsuario(
                                 usuario(
                                     id_usuario = idUsuario.value.toLong(),
-                                    //id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                    //?: 0,
+                                    id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
+                                        ?: 0,
                                     nombre = nombre.value,
                                     apellido = apellido.value,
                                     email = correo.value,
