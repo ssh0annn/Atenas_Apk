@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -79,13 +78,10 @@ fun GestionUsuariosScreen(
         viewModel.onUserEvent(UserEvent.LimpiarMensaje)
     }
 
-    if (busqueda.value.isNotBlank()) {
+    if (busqueda.value.isNotBlank())
         viewModel.onUserEvent(UserEvent.BuscarUsuario(busqueda.value))
-        Log.i("GestionUsuariosScreen", "Buscando usuario")
-    } else {
+    else
         viewModel.onUserEvent(UserEvent.MostrarUserEvent)
-        Log.i("GestionUsuariosScreen", "Todos los usuarios")
-    }
 
     if (uiState.roles.isEmpty())
         viewModel.onUserEvent(UserEvent.GetRoles)
@@ -166,8 +162,7 @@ fun GestionUsuariosScreen(
             uiState,
             mostrarRol,
             estado,
-            viewModel,
-            context
+            viewModel
         )
         DialogoConfirmarEliminarUsuario(
             mostrarConfirmarUsuario,
@@ -180,8 +175,7 @@ fun GestionUsuariosScreen(
             correo,
             clave,
             telefono,
-            estado,
-            context
+            estado
         )
         DialogoRol(
             mostrarRol,
@@ -191,8 +185,7 @@ fun GestionUsuariosScreen(
             descripcion,
             estadoRollUsuario,
             uiState,
-            viewModel,
-            context
+            viewModel
         )
         DialogoConfirmarEliminarRol(
             mostrarConfirmarRol,
@@ -200,8 +193,7 @@ fun GestionUsuariosScreen(
             idRollUsuario,
             nombreRollUsuario,
             descripcion,
-            estadoRollUsuario,
-            context
+            estadoRollUsuario
         )
         DialogoQR(mostrarQR, uiState.qr.toString())
         MenuLateral(navController)

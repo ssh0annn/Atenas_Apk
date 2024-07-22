@@ -1,7 +1,5 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,8 +32,7 @@ fun DialogoConfirmarProveedor(
     documentoProveedor: MutableState<String>,
     direccionProveedor: MutableState<String>,
     telefonoProveedor: MutableState<String>,
-    emailProveedor: MutableState<String>,
-    context: Context
+    emailProveedor: MutableState<String>
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -86,19 +83,7 @@ fun DialogoConfirmarProveedor(
                         emailProveedor.value = ""
 
                         mostrarConfirmarProveedor.value = false
-
-                        Toast.makeText(
-                            context,
-                            "Se eliminó el proveedor",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "No se pudo eliminar",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {

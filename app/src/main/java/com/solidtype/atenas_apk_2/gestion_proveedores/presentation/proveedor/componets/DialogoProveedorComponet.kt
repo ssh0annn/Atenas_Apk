@@ -1,15 +1,12 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets
 
-import android.content.Context
 import android.util.Patterns
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,11 +28,11 @@ import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
-import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
@@ -48,7 +45,6 @@ fun DialogoProveedor(
     telefonoProveedor: MutableState<String>,
     emailProveedor: MutableState<String>,
     viewModel: InventarioViewModel,
-    context: Context,
     uiState: ProductosViewStates,
     mostrarConfirmarProveedor: MutableState<Boolean>,
     idProveedor: MutableState<String>
@@ -147,19 +143,7 @@ fun DialogoProveedor(
                             direccionProveedor.value = ""
                             telefonoProveedor.value = ""
                             emailProveedor.value = ""
-
-                            Toast.makeText(
-                                context,
-                                "Proveedor guardado",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "error: ${e.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
                         BotonBlanco("Eliminar") { mostrarConfirmarProveedor.value = true }

@@ -1,14 +1,11 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,7 +44,6 @@ fun DialogoCategoria(
     estadoCategoria: MutableState<String>,
     uiState: ProductosViewStates,
     viewModel: InventarioViewModel,
-    context: Context,
     mostrarConfirmarCategoria: MutableState<Boolean>
 ) {
     Dialogo(
@@ -132,19 +128,7 @@ fun DialogoCategoria(
                             nombreCategoria.value = ""
                             descripcionCategoria.value = ""
                             estadoCategoria.value = "Activo"
-
-                            Toast.makeText(
-                                context,
-                                "Categoría guardada",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "error: ${e.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
                     BotonBlanco("Inactivar") { mostrarConfirmarCategoria.value = true }

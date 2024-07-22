@@ -237,7 +237,6 @@ fun InventoryScreen(
             idProveedor,
             impuesto,
             //estado,
-            context,
             provider,
             //listOf("Activo", "Inactivo"),
             mostrarCategoria,
@@ -262,7 +261,6 @@ fun InventoryScreen(
             //estado,
             categoria,
             provider,
-            context,
             uiState.switch
         )
         DialogoExcel(mostrarEjemplar)
@@ -274,7 +272,6 @@ fun InventoryScreen(
             estadoCategoria,
             uiState,
             viewModel,
-            context,
             mostrarConfirmarCategoria
         )
         DialogoConfirmarCategoria(
@@ -283,8 +280,7 @@ fun InventoryScreen(
             idCategoria,
             nombreCategoria,
             descripcionCategoria,
-            estadoCategoria,
-            context
+            estadoCategoria
         )
         DialogoProveedor(
             mostrarProveedor,
@@ -295,7 +291,6 @@ fun InventoryScreen(
             telefonoProveedor,
             emailProveedor,
             viewModel,
-            context,
             uiState,
             mostrarConfirmarProveedor,
             idProveedor
@@ -309,8 +304,7 @@ fun InventoryScreen(
             documentoProveedor,
             direccionProveedor,
             telefonoProveedor,
-            emailProveedor,
-            context
+            emailProveedor
         )
         MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)

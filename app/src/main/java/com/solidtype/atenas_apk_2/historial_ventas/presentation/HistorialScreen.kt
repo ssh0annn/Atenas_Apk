@@ -124,10 +124,10 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
                 Spacer(modifier = Modifier.height(16.dp))
                 Tabla(selected, uiState)
                 Spacer(modifier = Modifier.height(12.dp))
-                AvatarConBotones(viewModel, fechaIni, fechaFin, context, showSnackbarIni)
+                AvatarConBotones(fechaIni, fechaFin, showSnackbarIni)
             }
-            DatePickerDialogoSimple(identificador, selected, showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin, context)
-            DatePickerDialogoSimple(identificador, selected, showDatePicker2, datePickerState2, fechaIni, viewModel, fechaFin, context)
+            DatePickerDialogoSimple(identificador, selected, showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin)
+            DatePickerDialogoSimple(identificador, selected, showDatePicker2, datePickerState2, fechaIni, viewModel, fechaFin)
         }
         MenuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)

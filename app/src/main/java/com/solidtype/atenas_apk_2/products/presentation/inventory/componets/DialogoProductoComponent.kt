@@ -1,8 +1,5 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +36,6 @@ fun DialogoProducto(
     idProveedorText: MutableState<String>,
     impuesto: MutableState<String>,
     //estado: MutableState<String>,
-    context: Context,
     provider: MutableState<String>,
     //listEstados: List<String>,
     mostrarCategoria: MutableState<Boolean>,
@@ -125,15 +121,7 @@ fun DialogoProducto(
                         impuesto.value = ""
                         descripcion.value = ""
                         //estado.value = "Activo"
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "error: campos invalidos",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                        Log.e("ErrorInventario", "Error: ${e.message}, Causa: ${e.cause}")
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cerrar") {

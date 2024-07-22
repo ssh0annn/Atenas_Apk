@@ -1,7 +1,5 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,8 +30,7 @@ fun DialogoConfirmarCategoria(
     idCategoria: MutableState<String>,
     nombreCategoria: MutableState<String>,
     descripcionCategoria: MutableState<String>,
-    estadoCategoria: MutableState<String>,
-    context: Context
+    estadoCategoria: MutableState<String>
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -78,19 +75,7 @@ fun DialogoConfirmarCategoria(
                         estadoCategoria.value = "Activo"
 
                         mostrarConfirmarCategoria.value = false
-
-                        Toast.makeText(
-                            context,
-                            "Se inactivó la categoría",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "No se pudo inactivar",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {

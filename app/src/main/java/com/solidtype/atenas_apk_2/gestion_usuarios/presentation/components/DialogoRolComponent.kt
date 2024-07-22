@@ -1,14 +1,11 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,8 +45,7 @@ fun DialogoRol(
     descripcion: MutableState<String>,
     estadoRollUsuario: MutableState<String>,
     uiState: UserStatesUI,
-    viewModel: UsuariosViewmodel,
-    context: Context
+    viewModel: UsuariosViewmodel
 ) {
     Dialogo("Gestor de Roles", mostrarDialogo.value, { mostrarDialogo.value = false }, false) {
         Row {//Detalles y Lista
@@ -104,7 +100,6 @@ fun DialogoRol(
                             }
 
                             if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
-//                            Log.i("GestionUsuariosScreen", "Editar Rol")
                                 viewModel.onUserEvent(
                                     UserEvent.EditarRol(
                                         roll_usuarios(
@@ -134,19 +129,7 @@ fun DialogoRol(
                             nombreRollUsuario.value = ""
                             descripcion.value = ""
                             estadoRollUsuario.value = "Activo"
-
-                            Toast.makeText(
-                                context,
-                                "Rol guardado",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "error: ${e.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
                     BotonBlanco("Eliminar"){ mostrarConfirmarRol.value = true }

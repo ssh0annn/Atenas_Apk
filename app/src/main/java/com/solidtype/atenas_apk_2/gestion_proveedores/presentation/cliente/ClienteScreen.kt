@@ -263,14 +263,7 @@ fun ClienteScreen(
                                 )
                             )
                             mostrarDialogo.value = false
-                            Toast.makeText(
-                                context,
-                                "El cliente fue editado con éxito",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                 else
                     Boton("Agregar", camposCompletos) {
@@ -295,9 +288,7 @@ fun ClienteScreen(
                             numDocumento.value = ""
                             email.value = ""
                             telefono.value = ""
-                        } catch (e: Exception) {
-                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                        }
+                        } catch (_: Exception) { }
                     }
 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -345,18 +336,7 @@ fun ClienteScreen(
                                     )
                                 )
                             )
-                            Toast.makeText(
-                                context,
-                                "Se eliminó el cliente",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "No se pudo eliminar",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     Boton("Cancelar") {

@@ -1,7 +1,5 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,8 +30,7 @@ fun DialogoConfirmarEliminarRol(
     idRollUsuario: MutableState<String>,
     nombreRollUsuario: MutableState<String>,
     descripcion: MutableState<String>,
-    estadoRollUsuario: MutableState<String>,
-    context: Context
+    estadoRollUsuario: MutableState<String>
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -76,19 +73,7 @@ fun DialogoConfirmarEliminarRol(
                         estadoRollUsuario.value = "Activo"
 
                         mostrarConfirmarRol.value = false
-
-                        Toast.makeText(
-                            context,
-                            "Se eliminó el rol",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "No se pudo eliminar",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {

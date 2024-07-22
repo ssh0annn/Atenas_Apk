@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
+//import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +20,6 @@ import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
-//import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
@@ -44,7 +41,6 @@ fun DialogoConfirmarProducto(
     //estado: MutableState<String>,
     categoria: MutableState<String>,
     provider: MutableState<String>,
-    context: Context,
     inactivo: Boolean
 ) {
     Dialogo(
@@ -72,7 +68,6 @@ fun DialogoConfirmarProducto(
                 Boton("Aceptar") {
                     try {
                         if(inactivo){
-                            Log.i("ErrorInventario", "idInventario: ${idInventario.value}, idCategoria: ${idCategoriaText.value}, idProveedor: ${idProveedorText.value}, nombre: ${nombre.value}, marca: ${marca.value}, modelo: ${modelo.value}, cantidad: ${cantidad.value}, costo: ${costo.value}, precio: ${precio.value}, impuesto: ${impuesto.value}, descripcion: ${descripcion.value}")
                             viewModel.onEvent(
                                 InventariosEvent.AgregarProductos(
                                     inventario(
@@ -129,19 +124,7 @@ fun DialogoConfirmarProducto(
                         idProveedorText.value = ""
 
                         mostrarConfirmarProducto.value = false
-
-                        Toast.makeText(
-                            context,
-                            "Se ${if (inactivo) "restauró" else "eliminó"} correctamente",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "No se pudo ${if (inactivo) "restaurar" else "eliminar"} el producto",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {

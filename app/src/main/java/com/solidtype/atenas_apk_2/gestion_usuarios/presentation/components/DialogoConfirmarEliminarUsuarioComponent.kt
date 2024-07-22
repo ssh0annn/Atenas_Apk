@@ -1,7 +1,5 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,8 +36,7 @@ fun DialogoConfirmarEliminarUsuario(
     correo: MutableState<String>,
     clave: MutableState<String>,
     telefono: MutableState<String>,
-    estado: MutableState<String>,
-    context: Context
+    estado: MutableState<String>
 ) {
     Dialogo(
         titulo = "Confirma",
@@ -89,19 +86,7 @@ fun DialogoConfirmarEliminarUsuario(
                         estado.value = "Activo"
 
                         mostrarConfirmar.value = false
-
-                        Toast.makeText(
-                            context,
-                            "Se eliminó el usuario",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "No se pudo eliminar",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cancelar") {

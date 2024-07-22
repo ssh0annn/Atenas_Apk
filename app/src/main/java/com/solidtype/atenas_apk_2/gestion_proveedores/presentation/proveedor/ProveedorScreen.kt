@@ -268,14 +268,7 @@ fun ProveedorScreen(
                                 )
                             )
                             mostrarDialogo.value = false
-                            Toast.makeText(
-                                context,
-                                "El proveedor fue editado con éxito",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                 else
                     Boton("Agregar", camposCompletos) {
@@ -303,9 +296,7 @@ fun ProveedorScreen(
                             direccion.value = ""
                             email.value = ""
                             telefono.value = ""
-                        } catch (e: Exception) {
-                            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                        }
+                        } catch (_: Exception) { }
                     }
 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -353,18 +344,7 @@ fun ProveedorScreen(
                                     )
                                 )
                             )
-                            Toast.makeText(
-                                context,
-                                "Se eliminó el proveedor",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                context,
-                                "No se pudo eliminar",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                        } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     Boton("Cancelar") {

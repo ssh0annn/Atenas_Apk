@@ -1,8 +1,6 @@
 package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
-import android.content.Context
 import android.util.Patterns
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,8 +34,7 @@ fun DialogoUsuario(
     uiState: UserStatesUI,
     mostrarRol: MutableState<Boolean>,
     estado: MutableState<String>,
-    viewModel: UsuariosViewmodel,
-    context: Context
+    viewModel: UsuariosViewmodel
 ) {
     Dialogo(
         titulo = "Gestor de Usuarios",
@@ -98,11 +95,6 @@ fun DialogoUsuario(
                                     )
                                 )
                             )
-                            Toast.makeText(
-                                context,
-                                "Usuario editado",
-                                Toast.LENGTH_LONG
-                            ).show()
                         } else {
                             viewModel.onUserEvent(
                                 UserEvent.AgregarUsuario(
@@ -119,11 +111,6 @@ fun DialogoUsuario(
                                     )
                                 )
                             )
-                            Toast.makeText(
-                                context,
-                                "Usuario guardado",
-                                Toast.LENGTH_LONG
-                            ).show()
                         }
 
                         idUsuario.value = ""
@@ -133,14 +120,7 @@ fun DialogoUsuario(
                         clave.value = ""
                         telefono.value = ""
                         estado.value = "Activo"
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "error: ${e.message}",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                    }
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cerrar") {
