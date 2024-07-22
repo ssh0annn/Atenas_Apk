@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.util
+package com.solidtype.atenas_apk_2.util.ui.components
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes

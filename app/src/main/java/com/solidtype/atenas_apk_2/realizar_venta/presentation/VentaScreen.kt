@@ -35,7 +35,7 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.ui.theme.Fondo
 import com.solidtype.atenas_apk_2.ui.theme.SubFondo
 import com.solidtype.atenas_apk_2.ui.theme.SubPaneles
-import com.solidtype.atenas_apk_2.util.PickerButton
+import com.solidtype.atenas_apk_2.util.ui.components.PickerButton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo

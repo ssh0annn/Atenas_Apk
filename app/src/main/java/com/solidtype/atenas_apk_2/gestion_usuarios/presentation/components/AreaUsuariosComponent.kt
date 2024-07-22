@@ -167,7 +167,7 @@ fun AreaUsuarios(
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
-                                Text(
+                                /*Text(
                                     text = uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
                                         ?: "",
                                     modifier = Modifier.weight(1f),
@@ -220,7 +220,7 @@ fun AreaUsuarios(
                                                 tint = AzulGris
                                             )
                                         }
-                                }
+                                }*/
                             }
                         }
                 }

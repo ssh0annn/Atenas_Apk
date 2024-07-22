@@ -47,6 +47,7 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.casosusos.MostrarTodas
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialTicketDAO
 import com.solidtype.atenas_apk_2.historial_ventas.data.local.dao.HistorialVentaDAO
 import com.solidtype.atenas_apk_2.core.ddbb.ProductDataBase
+import com.solidtype.atenas_apk_2.core.entidades.relacion_usuario_roll
 import com.solidtype.atenas_apk_2.core.remote.authtentication.MetodoAutenticacion
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloud
 import com.solidtype.atenas_apk_2.core.remote.dataCloud.DataCloudImpl

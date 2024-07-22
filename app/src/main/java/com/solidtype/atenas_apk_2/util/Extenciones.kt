@@ -93,7 +93,7 @@ fun Map<String, Any?>.toUsuario(): usuario {
         setOf("id_roll_usuario", "nombre", "apellido", "email", "clave", "telefono", "estado")
     if (this.keys.toSet() == usuario) {
         return usuario(
-            id_roll_usuario = this["id_roll_usuario"] as Long,
+            //id_roll_usuario = this["id_roll_usuario"] as Long,
             nombre = this["nombre"] as String,
             apellido = this["apellido"] as String,
             email = this["email"] as String,
@@ -112,7 +112,7 @@ fun Map<String, Any?>.toUsuario(): usuario {
  */
 fun usuario.toMap(): Map<String, Any?> {
     return mapOf(
-        "id_roll_usuario" to id_roll_usuario,
+        //"id_roll_usuario" to id_roll_usuario,
         "nombre" to nombre,
         "apellido" to apellido,
         "email" to email,
