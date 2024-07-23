@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.util.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding

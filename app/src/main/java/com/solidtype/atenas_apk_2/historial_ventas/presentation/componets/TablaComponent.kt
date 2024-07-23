@@ -83,48 +83,48 @@ fun Tabla(
                 LazyColumn {
                     items(uiState.Historial.size) { i ->
                         Row {
-//                            Text(
-//                                uiState.Historial[i].id_venta.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Historial[i].id_cliente.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Historial[i].fecha.toString().formatoParaUser(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Historial[i].subtotal.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Historial[i].total.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Historial[i].cantidad.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Historial[i].estado.formatoActivo(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
+                            Text(
+                                uiState.Historial[i].venta.id_venta.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Historial[i].venta.id_cliente.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Historial[i].venta.fecha.toString().formatoParaUser(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Historial[i].tipoVenta.subtotal.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Historial[i].tipoVenta.total.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Historial[i].venta.cantidad.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Historial[i].venta.estado.formatoActivo(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
                         }
                         Divider()
                     }
@@ -187,56 +187,56 @@ fun Tabla(
                 LazyColumn {
                     items(uiState.Ticket.size) { i ->
                         Row {
-//                            Text(
-//                                uiState.Ticket[i].id_ticket.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].descripcion,
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].fecha_inicio.toString()
-//                                    .formatoParaUser(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].fecha_final.toString()
-//                                    .formatoParaUser(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].subtotal.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].impuesto.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].total.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
-//                            Text(
-//                                uiState.Ticket[i].id_cliente.toString(),
-//                                fontSize = 16.sp,
-//                                modifier = Modifier.weight(1f),
-//                                textAlign = TextAlign.Center
-//                            )
+                            Text(
+                                uiState.Ticket[i].venta.id_ticket.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].venta.descripcion,
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].venta.fecha_inicio.toString()
+                                    .formatoParaUser(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].venta.fecha_final.toString()
+                                    .formatoParaUser(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].tipoVenta.subtotal.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].tipoVenta.impuesto.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].tipoVenta.total.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                uiState.Ticket[i].venta.id_cliente.toString(),
+                                fontSize = 16.sp,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
                         }
                         Divider()
                     }

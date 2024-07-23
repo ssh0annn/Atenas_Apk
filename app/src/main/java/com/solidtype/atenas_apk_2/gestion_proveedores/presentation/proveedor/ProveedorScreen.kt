@@ -49,6 +49,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 
 @OptIn(ExperimentalMultiplatform::class)
@@ -73,8 +74,6 @@ fun ProveedorScreen(
     val telefono = rememberSaveable { mutableStateOf("") }
     val direccion = rememberSaveable { mutableStateOf("") }
 
-    //LISTA SELECTOR
-    val documetSelector = listOf("Cédula", "Pasaporte")
     //estado busqueda
     val busqueda = rememberSaveable { mutableStateOf("") }
 
@@ -116,12 +115,18 @@ fun ProveedorScreen(
             ) {//Contenedor
                 Column {
                     Titulo("Proveedor", Icons.Default.LocalShipping)
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        Buscador(busqueda = busqueda.value) {
-                            busqueda.value = it
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row {
+                        Box(modifier = Modifier.weight(3f)) {
+                            Buscador(busqueda.value) { busqueda.value = it }
+                        }
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            SwitchInactivos(uiState.switch) {
+                                viewModel.onUserEvent(ProveedorEvent.Switch)
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -136,7 +141,8 @@ fun ProveedorScreen(
                         mostrarConfirmar,
                         idProveedor,
                         tipoDocumento,
-                        direccion
+                        direccion,
+                        uiState
                     )
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -193,7 +199,7 @@ fun ProveedorScreen(
                     AutocompleteSelect(
                         text = "Tipo de Documento",
                         variableStr = tipoDocumento.value,
-                        items = documetSelector,
+                        items = listOf("Cédula", "Pasaporte", "RNC")
                     ) {
                         tipoDocumento.value = it
                     }
@@ -239,12 +245,12 @@ fun ProveedorScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 val camposCompletos =
-                        nombre.value.isNotEmpty() &&
-                        tipoDocumento.value.isNotEmpty() &&
-                        numDocumento.value.matches("[0-9]+".toRegex()) &&
-                        Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
-                        telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
-                        direccion.value.isNotEmpty()
+                    nombre.value.isNotEmpty() &&
+                            tipoDocumento.value.isNotEmpty() &&
+                            numDocumento.value.matches("[0-9]+".toRegex()) &&
+                            Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
+                            telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
+                            direccion.value.isNotEmpty()
                 if (editar.value)
                     Boton(
                         "Editar",
@@ -268,7 +274,8 @@ fun ProveedorScreen(
                                 )
                             )
                             mostrarDialogo.value = false
-                        } catch (_: Exception) { }
+                        } catch (_: Exception) {
+                        }
                     }
                 else
                     Boton("Agregar", camposCompletos) {
@@ -296,7 +303,8 @@ fun ProveedorScreen(
                             direccion.value = ""
                             email.value = ""
                             telefono.value = ""
-                        } catch (_: Exception) { }
+                        } catch (_: Exception) {
+                        }
                     }
 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -320,7 +328,7 @@ fun ProveedorScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "¿Estás seguro que deseas eliminar este proveedor?",
+                    text = "¿Estás seguro que deseas ${if (uiState.switch) "restaurar" else "eliminar"} este producto?",
                     textAlign = TextAlign.Center,
                     color = AzulGris,
                     fontSize = 24.sp
@@ -329,21 +337,37 @@ fun ProveedorScreen(
                 Row {
                     Boton("Aceptar") {
                         try {
-                            mostrarConfirmar.value = false
-
-                            viewModel.onUserEvent(
-                                ProveedorEvent.BorrarProveedor(
-                                    Personastodas.Proveedor(
-                                        idProveedor.value.toLong(),
-                                        nombre.value,
-                                        tipoDocumento.value,
-                                        numDocumento.value,
-                                        direccion.value,
-                                        telefono.value,
-                                        email.value,
+                            if (uiState.switch) {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.RestaurarProveedor/*(
+                                        Personastodas.Proveedor(
+                                            idProveedor.value.toLong(),
+                                            nombre.value,
+                                            tipoDocumento.value,
+                                            numDocumento.value,
+                                            direccion.value,
+                                            telefono.value,
+                                            email.value
+                                        )
+                                    )*/
+                                )
+                            } else {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.BorrarProveedor(
+                                        Personastodas.Proveedor(
+                                            idProveedor.value.toLong(),
+                                            nombre.value,
+                                            tipoDocumento.value,
+                                            numDocumento.value,
+                                            direccion.value,
+                                            telefono.value,
+                                            email.value,
+                                        )
                                     )
                                 )
-                            )
+                            }
+
+                            mostrarConfirmar.value = false
                         } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(16.dp))

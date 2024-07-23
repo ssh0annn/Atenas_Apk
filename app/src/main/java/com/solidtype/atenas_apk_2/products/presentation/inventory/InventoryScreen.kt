@@ -40,7 +40,7 @@ import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Dial
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProveedor
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoProducto
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.SwitchInactivos
+import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.Loading

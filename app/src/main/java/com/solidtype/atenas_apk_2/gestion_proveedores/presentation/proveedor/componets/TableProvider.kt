@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorStatesUI
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
@@ -35,7 +36,8 @@ fun TableProviders(
     mostrarConfirmar: MutableState<Boolean>,
     idProveedor: MutableState<String>,
     tipoDocumento: MutableState<String>,
-    direccion: MutableState<String>
+    direccion: MutableState<String>,
+    uiState: ProveedorStatesUI
 ) {
     Box(
         modifier = Modifier
@@ -107,7 +109,8 @@ fun TableProviders(
                         mostrarConfirmar,
                         idProveedor,
                         tipoDocumento,
-                        direccion
+                        direccion,
+                        uiState
                     )
                 }
             }

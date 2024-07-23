@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.RestoreFromTrash
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteStateUI
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -35,8 +37,8 @@ fun MyClientItem(
     email: MutableState<String>,
     telefono: MutableState<String>,
     mostrarConfirmar: MutableState<Boolean>,
-    idCliente: MutableState<String>
-
+    idCliente: MutableState<String>,
+    uiState: ClienteStateUI
 ) {
     Box(
         modifier = Modifier
@@ -91,41 +93,61 @@ fun MyClientItem(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.weight(0.5f)
                 ) {
-                    IconButton(onClick = {
-                        mostrarDialogo.value = true
-                        editar.value = true
+                    if(uiState.switch) {
+                        IconButton(onClick = {
+                            mostrarConfirmar.value = true
 
-                        //formulario onEdit
-                        idCliente.value = client.id_cliente.toString()
-                        nombre.value = client.nombre!!
-                        tipoDocumento.value = client.tipo_documento!!
-                        numDocumento.value = client.documento!!
-                        telefono.value = client.telefono!!
-                        email.value = client.email!!
-
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = null,
-                            tint = AzulGris
-                        )
+                            idCliente.value = client.id_cliente.toString()
+                            nombre.value = client.nombre!!
+                            tipoDocumento.value = client.tipo_documento!!
+                            numDocumento.value = client.documento!!
+                            telefono.value = client.telefono!!
+                            email.value = client.email!!
+                        }){
+                            Icon(
+                                imageVector = Icons.Filled.RestoreFromTrash,
+                                contentDescription = null,
+                                tint = AzulGris
+                            )
+                        }
                     }
-                    IconButton(onClick = {
-                        mostrarConfirmar.value = true
+                    else {
+                        IconButton(onClick = {
+                            mostrarDialogo.value = true
+                            editar.value = true
 
-                        //formulario onDelete
-                        idCliente.value = client.id_cliente.toString()
-                        nombre.value = client.nombre!!
-                        tipoDocumento.value = client.tipo_documento!!
-                        numDocumento.value = client.documento!!
-                        telefono.value = client.telefono!!
-                        email.value = client.email!!
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = null,
-                            tint = AzulGris
-                        )
+                            //formulario onEdit
+                            idCliente.value = client.id_cliente.toString()
+                            nombre.value = client.nombre!!
+                            tipoDocumento.value = client.tipo_documento!!
+                            numDocumento.value = client.documento!!
+                            telefono.value = client.telefono!!
+                            email.value = client.email!!
+
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = null,
+                                tint = AzulGris
+                            )
+                        }
+                        IconButton(onClick = {
+                            mostrarConfirmar.value = true
+
+                            //formulario onDelete
+                            idCliente.value = client.id_cliente.toString()
+                            nombre.value = client.nombre!!
+                            tipoDocumento.value = client.tipo_documento!!
+                            numDocumento.value = client.documento!!
+                            telefono.value = client.telefono!!
+                            email.value = client.email!!
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = null,
+                                tint = AzulGris
+                            )
+                        }
                     }
                 }
             }

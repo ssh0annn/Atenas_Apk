@@ -40,6 +40,7 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.Tipo
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.componets.TableClients
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
@@ -72,8 +73,6 @@ fun ClienteScreen(
     val email = rememberSaveable { mutableStateOf("") }
     val telefono = rememberSaveable { mutableStateOf("") }
 
-    //LISTA SELECTOR
-    val documetSelector = listOf("Cédula", "Pasaporte")
     //estado busqueda
     val busqueda = rememberSaveable { mutableStateOf("") }
 
@@ -115,16 +114,20 @@ fun ClienteScreen(
             ) {//Contenedor
                 Column {
                     Titulo("Clientes", Icons.AutoMirrored.Outlined.FactCheck)
-
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        Buscador(busqueda = busqueda.value) {
-                            busqueda.value = it
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row {
+                        Box(modifier = Modifier.weight(3f)) {
+                            Buscador(busqueda.value) { busqueda.value = it }
+                        }
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            SwitchInactivos(uiState.switch) {
+                                viewModel.onUserEvent(ClienteEvent.Switch)
+                            }
                         }
                     }
-
                     Spacer(modifier = Modifier.height(10.dp))
 
                     TableClients(
@@ -137,7 +140,8 @@ fun ClienteScreen(
                         email,
                         telefono,
                         mostrarConfirmar,
-                        idCliente
+                        idCliente,
+                        uiState
                     )
 
                     Box(
@@ -197,7 +201,7 @@ fun ClienteScreen(
                     AutocompleteSelect(
                         text = "Tipo de Documento",
                         variableStr = tipoDocumento.value,
-                        items = documetSelector,
+                        items = listOf("Cédula", "Pasaporte", "RNC")
                     ) {
                         tipoDocumento.value = it
                     }
@@ -322,20 +326,34 @@ fun ClienteScreen(
                 Row {
                     Boton("Aceptar") {
                         try {
-                            mostrarConfirmar.value = false
-
-                            viewModel.onUserEvent(
-                                ClienteEvent.BorrarClientes(
-                                    Personastodas.ClienteUI(
-                                        idCliente.value.toLong(),
-                                        nombre.value,
-                                        tipoDocumento.value,
-                                        numDocumento.value,
-                                        email.value,
-                                        telefono.value
+                            if (uiState.switch) {
+                                viewModel.onUserEvent(
+                                    ClienteEvent.RestaurarClientes/*(
+                                        Personastodas.ClienteUI(
+                                            idCliente.value.toLong(),
+                                            nombre.value,
+                                            tipoDocumento.value,
+                                            numDocumento.value,
+                                            email.value,
+                                            telefono.value
+                                        )
+                                    )*/
+                                )
+                            } else {
+                                viewModel.onUserEvent(
+                                    ClienteEvent.BorrarClientes(
+                                        Personastodas.ClienteUI(
+                                            idCliente.value.toLong(),
+                                            nombre.value,
+                                            tipoDocumento.value,
+                                            numDocumento.value,
+                                            email.value,
+                                            telefono.value
+                                        )
                                     )
                                 )
-                            )
+                            }
+                            mostrarConfirmar.value = false
                         } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(16.dp))
