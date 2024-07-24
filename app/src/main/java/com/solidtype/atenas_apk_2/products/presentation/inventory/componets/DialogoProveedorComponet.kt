@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets
+package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.util.Patterns
 import androidx.compose.foundation.background
@@ -33,6 +33,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
@@ -46,8 +47,10 @@ fun DialogoProveedor(
     emailProveedor: MutableState<String>,
     viewModel: InventarioViewModel,
     uiState: ProductosViewStates,
-    mostrarConfirmarProveedor: MutableState<Boolean>,
-    idProveedor: MutableState<String>
+    idProveedor: MutableState<String>,
+    mostrarDialogo: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>
 ) {
     Dialogo(
         "Gestor de Proveedores",
@@ -81,7 +84,7 @@ fun DialogoProveedor(
                             AutocompleteSelect(
                                 text = "Tipo de Documento",
                                 variableStr = tipoDocumentoProveedor.value,
-                                items = listOf("Cédula", "Pasaporte")
+                                items = listOf("Cédula", "Pasaporte", "RNC")
                             ) {
                                 tipoDocumentoProveedor.value = it
                             }
@@ -98,12 +101,6 @@ fun DialogoProveedor(
                             InputDetalle("Email", emailProveedor.value, tipo = KeyboardType.Email) {
                                 emailProveedor.value = it
                             }
-                            /*Spacer(modifier = Modifier.height(5.dp))
-                                AutocompleteSelect(
-                                    "Estado",
-                                    estadoProveedor.value,
-                                    listOf("Activo", "Inactivo")
-                                ) { estadoProveedor.value = it }*/
                         }
                     }
                 }
@@ -146,7 +143,40 @@ fun DialogoProveedor(
                         } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
-                        BotonBlanco("Eliminar") { mostrarConfirmarProveedor.value = true }
+                        BotonBlanco("Eliminar") {
+                            {
+                                viewModel.onEvent(
+                                    InventariosEvent.EliminarProveedor(
+                                        Personastodas.Proveedor(
+                                            id_proveedor = idProveedor.value.toLong(),
+                                            nombre = nombreProveedor.value,
+                                            tipo_documento = tipoDocumentoProveedor.value,
+                                            documento = documentoProveedor.value,
+                                            direccion = direccionProveedor.value,
+                                            telefono = telefonoProveedor.value,
+                                            email = emailProveedor.value
+                                        )
+                                    )
+                                )
+
+                                viewModel.onEvent(InventariosEvent.Getrpoveedores)
+
+                                idProveedor.value = ""
+                                nombreProveedor.value = ""
+                                tipoDocumentoProveedor.value = ""
+                                documentoProveedor.value = ""
+                                direccionProveedor.value = ""
+                                telefonoProveedor.value = ""
+                                emailProveedor.value = ""
+
+                                mostrarDialogo.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el provedor '${nombreProveedor.value}'?",
+                                showDialog = { mostrarDialogo.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }

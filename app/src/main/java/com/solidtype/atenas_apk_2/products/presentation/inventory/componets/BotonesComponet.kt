@@ -20,7 +20,6 @@ fun Botones(
     showSnackbarIni: MutableState<Boolean>,
     mostrar: MutableState<Boolean>,
     mostrarProducto: MutableState<Boolean>,
-    editar: MutableState<Boolean>,
     idInventario: MutableState<String>,
     categoria: MutableState<String>,
     nombre: MutableState<String>,
@@ -31,7 +30,6 @@ fun Botones(
     marca: MutableState<String>,
     cantidad: MutableState<String>,
     impuesto: MutableState<String>,
-//    estado: MutableState<String>,
     provider: MutableState<String>,
     idCategoria: MutableState<String>,
     idProveedor: MutableState<String>
@@ -55,7 +53,6 @@ fun Botones(
             }
             Boton ("Agregar") {
                 mostrarProducto.value = true
-                editar.value = false
 
                 idInventario.value = ""
                 categoria.value = ""

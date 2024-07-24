@@ -33,7 +33,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Dialo
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoQR
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoRol
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoUsuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoUsuario
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador

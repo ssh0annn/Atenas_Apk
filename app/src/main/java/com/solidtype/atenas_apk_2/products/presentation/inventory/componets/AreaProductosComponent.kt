@@ -27,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
+import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
 import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -35,6 +38,7 @@ import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 //import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.Carrito
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 fun AreaProductos(
@@ -48,14 +52,15 @@ fun AreaProductos(
     precio: MutableState<String>,
     impuesto: MutableState<String>,
     descripcion: MutableState<String>,
-    //estado: MutableState<String>,
     mostrarProducto: MutableState<Boolean>,
-    editar: MutableState<Boolean>,
     categoria: MutableState<String>,
     provider: MutableState<String>,
-    mostrarConfirmarProducto: MutableState<Boolean>,
     idCategoria: MutableState<String>,
-    idProveedor: MutableState<String>
+    idProveedor: MutableState<String>,
+    viewModel: InventarioViewModel,
+    mostrarDialogo: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>
 ) {
     Box(
         modifier = Modifier
@@ -169,39 +174,44 @@ fun AreaProductos(
                                 modifier = Modifier.weight(0.5f),
                                 horizontalArrangement = Arrangement.End
                             ) {
-                                if(uiState.switch) {
+                                if (uiState.switch) {
                                     IconButton(onClick = {
-                                        mostrarConfirmarProducto.value = true
-
-                                        idInventario.value = producto.id_inventario.toString()
-                                        nombre.value = producto.nombre
-                                        marca.value = producto.marca
-                                        modelo.value = producto.modelo
-                                        cantidad.value = producto.cantidad.toString()
-                                        costo.value = producto.precio_compra.toString()
-                                        precio.value = producto.precio_venta.toString()
-                                        impuesto.value = producto.impuesto.toString()
-                                        descripcion.value = producto.descripcion
-                                        //estado.value = producto.estado.formatoActivo()
-                                        provider.value =
-                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
-                                        categoria.value =
-                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
-                                                ?: ""
-                                        idCategoria.value = producto.id_categoria.toString()
-                                        idProveedor.value = producto.id_proveedor.toString()
-                                    }){
+                                        {
+                                            viewModel.onEvent(
+                                                InventariosEvent.AgregarProductos(
+                                                    inventario(
+                                                        id_inventario = producto.id_inventario,
+                                                        id_categoria = producto.id_categoria,
+                                                        id_proveedor = producto.id_proveedor,
+                                                        nombre = producto.nombre,
+                                                        marca = producto.marca,
+                                                        modelo = producto.modelo,
+                                                        cantidad = producto.cantidad,
+                                                        precio_compra = producto.precio_compra,
+                                                        precio_venta = producto.precio_venta,
+                                                        impuesto = producto.impuesto,
+                                                        descripcion = producto.descripcion,
+                                                        estado = true
+                                                    )
+                                                )
+                                            )
+                                            mostrarDialogo.value = false
+                                        }.confirmar(
+                                            mensaje = "¿Estás seguro que deseas restaurar el producto '${producto.nombre}'?",
+                                            showDialog = { mostrarDialogo.value = true },
+                                            setMessage = { confirmarMensaje.value = it },
+                                            setAction = { accionDeConfirmacion.value = it }
+                                        )
+                                    }) {
                                         Icon(
                                             imageVector = Icons.Filled.RestoreFromTrash,
                                             contentDescription = null,
                                             tint = AzulGris
                                         )
                                     }
-                                }
-                                else {
+                                } else {
                                     IconButton(onClick = {
                                         mostrarProducto.value = true
-                                        editar.value = true
 
                                         idInventario.value = producto.id_inventario.toString()
                                         nombre.value = producto.nombre
@@ -212,8 +222,6 @@ fun AreaProductos(
                                         precio.value = producto.precio_venta.toString()
                                         impuesto.value = producto.impuesto.toString()
                                         descripcion.value = producto.descripcion
-                                        //estado.value = producto.estado.formatoActivo()
-                                        //filtrar el nombre proveedor y la categoria con el id del producto de uiState.proveedores y uiState.categoria
                                         provider.value =
                                             uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
                                         categoria.value =
@@ -229,25 +237,32 @@ fun AreaProductos(
                                         )
                                     }
                                     IconButton(onClick = {
-                                        mostrarConfirmarProducto.value = true
-
-                                        idInventario.value = producto.id_inventario.toString()
-                                        nombre.value = producto.nombre
-                                        marca.value = producto.marca
-                                        modelo.value = producto.modelo
-                                        cantidad.value = producto.cantidad.toString()
-                                        costo.value = producto.precio_compra.toString()
-                                        precio.value = producto.precio_venta.toString()
-                                        impuesto.value = producto.impuesto.toString()
-                                        descripcion.value = producto.descripcion
-                                        //estado.value = producto.estado.formatoActivo()
-                                        provider.value =
-                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
-                                        categoria.value =
-                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
-                                                ?: ""
-                                        idCategoria.value = producto.id_categoria.toString()
-                                        idProveedor.value = producto.id_proveedor.toString()
+                                        {
+                                            viewModel.onEvent(
+                                                InventariosEvent.EliminarProductos(
+                                                    inventario(
+                                                        id_inventario = producto.id_inventario,
+                                                        id_categoria = producto.id_categoria,
+                                                        id_proveedor = producto.id_proveedor,
+                                                        nombre = producto.nombre,
+                                                        marca = producto.marca,
+                                                        modelo = producto.modelo,
+                                                        cantidad = producto.cantidad,
+                                                        precio_compra = producto.precio_compra,
+                                                        precio_venta = producto.precio_venta,
+                                                        impuesto = producto.impuesto,
+                                                        descripcion = producto.descripcion,
+                                                        estado = false
+                                                    )
+                                                )
+                                            )
+                                            mostrarDialogo.value = false
+                                        }.confirmar(
+                                            mensaje = "¿Estás seguro que deseas eliminar el producto '${producto.nombre}'?",
+                                            showDialog = { mostrarDialogo.value = true },
+                                            setMessage = { confirmarMensaje.value = it },
+                                            setAction = { accionDeConfirmacion.value = it }
+                                        )
                                     }) {
                                         Icon(
                                             imageVector = Icons.Filled.Delete,

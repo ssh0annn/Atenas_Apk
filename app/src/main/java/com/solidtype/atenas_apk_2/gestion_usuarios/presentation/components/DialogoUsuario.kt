@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
 import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +16,6 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 

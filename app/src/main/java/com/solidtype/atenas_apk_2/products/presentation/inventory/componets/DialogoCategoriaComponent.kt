@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
+package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +33,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
@@ -44,7 +45,9 @@ fun DialogoCategoria(
     estadoCategoria: MutableState<String>,
     uiState: ProductosViewStates,
     viewModel: InventarioViewModel,
-    mostrarConfirmarCategoria: MutableState<Boolean>
+    mostrarDialogo: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>
 ) {
     Dialogo(
         "Gestor de Categoría",
@@ -131,7 +134,34 @@ fun DialogoCategoria(
                         } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
-                    BotonBlanco("Inactivar") { mostrarConfirmarCategoria.value = true }
+                    BotonBlanco("Inactivar") {
+                        {
+                            viewModel.onEvent(
+                                InventariosEvent.eliminarCategoria(
+                                    categoria(
+                                        idCategoria.value.toLong(),
+                                        nombreCategoria.value,
+                                        descripcionCategoria.value,
+                                        estadoCategoria.value.formatoActivoDDBB()
+                                    )
+                                )
+                            )
+
+                            viewModel.onEvent(InventariosEvent.GetCategorias)
+
+                            idCategoria.value = ""
+                            nombreCategoria.value = ""
+                            descripcionCategoria.value = ""
+                            estadoCategoria.value = "Activo"
+
+                            mostrarDialogo.value = false
+                        }.confirmar(
+                            mensaje = "¿Estás seguro que deseas inactivar la categoría '${nombreCategoria.value}'?",
+                            showDialog = { mostrarDialogo.value = true },
+                            setMessage = { confirmarMensaje.value = it },
+                            setAction = { accionDeConfirmacion.value = it }
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }

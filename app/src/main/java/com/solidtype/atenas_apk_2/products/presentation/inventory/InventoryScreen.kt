@@ -31,18 +31,16 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.DialogoProveedor
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoCategoria
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarCategoria
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoProveedor
+import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoCategoria
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.AreaProductos
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.Botones
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProducto
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoConfirmarProveedor
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoExcel
 import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.DialogoProducto
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.DialogoConfirmacion
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateralSingleton
 import com.solidtype.atenas_apk_2.util.ui.components.SnackbarAnimado
@@ -62,6 +60,10 @@ fun InventoryScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val mostrarDialogo = remember { mutableStateOf(false) }
+    val confirmarMensaje = remember { mutableStateOf("") }
+    val accionDeConfirmacion = remember { mutableStateOf({}) }
+
     val busqueda = rememberSaveable { mutableStateOf("") }
     val mostrarEjemplar = rememberSaveable { mutableStateOf(false) }
 
@@ -77,8 +79,6 @@ fun InventoryScreen(
     ).show()
 
     val mostrarProducto = rememberSaveable { mutableStateOf(false) }
-    val mostrarConfirmarProducto = rememberSaveable { mutableStateOf(false) }
-    val editar = rememberSaveable { mutableStateOf(false) }
 
     val idInventario = rememberSaveable { mutableStateOf("") }
     val categoria = rememberSaveable { mutableStateOf("") }
@@ -90,19 +90,15 @@ fun InventoryScreen(
     val marca = rememberSaveable { mutableStateOf("") }
     val cantidad = rememberSaveable { mutableStateOf("") }
     val impuesto = rememberSaveable { mutableStateOf("") }
-    //val estado = rememberSaveable { mutableStateOf("Activo") }
     val provider = rememberSaveable { mutableStateOf("") }
 
     val mostrarCategoria = rememberSaveable { mutableStateOf(false) }
-
     val idCategoria = rememberSaveable { mutableStateOf("") }
     val nombreCategoria = rememberSaveable { mutableStateOf("") }
     val descripcionCategoria = rememberSaveable { mutableStateOf("") }
     val estadoCategoria = rememberSaveable { mutableStateOf("Activo") }
-    val mostrarConfirmarCategoria = rememberSaveable { mutableStateOf(false) }
 
     val mostrarProveedor = rememberSaveable { mutableStateOf(false) }
-
     val idProveedor = rememberSaveable { mutableStateOf("") }
     val nombreProveedor = rememberSaveable { mutableStateOf("") }
     val tipoDocumentoProveedor = rememberSaveable { mutableStateOf("") }
@@ -110,7 +106,6 @@ fun InventoryScreen(
     val direccionProveedor = rememberSaveable { mutableStateOf("") }
     val telefonoProveedor = rememberSaveable { mutableStateOf("") }
     val emailProveedor = rememberSaveable { mutableStateOf("") }
-    val mostrarConfirmarProveedor = rememberSaveable { mutableStateOf(false) }
 
     val showSnackbar = rememberSaveable { mutableStateOf(false) }
 
@@ -187,14 +182,15 @@ fun InventoryScreen(
                     precio,
                     impuesto,
                     descripcion,
-                    //estado,
                     mostrarProducto,
-                    editar,
                     categoria,
                     provider,
-                    mostrarConfirmarProducto,
                     idCategoria,
-                    idProveedor
+                    idProveedor,
+                    viewModel,
+                    mostrarDialogo,
+                    confirmarMensaje,
+                    accionDeConfirmacion
                 )
                 Botones(
                     context,
@@ -202,7 +198,6 @@ fun InventoryScreen(
                     showSnackbarIni,
                     mostrarEjemplar,
                     mostrarProducto,
-                    editar,
                     idInventario,
                     categoria,
                     nombre,
@@ -213,7 +208,6 @@ fun InventoryScreen(
                     marca,
                     cantidad,
                     impuesto,
-                    //estado,
                     provider,
                     idCategoria,
                     idProveedor
@@ -236,34 +230,12 @@ fun InventoryScreen(
             idCategoria,
             idProveedor,
             impuesto,
-            //estado,
             provider,
-            //listOf("Activo", "Inactivo"),
             mostrarCategoria,
             mostrarProveedor,
             idCategoria,
             idProveedor
         )
-        DialogoConfirmarProducto(
-            mostrarConfirmarProducto,
-            viewModel,
-            idInventario,
-            idCategoria,
-            idProveedor,
-            nombre,
-            marca,
-            modelo,
-            cantidad,
-            costo,
-            precio,
-            impuesto,
-            descripcion,
-            //estado,
-            categoria,
-            provider,
-            uiState.switch
-        )
-        DialogoExcel(mostrarEjemplar)
         DialogoCategoria(
             mostrarCategoria,
             idCategoria,
@@ -272,15 +244,9 @@ fun InventoryScreen(
             estadoCategoria,
             uiState,
             viewModel,
-            mostrarConfirmarCategoria
-        )
-        DialogoConfirmarCategoria(
-            mostrarConfirmarCategoria,
-            viewModel,
-            idCategoria,
-            nombreCategoria,
-            descripcionCategoria,
-            estadoCategoria
+            mostrarDialogo,
+            confirmarMensaje,
+            accionDeConfirmacion
         )
         DialogoProveedor(
             mostrarProveedor,
@@ -292,21 +258,18 @@ fun InventoryScreen(
             emailProveedor,
             viewModel,
             uiState,
-            mostrarConfirmarProveedor,
-            idProveedor
-        )
-        DialogoConfirmarProveedor(
-            mostrarConfirmarProveedor,
-            viewModel,
             idProveedor,
-            nombreProveedor,
-            tipoDocumentoProveedor,
-            documentoProveedor,
-            direccionProveedor,
-            telefonoProveedor,
-            emailProveedor
+            mostrarDialogo,
+            confirmarMensaje,
+            accionDeConfirmacion
+        )
+        DialogoConfirmacion(
+            showDialog = mostrarDialogo,
+            confirmMessage = confirmarMensaje,
+            onConfirmAction = accionDeConfirmacion
         )
         MenuLateralSingleton.menuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
+        DialogoExcel(mostrarEjemplar)
     }
 }
