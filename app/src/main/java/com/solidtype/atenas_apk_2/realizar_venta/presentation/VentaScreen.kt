@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PointOfSale
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -36,6 +38,7 @@ import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.ui.theme.Fondo
 import com.solidtype.atenas_apk_2.ui.theme.SubFondo
 import com.solidtype.atenas_apk_2.ui.theme.SubPaneles
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.PickerButton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
@@ -61,7 +64,7 @@ fun VentaScreen(
                 modifier = Modifier
                     .padding(30.dp)
             ) {
-                Titulo(text = "Venta")
+                Titulo(text = "Venta", imageVector = Icons.Outlined.PointOfSale)
                 Spacer(modifier = Modifier.width(60.dp))
                 Buscador(buscador.value) {
                     buscador.value = it
@@ -73,7 +76,9 @@ fun VentaScreen(
             .background(SubFondo)
             .padding(30.dp)
             .align(Alignment.CenterHorizontally)
-            .height(450.dp)
+            .height(
+                Pantalla.alto - 330.dp
+            )
             .width(1100.dp),
         ){
             Row {
