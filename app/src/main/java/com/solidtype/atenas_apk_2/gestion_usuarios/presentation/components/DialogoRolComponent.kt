@@ -34,18 +34,21 @@ import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
 fun DialogoRol(
     mostrarDialogo: MutableState<Boolean>,
-    mostrarConfirmarRol: MutableState<Boolean>,
     idRollUsuario: MutableState<String>,
     nombreRollUsuario: MutableState<String>,
     descripcion: MutableState<String>,
     estadoRollUsuario: MutableState<String>,
     uiState: UserStatesUI,
-    viewModel: UsuariosViewmodel
+    viewModel: UsuariosViewmodel,
+    mostrarDialogo1: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>
 ) {
     Dialogo("Gestor de Roles", mostrarDialogo.value, { mostrarDialogo.value = false }, false) {
         Row {//Detalles y Lista
@@ -132,7 +135,38 @@ fun DialogoRol(
                         } catch (_: Exception) { }
                     }
                     Spacer(modifier = Modifier.width(40.dp))
-                    BotonBlanco("Eliminar"){ mostrarConfirmarRol.value = true }
+                    BotonBlanco("Eliminar"){
+                        {
+                            try {
+                                if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
+                                    throw Exception("Campos vacios.")
+                                }
+                            } catch (_: Exception) { }
+
+                            viewModel.onUserEvent(
+                                UserEvent.ElimnarRoll(
+                                    roll_usuarios(
+                                        idRollUsuario.value.toLong(),
+                                        nombreRollUsuario.value,
+                                        descripcion.value,
+                                        true
+                                    )
+                                )
+                            )
+
+                            idRollUsuario.value = ""
+                            nombreRollUsuario.value = ""
+                            descripcion.value = ""
+                            estadoRollUsuario.value = "Activo"
+
+                            mostrarDialogo1.value = false
+                        }.confirmar(
+                            mensaje = "¿Estás seguro que deseas eliminar el rol '${nombreRollUsuario.value}'?",
+                            showDialog = { mostrarDialogo1.value = true },
+                            setMessage = { confirmarMensaje.value = it },
+                            setAction = { accionDeConfirmacion.value = it }
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }

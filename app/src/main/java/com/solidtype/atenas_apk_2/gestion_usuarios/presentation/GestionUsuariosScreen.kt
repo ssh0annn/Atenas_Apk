@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,14 +30,13 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.Tipo
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Botones
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarRol
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoConfirmarEliminarUsuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoQR
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoRol
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoUsuario
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
+import com.solidtype.atenas_apk_2.util.ui.components.DialogoConfirmacion
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
@@ -51,6 +51,10 @@ fun GestionUsuariosScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val mostrarDialogo = remember { mutableStateOf(false) }
+    val confirmarMensaje = remember { mutableStateOf("") }
+    val accionDeConfirmacion = remember { mutableStateOf({}) }
+
     val busqueda = rememberSaveable { mutableStateOf("") }
 
     val rol = rememberSaveable { mutableStateOf("") }
@@ -60,18 +64,14 @@ fun GestionUsuariosScreen(
     val correo = rememberSaveable { mutableStateOf("") }
     val clave = rememberSaveable { mutableStateOf("") }
     val telefono = rememberSaveable { mutableStateOf("") }
-    //val estado = rememberSaveable { mutableStateOf("Activo") }
 
     val idRollUsuario = rememberSaveable { mutableStateOf("") }
     val nombreRollUsuario = rememberSaveable { mutableStateOf("") }
     val descripcion = rememberSaveable { mutableStateOf("") }
     val estadoRollUsuario = rememberSaveable { mutableStateOf("Activo") }
 
-    val editar = rememberSaveable { mutableStateOf(false) }
     val mostrarUsuario = rememberSaveable { mutableStateOf(false) }
-    val mostrarConfirmarUsuario = rememberSaveable { mutableStateOf(false) }
     val mostrarRol = rememberSaveable { mutableStateOf(false) }
-    val mostrarConfirmarRol = rememberSaveable { mutableStateOf(false) }
     val mostrarQR = rememberSaveable { mutableStateOf(false) }
 
     if (!uiState.razones.isNullOrEmpty()) {
@@ -136,11 +136,12 @@ fun GestionUsuariosScreen(
                         correo,
                         clave,
                         telefono,
-                        //estado,
                         rol,
                         mostrarUsuario,
-                        editar,
-                        mostrarConfirmarUsuario
+                        mostrarDialogo,
+                        confirmarMensaje,
+                        accionDeConfirmacion,
+                        viewModel
                     )
                 }
                 Botones(
@@ -152,9 +153,7 @@ fun GestionUsuariosScreen(
                     correo,
                     clave,
                     telefono,
-                    //estado,
-                    rol,
-                    editar
+                    rol
                 )
             }
         }
@@ -169,42 +168,26 @@ fun GestionUsuariosScreen(
             rol,
             uiState,
             mostrarRol,
-            //estado,
             viewModel
-        )
-        DialogoConfirmarEliminarUsuario(
-            mostrarConfirmarUsuario,
-            viewModel,
-            idUsuario,
-            uiState,
-            rol,
-            nombre,
-            apellido,
-            correo,
-            clave,
-            telefono,
-            //estado,
-            uiState.switch
         )
         DialogoRol(
             mostrarRol,
-            mostrarConfirmarRol,
             idRollUsuario,
             nombreRollUsuario,
             descripcion,
             estadoRollUsuario,
             uiState,
-            viewModel
-        )
-        DialogoConfirmarEliminarRol(
-            mostrarConfirmarRol,
             viewModel,
-            idRollUsuario,
-            nombreRollUsuario,
-            descripcion,
-            estadoRollUsuario
+            mostrarDialogo,
+            confirmarMensaje,
+            accionDeConfirmacion
         )
         DialogoQR(mostrarQR, uiState.qr.toString())
+        DialogoConfirmacion(
+            showDialog = mostrarDialogo,
+            confirmMessage = confirmarMensaje,
+            onConfirmAction = accionDeConfirmacion
+        )
         MenuLateral(navController)
     }
 }
