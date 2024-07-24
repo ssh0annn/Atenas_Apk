@@ -44,7 +44,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
-import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateralSingleton
 import com.solidtype.atenas_apk_2.util.ui.components.SnackbarAnimado
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
 import kotlinx.coroutines.Job
@@ -306,7 +306,7 @@ fun InventoryScreen(
             telefonoProveedor,
             emailProveedor
         )
-        MenuLateral(navController)
+        MenuLateralSingleton.menuLateral(navController)
         SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
     }
 }
