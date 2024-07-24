@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteStateUI
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClientesViewModel
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -35,9 +36,12 @@ fun TableClients(
     numDocumento: MutableState<String>,
     email: MutableState<String>,
     telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>,
     idCliente: MutableState<String>,
-    uiState: ClienteStateUI
+    uiState: ClienteStateUI,
+    mostrarDialogoG: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>,
+    viewModel: ClientesViewModel
 ) {
     Box(
         modifier = Modifier
@@ -110,9 +114,12 @@ fun TableClients(
                         numDocumento,
                         email,
                         telefono,
-                        mostrarConfirmar,
                         idCliente,
-                        uiState
+                        uiState,
+                        mostrarDialogoG,
+                        confirmarMensaje,
+                        accionDeConfirmacion,
+                        viewModel
                     )
                 }
             }

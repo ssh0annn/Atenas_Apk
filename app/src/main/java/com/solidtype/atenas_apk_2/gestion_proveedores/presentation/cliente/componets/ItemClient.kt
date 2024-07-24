@@ -21,10 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteStateUI
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClientesViewModel
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 fun MyClientItem(
@@ -36,9 +39,12 @@ fun MyClientItem(
     numDocumento: MutableState<String>,
     email: MutableState<String>,
     telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>,
     idCliente: MutableState<String>,
-    uiState: ClienteStateUI
+    uiState: ClienteStateUI,
+    mostrarDialogoG: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>,
+    viewModel: ClientesViewModel
 ) {
     Box(
         modifier = Modifier
@@ -95,14 +101,27 @@ fun MyClientItem(
                 ) {
                     if(uiState.switch) {
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-
-                            idCliente.value = client.id_cliente.toString()
-                            nombre.value = client.nombre!!
-                            tipoDocumento.value = client.tipo_documento!!
-                            numDocumento.value = client.documento!!
-                            telefono.value = client.telefono!!
-                            email.value = client.email!!
+                            {
+                                editar.value = false
+                                viewModel.onUserEvent(
+                                ClienteEvent.RestaurarClientes/*(
+                                        Personastodas.ClienteUI(
+                                            client.id_cliente,
+                                            client.nombre,
+                                            client.tipo_documento,
+                                            client.documento,
+                                            client.email,
+                                            client.telefono
+                                        )
+                                    )*/
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas restaurar este cliente?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
                         }){
                             Icon(
                                 imageVector = Icons.Filled.RestoreFromTrash,
@@ -132,15 +151,26 @@ fun MyClientItem(
                             )
                         }
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-
-                            //formulario onDelete
-                            idCliente.value = client.id_cliente.toString()
-                            nombre.value = client.nombre!!
-                            tipoDocumento.value = client.tipo_documento!!
-                            numDocumento.value = client.documento!!
-                            telefono.value = client.telefono!!
-                            email.value = client.email!!
+                            {
+                                viewModel.onUserEvent(
+                                    ClienteEvent.BorrarClientes(
+                                        Personastodas.ClienteUI(
+                                            client.id_cliente,
+                                            client.nombre,
+                                            client.tipo_documento,
+                                            client.documento,
+                                            client.email,
+                                            client.telefono
+                                        )
+                                    )
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el cliente '${client.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
