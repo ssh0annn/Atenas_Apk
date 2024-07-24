@@ -1,6 +1,5 @@
-package com.solidtype.atenas_apk_2.util
+package com.solidtype.atenas_apk_2.util.ui.components
 
-import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +35,6 @@ fun PickerButton(
             .background(backgroundColor, CircleShape)
             .clip(CircleShape)
             .size(size = size)
-            .clickable(enabled = enabled, onClick = {onClick})
+            .clickable(enabled = enabled, onClick = onClick)
     )
 }

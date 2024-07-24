@@ -18,9 +18,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,12 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.ui.theme.Fondo
 import com.solidtype.atenas_apk_2.ui.theme.SubFondo
 import com.solidtype.atenas_apk_2.ui.theme.SubPaneles
-import com.solidtype.atenas_apk_2.util.PickerButton
+import com.solidtype.atenas_apk_2.util.ui.components.PickerButton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
@@ -45,6 +46,8 @@ fun VentaScreen(
     navController: NavController
 ){
     val buscador = rememberSaveable { mutableStateOf("") }
+    val mostrarDialogoX = rememberSaveable { mutableStateOf(false) }
+    val number = rememberSaveable { mutableIntStateOf(1) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -100,7 +103,9 @@ fun VentaScreen(
                         Text(text = "Celular", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
                         Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center
                         ){
-                            CambiarCantidad()
+                            CambiarCantidad(number = number, width = 25.dp){
+                                number.intValue = it
+                            }
                         }
                         Text(text = "$ "+"12000.00", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
                         Text(text = "$ "+"100.00", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
@@ -127,7 +132,9 @@ fun VentaScreen(
                 Spacer(modifier = Modifier.width(60.dp))
                 Text(modifier = Modifier.padding(7.dp), text = "Cantidades: "+"1", color = Fondo, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(140.dp))
-                Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Fondo)) {
+                Button(onClick = { 
+                    mostrarDialogoX.value = true
+                }, colors = ButtonDefaults.buttonColors(Fondo)) {
                     Text(text = "Facturar", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.width(70.dp))
@@ -137,6 +144,12 @@ fun VentaScreen(
             }
         }
     }
+    if(mostrarDialogoX.value)
+        Dialog(onDismissRequest = {
+            mostrarDialogoX.value = false
+        }) {
+            Text(text = "Hola mundo!")
+        }
     MenuLateral(navController)
 }
 
@@ -144,33 +157,31 @@ fun VentaScreen(
 fun CambiarCantidad(
     modifier: Modifier = Modifier,
     width: Dp = 45.dp,
-    min: Int = 1,
+    number: MutableIntState,
     max: Int = 30,
-    default: Int = min,
     onValueChange: (Int) -> Unit = {}
 ){
-    val number = remember{ mutableIntStateOf(default) }
     Row{
         PickerButton(
             size = width,
-            drawable = R.drawable.ic_go,
-            enabled = number.intValue > min,
+            drawable = R.drawable.ic_back,
+            enabled = number.intValue > 1,
             onClick = {
-                if (number.intValue > min) number.intValue --
+                if (number.intValue > 1) number.intValue --
                 onValueChange(number.intValue)
             }
         )
         Text(
             fontSize = 18.sp,
             text = number.intValue.toString(),
-            modifier = Modifier
+            modifier = modifier
                 .padding(start = 10.dp, end = 10.dp)
                 .height(IntrinsicSize.Max)
                 .align(Alignment.CenterVertically)
         )
         PickerButton(
             size = width,
-            drawable = R.drawable.ic_back,
+            drawable = R.drawable.ic_go,
             enabled = number.intValue < max,
             onClick = {
                 if (number.intValue < max) number.intValue ++

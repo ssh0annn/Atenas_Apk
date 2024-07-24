@@ -121,7 +121,7 @@ fun MenuLateral(
                         }
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+                        //if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
                             Boton(
                                 "Servicios",
                                 anchoTotal = true,
@@ -147,7 +147,7 @@ fun MenuLateral(
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.VistaTicket.route)
                             }
-                        }
+                        //}
 
                         if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
 
