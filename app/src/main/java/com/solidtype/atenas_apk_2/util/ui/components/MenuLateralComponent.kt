@@ -206,7 +206,7 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                     ) {
                         Spacer(modifier = Modifier.width(100.dp))
                         Text(
-                            text = "Cerrar Sección",
+                            text = "Cerrar Sesión",
                             color = AzulGris,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,

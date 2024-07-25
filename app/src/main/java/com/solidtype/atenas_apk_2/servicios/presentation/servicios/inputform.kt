@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -143,7 +144,8 @@ fun Inputlargo(
                 .height(130.dp)
                 .background(
                     Blanco,
-                    RoundedCornerShape(20.dp))
+                    RoundedCornerShape(20.dp)
+                )
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp)),
 
@@ -190,8 +192,10 @@ fun Inputmed(
                 .width(280.dp)
                 .padding(8.dp)
                 .height(60.dp)
-                .background(Blanco,
-                    RoundedCornerShape(20.dp))
+                .background(
+                    Blanco,
+                    RoundedCornerShape(20.dp)
+                )
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp)),
 
@@ -211,6 +215,47 @@ fun Inputmed(
     }
 }
 
+@ExperimentalMultiplatform
+@Composable
+fun Inputnoeditable(
+    label: String,
+    valor: String,
+    derecho: Boolean = false,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+) {
+    Box() {
+    Column {
+        Box (modifier = Modifier
+            .padding(start = 10.dp, top = 5.dp, end = 10.dp)
+        ){
+            Text(
+                text = label,
+                color = Negro,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .width(240.dp)
+                .height(50.dp)
+                .background(Blanco, RoundedCornerShape(20.dp))
+                .wrapContentHeight()
+                .clip(RoundedCornerShape(15.dp))
+                .padding(8.dp) // Ajuste del padding interno del valor
+        ) {
+
+            Text(
+                text = valor,
+                color = Negro,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+    }
+}
 
 @ExperimentalMultiplatform
 @Composable
@@ -237,8 +282,10 @@ fun Inputt(
                 .width(190.dp)
                 .padding(8.dp)
                 .height(60.dp)
-                .background(Blanco,
-                    RoundedCornerShape(20.dp))
+                .background(
+                    Blanco,
+                    RoundedCornerShape(20.dp)
+                )
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp)),
 
@@ -281,8 +328,10 @@ fun NumericTextField1(
             .width(190.dp)
             .padding(8.dp)
             .height(60.dp)
-            .background(Blanco,
-                RoundedCornerShape(20.dp))
+            .background(
+                Blanco,
+                RoundedCornerShape(20.dp)
+            )
             .wrapContentHeight()
             .clip(RoundedCornerShape(15.dp)),
         label = {
@@ -322,8 +371,10 @@ fun NumericTextField(
             .width(90.dp)
             .padding(8.dp)
             .height(60.dp)
-            .background(Blanco,
-                RoundedCornerShape(20.dp))
+            .background(
+                Blanco,
+                RoundedCornerShape(20.dp)
+            )
             .wrapContentHeight()
             .clip(RoundedCornerShape(15.dp)),
         label = {
@@ -368,8 +419,10 @@ fun Inputpeq(
                 .width(90.dp)
                 .padding(8.dp)
                 .height(60.dp)
-                .background(Blanco,
-                    RoundedCornerShape(20.dp))
+                .background(
+                    Blanco,
+                    RoundedCornerShape(20.dp)
+                )
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp)),
 

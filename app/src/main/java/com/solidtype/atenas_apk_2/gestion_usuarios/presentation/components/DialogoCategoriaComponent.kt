@@ -93,7 +93,11 @@ fun DialogoCategoria(
                 Row {
                     BotonBlanco(
                         text = "Guardar",
-                        habilitar = idCategoria.value != "" && nombreCategoria.value != "" && descripcionCategoria.value != "" && estadoCategoria.value != "",
+                        habilitar =
+                            idCategoria.value.matches("[0-9]+".toRegex()) &&
+                            nombreCategoria.value != "" &&
+                            descripcionCategoria.value != "" &&
+                            estadoCategoria.value != "",
                     ) {
                         try {
                             if (idCategoria.value.isEmpty() || nombreCategoria.value.isEmpty() || descripcionCategoria.value.isEmpty() || estadoCategoria.value.isEmpty()) {

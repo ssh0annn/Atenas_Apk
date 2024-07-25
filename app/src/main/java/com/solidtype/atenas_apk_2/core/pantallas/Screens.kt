@@ -24,6 +24,6 @@ sealed class Screens(val route: String) {
     //vendedor
     object Ticket : Screens("ticket")
     object Venta : Screens("venta")
-    object Servicio : Screens("servicio")
+    object Servicio : Screens("Servicio")
 
 }

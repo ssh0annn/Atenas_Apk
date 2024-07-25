@@ -4,13 +4,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.core.pantallas.NavigationSingleton.navController
+import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun servicios (){
+fun servicios (navController: NavController){
 
-    complementari()
-
+    complementari(navController)
+//complementari()
 }
 
 

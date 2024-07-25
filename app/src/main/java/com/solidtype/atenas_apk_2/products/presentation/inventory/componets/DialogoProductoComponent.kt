@@ -82,16 +82,16 @@ fun DialogoProducto(
             Row {
                 Boton(
                     "Guardar",
-                    idInventario.value != "" &&
-                            idCategoriaText.value != "" &&
-                            idProveedorText.value != "" &&
+                    idInventario.value.matches("[0-9]+".toRegex()) &&
+                            idCategoriaText.value.matches("[0-9]+".toRegex()) &&
+                            idProveedorText.value.matches("[0-9]+".toRegex()) &&
                             nombre.value != "" &&
                             marca.value != "" &&
                             modelo.value != "" &&
-                            cantidad.value != "" &&
-                            costo.value != "" &&
-                            precio.value != "" &&
-                            impuesto.value != "" &&
+                            cantidad.value.matches("[0-9]+".toRegex()) &&
+                            (costo.value.matches("[0-9]+".toRegex()) || costo.value.matches("[0-9]+.[0-9]+".toRegex())) &&
+                            (precio.value.matches("[0-9]+".toRegex()) || precio.value.matches("[0-9]+.[0-9]+".toRegex())) &&
+                            (impuesto.value.matches("[0-9]+".toRegex()) || impuesto.value.matches("[0-9]+.[0-9]+".toRegex())) &&
                             descripcion.value != ""
                 ) {
                     try {

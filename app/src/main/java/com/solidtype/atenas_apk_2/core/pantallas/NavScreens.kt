@@ -13,7 +13,6 @@ import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.HomeScreen
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Inventario
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.PerfilAdministrador
 import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.Ticket
-import com.solidtype.atenas_apk_2.core.pantallas.pantallasTemporales.VentasScreen
 import com.solidtype.atenas_apk_2.facturacion.presentation.FacturacionScreen
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteScreen
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorScreen
@@ -21,6 +20,7 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.GestionUsuariosS
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialScreen
 import com.solidtype.atenas_apk_2.perfil_administrador.presentation.PerfilAdminScreen
 import com.solidtype.atenas_apk_2.products.presentation.inventory.InventoryScreen
+import com.solidtype.atenas_apk_2.realizar_venta.presentation.VentaScreen
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.servicios
 import com.solidtype.atenas_apk_2.servicios.presentation.ticket.ticketScreen
 
@@ -70,13 +70,13 @@ fun Navigation() {
             Inventario(navController)
         }
         composable(route = Screens.Servicio.route) {
-            servicios()
+            servicios(navController)
         }
         composable(route = Screens.Ticket.route) {
             Ticket(navController)
         }
         composable(route = Screens.Ventas.route) {
-            VentasScreen(navController)
+            VentaScreen(navController)
         }
         composable(route = Screens.Productos.route) {
             InventoryScreen(navController)

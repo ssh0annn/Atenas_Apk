@@ -68,12 +68,12 @@ fun DialogoUsuario(
             Row {
                 Boton(
                     "Guardar",
-                    idUsuario.value != "" &&
+                    idUsuario.value .matches("[0-9]+".toRegex()) &&
                             nombre.value != "" &&
                             apellido.value != "" &&
                             Patterns.EMAIL_ADDRESS.matcher(correo.value).matches() &&
-                            clave.value.length >= 8 &&
-                            telefono.value != "" &&
+                            (clave.value.length in 8..16) &&
+                            telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
                             estado.value != "" &&
                             rol.value != ""
                 ) {
