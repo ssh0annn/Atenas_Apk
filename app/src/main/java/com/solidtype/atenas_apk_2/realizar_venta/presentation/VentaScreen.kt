@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
@@ -33,7 +34,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
+import com.solidtype.atenas_apk_2.ui.theme.Boton
 import com.solidtype.atenas_apk_2.ui.theme.Fondo
+import com.solidtype.atenas_apk_2.ui.theme.Paneles
 import com.solidtype.atenas_apk_2.ui.theme.SubFondo
 import com.solidtype.atenas_apk_2.ui.theme.SubPaneles
 import com.solidtype.atenas_apk_2.util.ui.components.PickerButton
@@ -71,7 +74,7 @@ fun VentaScreen(
         Column (modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .background(SubFondo)
-            .padding(30.dp)
+            .padding(25.dp)
             .align(Alignment.CenterHorizontally)
             .height(450.dp)
             .width(1100.dp),
@@ -115,22 +118,22 @@ fun VentaScreen(
 
             }
         }
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Box(modifier = Modifier
-            .padding(end = 55.dp)
+            .padding(end = 60.dp)
             .fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd
         ){
             Row(modifier = Modifier
-                .clip(RoundedCornerShape(40.dp))
+                .clip(RoundedCornerShape(30.dp))
                 .background(SubFondo)
                 .width(1000.dp)
-                .padding(20.dp),
+                .padding(10.dp),
                 horizontalArrangement = Arrangement.Center
             ){
-                Text(modifier = Modifier.padding(7.dp), text = "Totales: $ "+"12100.00", color = Fondo, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Text(modifier = Modifier.padding(7.dp), text = "Totales: $ "+"12100.00", color = Fondo, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(60.dp))
-                Text(modifier = Modifier.padding(7.dp), text = "Cantidades: "+"1", color = Fondo, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Text(modifier = Modifier.padding(7.dp), text = "Cantidades: "+"1", color = Fondo, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(140.dp))
                 Button(onClick = { 
                     mostrarDialogoX.value = true
@@ -148,7 +151,22 @@ fun VentaScreen(
         Dialog(onDismissRequest = {
             mostrarDialogoX.value = false
         }) {
-            Text(text = "Hola mundo!")
+            Box(modifier = Modifier
+                .width(600.dp)
+                .height(600.dp)
+                .background(Paneles, shape = RoundedCornerShape(20.dp))
+            ){
+                Row(modifier = Modifier.padding(20.dp)){
+                    Titulo(text = "Facturar")
+                    Spacer(modifier = Modifier.width(200.dp))
+                    Text(text = "20/30/2024", fontSize = 30.sp, color = Boton, fontWeight = FontWeight.Bold)
+                }
+                Column {
+                    Row{
+
+                    }
+                }
+            }
         }
     MenuLateral(navController)
 }
@@ -156,7 +174,7 @@ fun VentaScreen(
 @Composable
 fun CambiarCantidad(
     modifier: Modifier = Modifier,
-    width: Dp = 45.dp,
+    width: Dp = 35.dp,
     number: MutableIntState,
     max: Int = 30,
     onValueChange: (Int) -> Unit = {}
