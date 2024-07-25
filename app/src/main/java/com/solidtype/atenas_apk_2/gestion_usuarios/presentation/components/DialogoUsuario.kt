@@ -12,10 +12,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
@@ -29,10 +26,9 @@ fun DialogoUsuario(
     clave: MutableState<String>,
     telefono: MutableState<String>,
     rol: MutableState<String>,
-    uiState: UserStatesUI,
+    uiRoles: List<roll_usuarios>,
     mostrarRol: MutableState<Boolean>,
-    //estado: MutableState<String>,
-    viewModel: UsuariosViewmodel
+    onClickGuardar: () -> Unit
 ) {
     Dialogo(
         titulo = "Gestor de Usuarios",
@@ -56,9 +52,8 @@ fun DialogoUsuario(
                 clave,
                 telefono,
                 rol,
-                uiState,
-                mostrarRol,
-                //estado
+                uiRoles,
+                mostrarRol
             )
             Row {
                 Boton(
@@ -72,53 +67,7 @@ fun DialogoUsuario(
                             //estado.value != "" &&
                             rol.value != ""
                 ) {
-                    try {
-                        if (idUsuario.value.isEmpty() || nombre.value.isEmpty() || apellido.value.isEmpty() || correo.value.isEmpty() || clave.value.isEmpty() || telefono.value.isEmpty() || rol.value.isEmpty()) {
-                            throw Exception("Campos vacios.")
-                        }
-
-                        if (uiState.usuarios.find { it.id_usuario == idUsuario.value.toLong() } != null) {
-                            viewModel.onUserEvent(
-                                UserEvent.EditarUsuario(
-                                    usuario(
-                                        id_usuario = idUsuario.value.toLong(),
-                                        id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                            ?: 0,
-                                        nombre = nombre.value,
-                                        apellido = apellido.value,
-                                        email = correo.value,
-                                        clave = clave.value,
-                                        telefono = telefono.value,
-                                        estado = true
-                                    )
-                                )
-                            )
-                        } else {
-                            viewModel.onUserEvent(
-                                UserEvent.AgregarUsuario(
-                                    usuario(
-                                        id_usuario = idUsuario.value.toLong(),
-                                        id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
-                                            ?: 0,
-                                        nombre = nombre.value,
-                                        apellido = apellido.value,
-                                        email = correo.value,
-                                        clave = clave.value,
-                                        telefono = telefono.value,
-                                        estado = true
-                                    )
-                                )
-                            )
-                        }
-
-                        idUsuario.value = ""
-                        nombre.value = ""
-                        apellido.value = ""
-                        correo.value = ""
-                        clave.value = ""
-                        telefono.value = ""
-                        //estado.value = "Activo"
-                    } catch (_: Exception) { }
+                    onClickGuardar()
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cerrar") {

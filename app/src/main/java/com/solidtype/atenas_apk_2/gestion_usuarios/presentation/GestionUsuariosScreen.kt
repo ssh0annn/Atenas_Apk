@@ -28,6 +28,8 @@ import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.AreaUsuarios
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Botones
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoQR
@@ -35,11 +37,13 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Dialo
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.DialogoUsuario
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.DialogoConfirmacion
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 fun GestionUsuariosScreen(
@@ -128,59 +132,175 @@ fun GestionUsuariosScreen(
                             }
                         }
                     }
-                    AreaUsuarios(
-                        uiState,
-                        idUsuario,
-                        nombre,
-                        apellido,
-                        correo,
-                        clave,
-                        telefono,
-                        rol,
-                        mostrarUsuario,
-                        mostrarDialogo,
-                        confirmarMensaje,
-                        accionDeConfirmacion,
-                        viewModel
+                    AreaUsuarios(uiState.usuarios, uiState.roles, uiState.switch, idUsuario, nombre, apellido, correo, clave, telefono, rol, mostrarUsuario,
+                        onClickRestaurar = { usuario ->
+                            {
+                                viewModel.onUserEvent(
+                                    UserEvent.EditarUsuario(
+                                        usuario(
+                                            id_usuario = usuario.id_usuario,
+                                            id_roll_usuario = usuario.id_roll_usuario,
+                                            nombre = usuario.nombre,
+                                            apellido = usuario.apellido,
+                                            email = usuario.email,
+                                            clave = usuario.clave,
+                                            telefono = usuario.telefono,
+                                            estado = true
+                                        )
+                                    )
+                                )
+                                mostrarDialogo.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas restaurar el usuario '${usuario.nombre}'?",
+                                showDialog = { mostrarDialogo.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        }, onClickEliminar = { usuario ->
+                            {
+                                viewModel.onUserEvent(
+                                    UserEvent.BorrarUsuario(
+                                        usuario(
+                                            id_usuario = usuario.id_usuario,
+                                            id_roll_usuario = usuario.id_roll_usuario,
+                                            nombre = usuario.nombre,
+                                            apellido = usuario.apellido,
+                                            email = usuario.email,
+                                            clave = usuario.clave,
+                                            telefono = usuario.telefono,
+                                            estado = false
+                                        )
+                                    )
+                                )
+                                mostrarDialogo.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el usuario '${usuario.nombre}'?",
+                                showDialog = { mostrarDialogo.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        }
                     )
                 }
-                Botones(
-                    mostrarQR,
-                    mostrarUsuario,
-                    idUsuario,
-                    nombre,
-                    apellido,
-                    correo,
-                    clave,
-                    telefono,
-                    rol
-                )
+                Botones(mostrarQR, mostrarUsuario, idUsuario, nombre, apellido, correo, clave, telefono, rol)
             }
         }
-        DialogoUsuario(
-            mostrarUsuario,
-            idUsuario,
-            nombre,
-            apellido,
-            correo,
-            clave,
-            telefono,
-            rol,
-            uiState,
-            mostrarRol,
-            viewModel
-        )
-        DialogoRol(
-            mostrarRol,
-            idRollUsuario,
-            nombreRollUsuario,
-            descripcion,
-            estadoRollUsuario,
-            uiState,
-            viewModel,
-            mostrarDialogo,
-            confirmarMensaje,
-            accionDeConfirmacion
+        DialogoUsuario(mostrarUsuario, idUsuario, nombre, apellido, correo, clave, telefono, rol, uiState.roles, mostrarRol){
+            try {
+                if (idUsuario.value.isEmpty() || nombre.value.isEmpty() || apellido.value.isEmpty() || correo.value.isEmpty() || clave.value.isEmpty() || telefono.value.isEmpty() || rol.value.isEmpty()) {
+                    throw Exception("Campos vacios.")
+                }
+
+                if (uiState.usuarios.find { it.id_usuario == idUsuario.value.toLong() } != null) {
+                    viewModel.onUserEvent(
+                        UserEvent.EditarUsuario(
+                            usuario(
+                                id_usuario = idUsuario.value.toLong(),
+                                id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
+                                    ?: 0,
+                                nombre = nombre.value,
+                                apellido = apellido.value,
+                                email = correo.value,
+                                clave = clave.value,
+                                telefono = telefono.value,
+                                estado = true
+                            )
+                        )
+                    )
+                } else {
+                    viewModel.onUserEvent(
+                        UserEvent.AgregarUsuario(
+                            usuario(
+                                id_usuario = idUsuario.value.toLong(),
+                                id_roll_usuario = uiState.roles.find { it.nombre == rol.value }?.id_roll_usuario
+                                    ?: 0,
+                                nombre = nombre.value,
+                                apellido = apellido.value,
+                                email = correo.value,
+                                clave = clave.value,
+                                telefono = telefono.value,
+                                estado = true
+                            )
+                        )
+                    )
+                }
+
+                idUsuario.value = ""
+                nombre.value = ""
+                apellido.value = ""
+                correo.value = ""
+                clave.value = ""
+                telefono.value = ""
+            } catch (_: Exception) { }
+        }
+        DialogoRol(mostrarRol, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, uiState.roles,
+            onClickGuardar = {
+                try {
+                    if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
+                        throw Exception("Campos vacios.")
+                    }
+
+                    if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
+                        viewModel.onUserEvent(
+                            UserEvent.EditarRol(
+                                roll_usuarios(
+                                    id_roll_usuario = idRollUsuario.value.toLong(),
+                                    nombre = nombreRollUsuario.value,
+                                    descripcion = descripcion.value,
+                                    estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                )
+                            )
+                        )
+                    } else {
+                        viewModel.onUserEvent(
+                            UserEvent.AgregarNuevoRol(
+                                roll_usuarios(
+                                    id_roll_usuario = idRollUsuario.value.toLong(),
+                                    nombre = nombreRollUsuario.value,
+                                    descripcion = descripcion.value,
+                                    estado = estadoRollUsuario.value.formatoActivoDDBB()
+                                )
+                            )
+                        )
+                    }
+
+                    idRollUsuario.value = ""
+                    nombreRollUsuario.value = ""
+                    descripcion.value = ""
+                    estadoRollUsuario.value = "Activo"
+                } catch (_: Exception) { }
+            }, onClickEliminar = {
+                {
+                    try {
+                        if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
+                            throw Exception("Campos vacios.")
+                        }
+                    } catch (_: Exception) { }
+
+                    viewModel.onUserEvent(
+                        UserEvent.ElimnarRoll(
+                            roll_usuarios(
+                                idRollUsuario.value.toLong(),
+                                nombreRollUsuario.value,
+                                descripcion.value,
+                                true
+                            )
+                        )
+                    )
+
+                    idRollUsuario.value = ""
+                    nombreRollUsuario.value = ""
+                    descripcion.value = ""
+                    estadoRollUsuario.value = "Activo"
+
+                    mostrarDialogo.value = false
+                }.confirmar(
+                    mensaje = "¿Estás seguro que deseas eliminar el rol '${nombreRollUsuario.value}'?",
+                    showDialog = { mostrarDialogo.value = true },
+                    setMessage = { confirmarMensaje.value = it },
+                    setAction = { accionDeConfirmacion.value = it }
+                )
+            }
         )
         DialogoQR(mostrarQR, uiState.qr.toString())
         DialogoConfirmacion(

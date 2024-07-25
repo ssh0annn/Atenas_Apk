@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
@@ -32,9 +31,8 @@ fun Detalles(
     clave: MutableState<String>,
     telefono: MutableState<String>,
     rol: MutableState<String>,
-    uiState: UserStatesUI,
+    uiRoles: List<com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios>,
     mostrarDialogo: MutableState<Boolean>,
-    //estado: MutableState<String>,
 ) {
     Column(
         modifier = Modifier
@@ -57,9 +55,6 @@ fun Detalles(
                     .background(GrisOscuro)
             ) {// Area de detalles = Imagen del producto, Categoría y Nombre
                 item {
-                    /*BackHandler(expanded.value) {
-                                        expanded.value = false
-                                    }*/
                     Column(
                         modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 0.dp)
                     ) {
@@ -89,19 +84,13 @@ fun Detalles(
                         AutocompleteSelect(
                             "Rol",
                             rol.value,
-                            if (uiState.roles.isNotEmpty()) uiState.roles.map { it.nombre } else listOf(
+                            if (uiRoles.isNotEmpty()) uiRoles.map { it.nombre } else listOf(
                                 ""
                             ),
                             onClickAgregar = {
                                 mostrarDialogo.value = true
                             },
                         ) { rol.value = it }
-                        /*Spacer(modifier = Modifier.height(10.dp))
-                        AutocompleteSelect(
-                            "Estado",
-                            estado.value,
-                            listOf("Activo", "Inactivo")
-                        ) { estado.value = it }*/
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
