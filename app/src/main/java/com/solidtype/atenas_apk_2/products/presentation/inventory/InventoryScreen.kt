@@ -176,26 +176,8 @@ fun InventoryScreen(
                         }
                     }
                 }
-                AreaProductos(
-                    uiState.products,
-                    uiState.proveedores,
-                    uiState.categoria,
-                    uiState.switch,
-                    idInventario,
-                    nombre,
-                    marca,
-                    modelo,
-                    cantidad,
-                    costo,
-                    precio,
-                    impuesto,
-                    descripcion,
-                    mostrarProducto,
-                    categoria,
-                    provider,
-                    idCategoria,
-                    idProveedor,
-                    { producto ->
+                AreaProductos(uiState.products, uiState.proveedores, uiState.categoria, uiState.switch, idInventario, nombre, marca, modelo, cantidad, costo, precio, impuesto, descripcion, mostrarProducto, categoria, provider, idCategoria, idProveedor,
+                    onRestaurarProducto = { producto ->
                         {
                             viewModel.onEvent(
                                 InventariosEvent.AgregarProductos(
@@ -223,7 +205,7 @@ fun InventoryScreen(
                             setAction = { accionDeConfirmacion.value = it }
                         )
                     },
-                    { producto ->
+                    onEliminarProducto = { producto ->
                         {
                             viewModel.onEvent(
                                 InventariosEvent.EliminarProductos(
@@ -252,24 +234,7 @@ fun InventoryScreen(
                         )
                     }
                 )
-                Botones(
-                    context,
-                    mostrarEjemplar,
-                    mostrarProducto,
-                    idInventario,
-                    categoria,
-                    nombre,
-                    descripcion,
-                    costo,
-                    precio,
-                    modelo,
-                    marca,
-                    cantidad,
-                    impuesto,
-                    provider,
-                    idCategoria,
-                    idProveedor
-                ) {
+                Botones(context, mostrarEjemplar, mostrarProducto, idInventario, categoria, nombre, descripcion, costo, precio, modelo, marca, cantidad, impuesto, provider, idCategoria, idProveedor) {
                     Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
                         .show()
                     viewModel.exportarExcel()
@@ -277,26 +242,7 @@ fun InventoryScreen(
                 }
             }
         }
-        DialogoProducto(
-            mostrarProducto,
-            categoria,
-            nombre,
-            idInventario,
-            descripcion,
-            costo,
-            precio,
-            modelo,
-            marca,
-            cantidad,
-            idCategoria,
-            idProveedor,
-            impuesto,
-            provider,
-            mostrarCategoria,
-            mostrarProveedor,
-            uiState.categoria,
-            uiState.proveedores
-        ) {
+        DialogoProducto(mostrarProducto, categoria, nombre, idInventario, descripcion, costo, precio, modelo, marca, cantidad, idCategoria, idProveedor, impuesto, provider, mostrarCategoria, mostrarProveedor, uiState.categoria, uiState.proveedores) {
             viewModel.onEvent(
                 InventariosEvent.AgregarProductos(
                     inventario(
@@ -327,14 +273,8 @@ fun InventoryScreen(
             impuesto.value = ""
             descripcion.value = ""
         }
-        DialogoCategoria(
-            mostrarCategoria,
-            idCategoria,
-            nombreCategoria,
-            descripcionCategoria,
-            estadoCategoria,
-            uiState.categoria,
-            {
+        DialogoCategoria(mostrarCategoria, idCategoria, nombreCategoria, descripcionCategoria, estadoCategoria, uiState.categoria,
+            onGuardar = {
                 try {
                     if (idCategoria.value.isEmpty() || nombreCategoria.value.isEmpty() || descripcionCategoria.value.isEmpty() || estadoCategoria.value.isEmpty()) {
                         throw Exception("Campos vacios.")
@@ -370,7 +310,7 @@ fun InventoryScreen(
                     estadoCategoria.value = "Activo"
                 } catch (_: Exception) { }
             },
-            {
+            onInactivar = {
                 {
                     viewModel.onEvent(
                         InventariosEvent.eliminarCategoria(
@@ -397,19 +337,10 @@ fun InventoryScreen(
                     setMessage = { confirmarMensaje.value = it },
                     setAction = { accionDeConfirmacion.value = it }
                 )
-            },
+            }
         )
-        DialogoProveedor(
-            mostrarProveedor,
-            nombreProveedor,
-            tipoDocumentoProveedor,
-            documentoProveedor,
-            direccionProveedor,
-            telefonoProveedor,
-            emailProveedor,
-            uiState.proveedores,
-            idProveedor,
-            {
+        DialogoProveedor(mostrarProveedor, nombreProveedor, tipoDocumentoProveedor, documentoProveedor, direccionProveedor, telefonoProveedor, emailProveedor, uiState.proveedores, idProveedor,
+            onGuardar = {
                 try {
                     if (nombreProveedor.value.isEmpty() || tipoDocumentoProveedor.value.isEmpty() || documentoProveedor.value.isEmpty() || direccionProveedor.value.isEmpty() || telefonoProveedor.value.isEmpty() || emailProveedor.value.isEmpty()) {
                         throw Exception("Campos vacios.")
@@ -437,7 +368,7 @@ fun InventoryScreen(
                     emailProveedor.value = ""
                 } catch (_: Exception) { }
             },
-            {
+            onEliminar = {
                 {
                     viewModel.onEvent(
                         InventariosEvent.EliminarProveedor(
