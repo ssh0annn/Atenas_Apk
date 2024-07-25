@@ -22,7 +22,7 @@ class VentasViewmodel @Inject constructor(
     private val casosCliente: ClientesManage,
 ) : ViewModel() {
 
-
+    
     private val CORREO: String = "correo"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
 
