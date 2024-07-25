@@ -49,6 +49,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @OptIn(ExperimentalMultiplatform::class)
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
@@ -130,22 +131,53 @@ fun ProveedorScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    TableProviders(
-                        uiState.proveedores,
-                        mostrarDialogo,
-                        editar,
-                        nombre,
-                        numDocumento,
-                        email,
-                        telefono,
-                        idProveedor,
-                        tipoDocumento,
-                        direccion,
-                        uiState,
-                        mostrarDialogoG,
-                        confirmarMensaje,
-                        accionDeConfirmacion,
-                        viewModel
+                    TableProviders(uiState.proveedores, mostrarDialogo, editar, nombre, numDocumento, email, telefono, idProveedor, tipoDocumento, direccion, uiState.switch,
+                        onClickRestore = { provider ->
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.RestaurarProveedor/*(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )*/
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        },
+                        onClickDelete = { provider ->
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.BorrarProveedor(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        }
                     )
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -317,7 +349,6 @@ fun ProveedorScreen(
                 }
             }
         }
-        //****************************************************************
         DialogoConfirmacion(
             showDialog = mostrarDialogoG,
             confirmMessage = confirmarMensaje,
