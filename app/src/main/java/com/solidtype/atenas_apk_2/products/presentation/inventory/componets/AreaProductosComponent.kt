@@ -27,22 +27,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-//import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.Carrito
-import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 fun AreaProductos(
-    uiState: ProductosViewStates,
+    uiProducts: List<inventario>,
+    uiProveedores: List<Personastodas.Proveedor>,
+    uiCategoria: List<categoria>,
+    inactivo: Boolean,
     idInventario: MutableState<String>,
     nombre: MutableState<String>,
     marca: MutableState<String>,
@@ -57,10 +57,8 @@ fun AreaProductos(
     provider: MutableState<String>,
     idCategoria: MutableState<String>,
     idProveedor: MutableState<String>,
-    viewModel: InventarioViewModel,
-    mostrarDialogo: MutableState<Boolean>,
-    confirmarMensaje: MutableState<String>,
-    accionDeConfirmacion: MutableState<() -> Unit>
+    onRestaurarProducto: (inventario) -> Unit,
+    onEliminarProducto: (inventario) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -133,7 +131,7 @@ fun AreaProductos(
                         .clip(RoundedCornerShape(5.dp))
                         .background(GrisOscuro)
                 ) { //buscar componente para agregar filas de cards
-                    items(uiState.products) { producto ->
+                    items(uiProducts) { producto ->
                         Row(
                             modifier = Modifier
                                 .padding(start = 20.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
@@ -174,34 +172,9 @@ fun AreaProductos(
                                 modifier = Modifier.weight(0.5f),
                                 horizontalArrangement = Arrangement.End
                             ) {
-                                if (uiState.switch) {
+                                if (inactivo) {
                                     IconButton(onClick = {
-                                        {
-                                            viewModel.onEvent(
-                                                InventariosEvent.AgregarProductos(
-                                                    inventario(
-                                                        id_inventario = producto.id_inventario,
-                                                        id_categoria = producto.id_categoria,
-                                                        id_proveedor = producto.id_proveedor,
-                                                        nombre = producto.nombre,
-                                                        marca = producto.marca,
-                                                        modelo = producto.modelo,
-                                                        cantidad = producto.cantidad,
-                                                        precio_compra = producto.precio_compra,
-                                                        precio_venta = producto.precio_venta,
-                                                        impuesto = producto.impuesto,
-                                                        descripcion = producto.descripcion,
-                                                        estado = true
-                                                    )
-                                                )
-                                            )
-                                            mostrarDialogo.value = false
-                                        }.confirmar(
-                                            mensaje = "¿Estás seguro que deseas restaurar el producto '${producto.nombre}'?",
-                                            showDialog = { mostrarDialogo.value = true },
-                                            setMessage = { confirmarMensaje.value = it },
-                                            setAction = { accionDeConfirmacion.value = it }
-                                        )
+                                        onRestaurarProducto(producto)
                                     }) {
                                         Icon(
                                             imageVector = Icons.Filled.RestoreFromTrash,
@@ -223,9 +196,9 @@ fun AreaProductos(
                                         impuesto.value = producto.impuesto.toString()
                                         descripcion.value = producto.descripcion
                                         provider.value =
-                                            uiState.proveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
+                                            uiProveedores.find { it.id_proveedor == producto.id_proveedor }?.nombre.toString()
                                         categoria.value =
-                                            uiState.categoria.find { it.id_categoria == producto.id_categoria }?.nombre
+                                            uiCategoria.find { it.id_categoria == producto.id_categoria }?.nombre
                                                 ?: ""
                                         idCategoria.value = producto.id_categoria.toString()
                                         idProveedor.value = producto.id_proveedor.toString()
@@ -237,32 +210,7 @@ fun AreaProductos(
                                         )
                                     }
                                     IconButton(onClick = {
-                                        {
-                                            viewModel.onEvent(
-                                                InventariosEvent.EliminarProductos(
-                                                    inventario(
-                                                        id_inventario = producto.id_inventario,
-                                                        id_categoria = producto.id_categoria,
-                                                        id_proveedor = producto.id_proveedor,
-                                                        nombre = producto.nombre,
-                                                        marca = producto.marca,
-                                                        modelo = producto.modelo,
-                                                        cantidad = producto.cantidad,
-                                                        precio_compra = producto.precio_compra,
-                                                        precio_venta = producto.precio_venta,
-                                                        impuesto = producto.impuesto,
-                                                        descripcion = producto.descripcion,
-                                                        estado = false
-                                                    )
-                                                )
-                                            )
-                                            mostrarDialogo.value = false
-                                        }.confirmar(
-                                            mensaje = "¿Estás seguro que deseas eliminar el producto '${producto.nombre}'?",
-                                            showDialog = { mostrarDialogo.value = true },
-                                            setMessage = { confirmarMensaje.value = it },
-                                            setAction = { accionDeConfirmacion.value = it }
-                                        )
+                                        onEliminarProducto(producto)
                                     }) {
                                         Icon(
                                             imageVector = Icons.Filled.Delete,

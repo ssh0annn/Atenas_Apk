@@ -17,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
@@ -29,7 +30,6 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 @OptIn(ExperimentalMultiplatform::class)
 fun Detalles(
     categoria: MutableState<String>,
-    uiState: ProductosViewStates,
     nombre: MutableState<String>,
     idInventario: MutableState<String>,
     descripcion: MutableState<String>,
@@ -43,7 +43,9 @@ fun Detalles(
     impuesto: MutableState<String>,
     provider: MutableState<String>,
     mostrarCategoria: MutableState<Boolean>,
-    mostrarProveedor: MutableState<Boolean>
+    mostrarProveedor: MutableState<Boolean>,
+    uiCategoria: List<categoria>,
+    uiProveedores:  List<Personastodas. Proveedor>
 ) {
     Column(
         modifier = Modifier
@@ -81,13 +83,13 @@ fun Detalles(
                                 "Categoría",
                                 categoria.value,
                                 if (
-                                    uiState.categoria.isNotEmpty() &&
-                                    uiState.categoria
+                                    uiCategoria.isNotEmpty() &&
+                                    uiCategoria
                                         .filter { it.estado }
                                         .map { it.nombre }
                                         .isNotEmpty()
                                 )
-                                    uiState.categoria
+                                    uiCategoria
                                         .filter { it.estado }
                                         .map { it.nombre }
                                 else
@@ -100,7 +102,7 @@ fun Detalles(
                                 categoria.value = valor
                                 if (categoria.value != "")
                                     idCatalogo.value =
-                                        uiState.categoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
+                                        uiCategoria.find { it.nombre == categoria.value }!!.id_categoria.toString()
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             InputDetalle(
@@ -124,7 +126,7 @@ fun Detalles(
                         AutocompleteSelect(
                             "Proveedor",
                             provider.value,
-                            if (uiState.proveedores.isNotEmpty()) uiState.proveedores.map { it.nombre.toString() } else listOf(
+                            if (uiProveedores.isNotEmpty()) uiProveedores.map { it.nombre.toString() } else listOf(
                                 ""
                             ),
                             onClickAgregar = {
@@ -134,7 +136,7 @@ fun Detalles(
                             provider.value = valor
                             if (provider.value != "")
                                 idProveedor.value =
-                                    uiState.proveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
+                                    uiProveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
                         Spacer(modifier = Modifier.height(5.dp))
                         InputDetalle("Costo", costo.value, tipo = KeyboardType.Number) {

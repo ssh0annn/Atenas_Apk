@@ -16,8 +16,6 @@ import com.solidtype.atenas_apk_2.util.ui.components.Boton
 @Composable
 fun Botones(
     context: Context,
-    viewModel: InventarioViewModel,
-    showSnackbarIni: MutableState<Boolean>,
     mostrar: MutableState<Boolean>,
     mostrarProducto: MutableState<Boolean>,
     idInventario: MutableState<String>,
@@ -32,7 +30,8 @@ fun Botones(
     impuesto: MutableState<String>,
     provider: MutableState<String>,
     idCategoria: MutableState<String>,
-    idProveedor: MutableState<String>
+    idProveedor: MutableState<String>,
+    onExportar: () -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -43,10 +42,7 @@ fun Botones(
                 showFilePicker(context)
             }
             Boton("Exportar") {
-                Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
-                    .show()
-                viewModel.exportarExcel()
-                showSnackbarIni.value = true
+                onExportar()
             }
             Boton("Ejemplar") {
                 mostrar.value = true
@@ -64,7 +60,6 @@ fun Botones(
                 marca.value = ""
                 cantidad.value = ""
                 impuesto.value = ""
-                //estado.value = "Activo"
                 provider.value = ""
                 idCategoria.value = ""
                 idProveedor.value = ""

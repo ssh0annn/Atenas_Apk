@@ -19,21 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
-import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
@@ -43,11 +38,9 @@ fun DialogoCategoria(
     nombreCategoria: MutableState<String>,
     descripcionCategoria: MutableState<String>,
     estadoCategoria: MutableState<String>,
-    uiState: ProductosViewStates,
-    viewModel: InventarioViewModel,
-    mostrarDialogo: MutableState<Boolean>,
-    confirmarMensaje: MutableState<String>,
-    accionDeConfirmacion: MutableState<() -> Unit>
+    uiCategoria: List<categoria>,
+    onGuardar: () -> Unit,
+    onInactivar: () -> Unit
 ) {
     Dialogo(
         "Gestor de Categoría",
@@ -98,69 +91,11 @@ fun DialogoCategoria(
                             descripcionCategoria.value != "" &&
                             estadoCategoria.value != "",
                     ) {
-                        try {
-                            if (idCategoria.value.isEmpty() || nombreCategoria.value.isEmpty() || descripcionCategoria.value.isEmpty() || estadoCategoria.value.isEmpty()) {
-                                throw Exception("Campos vacios.")
-                            }
-
-                            if (uiState.categoria.find { it.id_categoria == idCategoria.value.toLong() } != null) {
-                                viewModel.onEvent(
-                                    InventariosEvent.ActualizarCategoria(
-                                        categoria(
-                                            id_categoria = idCategoria.value.toLong(),
-                                            nombre = nombreCategoria.value,
-                                            descripcion = descripcionCategoria.value,
-                                            estado = estadoCategoria.value.formatoActivoDDBB()
-                                        )
-                                    )
-                                )
-                            } else {
-                                viewModel.onEvent(
-                                    InventariosEvent.AgregarCategorias(
-                                        categoria(
-                                            id_categoria = idCategoria.value.toLong(),
-                                            nombre = nombreCategoria.value,
-                                            descripcion = descripcionCategoria.value,
-                                            estado = estadoCategoria.value.formatoActivoDDBB()
-                                        )
-                                    )
-                                )
-                            }
-
-                            idCategoria.value = ""
-                            nombreCategoria.value = ""
-                            descripcionCategoria.value = ""
-                            estadoCategoria.value = "Activo"
-                        } catch (_: Exception) { }
+                        onGuardar()
                     }
                     Spacer(modifier = Modifier.width(40.dp))
                     BotonBlanco("Inactivar") {
-                        {
-                            viewModel.onEvent(
-                                InventariosEvent.eliminarCategoria(
-                                    categoria(
-                                        idCategoria.value.toLong(),
-                                        nombreCategoria.value,
-                                        descripcionCategoria.value,
-                                        estadoCategoria.value.formatoActivoDDBB()
-                                    )
-                                )
-                            )
-
-                            viewModel.onEvent(InventariosEvent.GetCategorias)
-
-                            idCategoria.value = ""
-                            nombreCategoria.value = ""
-                            descripcionCategoria.value = ""
-                            estadoCategoria.value = "Activo"
-
-                            mostrarDialogo.value = false
-                        }.confirmar(
-                            mensaje = "¿Estás seguro que deseas inactivar la categoría '${nombreCategoria.value}'?",
-                            showDialog = { mostrarDialogo.value = true },
-                            setMessage = { confirmarMensaje.value = it },
-                            setAction = { accionDeConfirmacion.value = it }
-                        )
+                        onInactivar()
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -212,8 +147,8 @@ fun DialogoCategoria(
                             }
                         }
                     }
-                    if (uiState.categoria.isNotEmpty())
-                        items(uiState.categoria) { categoriaIndex ->
+                    if (uiCategoria.isNotEmpty())
+                        items(uiCategoria) { categoriaIndex ->
                             Row(
                                 modifier = Modifier
                                     .padding(

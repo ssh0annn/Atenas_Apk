@@ -21,9 +21,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -33,7 +30,6 @@ import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
-import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
@@ -45,12 +41,10 @@ fun DialogoProveedor(
     direccionProveedor: MutableState<String>,
     telefonoProveedor: MutableState<String>,
     emailProveedor: MutableState<String>,
-    viewModel: InventarioViewModel,
-    uiState: ProductosViewStates,
+    uiProveedores: List<Personastodas.Proveedor>,
     idProveedor: MutableState<String>,
-    mostrarDialogo: MutableState<Boolean>,
-    confirmarMensaje: MutableState<String>,
-    accionDeConfirmacion: MutableState<() -> Unit>
+    onGuardar: () -> Unit,
+    onEliminar: () -> Unit
 ) {
     Dialogo(
         "Gestor de Proveedores",
@@ -115,67 +109,11 @@ fun DialogoProveedor(
                             telefonoProveedor.value.matches("8\\d9\\d{7}".toRegex()) &&
                             Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
                         ) {
-                        try {
-                            if (nombreProveedor.value.isEmpty() || tipoDocumentoProveedor.value.isEmpty() || documentoProveedor.value.isEmpty() || direccionProveedor.value.isEmpty() || telefonoProveedor.value.isEmpty() || emailProveedor.value.isEmpty()) {
-                                throw Exception("Campos vacios.")
-                            }
-
-                            viewModel.onEvent(
-                                InventariosEvent.CrearProveedor(
-                                    Personastodas.Proveedor(
-                                        id_proveedor = 0,
-                                        nombre = nombreProveedor.value,
-                                        tipo_documento = tipoDocumentoProveedor.value,
-                                        documento = documentoProveedor.value,
-                                        direccion = direccionProveedor.value,
-                                        telefono = telefonoProveedor.value,
-                                        email = emailProveedor.value
-                                    )
-                                )
-                            )
-
-                            nombreProveedor.value = ""
-                            tipoDocumentoProveedor.value = ""
-                            documentoProveedor.value = ""
-                            direccionProveedor.value = ""
-                            telefonoProveedor.value = ""
-                            emailProveedor.value = ""
-                        } catch (_: Exception) { }
+                        onGuardar()
                     }
                     Spacer(modifier = Modifier.width(40.dp))
                         BotonBlanco("Eliminar") {
-                            {
-                                viewModel.onEvent(
-                                    InventariosEvent.EliminarProveedor(
-                                        Personastodas.Proveedor(
-                                            id_proveedor = idProveedor.value.toLong(),
-                                            nombre = nombreProveedor.value,
-                                            tipo_documento = tipoDocumentoProveedor.value,
-                                            documento = documentoProveedor.value,
-                                            direccion = direccionProveedor.value,
-                                            telefono = telefonoProveedor.value,
-                                            email = emailProveedor.value
-                                        )
-                                    )
-                                )
-
-                                viewModel.onEvent(InventariosEvent.Getrpoveedores)
-
-                                idProveedor.value = ""
-                                nombreProveedor.value = ""
-                                tipoDocumentoProveedor.value = ""
-                                documentoProveedor.value = ""
-                                direccionProveedor.value = ""
-                                telefonoProveedor.value = ""
-                                emailProveedor.value = ""
-
-                                mostrarDialogo.value = false
-                            }.confirmar(
-                                mensaje = "¿Estás seguro que deseas eliminar el provedor '${nombreProveedor.value}'?",
-                                showDialog = { mostrarDialogo.value = true },
-                                setMessage = { confirmarMensaje.value = it },
-                                setAction = { accionDeConfirmacion.value = it }
-                            )
+                            onEliminar()
                         }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -227,8 +165,8 @@ fun DialogoProveedor(
                             }
                         }
                     }
-                    if (uiState.proveedores.isNotEmpty())
-                        items(uiState.proveedores) { proveedor ->
+                    if (uiProveedores.isNotEmpty())
+                        items(uiProveedores) { proveedor ->
                             Row(
                                 modifier = Modifier
                                     .padding(
