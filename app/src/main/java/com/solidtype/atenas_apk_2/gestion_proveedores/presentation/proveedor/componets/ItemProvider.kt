@@ -22,9 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorStatesUI
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorViewModel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 fun MyProviderItem(
@@ -35,11 +38,14 @@ fun MyProviderItem(
     numDocumento: MutableState<String>,
     email: MutableState<String>,
     telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>,
     idProveedor: MutableState<String>,
     tipoDocumento: MutableState<String>,
     direccion: MutableState<String>,
-    uiState: ProveedorStatesUI
+    uiState: ProveedorStatesUI,
+    mostrarDialogoG: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>,
+    viewModel: ProveedorViewModel
 ) {
     Box(
         modifier = Modifier
@@ -97,15 +103,27 @@ fun MyProviderItem(
                 ) {
                     if(uiState.switch) {
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-
-                            idProveedor.value = provider.id_proveedor.toString()
-                            nombre.value = provider.nombre!!
-                            numDocumento.value = provider.documento!!
-                            telefono.value = provider.telefono!!
-                            email.value = provider.email!!
-                            tipoDocumento.value = provider.tipo_documento!!
-                            direccion.value = provider.direccion!!
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.RestaurarProveedor/*(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )*/
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
                         }){
                             Icon(
                                 imageVector = Icons.Filled.RestoreFromTrash,
@@ -134,13 +152,27 @@ fun MyProviderItem(
                             )
                         }
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-                            //formulario onDelete
-                            idProveedor.value = provider.id_proveedor.toString()
-                            nombre.value = provider.nombre!!
-                            numDocumento.value = provider.documento!!
-                            telefono.value = provider.telefono!!
-                            email.value = provider.email!!
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.BorrarProveedor(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,

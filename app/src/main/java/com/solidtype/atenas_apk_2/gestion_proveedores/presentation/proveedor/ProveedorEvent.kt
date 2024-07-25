@@ -1,6 +1,5 @@
 package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor
 
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteEvent
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 
 sealed class ProveedorEvent {
