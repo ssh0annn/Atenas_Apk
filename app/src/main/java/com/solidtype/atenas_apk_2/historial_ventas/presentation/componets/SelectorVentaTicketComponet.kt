@@ -7,6 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorailViewModel
+import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialEvent
 
 @Composable
 fun SelectorVentaTicket(
@@ -30,13 +31,17 @@ fun SelectorVentaTicket(
                     ventasTickerTitulo.value = "Ventas"
                     fechaIni.value = ""
                     fechaFin.value = ""
-                 //   viewModel.MostrarHistoriar()
+                    viewModel.onEvent(
+                        HistorialEvent.GetTodosTodasVentas
+                    )
                 }
                 "Ticket" -> {
                     ventasTickerTitulo.value = "Cuenta x Cobrar"
                     fechaIni.value = ""
                     fechaFin.value = ""
-                  //  viewModel.mostrarTicket()
+                    viewModel.onEvent(
+                        HistorialEvent.GetTodosTickets
+                    )
                 }
             }
         }

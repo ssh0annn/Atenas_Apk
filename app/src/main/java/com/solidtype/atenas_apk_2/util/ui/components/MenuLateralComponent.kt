@@ -48,10 +48,23 @@ import com.solidtype.atenas_apk_2.ui.theme.semiTransparente
 import com.solidtype.atenas_apk_2.util.ui.LogoutViewmodel
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
+object MenuLateralSingleton {
+    var menuLateral: @Composable (NavController) -> Unit = {
+        MenuLateral(it)
+    }
+}
+
 @Composable
-fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltViewModel()) {
+fun MenuLateral(
+    navController: NavController,
+    viewModel: LogoutViewmodel = hiltViewModel()
+) {
     val mostrarMenu = rememberSaveable { mutableStateOf(false) }
     val noHoverInteractionSource = remember { MutableInteractionSource() }
+
+    val mostrarDialogo = remember { mutableStateOf(false) }
+    val confirmarMensaje = remember { mutableStateOf("") }
+    val accionDeConfirmacion = remember { mutableStateOf({}) }
 
     AnimatedVisibility(
         visible = mostrarMenu.value,
@@ -108,7 +121,7 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                         }
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
+                        //if (TipoUserSingleton.tipoUser != TipoUser.ADMIN) {
                             Boton(
                                 "Servicios",
                                 anchoTotal = true,
@@ -134,7 +147,7 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                                 mostrarMenu.value = false
                                 navController.navigate(Screens.VistaTicket.route)
                             }
-                        }
+                        //}
 
                         if (TipoUserSingleton.tipoUser == TipoUser.ADMIN) {
 
@@ -213,13 +226,20 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .clickable {
-                                    navController.navigate(Screens.Login.route) {
-                                        popUpTo(Screens.Login.route) {
-                                            inclusive =true
+                                    {
+                                        navController.navigate(Screens.Login.route) {
+                                            popUpTo(Screens.Login.route) {
+                                                inclusive = true
+                                            }
+                                            launchSingleTop = true
                                         }
-                                        launchSingleTop = true
-                                    }
-                                    viewModel.onEvent()
+                                        viewModel.onEvent()
+                                    }.confirmar(
+                                        mensaje = "¿Estás seguro de que deseas cerrar sesión?",
+                                        showDialog = { mostrarDialogo.value = true },
+                                        setMessage = { confirmarMensaje.value = it },
+                                        setAction = { accionDeConfirmacion.value = it }
+                                    )
                                 }
                         )
                     }
@@ -271,4 +291,9 @@ fun MenuLateral(navController: NavController, viewModel: LogoutViewmodel = hiltV
             }
         }
     }
+    DialogoConfirmacion(
+        showDialog = mostrarDialogo,
+        confirmMessage = confirmarMensaje,
+        onConfirmAction = accionDeConfirmacion
+    )
 }

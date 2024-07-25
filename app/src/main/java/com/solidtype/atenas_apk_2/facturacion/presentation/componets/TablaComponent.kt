@@ -219,8 +219,8 @@ fun Tabla(facturas: List<FacturaConDetalle?>) {
                                             )
                                         }
                                         Divider()
-                                        LazyColumn {
-                                            items(factura!!.detalle) { detalle ->
+                                        Column {
+                                            factura?.detalle?.forEach { detalle ->
                                                 Row(
                                                     modifier = Modifier
                                                         .fillMaxWidth()

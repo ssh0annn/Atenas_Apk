@@ -1,17 +1,12 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -20,17 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.componets.BotonIconCircular
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
-import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 @OptIn(ExperimentalMultiplatform::class)
@@ -44,7 +34,7 @@ fun Detalles(
     rol: MutableState<String>,
     uiState: UserStatesUI,
     mostrarDialogo: MutableState<Boolean>,
-    estado: MutableState<String>,
+    //estado: MutableState<String>,
 ) {
     Column(
         modifier = Modifier
@@ -106,12 +96,12 @@ fun Detalles(
                                 mostrarDialogo.value = true
                             },
                         ) { rol.value = it }
-                        Spacer(modifier = Modifier.height(10.dp))
+                        /*Spacer(modifier = Modifier.height(10.dp))
                         AutocompleteSelect(
                             "Estado",
                             estado.value,
                             listOf("Activo", "Inactivo")
-                        ) { estado.value = it }
+                        ) { estado.value = it }*/
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }

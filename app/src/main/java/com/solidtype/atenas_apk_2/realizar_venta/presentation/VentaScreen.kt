@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,24 +14,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PointOfSale
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.ui.theme.Fondo
 import com.solidtype.atenas_apk_2.ui.theme.SubFondo
 import com.solidtype.atenas_apk_2.ui.theme.SubPaneles
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
+import com.solidtype.atenas_apk_2.util.ui.components.PickerButton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
@@ -40,6 +49,8 @@ fun VentaScreen(
     navController: NavController
 ){
     val buscador = rememberSaveable { mutableStateOf("") }
+    val mostrarDialogoX = rememberSaveable { mutableStateOf(false) }
+    val number = rememberSaveable { mutableIntStateOf(1) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +64,7 @@ fun VentaScreen(
                 modifier = Modifier
                     .padding(30.dp)
             ) {
-                Titulo(text = "Venta")
+                Titulo(text = "Venta", imageVector = Icons.Outlined.PointOfSale)
                 Spacer(modifier = Modifier.width(60.dp))
                 Buscador(buscador.value) {
                     buscador.value = it
@@ -65,7 +76,9 @@ fun VentaScreen(
             .background(SubFondo)
             .padding(30.dp)
             .align(Alignment.CenterHorizontally)
-            .height(450.dp)
+            .height(
+                Pantalla.alto - 330.dp
+            )
             .width(1100.dp),
         ){
             Row {
@@ -93,7 +106,12 @@ fun VentaScreen(
                     ){
                         Text(text = "Samsung S3", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
                         Text(text = "Celular", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
-                        Text(text = "1", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
+                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center
+                        ){
+                            CambiarCantidad(number = number, width = 25.dp){
+                                number.intValue = it
+                            }
+                        }
                         Text(text = "$ "+"12000.00", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
                         Text(text = "$ "+"100.00", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
                         Text(text = "$ "+"12100.00", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f), maxLines = 2)
@@ -115,19 +133,65 @@ fun VentaScreen(
                 .padding(20.dp),
                 horizontalArrangement = Arrangement.Center
             ){
-                Text(modifier = Modifier.padding(7.dp), text = "Totales: $ "+"12100.00", color = Fondo, fontSize = 28.sp, fontStyle = FontStyle.Normal)
+                Text(modifier = Modifier.padding(7.dp), text = "Totales: $ "+"12100.00", color = Fondo, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(60.dp))
-                Text(modifier = Modifier.padding(7.dp), text = "Cantidades: "+"1", color = Fondo, fontSize = 28.sp, fontStyle = FontStyle.Normal)
+                Text(modifier = Modifier.padding(7.dp), text = "Cantidades: "+"1", color = Fondo, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(140.dp))
-                Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Fondo)) {
-                    Text(text = "Facturar", color = SubFondo, fontSize = 18.sp, fontStyle = FontStyle.Normal)
+                Button(onClick = { 
+                    mostrarDialogoX.value = true
+                }, colors = ButtonDefaults.buttonColors(Fondo)) {
+                    Text(text = "Facturar", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.width(70.dp))
                 Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Fondo)) {
-                    Text(text = "Cancelar", color = SubFondo, fontSize = 18.sp, fontStyle = FontStyle.Normal)
+                    Text(text = "Cancelar", color = SubFondo, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
     }
+    if(mostrarDialogoX.value)
+        Dialog(onDismissRequest = {
+            mostrarDialogoX.value = false
+        }) {
+            Text(text = "Hola mundo!")
+        }
     MenuLateral(navController)
+}
+
+@Composable
+fun CambiarCantidad(
+    modifier: Modifier = Modifier,
+    width: Dp = 45.dp,
+    number: MutableIntState,
+    max: Int = 30,
+    onValueChange: (Int) -> Unit = {}
+){
+    Row{
+        PickerButton(
+            size = width,
+            drawable = R.drawable.ic_back,
+            enabled = number.intValue > 1,
+            onClick = {
+                if (number.intValue > 1) number.intValue --
+                onValueChange(number.intValue)
+            }
+        )
+        Text(
+            fontSize = 18.sp,
+            text = number.intValue.toString(),
+            modifier = modifier
+                .padding(start = 10.dp, end = 10.dp)
+                .height(IntrinsicSize.Max)
+                .align(Alignment.CenterVertically)
+        )
+        PickerButton(
+            size = width,
+            drawable = R.drawable.ic_go,
+            enabled = number.intValue < max,
+            onClick = {
+                if (number.intValue < max) number.intValue ++
+                onValueChange(number.intValue)
+            }
+        )
+    }
 }

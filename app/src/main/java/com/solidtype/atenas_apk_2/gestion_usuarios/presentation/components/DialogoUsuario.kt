@@ -1,8 +1,6 @@
-package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
+package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
-import android.content.Context
 import android.util.Patterns
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,8 +16,6 @@ import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components.Detalles
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
@@ -35,9 +31,8 @@ fun DialogoUsuario(
     rol: MutableState<String>,
     uiState: UserStatesUI,
     mostrarRol: MutableState<Boolean>,
-    estado: MutableState<String>,
-    viewModel: UsuariosViewmodel,
-    context: Context
+    //estado: MutableState<String>,
+    viewModel: UsuariosViewmodel
 ) {
     Dialogo(
         titulo = "Gestor de Usuarios",
@@ -63,7 +58,7 @@ fun DialogoUsuario(
                 rol,
                 uiState,
                 mostrarRol,
-                estado
+                //estado
             )
             Row {
                 Boton(
@@ -74,11 +69,11 @@ fun DialogoUsuario(
                             Patterns.EMAIL_ADDRESS.matcher(correo.value).matches() &&
                             (clave.value.length in 8..16) &&
                             telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
-                            estado.value != "" &&
+                            //estado.value != "" &&
                             rol.value != ""
                 ) {
                     try {
-                        if (idUsuario.value.isEmpty() || nombre.value.isEmpty() || apellido.value.isEmpty() || correo.value.isEmpty() || clave.value.isEmpty() || telefono.value.isEmpty() || estado.value.isEmpty() || rol.value.isEmpty()) {
+                        if (idUsuario.value.isEmpty() || nombre.value.isEmpty() || apellido.value.isEmpty() || correo.value.isEmpty() || clave.value.isEmpty() || telefono.value.isEmpty() || rol.value.isEmpty()) {
                             throw Exception("Campos vacios.")
                         }
 
@@ -94,15 +89,10 @@ fun DialogoUsuario(
                                         email = correo.value,
                                         clave = clave.value,
                                         telefono = telefono.value,
-                                        estado = estado.value.formatoActivoDDBB()
+                                        estado = true
                                     )
                                 )
                             )
-                            Toast.makeText(
-                                context,
-                                "Usuario editado",
-                                Toast.LENGTH_LONG
-                            ).show()
                         } else {
                             viewModel.onUserEvent(
                                 UserEvent.AgregarUsuario(
@@ -115,15 +105,10 @@ fun DialogoUsuario(
                                         email = correo.value,
                                         clave = clave.value,
                                         telefono = telefono.value,
-                                        estado = estado.value.formatoActivoDDBB()
+                                        estado = true
                                     )
                                 )
                             )
-                            Toast.makeText(
-                                context,
-                                "Usuario guardado",
-                                Toast.LENGTH_LONG
-                            ).show()
                         }
 
                         idUsuario.value = ""
@@ -132,15 +117,8 @@ fun DialogoUsuario(
                         correo.value = ""
                         clave.value = ""
                         telefono.value = ""
-                        estado.value = "Activo"
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            context,
-                            "error: ${e.message}",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                    }
+                        //estado.value = "Activo"
+                    } catch (_: Exception) { }
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cerrar") {

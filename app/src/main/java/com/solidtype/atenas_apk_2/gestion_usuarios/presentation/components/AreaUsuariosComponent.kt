@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.RestoreFromTrash
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,13 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
 import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
+import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
-import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @Composable
 fun AreaUsuarios(
@@ -45,11 +49,12 @@ fun AreaUsuarios(
     correo: MutableState<String>,
     clave: MutableState<String>,
     telefono: MutableState<String>,
-    estado: MutableState<String>,
     rol: MutableState<String>,
     mostrarUsuario: MutableState<Boolean>,
-    editar: MutableState<Boolean>,
-    mostrarConfirmarUsuario: MutableState<Boolean>
+    mostrarDialogo: MutableState<Boolean>,
+    confirmarMensaje: MutableState<String>,
+    accionDeConfirmacion: MutableState<() -> Unit>,
+    viewModel: UsuariosViewmodel
 ) {
     Box(
         modifier = Modifier
@@ -173,35 +178,46 @@ fun AreaUsuarios(
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
                                 )
-                                //Iconos de editar y eliminar
+                                //Iconos de editar, eliminar y restaurar
                                 Row(
                                     modifier = Modifier.weight(0.5f),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    IconButton(onClick = {
-                                        mostrarUsuario.value = true
-                                        editar.value = true
-
-                                        idUsuario.value = usuario.id_usuario.toString()
-                                        nombre.value = usuario.nombre
-                                        apellido.value = usuario.apellido
-                                        correo.value = usuario.email
-                                        clave.value = usuario.clave
-                                        telefono.value = usuario.telefono
-                                        estado.value = usuario.estado.formatoActivo()
-                                        //filtro
-                                        rol.value =
-                                            uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre ?: ""
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Edit,
-                                            contentDescription = null,
-                                            tint = AzulGris
-                                        )
-                                    }
-                                    if (usuario.estado)
+                                    if(uiState.switch) {
                                         IconButton(onClick = {
-                                            mostrarConfirmarUsuario.value = true
+                                            {
+                                                viewModel.onUserEvent(
+                                                    UserEvent.EditarUsuario(
+                                                        usuario(
+                                                            id_usuario = usuario.id_usuario,
+                                                            id_roll_usuario = usuario.id_roll_usuario,
+                                                            nombre = usuario.nombre,
+                                                            apellido = usuario.apellido,
+                                                            email = usuario.email,
+                                                            clave = usuario.clave,
+                                                            telefono = usuario.telefono,
+                                                            estado = true
+                                                        )
+                                                    )
+                                                )
+                                                mostrarDialogo.value = false
+                                            }.confirmar(
+                                                mensaje = "¿Estás seguro que deseas restaurar el usuario '${usuario.nombre}'?",
+                                                showDialog = { mostrarDialogo.value = true },
+                                                setMessage = { confirmarMensaje.value = it },
+                                                setAction = { accionDeConfirmacion.value = it }
+                                            )
+                                        }){
+                                            Icon(
+                                                imageVector = Icons.Filled.RestoreFromTrash,
+                                                contentDescription = null,
+                                                tint = AzulGris
+                                            )
+                                        }
+                                    }
+                                    else {
+                                        IconButton(onClick = {
+                                            mostrarUsuario.value = true
 
                                             idUsuario.value = usuario.id_usuario.toString()
                                             nombre.value = usuario.nombre
@@ -209,10 +225,39 @@ fun AreaUsuarios(
                                             correo.value = usuario.email
                                             clave.value = usuario.clave
                                             telefono.value = usuario.telefono
-                                            estado.value = usuario.estado.formatoActivo()
-                                            //filtro
                                             rol.value =
-                                                uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre ?: ""
+                                                uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
+                                                    ?: ""
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Edit,
+                                                contentDescription = null,
+                                                tint = AzulGris
+                                            )
+                                        }
+                                        IconButton(onClick = {
+                                            {
+                                                viewModel.onUserEvent(
+                                                    UserEvent.BorrarUsuario(
+                                                        usuario(
+                                                            id_usuario = usuario.id_usuario,
+                                                            id_roll_usuario = usuario.id_roll_usuario,
+                                                            nombre = usuario.nombre,
+                                                            apellido = usuario.apellido,
+                                                            email = usuario.email,
+                                                            clave = usuario.clave,
+                                                            telefono = usuario.telefono,
+                                                            estado = false
+                                                        )
+                                                    )
+                                                )
+                                                mostrarDialogo.value = false
+                                            }.confirmar(
+                                                mensaje = "¿Estás seguro que deseas eliminar el usuario '${usuario.nombre}'?",
+                                                showDialog = { mostrarDialogo.value = true },
+                                                setMessage = { confirmarMensaje.value = it },
+                                                setAction = { accionDeConfirmacion.value = it }
+                                            )
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Filled.Delete,
@@ -220,6 +265,7 @@ fun AreaUsuarios(
                                                 tint = AzulGris
                                             )
                                         }
+                                    }
                                 }
                             }
                         }

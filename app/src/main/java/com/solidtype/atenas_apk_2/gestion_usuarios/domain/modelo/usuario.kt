@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 
 @Entity(foreignKeys = [
     ForeignKey(entity = roll_usuarios::class, parentColumns = ["id_roll_usuario"], childColumns = ["id_roll_usuario"], onDelete = ForeignKey.CASCADE)
-], indices = [Index(value = ["id_roll_usuario"], unique = true)])
+], indices = [Index(value = ["id_roll_usuario"], unique = false)])
 data class usuario (
     @PrimaryKey(autoGenerate = true) val id_usuario :Long = 0,
     val id_roll_usuario :Long,

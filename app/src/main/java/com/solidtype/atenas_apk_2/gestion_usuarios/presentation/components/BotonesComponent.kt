@@ -19,9 +19,7 @@ fun Botones(
     correo: MutableState<String>,
     clave: MutableState<String>,
     telefono: MutableState<String>,
-    estado: MutableState<String>,
-    rol: MutableState<String>,
-    editar: MutableState<Boolean>
+    rol: MutableState<String>
 ) {
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -33,7 +31,6 @@ fun Botones(
             }
             Boton("Agregar"){
                 mostrarUsuario.value = true
-                editar.value = false
 
                 idUsuario.value = ""
                 nombre.value = ""
@@ -41,7 +38,6 @@ fun Botones(
                 correo.value = ""
                 clave.value = ""
                 telefono.value = ""
-                estado.value = "Activo"
                 rol.value = ""
             }
         }

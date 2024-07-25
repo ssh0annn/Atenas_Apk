@@ -1,7 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.data
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -18,8 +17,6 @@ interface usuarioDao {
     suspend fun addUsuarios(usuario : List<usuario>)
     @Query("select * from usuario")
     fun getUsuarios(): Flow<List<usuario>>
-    @Query("select * from usuario where id_roll_usuario ==:id")
-    fun getUsuariosByIdRoll(id :Int): Flow<List<usuario>>
     @Query("select * from usuario where id_usuario ==:id")
     suspend fun getUsuariosById(id :Int): usuario
     @Update
@@ -32,7 +29,6 @@ interface usuarioDao {
     @Query("""
         SELECT * FROM usuario WHERE 
             id_usuario LIKE '%' || :any ||   '%' OR 
-         id_roll_usuario  LIKE '%' || :any ||   '%' OR
          nombre  LIKE '%' || :any ||   '%' OR
          apellido  LIKE '%' || :any ||   '%' OR
          email  LIKE '%' || :any ||   '%' OR

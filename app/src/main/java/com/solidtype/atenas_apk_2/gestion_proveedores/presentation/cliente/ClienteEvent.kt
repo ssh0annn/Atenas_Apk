@@ -5,7 +5,7 @@ import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.model
 sealed class ClienteEvent {
     data class BuscarClientes(val any: String) : ClienteEvent()
 
-    data class BorrarClientes(val clientes:Personastodas.ClienteUI) : ClienteEvent()
+    data class BorrarClientes(val clientes: Personastodas.ClienteUI) : ClienteEvent()
 
     data class AgregarClientes(val clientes: Personastodas.ClienteUI) : ClienteEvent()
 

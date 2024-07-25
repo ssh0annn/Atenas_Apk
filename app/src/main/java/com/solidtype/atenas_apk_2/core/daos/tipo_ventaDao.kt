@@ -32,7 +32,6 @@ interface tipo_ventaDao {
     suspend fun updateTipoVenta(tipoVenta : tipo_venta)
     @Delete
     suspend fun deleteTipoVenta(tipoVenta : tipo_venta)
-
     //Otra baina bien
     @Transaction
     @Query("SELECT * FROM venta WHERE fecha BETWEEN :desde AND :hasta")

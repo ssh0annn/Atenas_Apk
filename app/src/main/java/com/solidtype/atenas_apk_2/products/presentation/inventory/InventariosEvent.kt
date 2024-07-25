@@ -32,8 +32,8 @@ sealed class InventariosEvent {
 
     object Getrpoveedores:InventariosEvent()
     data class BuscarProveedores(val any:String):InventariosEvent()
-    data class CrearProveedor(val provee:Personastodas.Proveedor):InventariosEvent()
-    data class EliminarProveedor(val provee:Personastodas.Proveedor):InventariosEvent()
+    data class CrearProveedor(val provee: Personastodas.Proveedor):InventariosEvent()
+    data class EliminarProveedor(val provee: Personastodas.Proveedor):InventariosEvent()
 
     object Switch:InventariosEvent()
 
