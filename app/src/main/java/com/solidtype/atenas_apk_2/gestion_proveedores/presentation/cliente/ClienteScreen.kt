@@ -49,13 +49,13 @@ import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @OptIn(ExperimentalMultiplatform::class)
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
 @Composable
 fun ClienteScreen(
-    navController: NavController,
-    viewModel: ClientesViewModel = hiltViewModel()
+    navController: NavController, viewModel: ClientesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,8 +93,7 @@ fun ClienteScreen(
         navController.navigate(Screens.Login.route)
     } else if (uiState.isLoading) {
         Box(
-            Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            Modifier.fillMaxSize(), contentAlignment = Alignment.Center
         ) {
             Loading(true)
         }
@@ -120,8 +119,7 @@ fun ClienteScreen(
                             Buscador(busqueda.value) { busqueda.value = it }
                         }
                         Box(
-                            modifier = Modifier.weight(1f),
-                            contentAlignment = Alignment.CenterEnd
+                            modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterEnd
                         ) {
                             SwitchInactivos(uiState.switch) {
                                 viewModel.onUserEvent(ClienteEvent.Switch)
@@ -129,27 +127,50 @@ fun ClienteScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-
-                    TableClients(
-                        uiState.clientes,
-                        mostrarDialogo,
-                        editar,
-                        nombre,
-                        tipoDocumento,
-                        numDocumento,
-                        email,
-                        telefono,
-                        idCliente,
-                        uiState,
-                        mostrarDialogoG,
-                        confirmarMensaje,
-                        accionDeConfirmacion,
-                        viewModel
+                    TableClients(uiState.clientes, mostrarDialogo, editar, nombre, tipoDocumento, numDocumento, email, telefono, idCliente, uiState.switch,
+                        onClickRestore = { //client ->
+                            {
+                                editar.value = false
+                                viewModel.onUserEvent(
+                                    ClienteEvent.RestaurarClientes/*(
+                                        Personastodas.ClienteUI(
+                                            client.id_cliente,
+                                            client.nombre,
+                                            client.tipo_documento,
+                                            client.documento,
+                                            client.email,
+                                            client.telefono
+                                        )
+                                    )*/
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(mensaje = "¿Estás seguro que deseas restaurar este cliente?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it })
+                        }, onClickDelete = { client ->
+                            {
+                                viewModel.onUserEvent(
+                                    ClienteEvent.BorrarClientes(
+                                        Personastodas.ClienteUI(
+                                            client.id_cliente,
+                                            client.nombre,
+                                            client.tipo_documento,
+                                            client.documento,
+                                            client.email,
+                                            client.telefono
+                                        )
+                                    )
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(mensaje = "¿Estás seguro que deseas eliminar el cliente '${client.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it })
+                        }
                     )
-
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.BottomEnd
+                        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd
                     ) {
                         Boton("Agregar") {
                             mostrarDialogo.value = true
@@ -190,22 +211,25 @@ fun ClienteScreen(
             ) {
                 //cuerpo1
                 Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState()),
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     InputDetalle(
                         label = "Nombre",
                         valor = nombre.value,
+                        validable = true,
+                        esValido = nombre.value.isNotEmpty()
                     ) {
                         nombre.value = it
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     AutocompleteSelect(
                         text = "Tipo de Documento",
-                        variableStr = tipoDocumento.value,
-                        items = listOf("Cédula", "Pasaporte", "RNC")
+                        variableStr = tipoDocumento,
+                        items = listOf("Cédula", "Pasaporte", "RNC"),
+                        validable = true,
+                        esValido = tipoDocumento.value.isNotEmpty() && tipoDocumento.value in listOf("Cédula", "Pasaporte", "RNC")
                     ) {
                         tipoDocumento.value = it
                     }
@@ -213,23 +237,25 @@ fun ClienteScreen(
                     InputDetalle(
                         label = "Numero de documento",
                         valor = numDocumento.value,
-                        tipo = KeyboardType.Number
+                        tipo = KeyboardType.Number,
+                        validable = true,
+                        esValido = numDocumento.value.matches("[0-9]+".toRegex())
                     ) {
                         numDocumento.value = it
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     InputDetalle(
-                        label = "Email",
-                        valor = email.value,
-                        tipo = KeyboardType.Email
+                        label = "Email", valor = email.value, tipo = KeyboardType.Email,
+                        validable = true,
+                        esValido = Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
                     ) {
                         email.value = it
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     InputDetalle(
-                        label = "Telefono",
-                        valor = telefono.value,
-                        tipo = KeyboardType.Phone
+                        label = "Telefono", valor = telefono.value, tipo = KeyboardType.Phone,
+                        validable = true,
+                        esValido = telefono.value.matches("8\\d9\\d{7}".toRegex())
                     ) {
                         telefono.value = it
                     }
@@ -244,63 +270,58 @@ fun ClienteScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 val camposCompletos =
-                        nombre.value.isNotEmpty() &&
-                        tipoDocumento.value.isNotEmpty() &&
-                        numDocumento.value.matches("[0-9]+".toRegex()) &&
-                        Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
-                        telefono.value.matches("8\\d9\\d{7}".toRegex())
-                if (editar.value)
-                    Boton(
-                        "Editar",
-                        camposCompletos
-                    ) {
-                        try {
-                            if (!camposCompletos) {
-                                throw Exception("Campos vacios.")
-                            }
-                            viewModel.onUserEvent(
-                                ClienteEvent.EditarClientes(
-                                    Personastodas.ClienteUI(
-                                        idCliente.value.toLong(),
-                                        nombre.value,
-                                        tipoDocumento.value,
-                                        numDocumento.value,
-                                        email.value,
-                                        telefono.value
-                                    )
+                    nombre.value.isNotEmpty() && tipoDocumento.value.isNotEmpty() && numDocumento.value.matches(
+                        "[0-9]+".toRegex()
+                    ) && Patterns.EMAIL_ADDRESS.matcher(email.value)
+                        .matches() && telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
+                    tipoDocumento.value in listOf("Cédula", "Pasaporte", "RNC")
+                if (editar.value) Boton(
+                    "Editar", camposCompletos
+                ) {
+                    try {
+                        if (!camposCompletos) {
+                            throw Exception("Campos vacios.")
+                        }
+                        viewModel.onUserEvent(
+                            ClienteEvent.EditarClientes(
+                                Personastodas.ClienteUI(
+                                    idCliente.value.toLong(),
+                                    nombre.value,
+                                    tipoDocumento.value,
+                                    numDocumento.value,
+                                    email.value,
+                                    telefono.value
                                 )
                             )
-                            mostrarDialogo.value = false
-                        } catch (_: Exception) { }
-                    }
-                else
-                    Boton("Agregar", camposCompletos) {
-                        try {
-                            if (!camposCompletos) {
-                                throw Exception("Campos vacios.")
-                            }
-                            viewModel.onUserEvent(
-                                ClienteEvent.AgregarClientes(
-                                    Personastodas.ClienteUI(
-                                        id_cliente = 0,
-                                        nombre = nombre.value,
-                                        tipo_documento = tipoDocumento.value,
-                                        documento = numDocumento.value,
-                                        telefono = telefono.value,
-                                        email = email.value//OJO Estabas pasando el telefono donde iva el emial
-                                    )
+                        )
+                        mostrarDialogo.value = false
+                    } catch (_: Exception) { }
+                }
+                else Boton("Agregar", camposCompletos) {
+                    try {
+                        if (!camposCompletos) {
+                            throw Exception("Campos vacios.")
+                        }
+                        viewModel.onUserEvent(
+                            ClienteEvent.AgregarClientes(
+                                Personastodas.ClienteUI(
+                                    id_cliente = 0,
+                                    nombre = nombre.value,
+                                    tipo_documento = tipoDocumento.value,
+                                    documento = numDocumento.value,
+                                    telefono = telefono.value,
+                                    email = email.value//OJO Estabas pasando el telefono donde iva el emial
                                 )
                             )
-                            nombre.value = ""
-                            tipoDocumento.value = ""
-                            numDocumento.value = ""
-                            email.value = ""
-                            telefono.value = ""
-                        } catch (_: Exception) { }
-                    }
-
+                        )
+                        nombre.value = ""
+                        tipoDocumento.value = ""
+                        numDocumento.value = ""
+                        email.value = ""
+                        telefono.value = ""
+                    } catch (_: Exception) { }
+                }
                 Spacer(modifier = Modifier.width(20.dp))
-
                 Boton("Cancelar") {
                     mostrarDialogo.value = false
                 }

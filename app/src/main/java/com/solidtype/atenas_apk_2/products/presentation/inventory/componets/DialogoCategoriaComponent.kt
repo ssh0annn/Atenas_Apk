@@ -65,19 +65,31 @@ fun DialogoCategoria(
                             modifier = Modifier
                                 .padding(10.dp)
                         ) {
-                            InputDetalle("ID", idCategoria.value) { idCategoria.value = it }
+                            InputDetalle(
+                                "ID", idCategoria.value,
+                                validable = true,
+                                esValido = idCategoria.value.matches("[0-9]+".toRegex())
+                            ) { idCategoria.value = it }
                             InputDetalle(
                                 "Categoría",
-                                nombreCategoria.value
+                                nombreCategoria.value,
+                                validable = true,
+                                esValido = nombreCategoria.value != ""
                             ) { nombreCategoria.value = it }
-                            InputDetalle("Descripción", descripcionCategoria.value) {
+                            InputDetalle(
+                                "Descripción", descripcionCategoria.value,
+                                validable = true,
+                                esValido = descripcionCategoria.value != ""
+                            ) {
                                 descripcionCategoria.value = it
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             AutocompleteSelect(
                                 "Estado",
-                                estadoCategoria.value,
-                                listOf("Activo", "Inactivo")
+                                estadoCategoria,
+                                listOf("Activo", "Inactivo"),
+                                validable = true,
+                                esValido = estadoCategoria.value != "" && estadoCategoria.value in listOf("Activo", "Inactivo")
                             ) { estadoCategoria.value = it }
                         }
                     }
@@ -89,7 +101,7 @@ fun DialogoCategoria(
                             idCategoria.value.matches("[0-9]+".toRegex()) &&
                             nombreCategoria.value != "" &&
                             descripcionCategoria.value != "" &&
-                            estadoCategoria.value != "",
+                            estadoCategoria.value != "" && estadoCategoria.value in listOf("Activo", "Inactivo")
                     ) {
                         onGuardar()
                     }

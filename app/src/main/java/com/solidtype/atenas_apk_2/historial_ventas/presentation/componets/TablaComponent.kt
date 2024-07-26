@@ -15,7 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialUIState
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.TipoVentaTicket
+import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.TipoVentaVenta
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.util.formatoActivo
 import com.solidtype.atenas_apk_2.util.formatoParaUser
@@ -24,7 +25,8 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 @Composable
 fun Tabla(
     selected: MutableState<String>,
-    uiState: HistorialUIState
+    uiHistorial: List<TipoVentaVenta>,
+    uiTicket: List<TipoVentaTicket>
 ) {
     Column(
         modifier = Modifier
@@ -81,46 +83,46 @@ fun Tabla(
                 }
                 Divider()
                 LazyColumn {
-                    items(uiState.Historial.size) { i ->
+                    items(uiHistorial.size) { i ->
                         Row {
                             Text(
-                                uiState.Historial[i].venta.id_venta.toString(),
+                                uiHistorial[i].venta.id_venta.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Historial[i].venta.id_cliente.toString(),
+                                uiHistorial[i].venta.id_cliente.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Historial[i].venta.fecha.toString().formatoParaUser(),
+                                uiHistorial[i].venta.fecha.toString().formatoParaUser(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Historial[i].tipoVenta.subtotal.toString(),
+                                uiHistorial[i].tipoVenta.subtotal.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Historial[i].tipoVenta.total.toString(),
+                                uiHistorial[i].tipoVenta.total.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Historial[i].venta.cantidad.toString(),
+                                uiHistorial[i].venta.cantidad.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Historial[i].venta.estado.formatoActivo(),
+                                uiHistorial[i].venta.estado.formatoActivo(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
@@ -185,54 +187,54 @@ fun Tabla(
                 }
                 Divider()
                 LazyColumn {
-                    items(uiState.Ticket.size) { i ->
+                    items(uiTicket.size) { i ->
                         Row {
                             Text(
-                                uiState.Ticket[i].venta.id_ticket.toString(),
+                                uiTicket[i].venta.id_ticket.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].venta.descripcion,
+                                uiTicket[i].venta.descripcion,
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].venta.fecha_inicio.toString()
+                                uiTicket[i].venta.fecha_inicio.toString()
                                     .formatoParaUser(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].venta.fecha_final.toString()
+                                uiTicket[i].venta.fecha_final.toString()
                                     .formatoParaUser(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].tipoVenta.subtotal.toString(),
+                                uiTicket[i].tipoVenta.subtotal.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].tipoVenta.impuesto.toString(),
+                                uiTicket[i].tipoVenta.impuesto.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].tipoVenta.total.toString(),
+                                uiTicket[i].tipoVenta.total.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                uiState.Ticket[i].venta.id_cliente.toString(),
+                                uiTicket[i].venta.id_cliente.toString(),
                                 fontSize = 16.sp,
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center

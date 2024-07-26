@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +19,7 @@ import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,11 +37,14 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.domain.TipoUser
 import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.TipoUserSingleton
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AreaVentas
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.AvatarConBotones
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.DatePickerDialogoSimple
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Inputs
 import com.solidtype.atenas_apk_2.historial_ventas.presentation.componets.Tabla
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
+import com.solidtype.atenas_apk_2.util.formatearFecha
+import com.solidtype.atenas_apk_2.util.formatoDDBB
+import com.solidtype.atenas_apk_2.util.toLocalDate
+import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.SnackbarAnimado
@@ -51,8 +56,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("SimpleDateFormat", "CoroutineCreationDuringComposition", "QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel = hiltViewModel()) {
-
+fun HistorialScreen(
+    navController: NavController,
+    viewModel: HistorailViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -60,22 +67,28 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
     val ventasTickerTitulo = rememberSaveable { mutableStateOf("Ventas") }
     val selected = rememberSaveable { mutableStateOf("Ventas") }
 
-    val datePickerState1: DatePickerState = rememberDatePickerState()
-    val showDatePicker1 = rememberSaveable { mutableStateOf(false) }
-    val fechaIni = rememberSaveable { mutableStateOf("") }
-
-    val datePickerState2: DatePickerState = rememberDatePickerState()
-    val showDatePicker2 = rememberSaveable { mutableStateOf(false) }
-    val fechaFin = rememberSaveable { mutableStateOf("") }
+    val datePickerStateList: List<DatePickerState> = listOf(
+        rememberDatePickerState(),
+        rememberDatePickerState()
+    )
+    val showDatePickerList: List<MutableState<Boolean>> = listOf(
+        rememberSaveable { mutableStateOf(false) },
+        rememberSaveable { mutableStateOf(false) }
+    )
+    val fechaList = listOf(
+        rememberSaveable { mutableStateOf("") },
+        rememberSaveable { mutableStateOf("") }
+    )
 
     val identificador = rememberSaveable { mutableStateOf("") }
-
-    val showSnackbar = rememberSaveable { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
     var snackbarJob: Job by remember { mutableStateOf(Job()) }
 
-    val showSnackbarIni = rememberSaveable { mutableStateOf(false) }
+    val showSnackbarList = listOf(
+        rememberSaveable { mutableStateOf(false) },
+        rememberSaveable { mutableStateOf(false) }
+    )
 
     if (uiState.mensaje.isNotEmpty()) {
         Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
@@ -92,13 +105,13 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
             Loading(true)
         }
     } else {
-        if (showSnackbarIni.value) {
-            showSnackbarIni.value = false
+        if (showSnackbarList[1].value) {
+            showSnackbarList[1].value = false
             snackbarJob.cancel() //Cancela el job anterior si existe
-            showSnackbar.value = true
+            showSnackbarList[0].value = true
             snackbarJob = coroutineScope.launch {
                 delay(10000L)
-                showSnackbar.value = false
+                showSnackbarList[0].value = false
             }
         }
         Column(
@@ -118,18 +131,106 @@ fun HistorialScreen(navController: NavController, viewModel: HistorailViewModel 
             ) {
                 Titulo("Reporte", Icons.Outlined.HistoryEdu)
                 Row {
-                    Inputs(identificador, datePickerState1, fechaIni, showDatePicker1, datePickerState2, fechaFin, showDatePicker2, selected, ventasTickerTitulo, viewModel, modifier = Modifier.weight(10f))
-                    AreaVentas(ventasTickerTitulo, selected, uiState, Modifier.weight(6f))
+                    Inputs(
+                        identificador, datePickerStateList[0], fechaList[0], showDatePickerList[0], datePickerStateList[1], fechaList[1], showDatePickerList[1], selected, ventasTickerTitulo,
+                        getTodasVentas = {
+                            viewModel.onEvent(
+                                HistorialEvent.GetTodosTodasVentas
+                            )
+                        }, getTodosTickets = {
+                            viewModel.onEvent(
+                                HistorialEvent.GetTodosTickets
+                            )
+                        },
+                        modifier = Modifier.weight(10f)
+                    )
+                    AreaVentas(ventasTickerTitulo, selected, uiState.total, uiState.abono, Modifier.weight(6f))
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Tabla(selected, uiState)
+                Tabla(selected, uiState.Historial, uiState.Ticket)
                 Spacer(modifier = Modifier.height(12.dp))
-                AvatarConBotones(fechaIni, fechaFin, showSnackbarIni)
+                Box(//Botones
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.TopEnd
+                ) { //Avatar y Botones
+                    Row {
+                        Boton("Ver Todo") {
+                            if (selected.value == "Ventas") {
+                                viewModel.onEvent(
+                                    HistorialEvent.GetTodosTodasVentas
+                                )
+                            } else {
+                                viewModel.onEvent(
+                                    HistorialEvent.GetTodosTickets
+                                )
+                            }
+                            fechaList[0].value = ""
+                            fechaList[1].value = ""
+                        }
+                        Boton("Exportar") {
+                            showSnackbarList[1].value = true
+                        }
+                    }
+                }
             }
-            DatePickerDialogoSimple(identificador, selected, showDatePicker1, datePickerState1, fechaIni, viewModel, fechaFin)
-            DatePickerDialogoSimple(identificador, selected, showDatePicker2, datePickerState2, fechaIni, viewModel, fechaFin)
+            DatePickerDialogoSimple(
+                showDatePickerList[0],
+                datePickerStateList[0],
+            ){
+                showDatePickerList[0].value = false
+                when (identificador.value) {
+                    "FechaIni" -> fechaList[0].value = datePickerStateList[0].selectedDateMillis.formatearFecha()
+                    "FechaFin" -> fechaList[1].value = datePickerStateList[0].selectedDateMillis.formatearFecha()
+                }
+                when (selected.value) {
+                    "Ventas" -> {
+                        viewModel.onEvent(
+                            HistorialEvent.GetVentasFechas(
+                                desde = fechaList[0].value.formatoDDBB().toLocalDate(),
+                                hasta = fechaList[1].value.formatoDDBB().toLocalDate(),
+                            )
+                        )
+                    }
+                    "Ticket" -> {
+                        viewModel.onEvent(
+                            HistorialEvent.GetTicketsFechas(
+                                desde = fechaList[0].value.formatoDDBB().toLocalDate(),
+                                hasta = fechaList[1].value.formatoDDBB().toLocalDate()
+                            )
+                        )
+                    }
+                }
+            }
+            DatePickerDialogoSimple(
+                showDatePickerList[1],
+                datePickerStateList[1],
+            ){
+                showDatePickerList[1].value = false
+                when (identificador.value) {
+                    "FechaIni" -> fechaList[0].value = datePickerStateList[1].selectedDateMillis.formatearFecha()
+                    "FechaFin" -> fechaList[1].value = datePickerStateList[1].selectedDateMillis.formatearFecha()
+                }
+                when (selected.value) {
+                    "Ventas" -> {
+                        viewModel.onEvent(
+                            HistorialEvent.GetVentasFechas(
+                                desde = fechaList[0].value.formatoDDBB().toLocalDate(),
+                                hasta = fechaList[1].value.formatoDDBB().toLocalDate(),
+                            )
+                        )
+                    }
+                    "Ticket" -> {
+                        viewModel.onEvent(
+                            HistorialEvent.GetTicketsFechas(
+                                desde = fechaList[0].value.formatoDDBB().toLocalDate(),
+                                hasta = fechaList[1].value.formatoDDBB().toLocalDate()
+                            )
+                        )
+                    }
+                }
+            }
         }
         MenuLateral(navController)
-        SnackbarAnimado(showSnackbar.value, uiState.uriPath, context)
+        SnackbarAnimado(showSnackbarList[0].value, uiState.uriPath, context)
     }
 }

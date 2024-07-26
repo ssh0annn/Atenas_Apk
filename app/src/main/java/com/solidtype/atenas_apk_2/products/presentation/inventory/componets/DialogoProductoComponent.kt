@@ -38,6 +38,29 @@ fun DialogoProducto(
     uiProveedores: List<Personastodas.Proveedor>,
     onGuardar: () -> Unit
 ) {
+    val listaFiltradaCategoria = if (
+        uiCategoria.isNotEmpty() &&
+        uiCategoria
+            .filter { it.estado }
+            .map { it.nombre }
+            .isNotEmpty()
+    )
+        uiCategoria
+            .filter { it.estado }
+            .map { it.nombre }
+    else
+        listOf("")
+
+    val listaFiltradaProveedor = if (
+        uiProveedores.isNotEmpty()
+    )
+        uiProveedores
+            .map {
+                it.nombre.toString()
+            }
+    else
+        listOf("")
+
     Dialogo(
         titulo = "Gestor de Productos",
         mostrar = mostrarProducto.value,
@@ -69,7 +92,9 @@ fun DialogoProducto(
                 mostrarCategoria,
                 mostrarProveedor,
                 uiCategoria,
-                uiProveedores
+                uiProveedores,
+                listaFiltradaCategoria,
+                listaFiltradaProveedor
             )
             Row {
                 Boton(
@@ -84,7 +109,9 @@ fun DialogoProducto(
                             (costo.value.matches("[0-9]+".toRegex()) || costo.value.matches("[0-9]+.[0-9]+".toRegex())) &&
                             (precio.value.matches("[0-9]+".toRegex()) || precio.value.matches("[0-9]+.[0-9]+".toRegex())) &&
                             (impuesto.value.matches("[0-9]+".toRegex()) || impuesto.value.matches("[0-9]+.[0-9]+".toRegex())) &&
-                            descripcion.value != ""
+                            descripcion.value != "" &&
+                            categoria.value.isNotEmpty() && categoria.value in listaFiltradaCategoria &&
+                            provider.value.isNotEmpty() && provider.value in listaFiltradaProveedor
                 ) {
                     onGuardar()
                 }

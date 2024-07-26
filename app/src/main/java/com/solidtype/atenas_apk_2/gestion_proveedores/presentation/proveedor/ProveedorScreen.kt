@@ -49,6 +49,7 @@ import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @OptIn(ExperimentalMultiplatform::class)
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
@@ -130,22 +131,53 @@ fun ProveedorScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    TableProviders(
-                        uiState.proveedores,
-                        mostrarDialogo,
-                        editar,
-                        nombre,
-                        numDocumento,
-                        email,
-                        telefono,
-                        idProveedor,
-                        tipoDocumento,
-                        direccion,
-                        uiState,
-                        mostrarDialogoG,
-                        confirmarMensaje,
-                        accionDeConfirmacion,
-                        viewModel
+                    TableProviders(uiState.proveedores, mostrarDialogo, editar, nombre, numDocumento, email, telefono, idProveedor, tipoDocumento, direccion, uiState.switch,
+                        onClickRestore = { provider ->
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.RestaurarProveedor/*(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )*/
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        },
+                        onClickDelete = { provider ->
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.BorrarProveedor(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        }
                     )
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -196,14 +228,18 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Nombre",
                         valor = nombre.value,
+                        validable = true,
+                        esValido = nombre.value.isNotEmpty()
                     ) {
                         nombre.value = it
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     AutocompleteSelect(
                         text = "Tipo de Documento",
-                        variableStr = tipoDocumento.value,
-                        items = listOf("Cédula", "Pasaporte", "RNC")
+                        variableStr = tipoDocumento,
+                        items = listOf("Cédula", "Pasaporte", "RNC"),
+                        validable = true,
+                        esValido = tipoDocumento.value.isNotEmpty() && tipoDocumento.value in listOf("Cédula", "Pasaporte", "RNC")
                     ) {
                         tipoDocumento.value = it
                     }
@@ -211,7 +247,9 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Numero de documento",
                         valor = numDocumento.value,
-                        tipo = KeyboardType.Number
+                        tipo = KeyboardType.Number,
+                        validable = true,
+                        esValido = numDocumento.value.matches("[0-9]+".toRegex())
                     ) {
                         numDocumento.value = it
                     }
@@ -219,7 +257,9 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Email",
                         valor = email.value,
-                        tipo = KeyboardType.Email
+                        tipo = KeyboardType.Email,
+                        validable = true,
+                        esValido = Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
                     ) {
                         email.value = it
                     }
@@ -227,7 +267,9 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Telefono",
                         valor = telefono.value,
-                        tipo = KeyboardType.Phone
+                        tipo = KeyboardType.Phone,
+                        validable = true,
+                        esValido = telefono.value.matches("8\\d9\\d{7}".toRegex())
                     ) {
                         telefono.value = it
                     }
@@ -235,6 +277,8 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Dirección",
                         valor = direccion.value,
+                        validable = true,
+                        esValido = direccion.value.isNotEmpty()
                     ) {
                         direccion.value = it
                     }
@@ -254,7 +298,8 @@ fun ProveedorScreen(
                             numDocumento.value.matches("[0-9]+".toRegex()) &&
                             Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
                             telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
-                            direccion.value.isNotEmpty()
+                            direccion.value.isNotEmpty() &&
+                            tipoDocumento.value in listOf("Cédula", "Pasaporte", "RNC")
                 if (editar.value)
                     Boton(
                         "Editar",
@@ -317,7 +362,6 @@ fun ProveedorScreen(
                 }
             }
         }
-        //****************************************************************
         DialogoConfirmacion(
             showDialog = mostrarDialogoG,
             confirmMessage = confirmarMensaje,
