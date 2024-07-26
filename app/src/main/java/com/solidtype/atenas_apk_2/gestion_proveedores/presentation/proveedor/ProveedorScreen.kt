@@ -228,6 +228,8 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Nombre",
                         valor = nombre.value,
+                        validable = true,
+                        esValido = nombre.value.isNotEmpty()
                     ) {
                         nombre.value = it
                     }
@@ -235,7 +237,9 @@ fun ProveedorScreen(
                     AutocompleteSelect(
                         text = "Tipo de Documento",
                         variableStr = tipoDocumento,
-                        items = listOf("Cédula", "Pasaporte", "RNC")
+                        items = listOf("Cédula", "Pasaporte", "RNC"),
+                        validable = true,
+                        esValido = tipoDocumento.value.isNotEmpty() && tipoDocumento.value in listOf("Cédula", "Pasaporte", "RNC")
                     ) {
                         tipoDocumento.value = it
                     }
@@ -243,7 +247,9 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Numero de documento",
                         valor = numDocumento.value,
-                        tipo = KeyboardType.Number
+                        tipo = KeyboardType.Number,
+                        validable = true,
+                        esValido = numDocumento.value.matches("[0-9]+".toRegex())
                     ) {
                         numDocumento.value = it
                     }
@@ -251,7 +257,9 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Email",
                         valor = email.value,
-                        tipo = KeyboardType.Email
+                        tipo = KeyboardType.Email,
+                        validable = true,
+                        esValido = Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
                     ) {
                         email.value = it
                     }
@@ -259,7 +267,9 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Telefono",
                         valor = telefono.value,
-                        tipo = KeyboardType.Phone
+                        tipo = KeyboardType.Phone,
+                        validable = true,
+                        esValido = telefono.value.matches("8\\d9\\d{7}".toRegex())
                     ) {
                         telefono.value = it
                     }
@@ -267,6 +277,8 @@ fun ProveedorScreen(
                     InputDetalle(
                         label = "Dirección",
                         valor = direccion.value,
+                        validable = true,
+                        esValido = direccion.value.isNotEmpty()
                     ) {
                         direccion.value = it
                     }
@@ -286,7 +298,8 @@ fun ProveedorScreen(
                             numDocumento.value.matches("[0-9]+".toRegex()) &&
                             Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
                             telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
-                            direccion.value.isNotEmpty()
+                            direccion.value.isNotEmpty() &&
+                            tipoDocumento.value in listOf("Cédula", "Pasaporte", "RNC")
                 if (editar.value)
                     Boton(
                         "Editar",
