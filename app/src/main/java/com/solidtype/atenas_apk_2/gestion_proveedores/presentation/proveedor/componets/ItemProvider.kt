@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.ProveedorStatesUI
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 
@@ -35,11 +34,12 @@ fun MyProviderItem(
     numDocumento: MutableState<String>,
     email: MutableState<String>,
     telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>,
     idProveedor: MutableState<String>,
     tipoDocumento: MutableState<String>,
     direccion: MutableState<String>,
-    uiState: ProveedorStatesUI
+    inactivo: Boolean,
+    onClickRestore: (Personastodas.Proveedor) -> Unit,
+    onClickDelete: (Personastodas.Proveedor) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -95,17 +95,9 @@ fun MyProviderItem(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.weight(0.5f)
                 ) {
-                    if(uiState.switch) {
+                    if(inactivo) {
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-
-                            idProveedor.value = provider.id_proveedor.toString()
-                            nombre.value = provider.nombre!!
-                            numDocumento.value = provider.documento!!
-                            telefono.value = provider.telefono!!
-                            email.value = provider.email!!
-                            tipoDocumento.value = provider.tipo_documento!!
-                            direccion.value = provider.direccion!!
+                            onClickRestore(provider)
                         }){
                             Icon(
                                 imageVector = Icons.Filled.RestoreFromTrash,
@@ -134,13 +126,7 @@ fun MyProviderItem(
                             )
                         }
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-                            //formulario onDelete
-                            idProveedor.value = provider.id_proveedor.toString()
-                            nombre.value = provider.nombre!!
-                            numDocumento.value = provider.documento!!
-                            telefono.value = provider.telefono!!
-                            email.value = provider.email!!
+                            onClickDelete(provider)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,

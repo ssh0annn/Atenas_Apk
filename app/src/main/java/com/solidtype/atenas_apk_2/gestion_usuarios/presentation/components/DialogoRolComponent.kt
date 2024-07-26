@@ -20,15 +20,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserEvent
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UsuariosViewmodel
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.ui.theme.GrisOscuro
 import com.solidtype.atenas_apk_2.util.formatoActivo
-import com.solidtype.atenas_apk_2.util.formatoActivoDDBB
 import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.BotonBlanco
@@ -39,13 +35,13 @@ import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 @OptIn(ExperimentalMultiplatform::class)
 fun DialogoRol(
     mostrarDialogo: MutableState<Boolean>,
-    mostrarConfirmarRol: MutableState<Boolean>,
     idRollUsuario: MutableState<String>,
     nombreRollUsuario: MutableState<String>,
     descripcion: MutableState<String>,
     estadoRollUsuario: MutableState<String>,
-    uiState: UserStatesUI,
-    viewModel: UsuariosViewmodel
+    uiRoles: List<roll_usuarios>,
+    onClickGuardar: () -> Unit,
+    onClickEliminar: () -> Unit
 ) {
     Dialogo("Gestor de Roles", mostrarDialogo.value, { mostrarDialogo.value = false }, false) {
         Row {//Detalles y Lista
@@ -94,45 +90,12 @@ fun DialogoRol(
                                 descripcion.value != "" &&
                                 estadoRollUsuario.value != ""
                     ) {
-                        try {
-                            if (idRollUsuario.value.isEmpty() || nombreRollUsuario.value.isEmpty() || descripcion.value.isEmpty() || estadoRollUsuario.value.isEmpty()) {
-                                throw Exception("Campos vacios.")
-                            }
-
-                            if (uiState.roles.find { it.id_roll_usuario == idRollUsuario.value.toLong() } != null) {
-                                viewModel.onUserEvent(
-                                    UserEvent.EditarRol(
-                                        roll_usuarios(
-                                            id_roll_usuario = idRollUsuario.value.toLong(),
-                                            nombre = nombreRollUsuario.value,
-                                            descripcion = descripcion.value,
-                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
-                                        )
-                                    )
-                                )
-                                //Error: No se puede editar un rol
-                                //throw Exception("No se puede editar un rol.")
-                            } else {
-                                viewModel.onUserEvent(
-                                    UserEvent.AgregarNuevoRol(
-                                        roll_usuarios(
-                                            id_roll_usuario = idRollUsuario.value.toLong(),
-                                            nombre = nombreRollUsuario.value,
-                                            descripcion = descripcion.value,
-                                            estado = estadoRollUsuario.value.formatoActivoDDBB()
-                                        )
-                                    )
-                                )
-                            }
-
-                            idRollUsuario.value = ""
-                            nombreRollUsuario.value = ""
-                            descripcion.value = ""
-                            estadoRollUsuario.value = "Activo"
-                        } catch (_: Exception) { }
+                        onClickGuardar()
                     }
                     Spacer(modifier = Modifier.width(40.dp))
-                    BotonBlanco("Eliminar"){ mostrarConfirmarRol.value = true }
+                    BotonBlanco("Eliminar"){
+                        onClickEliminar()
+                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -183,8 +146,8 @@ fun DialogoRol(
                             }
                         }
                     }
-                    if (uiState.roles.isNotEmpty())
-                        items(uiState.roles) { rol ->
+                    if (uiRoles.isNotEmpty())
+                        items(uiRoles) { rol ->
                             Row(
                                 modifier = Modifier
                                     .padding(

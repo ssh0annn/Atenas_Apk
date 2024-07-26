@@ -14,10 +14,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.SwitchAccount
+import androidx.compose.material.icons.outlined.PointOfSale
+import androidx.compose.material.icons.rounded.AccountBalance
+import androidx.compose.material.icons.rounded.Cached
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
@@ -26,12 +38,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.solidtype.atenas_apk_2.R
 import com.solidtype.atenas_apk_2.ui.theme.Boton
@@ -39,6 +55,7 @@ import com.solidtype.atenas_apk_2.ui.theme.Fondo
 import com.solidtype.atenas_apk_2.ui.theme.Paneles
 import com.solidtype.atenas_apk_2.ui.theme.SubFondo
 import com.solidtype.atenas_apk_2.ui.theme.SubPaneles
+import com.solidtype.atenas_apk_2.util.ui.Pantalla
 import com.solidtype.atenas_apk_2.util.ui.components.PickerButton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
@@ -51,6 +68,7 @@ fun VentaScreen(
     val buscador = rememberSaveable { mutableStateOf("") }
     val mostrarDialogoX = rememberSaveable { mutableStateOf(false) }
     val number = rememberSaveable { mutableIntStateOf(1) }
+    val enuso = rememberSaveable { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +82,7 @@ fun VentaScreen(
                 modifier = Modifier
                     .padding(30.dp)
             ) {
-                Titulo(text = "Venta")
+                Titulo(text = "Venta", imageVector = Icons.Outlined.PointOfSale)
                 Spacer(modifier = Modifier.width(60.dp))
                 Buscador(buscador.value) {
                     buscador.value = it
@@ -76,7 +94,9 @@ fun VentaScreen(
             .background(SubFondo)
             .padding(25.dp)
             .align(Alignment.CenterHorizontally)
-            .height(450.dp)
+            .height(
+                Pantalla.alto - 300.dp
+            )
             .width(1100.dp),
         ){
             Row {
@@ -118,7 +138,7 @@ fun VentaScreen(
 
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(25.dp))
         Box(modifier = Modifier
             .padding(end = 60.dp)
             .fillMaxWidth(),
@@ -148,22 +168,343 @@ fun VentaScreen(
         }
     }
     if(mostrarDialogoX.value)
-        Dialog(onDismissRequest = {
-            mostrarDialogoX.value = false
-        }) {
-            Box(modifier = Modifier
-                .width(600.dp)
-                .height(600.dp)
-                .background(Paneles, shape = RoundedCornerShape(20.dp))
+        Dialog(onDismissRequest = { mostrarDialogoX.value = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Card (
+                colors = CardDefaults.cardColors(Paneles),
+                elevation = CardDefaults.cardElevation(5.dp),
+                modifier = Modifier
+                    .width(1000.dp)
+                    .height(570.dp)
+                    .padding(16.dp)
             ){
-                Row(modifier = Modifier.padding(20.dp)){
-                    Titulo(text = "Facturar")
-                    Spacer(modifier = Modifier.width(200.dp))
-                    Text(text = "20/30/2024", fontSize = 30.sp, color = Boton, fontWeight = FontWeight.Bold)
+                Row (modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                ){
+                    Text(text = "Facturar", color = SubFondo, fontSize = 32.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
+                    Text(text = "Fecha Actual", color = SubFondo, fontSize = 32.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
                 }
-                Column {
-                    Row{
+                Row (modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                ){
+                    //DATOS DE EL ARTICULO Y DINERO
+                    Column(modifier = Modifier.weight(1f)
+                    ){
+                        TextField(value = enuso.value,
+                            label = {Text("Total")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Decimal),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Rounded.AccountBalance,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = true,
+                            enabled = false)
 
+                        TextField(value = enuso.value,
+                            label = {Text("Dado")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Decimal),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Rounded.Cached,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Vendedor")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Filled.AccountCircle,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = true,
+                            enabled = false)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Cliente")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Filled.SwitchAccount,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Cantidad")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Filled.AddShoppingCart,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = true,
+                            enabled = false)
+                    }
+                    //DATOS DEL CLIENTE APARTE
+                    Column (modifier = Modifier.weight(1f)
+                    ){
+                        TextField(value = enuso.value,
+                            label = {Text("Tipo de pago")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Rounded.AccountBalance,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Codigo")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Rounded.Cached,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Tipo de comprobante")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Filled.AccountCircle,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Serie de comprobante")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Filled.SwitchAccount,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+
+                        TextField(value = enuso.value,
+                            label = {Text("Numero de comprobante")},
+                            onValueChange = {enuso.value = it},
+                            textStyle = TextStyle(
+                                color = Boton,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text),
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .width(400.dp),
+                            singleLine = true,
+                            leadingIcon = { Icon(
+                                imageVector = Icons.Filled.AddShoppingCart,
+                                contentDescription = "Icono importado y en uso",
+                                modifier = Modifier.padding(5.dp),
+                                tint = Boton)
+                            },
+                            colors = TextFieldDefaults.colors(
+                                disabledContainerColor = Fondo,
+                                focusedContainerColor = Fondo,
+                                unfocusedContainerColor = Fondo,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent),
+                            readOnly = false,
+                            enabled = true)
+                    }
+                }
+                Row(modifier = Modifier.padding(10.dp)){
+                    Spacer(modifier = Modifier.width(30.dp))
+                    Button(onClick = { mostrarDialogoX.value = false }, colors = ButtonDefaults.buttonColors(Fondo)) {
+                        Text(text = "Cancelar", color = Boton, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    }
+                    Spacer(modifier = Modifier.width(100.dp))
+                    Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Fondo)) {
+                        Text(text = "Imprimir", color = Boton, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }

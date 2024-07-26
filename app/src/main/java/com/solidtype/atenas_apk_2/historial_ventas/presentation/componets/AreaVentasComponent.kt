@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.solidtype.atenas_apk_2.historial_ventas.presentation.HistorialUIState
 
 @Composable
 fun AreaVentas(
     ventasTickerTitulo: MutableState<String>,
     selected: MutableState<String>,
-    uiState: HistorialUIState,
+    uiTotal: Double,
+    uiAbono: Double,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -29,8 +29,8 @@ fun AreaVentas(
         )
         Text(
             text = when (selected.value) {
-                "Ventas" -> "${uiState.total} RD$"
-                "Ticket" -> "${uiState.abono} RD$" //abono?
+                "Ventas" -> "$uiTotal RD$"
+                "Ticket" -> "$uiAbono RD$" //abono?
                 else -> "0.0 RD$"
             },
             fontSize = 24.sp,

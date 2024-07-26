@@ -11,19 +11,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.inventario
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
+import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
+import com.solidtype.atenas_apk_2.products.domain.model.actualizacion.categoria
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
 
 @Composable
 fun DialogoProducto(
     mostrarProducto: MutableState<Boolean>,
-    viewModel: InventarioViewModel,
     categoria: MutableState<String>,
-    uiState: ProductosViewStates,
     nombre: MutableState<String>,
     idInventario: MutableState<String>,
     descripcion: MutableState<String>,
@@ -35,13 +31,12 @@ fun DialogoProducto(
     idCategoriaText: MutableState<String>,
     idProveedorText: MutableState<String>,
     impuesto: MutableState<String>,
-    //estado: MutableState<String>,
     provider: MutableState<String>,
-    //listEstados: List<String>,
     mostrarCategoria: MutableState<Boolean>,
     mostrarProveedor: MutableState<Boolean>,
-    idCategoria: MutableState<String>,
-    idProveedor: MutableState<String>
+    uiCategoria: List<categoria>,
+    uiProveedores: List<Personastodas.Proveedor>,
+    onGuardar: () -> Unit
 ) {
     Dialogo(
         titulo = "Gestor de Productos",
@@ -59,7 +54,6 @@ fun DialogoProducto(
         ) {
             Detalles(
                 categoria,
-                uiState,
                 nombre,
                 idInventario,
                 descripcion,
@@ -73,7 +67,9 @@ fun DialogoProducto(
                 impuesto,
                 provider,
                 mostrarCategoria,
-                mostrarProveedor
+                mostrarProveedor,
+                uiCategoria,
+                uiProveedores
             )
             Row {
                 Boton(
@@ -90,38 +86,7 @@ fun DialogoProducto(
                             (impuesto.value.matches("[0-9]+".toRegex()) || impuesto.value.matches("[0-9]+.[0-9]+".toRegex())) &&
                             descripcion.value != ""
                 ) {
-                    try {
-                        viewModel.onEvent(
-                            InventariosEvent.AgregarProductos(
-                                inventario(
-                                    id_inventario = idInventario.value.toLong(),
-                                    id_categoria = idCategoriaText.value.toLong(),
-                                    id_proveedor = idProveedorText.value.toLong(),
-                                    nombre = nombre.value,
-                                    marca = marca.value,
-                                    modelo = modelo.value,
-                                    cantidad = cantidad.value.toInt(),
-                                    precio_compra = costo.value.toDouble(),
-                                    precio_venta = precio.value.toDouble(),
-                                    impuesto = impuesto.value.toDouble(),
-                                    descripcion = descripcion.value,
-                                    estado = true
-                                )
-                            )
-                        )
-                        idInventario.value = ""
-                        idCategoria.value = ""
-                        idProveedor.value = ""
-                        nombre.value = ""
-                        marca.value = ""
-                        modelo.value = ""
-                        cantidad.value = ""
-                        costo.value = ""
-                        precio.value = ""
-                        impuesto.value = ""
-                        descripcion.value = ""
-                        //estado.value = "Activo"
-                    } catch (_: Exception) { }
+                    onGuardar()
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Boton("Cerrar") {

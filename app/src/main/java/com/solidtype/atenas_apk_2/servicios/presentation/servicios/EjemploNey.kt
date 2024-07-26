@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.solidtype.atenas_apk_2.core.entidades.tipo_venta
 import com.solidtype.atenas_apk_2.dispositivos.model.Dispositivo
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 

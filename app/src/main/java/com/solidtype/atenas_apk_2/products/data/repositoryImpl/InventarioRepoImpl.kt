@@ -3,7 +3,6 @@ package com.solidtype.atenas_apk_2.products.data.repositoryImpl
 import android.net.Uri
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.persona
 import com.solidtype.atenas_apk_2.gestion_proveedores.data.personaDao
-import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util.client_builder.PersonaBuilder
 import com.solidtype.atenas_apk_2.gestion_proveedores.domain.casos_usos.util.client_builder.PersonaDirector
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.products.data.local.dao.categoriaDao

@@ -19,19 +19,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalShipping
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -40,17 +38,18 @@ import com.solidtype.atenas_apk_2.authentication.actualizacion.presentation.Tipo
 import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets.TableProviders
-import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
 import com.solidtype.atenas_apk_2.util.ui.components.AutocompleteSelect
 import com.solidtype.atenas_apk_2.util.ui.components.Boton
 import com.solidtype.atenas_apk_2.util.ui.components.Buscador
 import com.solidtype.atenas_apk_2.util.ui.components.Dialogo
+import com.solidtype.atenas_apk_2.util.ui.components.DialogoConfirmacion
 import com.solidtype.atenas_apk_2.util.ui.components.InputDetalle
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 import com.solidtype.atenas_apk_2.util.ui.components.MenuLateral
 import com.solidtype.atenas_apk_2.util.ui.components.SwitchInactivos
 import com.solidtype.atenas_apk_2.util.ui.components.Titulo
+import com.solidtype.atenas_apk_2.util.ui.components.confirmar
 
 @OptIn(ExperimentalMultiplatform::class)
 @SuppressLint("StateFlowValueCalledInComposition", "SuspiciousIndentation")
@@ -61,6 +60,10 @@ fun ProveedorScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val mostrarDialogoG = remember { mutableStateOf(false) }
+    val confirmarMensaje = remember { mutableStateOf("") }
+    val accionDeConfirmacion = remember { mutableStateOf({}) }
 
     val mostrarDialogo = rememberSaveable { mutableStateOf(false) }
     val editar = rememberSaveable { mutableStateOf(false) }
@@ -76,8 +79,6 @@ fun ProveedorScreen(
 
     //estado busqueda
     val busqueda = rememberSaveable { mutableStateOf("") }
-
-    val mostrarConfirmar = rememberSaveable { mutableStateOf(false) }
 
     if (uiState.mensaje.isNotEmpty()) {
         Toast.makeText(context, uiState.mensaje, Toast.LENGTH_LONG).show()
@@ -130,19 +131,53 @@ fun ProveedorScreen(
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    TableProviders(
-                        uiState.proveedores,
-                        mostrarDialogo,
-                        editar,
-                        nombre,
-                        numDocumento,
-                        email,
-                        telefono,
-                        mostrarConfirmar,
-                        idProveedor,
-                        tipoDocumento,
-                        direccion,
-                        uiState
+                    TableProviders(uiState.proveedores, mostrarDialogo, editar, nombre, numDocumento, email, telefono, idProveedor, tipoDocumento, direccion, uiState.switch,
+                        onClickRestore = { provider ->
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.RestaurarProveedor/*(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )*/
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        },
+                        onClickDelete = { provider ->
+                            {
+                                viewModel.onUserEvent(
+                                    ProveedorEvent.BorrarProveedor(
+                                        Personastodas.Proveedor(
+                                            provider.id_proveedor,
+                                            provider.nombre,
+                                            provider.tipo_documento,
+                                            provider.documento,
+                                            provider.direccion,
+                                            provider.telefono,
+                                            provider.email,
+                                        )
+                                    )
+                                )
+                                mostrarDialogoG.value = false
+                            }.confirmar(
+                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                showDialog = { mostrarDialogoG.value = true },
+                                setMessage = { confirmarMensaje.value = it },
+                                setAction = { accionDeConfirmacion.value = it }
+                            )
+                        }
                     )
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -165,6 +200,7 @@ fun ProveedorScreen(
                 }
             }
         }
+        //--------------------------------------------------------------
         Dialogo(
             max = false,
             titulo = if (editar.value) "Editar Proveedor" else "Nuevo Proveedor",
@@ -313,70 +349,11 @@ fun ProveedorScreen(
                 }
             }
         }
-        Dialogo(
-            titulo = "Confirma",
-            mostrar = mostrarConfirmar.value,
-            onCerrarDialogo = { mostrarConfirmar.value = false },
-            max = false,
-            sinBoton = true
-        ) {
-            Column(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(16.dp, 16.dp, 16.dp, 0.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "¿Estás seguro que deseas ${if (uiState.switch) "restaurar" else "eliminar"} este producto?",
-                    textAlign = TextAlign.Center,
-                    color = AzulGris,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Row {
-                    Boton("Aceptar") {
-                        try {
-                            if (uiState.switch) {
-                                viewModel.onUserEvent(
-                                    ProveedorEvent.RestaurarProveedor/*(
-                                        Personastodas.Proveedor(
-                                            idProveedor.value.toLong(),
-                                            nombre.value,
-                                            tipoDocumento.value,
-                                            numDocumento.value,
-                                            direccion.value,
-                                            telefono.value,
-                                            email.value
-                                        )
-                                    )*/
-                                )
-                            } else {
-                                viewModel.onUserEvent(
-                                    ProveedorEvent.BorrarProveedor(
-                                        Personastodas.Proveedor(
-                                            idProveedor.value.toLong(),
-                                            nombre.value,
-                                            tipoDocumento.value,
-                                            numDocumento.value,
-                                            direccion.value,
-                                            telefono.value,
-                                            email.value,
-                                        )
-                                    )
-                                )
-                            }
-
-                            mostrarConfirmar.value = false
-                        } catch (_: Exception) { }
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Boton("Cancelar") {
-                        mostrarConfirmar.value = false
-                    }
-                }
-            }
-        }
+        DialogoConfirmacion(
+            showDialog = mostrarDialogoG,
+            confirmMessage = confirmarMensaje,
+            onConfirmAction = accionDeConfirmacion
+        )
         MenuLateral(navController)
     }
 }

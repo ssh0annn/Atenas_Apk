@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.ClienteStateUI
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
@@ -36,9 +35,10 @@ fun MyClientItem(
     numDocumento: MutableState<String>,
     email: MutableState<String>,
     telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>,
     idCliente: MutableState<String>,
-    uiState: ClienteStateUI
+    inactivo: Boolean,
+    onClickRestore: (Personastodas.ClienteUI) -> Unit,
+    onClickDelete: (Personastodas.ClienteUI) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -93,16 +93,9 @@ fun MyClientItem(
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.weight(0.5f)
                 ) {
-                    if(uiState.switch) {
+                    if(inactivo) {
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-
-                            idCliente.value = client.id_cliente.toString()
-                            nombre.value = client.nombre!!
-                            tipoDocumento.value = client.tipo_documento!!
-                            numDocumento.value = client.documento!!
-                            telefono.value = client.telefono!!
-                            email.value = client.email!!
+                            onClickRestore(client)
                         }){
                             Icon(
                                 imageVector = Icons.Filled.RestoreFromTrash,
@@ -132,15 +125,7 @@ fun MyClientItem(
                             )
                         }
                         IconButton(onClick = {
-                            mostrarConfirmar.value = true
-
-                            //formulario onDelete
-                            idCliente.value = client.id_cliente.toString()
-                            nombre.value = client.nombre!!
-                            tipoDocumento.value = client.tipo_documento!!
-                            numDocumento.value = client.documento!!
-                            telefono.value = client.telefono!!
-                            email.value = client.email!!
+                            onClickDelete(client)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,

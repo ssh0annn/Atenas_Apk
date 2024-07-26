@@ -18,7 +18,7 @@ fun persona.toMap(): Map<String, Any?> {
     )
 }
 
-fun persona.toClienteUI():Personastodas.ClienteUI{
+fun persona.toClienteUI(): Personastodas.ClienteUI{
     return Personastodas.ClienteUI(
         id_cliente = this.id_persona,
         nombre = this.nombre,
@@ -29,7 +29,7 @@ fun persona.toClienteUI():Personastodas.ClienteUI{
          )
 
 }
-fun persona.toProveedor():Personastodas.Proveedor{
+fun persona.toProveedor(): Personastodas.Proveedor{
     return Personastodas.Proveedor(
         id_proveedor = this.id_persona,
          nombre= this.nombre,

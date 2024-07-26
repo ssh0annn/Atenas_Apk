@@ -29,7 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.solidtype.atenas_apk_2.gestion_usuarios.presentation.UserStatesUI
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios
+import com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.usuario
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -38,18 +39,19 @@ import com.solidtype.atenas_apk_2.util.ui.Pantalla
 
 @Composable
 fun AreaUsuarios(
-    uiState: UserStatesUI,
+    uiUsuarios: List<usuario>,
+    uiRoles: List<roll_usuarios>,
+    inactivo: Boolean,
     idUsuario: MutableState<String>,
     nombre: MutableState<String>,
     apellido: MutableState<String>,
     correo: MutableState<String>,
     clave: MutableState<String>,
     telefono: MutableState<String>,
-    //estado: MutableState<String>,
     rol: MutableState<String>,
     mostrarUsuario: MutableState<Boolean>,
-    editar: MutableState<Boolean>,
-    mostrarConfirmarUsuario: MutableState<Boolean>
+    onClickRestaurar: (usuario) -> Unit,
+    onClickEliminar: (usuario) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -122,8 +124,8 @@ fun AreaUsuarios(
                         .fillMaxSize()
                         .background(GrisOscuro, RoundedCornerShape(5.dp))
                 ) { //buscar componente para agregar filas de cards
-                    if (uiState.usuarios.isNotEmpty())
-                        items(uiState.usuarios) { usuario ->
+                    if (uiUsuarios.isNotEmpty())
+                        items(uiUsuarios) { usuario ->
                             Row(
                                 modifier = Modifier
                                     .padding(
@@ -168,7 +170,7 @@ fun AreaUsuarios(
                                     textAlign = TextAlign.Center
                                 )
                                 Text(
-                                    text = uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
+                                    text = uiRoles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
                                         ?: "",
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center
@@ -178,21 +180,10 @@ fun AreaUsuarios(
                                     modifier = Modifier.weight(0.5f),
                                     horizontalArrangement = Arrangement.End
                                 ) {
-                                    if(uiState.switch) {
+                                    if(inactivo) {
                                         IconButton(onClick = {
-                                            mostrarConfirmarUsuario.value = true
-
-                                            idUsuario.value = usuario.id_usuario.toString()
-                                            nombre.value = usuario.nombre
-                                            apellido.value = usuario.apellido
-                                            correo.value = usuario.email
-                                            clave.value = usuario.clave
-                                            telefono.value = usuario.telefono
-
-                                            rol.value =
-                                                uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
-                                                    ?: ""
-                                        }){
+                                            onClickRestaurar(usuario)
+                                        }) {
                                             Icon(
                                                 imageVector = Icons.Filled.RestoreFromTrash,
                                                 contentDescription = null,
@@ -203,7 +194,6 @@ fun AreaUsuarios(
                                     else {
                                         IconButton(onClick = {
                                             mostrarUsuario.value = true
-                                            editar.value = true
 
                                             idUsuario.value = usuario.id_usuario.toString()
                                             nombre.value = usuario.nombre
@@ -211,10 +201,8 @@ fun AreaUsuarios(
                                             correo.value = usuario.email
                                             clave.value = usuario.clave
                                             telefono.value = usuario.telefono
-                                            //estado.value = usuario.estado.formatoActivo()
-                                            //filtro
                                             rol.value =
-                                                uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
+                                                uiRoles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
                                                     ?: ""
                                         }) {
                                             Icon(
@@ -224,19 +212,7 @@ fun AreaUsuarios(
                                             )
                                         }
                                         IconButton(onClick = {
-                                            mostrarConfirmarUsuario.value = true
-
-                                            idUsuario.value = usuario.id_usuario.toString()
-                                            nombre.value = usuario.nombre
-                                            apellido.value = usuario.apellido
-                                            correo.value = usuario.email
-                                            clave.value = usuario.clave
-                                            telefono.value = usuario.telefono
-                                            //estado.value = usuario.estado.formatoActivo()
-                                            //filtro
-                                            rol.value =
-                                                uiState.roles.find { it.id_roll_usuario == usuario.id_roll_usuario }?.nombre
-                                                    ?: ""
+                                            onClickEliminar(usuario)
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Filled.Delete,

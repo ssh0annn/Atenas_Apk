@@ -1,4 +1,4 @@
-package com.solidtype.atenas_apk_2.gestion_proveedores.presentation.proveedor.componets
+package com.solidtype.atenas_apk_2.products.presentation.inventory.componets
 
 import android.util.Patterns
 import androidx.compose.foundation.background
@@ -21,9 +21,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.solidtype.atenas_apk_2.gestion_proveedores.presentation.cliente.modelo.Personastodas
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventarioViewModel
-import com.solidtype.atenas_apk_2.products.presentation.inventory.InventariosEvent
-import com.solidtype.atenas_apk_2.products.presentation.inventory.ProductosViewStates
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.GrisClaro
@@ -44,10 +41,10 @@ fun DialogoProveedor(
     direccionProveedor: MutableState<String>,
     telefonoProveedor: MutableState<String>,
     emailProveedor: MutableState<String>,
-    viewModel: InventarioViewModel,
-    uiState: ProductosViewStates,
-    mostrarConfirmarProveedor: MutableState<Boolean>,
-    idProveedor: MutableState<String>
+    uiProveedores: List<Personastodas.Proveedor>,
+    idProveedor: MutableState<String>,
+    onGuardar: () -> Unit,
+    onEliminar: () -> Unit
 ) {
     Dialogo(
         "Gestor de Proveedores",
@@ -81,7 +78,7 @@ fun DialogoProveedor(
                             AutocompleteSelect(
                                 text = "Tipo de Documento",
                                 variableStr = tipoDocumentoProveedor.value,
-                                items = listOf("Cédula", "Pasaporte")
+                                items = listOf("Cédula", "Pasaporte", "RNC")
                             ) {
                                 tipoDocumentoProveedor.value = it
                             }
@@ -98,12 +95,6 @@ fun DialogoProveedor(
                             InputDetalle("Email", emailProveedor.value, tipo = KeyboardType.Email) {
                                 emailProveedor.value = it
                             }
-                            /*Spacer(modifier = Modifier.height(5.dp))
-                                AutocompleteSelect(
-                                    "Estado",
-                                    estadoProveedor.value,
-                                    listOf("Activo", "Inactivo")
-                                ) { estadoProveedor.value = it }*/
                         }
                     }
                 }
@@ -118,35 +109,12 @@ fun DialogoProveedor(
                             telefonoProveedor.value.matches("8\\d9\\d{7}".toRegex()) &&
                             Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
                         ) {
-                        try {
-                            if (nombreProveedor.value.isEmpty() || tipoDocumentoProveedor.value.isEmpty() || documentoProveedor.value.isEmpty() || direccionProveedor.value.isEmpty() || telefonoProveedor.value.isEmpty() || emailProveedor.value.isEmpty()) {
-                                throw Exception("Campos vacios.")
-                            }
-
-                            viewModel.onEvent(
-                                InventariosEvent.CrearProveedor(
-                                    Personastodas.Proveedor(
-                                        id_proveedor = 0,
-                                        nombre = nombreProveedor.value,
-                                        tipo_documento = tipoDocumentoProveedor.value,
-                                        documento = documentoProveedor.value,
-                                        direccion = direccionProveedor.value,
-                                        telefono = telefonoProveedor.value,
-                                        email = emailProveedor.value
-                                    )
-                                )
-                            )
-
-                            nombreProveedor.value = ""
-                            tipoDocumentoProveedor.value = ""
-                            documentoProveedor.value = ""
-                            direccionProveedor.value = ""
-                            telefonoProveedor.value = ""
-                            emailProveedor.value = ""
-                        } catch (_: Exception) { }
+                        onGuardar()
                     }
                     Spacer(modifier = Modifier.width(40.dp))
-                        BotonBlanco("Eliminar") { mostrarConfirmarProveedor.value = true }
+                        BotonBlanco("Eliminar") {
+                            onEliminar()
+                        }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -197,8 +165,8 @@ fun DialogoProveedor(
                             }
                         }
                     }
-                    if (uiState.proveedores.isNotEmpty())
-                        items(uiState.proveedores) { proveedor ->
+                    if (uiProveedores.isNotEmpty())
+                        items(uiProveedores) { proveedor ->
                             Row(
                                 modifier = Modifier
                                     .padding(

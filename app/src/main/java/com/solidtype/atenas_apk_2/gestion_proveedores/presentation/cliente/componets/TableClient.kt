@@ -35,9 +35,10 @@ fun TableClients(
     numDocumento: MutableState<String>,
     email: MutableState<String>,
     telefono: MutableState<String>,
-    mostrarConfirmar: MutableState<Boolean>,
     idCliente: MutableState<String>,
-    uiState: ClienteStateUI
+    inactivo: Boolean,
+    onClickRestore: (Personastodas.ClienteUI) -> Unit,
+    onClickDelete: (Personastodas.ClienteUI) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -110,9 +111,10 @@ fun TableClients(
                         numDocumento,
                         email,
                         telefono,
-                        mostrarConfirmar,
                         idCliente,
-                        uiState
+                        inactivo,
+                        onClickRestore,
+                        onClickDelete
                     )
                 }
             }

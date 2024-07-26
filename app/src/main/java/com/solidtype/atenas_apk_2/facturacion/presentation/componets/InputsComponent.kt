@@ -16,12 +16,9 @@ import com.solidtype.atenas_apk_2.util.ui.components.SelecionarFecha
 @OptIn(ExperimentalMultiplatform::class, ExperimentalMaterial3Api::class)
 fun Inputs(
     noFacturaCliente: MutableState<String>,
-    datePickerState1: DatePickerState,
-    fechaIni: String,
-    showDatePicker1: MutableState<Boolean>,
-    datePickerState2: DatePickerState,
-    fechaFin: String,
-    showDatePicker2: MutableState<Boolean>
+    datePickerStateList: List<DatePickerState>,
+    fechaList: List<MutableState<String>>,
+    showDatePickerLis: List<MutableState<Boolean>>,
 ) {
     Row {//Entradas
         InputBlanco(
@@ -34,35 +31,21 @@ fun Inputs(
         ) {
             noFacturaCliente.value = it
         }
-        SelecionarFecha(
-            "Fecha Inicial",
-            datePickerState1.selectedDateMillis,
-            modifierPadre = Modifier
-                .padding(start = 20.dp)
-                .weight(1f),
-            modifierHijo = Modifier
-                .padding(top = 5.dp)
-                .width(200.dp)
-                .height(55.dp),
-            size = 16,
-            fechaString = fechaIni
-        ) {
-            showDatePicker1.value = true
-        }
-        SelecionarFecha(
-            "Fecha Final",
-            datePickerState2.selectedDateMillis,
-            modifierPadre = Modifier
-                .padding(start = 20.dp)
-                .weight(1f),
-            modifierHijo = Modifier
-                .padding(top = 5.dp)
-                .width(200.dp)
-                .height(55.dp),
-            size = 16,
-            fechaString = fechaFin
-        ) {
-            showDatePicker2.value = true
-        }
+        for (i in fechaList.indices)
+            SelecionarFecha(
+                "Fecha Inicial",
+                datePickerStateList[i].selectedDateMillis,
+                modifierPadre = Modifier
+                    .padding(start = 20.dp)
+                    .weight(1f),
+                modifierHijo = Modifier
+                    .padding(top = 5.dp)
+                    .width(200.dp)
+                    .height(55.dp),
+                size = 16,
+                fechaString = fechaList[i].value
+            ) {
+                showDatePickerLis[i].value = true
+            }
     }
 }
