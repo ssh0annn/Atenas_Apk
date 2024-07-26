@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.dp
 @ExperimentalMaterial3Api
 @Composable
 fun ProductsCard(modifier: Modifier = Modifier, onClickGetClient:() -> Unit){
-    Card(modifier =modifier,
+    Card(
+        modifier =modifier,
         shape = RoundedCornerShape(30.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -34,9 +35,4 @@ fun ProductsCard(modifier: Modifier = Modifier, onClickGetClient:() -> Unit){
             Text(text = "Costo:")
         }
     }
-
 }
-
-
-
-
