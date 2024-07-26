@@ -1,5 +1,6 @@
 package com.solidtype.atenas_apk_2.gestion_usuarios.presentation.components
 
+import android.util.Patterns
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,8 +32,8 @@ fun Detalles(
     clave: MutableState<String>,
     telefono: MutableState<String>,
     rol: MutableState<String>,
-    uiRoles: List<com.solidtype.atenas_apk_2.gestion_usuarios.domain.modelo.roll_usuarios>,
     mostrarDialogo: MutableState<Boolean>,
+    listaFiltradaRoles: List<String>,
 ) {
     Column(
         modifier = Modifier
@@ -61,22 +62,40 @@ fun Detalles(
                         InputDetalle(
                             "Id del Usuario",
                             idUsuario.value,
-                            tipo = KeyboardType.Number
+                            tipo = KeyboardType.Number,
+                            validable = true,
+                            esValido = idUsuario.value.matches("[0-9]+".toRegex())
                         ) { idUsuario.value = it }
-                        InputDetalle("Nombre", nombre.value) { nombre.value = it }
-                        InputDetalle("Apellido", apellido.value) {
+                        InputDetalle(
+                            "Nombre", nombre.value,
+                            validable = true,
+                            esValido = nombre.value.isNotEmpty()
+                        ) { nombre.value = it }
+                        InputDetalle(
+                            "Apellido", apellido.value,
+                            validable = true,
+                            esValido = apellido.value.isNotEmpty()
+                        ) {
                             apellido.value = it
                         }
                         InputDetalle(
                             "Correo",
                             correo.value,
-                            tipo = KeyboardType.Email
+                            tipo = KeyboardType.Email,
+                            validable = true,
+                            esValido = Patterns.EMAIL_ADDRESS.matcher(correo.value).matches()
                         ) { correo.value = it }
-                        InputDetalle("Clave", clave.value, pass = true) { clave.value = it }
+                        InputDetalle(
+                            "Clave", clave.value, pass = true,
+                            validable = true,
+                            esValido = clave.value.length in 8..16
+                        ) { clave.value = it }
                         InputDetalle(
                             "Teléfono",
                             telefono.value,
-                            tipo = KeyboardType.Phone
+                            tipo = KeyboardType.Phone,
+                            validable = true,
+                            esValido = telefono.value.matches("8\\d9\\d{7}".toRegex())
                         ) {
                             telefono.value = it
                         }
@@ -84,12 +103,12 @@ fun Detalles(
                         AutocompleteSelect(
                             "Rol",
                             rol,
-                            if (uiRoles.isNotEmpty()) uiRoles.map { it.nombre } else listOf(
-                                ""
-                            ),
+                            listaFiltradaRoles,
                             onClickAgregar = {
                                 mostrarDialogo.value = true
                             },
+                            validable = true,
+                            esValido = rol.value.isNotEmpty() && rol.value in listaFiltradaRoles
                         ) { rol.value = it }
                         Spacer(modifier = Modifier.height(10.dp))
                     }

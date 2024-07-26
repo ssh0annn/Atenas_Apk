@@ -231,6 +231,7 @@ fun GestionUsuariosScreen(
                 correo.value = ""
                 clave.value = ""
                 telefono.value = ""
+                rol.value = ""
             } catch (_: Exception) { }
         }
         DialogoRol(mostrarRol, idRollUsuario, nombreRollUsuario, descripcion, estadoRollUsuario, uiState.roles,

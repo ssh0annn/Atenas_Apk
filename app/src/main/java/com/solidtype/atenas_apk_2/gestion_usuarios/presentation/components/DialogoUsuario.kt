@@ -30,6 +30,13 @@ fun DialogoUsuario(
     mostrarRol: MutableState<Boolean>,
     onClickGuardar: () -> Unit
 ) {
+    val listaFiltradaRoles =
+        if (uiRoles.isNotEmpty())
+            uiRoles.map {
+                it.nombre
+            }
+        else listOf("")
+
     Dialogo(
         titulo = "Gestor de Usuarios",
         mostrar = mostrarUsuario.value,
@@ -52,8 +59,8 @@ fun DialogoUsuario(
                 clave,
                 telefono,
                 rol,
-                uiRoles,
-                mostrarRol
+                mostrarRol,
+                listaFiltradaRoles
             )
             Row {
                 Boton(
@@ -64,8 +71,7 @@ fun DialogoUsuario(
                             Patterns.EMAIL_ADDRESS.matcher(correo.value).matches() &&
                             (clave.value.length in 8..16) &&
                             telefono.value.matches("8\\d9\\d{7}".toRegex()) &&
-                            //estado.value != "" &&
-                            rol.value != ""
+                            rol.value != "" && rol.value in listaFiltradaRoles
                 ) {
                     onClickGuardar()
                 }

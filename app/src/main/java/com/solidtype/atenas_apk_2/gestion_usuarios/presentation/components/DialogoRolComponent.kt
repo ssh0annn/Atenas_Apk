@@ -64,20 +64,30 @@ fun DialogoRol(
                             InputDetalle(
                                 "ID",
                                 idRollUsuario.value,
-                                tipo = KeyboardType.Number
+                                tipo = KeyboardType.Number,
+                                validable = true,
+                                esValido = idRollUsuario.value.matches("[0-9]+".toRegex())
                             ) { idRollUsuario.value = it }
                             InputDetalle(
                                 "Rol",
-                                nombreRollUsuario.value
+                                nombreRollUsuario.value,
+                                validable = true,
+                                esValido = nombreRollUsuario.value.isNotEmpty()
                             ) { nombreRollUsuario.value = it }
-                            InputDetalle("Descripción", descripcion.value) {
+                            InputDetalle(
+                                "Descripción", descripcion.value,
+                                validable = true,
+                                esValido = descripcion.value.isNotEmpty()
+                            ) {
                                 descripcion.value = it
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             AutocompleteSelect(
                                 "Estado",
                                 estadoRollUsuario,
-                                listOf("Activo", "Inactivo")
+                                listOf("Activo", "Inactivo"),
+                                validable = true,
+                                esValido = estadoRollUsuario.value.isNotEmpty() && estadoRollUsuario.value in listOf("Activo", "Inactivo")
                             ) { estadoRollUsuario.value = it }
                         }
                     }
@@ -88,7 +98,8 @@ fun DialogoRol(
                         habilitar = idRollUsuario.value.matches("[0-9]+".toRegex()) &&
                                 nombreRollUsuario.value != "" &&
                                 descripcion.value != "" &&
-                                estadoRollUsuario.value != ""
+                                estadoRollUsuario.value != "" &&
+                                estadoRollUsuario.value in listOf("Activo", "Inactivo")
                     ) {
                         onClickGuardar()
                     }
