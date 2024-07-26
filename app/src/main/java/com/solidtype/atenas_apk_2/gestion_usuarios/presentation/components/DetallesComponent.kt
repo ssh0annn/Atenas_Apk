@@ -83,7 +83,7 @@ fun Detalles(
                         Spacer(modifier = Modifier.height(5.dp))
                         AutocompleteSelect(
                             "Rol",
-                            rol.value,
+                            rol,
                             if (uiRoles.isNotEmpty()) uiRoles.map { it.nombre } else listOf(
                                 ""
                             ),

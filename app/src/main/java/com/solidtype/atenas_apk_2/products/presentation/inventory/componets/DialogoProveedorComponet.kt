@@ -72,27 +72,47 @@ fun DialogoProveedor(
                         ) {
                             InputDetalle(
                                 "Proveedor",
-                                nombreProveedor.value
+                                nombreProveedor.value,
+                                validable = true,
+                                esValido = nombreProveedor.value.isNotEmpty()
                             ) { nombreProveedor.value = it }
                             Spacer(modifier = Modifier.height(5.dp))
                             AutocompleteSelect(
                                 text = "Tipo de Documento",
-                                variableStr = tipoDocumentoProveedor.value,
-                                items = listOf("Cédula", "Pasaporte", "RNC")
+                                variableStr = tipoDocumentoProveedor,
+                                items = listOf("Cédula", "Pasaporte", "RNC"),
+                                validable = true,
+                                esValido = tipoDocumentoProveedor.value.isNotEmpty() && tipoDocumentoProveedor.value in listOf("Cédula", "Pasaporte", "RNC")
                             ) {
                                 tipoDocumentoProveedor.value = it
                             }
                             Spacer(modifier = Modifier.height(5.dp))
-                            InputDetalle("Documento", documentoProveedor.value, tipo = KeyboardType.Number) {
+                            InputDetalle(
+                                "Documento", documentoProveedor.value, tipo = KeyboardType.Number,
+                                validable = true,
+                                esValido = documentoProveedor.value.isNotEmpty() && documentoProveedor.value.matches("\\d+".toRegex())
+                            ) {
                                 documentoProveedor.value = it
                             }
-                            InputDetalle("Dirección", direccionProveedor.value) {
+                            InputDetalle(
+                                "Dirección", direccionProveedor.value,
+                                validable = true,
+                                esValido = direccionProveedor.value.isNotEmpty()
+                            ) {
                                 direccionProveedor.value = it
                             }
-                            InputDetalle("Teléfono", telefonoProveedor.value, tipo = KeyboardType.Phone) {
+                            InputDetalle(
+                                "Teléfono", telefonoProveedor.value, tipo = KeyboardType.Phone,
+                                validable = true,
+                                esValido = telefonoProveedor.value.matches("8\\d9\\d{7}".toRegex())
+                            ) {
                                 telefonoProveedor.value = it
                             }
-                            InputDetalle("Email", emailProveedor.value, tipo = KeyboardType.Email) {
+                            InputDetalle(
+                                "Email", emailProveedor.value, tipo = KeyboardType.Email,
+                                validable = true,
+                                esValido = Patterns.EMAIL_ADDRESS.matcher(emailProveedor.value).matches()
+                            ) {
                                 emailProveedor.value = it
                             }
                         }

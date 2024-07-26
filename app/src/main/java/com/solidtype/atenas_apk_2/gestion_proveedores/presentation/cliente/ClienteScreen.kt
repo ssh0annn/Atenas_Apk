@@ -224,7 +224,7 @@ fun ClienteScreen(
                     Spacer(modifier = Modifier.height(15.dp))
                     AutocompleteSelect(
                         text = "Tipo de Documento",
-                        variableStr = tipoDocumento.value,
+                        variableStr = tipoDocumento,
                         items = listOf("Cédula", "Pasaporte", "RNC")
                     ) {
                         tipoDocumento.value = it

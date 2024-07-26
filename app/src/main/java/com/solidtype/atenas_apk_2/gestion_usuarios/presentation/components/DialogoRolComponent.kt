@@ -76,7 +76,7 @@ fun DialogoRol(
                             Spacer(modifier = Modifier.height(5.dp))
                             AutocompleteSelect(
                                 "Estado",
-                                estadoRollUsuario.value,
+                                estadoRollUsuario,
                                 listOf("Activo", "Inactivo")
                             ) { estadoRollUsuario.value = it }
                         }

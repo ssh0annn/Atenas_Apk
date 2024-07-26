@@ -1,6 +1,7 @@
 package com.solidtype.atenas_apk_2.util.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -22,11 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,20 +40,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.RojoPalido
+import com.solidtype.atenas_apk_2.ui.theme.Transparente
+import com.solidtype.atenas_apk_2.ui.theme.VerdePalido
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutocompleteSelect(
     text: String,
-    variableStr: String,
+    variableStr: MutableState<String>,
     items: List<String>,
     corto: Boolean = false,
     expanded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     onClickAgregar: (() -> Unit)? = null,
+    validable: Boolean = false,
+    esValido: Boolean = true,
     onSelectionChange: (String) -> Unit
 ) {
-    var searchText: String by rememberSaveable { mutableStateOf(variableStr) }
-
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val focusRequester = remember { FocusRequester() }
@@ -66,9 +68,9 @@ fun AutocompleteSelect(
         }
     ) {
         TextField(
-            value = searchText,
+            value = variableStr.value,
             onValueChange = {
-                searchText = it
+                variableStr.value = it
                 expanded.value = true
             },
             singleLine = true,
@@ -111,8 +113,19 @@ fun AutocompleteSelect(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .clip(RoundedCornerShape(15.dp))
+                .border(
+                    2.dp,
+                    if (!validable)
+                        Transparente
+                    else
+                        if(variableStr.value.isEmpty()) Transparente
+                        else
+                            if (esValido) VerdePalido
+                            else RojoPalido,
+                    RoundedCornerShape(15.dp)
+                )
         )
-        val filteredItems = items.filter { it.contains(searchText, ignoreCase = true) }
+        val filteredItems = items.filter { it.contains(variableStr.value, ignoreCase = true) }
         if (filteredItems.isNotEmpty()) {
             ExposedDropdownMenu(
                 expanded = expanded.value,
@@ -123,7 +136,7 @@ fun AutocompleteSelect(
                 if (filteredItems != listOf(""))
                     for (item in filteredItems) {
                         DropdownMenuItem(text = { Text(item) }, onClick = {
-                            searchText = item
+                            variableStr.value = item
                             expanded.value = false
                             onSelectionChange(item)
                         })

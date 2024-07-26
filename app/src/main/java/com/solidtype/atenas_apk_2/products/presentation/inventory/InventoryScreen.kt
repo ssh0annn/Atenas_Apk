@@ -272,6 +272,8 @@ fun InventoryScreen(
             precio.value = ""
             impuesto.value = ""
             descripcion.value = ""
+            categoria.value = ""
+            provider.value = ""
         }
         DialogoCategoria(mostrarCategoria, idCategoria, nombreCategoria, descripcionCategoria, estadoCategoria, uiState.categoria,
             onGuardar = {

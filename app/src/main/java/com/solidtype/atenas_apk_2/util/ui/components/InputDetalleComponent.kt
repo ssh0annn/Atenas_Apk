@@ -2,6 +2,7 @@ package com.solidtype.atenas_apk_2.util.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
+import com.solidtype.atenas_apk_2.ui.theme.RojoPalido
+import com.solidtype.atenas_apk_2.ui.theme.Transparente
+import com.solidtype.atenas_apk_2.ui.theme.VerdePalido
 
 @ExperimentalMultiplatform
 @Composable
@@ -43,6 +47,8 @@ fun InputDetalle(
     corto: Boolean = false,
     pass: Boolean = false,
     tipo: KeyboardType = KeyboardType.Text,
+    validable: Boolean = false,
+    esValido: Boolean = true,
     onValueChange: (String) -> Unit
 ) {
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
@@ -68,7 +74,19 @@ fun InputDetalle(
                 .background(Blanco, RoundedCornerShape(15.dp))
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .clip(RoundedCornerShape(15.dp)),
+                .clip(RoundedCornerShape(15.dp))
+                .border(
+                    2.dp,
+                    if (!validable)
+                        Transparente
+                    else
+                        if(valor.isEmpty()) Transparente
+                        else
+                            if (esValido) VerdePalido
+                            else RojoPalido,
+                    RoundedCornerShape(15.dp)
+                )
+            ,
             label = {
                 Text(
                     text = label,

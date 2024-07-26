@@ -45,7 +45,9 @@ fun Detalles(
     mostrarCategoria: MutableState<Boolean>,
     mostrarProveedor: MutableState<Boolean>,
     uiCategoria: List<categoria>,
-    uiProveedores:  List<Personastodas. Proveedor>
+    uiProveedores: List<Personastodas.Proveedor>,
+    listaFiltradaCategoria: List<String>,
+    listaFiltradaProveedor: List<String>
 ) {
     Column(
         modifier = Modifier
@@ -81,23 +83,14 @@ fun Detalles(
                             // hay que crear un componente si se repetirá mucho el textEdit; aquí van dos para la Categoría y Nombre
                             AutocompleteSelect(
                                 "Categoría",
-                                categoria.value,
-                                if (
-                                    uiCategoria.isNotEmpty() &&
-                                    uiCategoria
-                                        .filter { it.estado }
-                                        .map { it.nombre }
-                                        .isNotEmpty()
-                                )
-                                    uiCategoria
-                                        .filter { it.estado }
-                                        .map { it.nombre }
-                                else
-                                    listOf(""),
+                                categoria,
+                                listaFiltradaCategoria,
                                 true,
                                 onClickAgregar = {
                                     mostrarCategoria.value = true
                                 },
+                                validable = true,
+                                esValido = categoria.value.isNotEmpty() && categoria.value in listaFiltradaCategoria
                             ) { valor ->
                                 categoria.value = valor
                                 if (categoria.value != "")
@@ -106,7 +99,9 @@ fun Detalles(
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             InputDetalle(
-                                "Nombre", nombre.value, true
+                                "Nombre", nombre.value, true,
+                                validable = true,
+                                esValido = nombre.value.isNotEmpty()
                             ) { nombre.value = it }
                         }
                     }
@@ -117,21 +112,25 @@ fun Detalles(
                         InputDetalle(
                             "Código",
                             idInventario.value,
-                            tipo = KeyboardType.Number
+                            tipo = KeyboardType.Number,
+                            validable = true,
+                            esValido = idInventario.value.matches("[0-9]+".toRegex()) && idInventario.value.isNotEmpty()
                         ) { idInventario.value = it }
                         InputDetalle(
-                            "Descripción", descripcion.value
+                            "Descripción", descripcion.value,
+                            validable = true,
+                            esValido = descripcion.value.isNotEmpty()
                         ) { descripcion.value = it }
                         Spacer(modifier = Modifier.height(5.dp))
                         AutocompleteSelect(
                             "Proveedor",
-                            provider.value,
-                            if (uiProveedores.isNotEmpty()) uiProveedores.map { it.nombre.toString() } else listOf(
-                                ""
-                            ),
+                            provider,
+                            listaFiltradaProveedor,
                             onClickAgregar = {
                                 mostrarProveedor.value = true
                             },
+                            validable = true,
+                            esValido = provider.value.isNotEmpty() && provider.value in listaFiltradaProveedor
                         ) { valor ->
                             provider.value = valor
                             if (provider.value != "")
@@ -139,22 +138,46 @@ fun Detalles(
                                     uiProveedores.find { it.nombre == provider.value }!!.id_proveedor.toString()
                         }
                         Spacer(modifier = Modifier.height(5.dp))
-                        InputDetalle("Costo", costo.value, tipo = KeyboardType.Number) {
+                        InputDetalle(
+                            "Costo", costo.value, tipo = KeyboardType.Number,
+                            validable = true,
+                            esValido = costo.value.matches("[0-9]+".toRegex()) || costo.value.matches("[0-9]+.[0-9]+".toRegex())
+                        ) {
                             costo.value = it
                         }
-                        InputDetalle("Precio de Venta", precio.value, tipo = KeyboardType.Number) {
+                        InputDetalle(
+                            "Precio de Venta", precio.value, tipo = KeyboardType.Number,
+                            validable = true,
+                            esValido = precio.value.matches("[0-9]+".toRegex()) || precio.value.matches("[0-9]+.[0-9]+".toRegex())
+                        ) {
                             precio.value = it
                         }
-                        InputDetalle("Impuesto", impuesto.value, tipo = KeyboardType.Number) {
+                        InputDetalle(
+                            "Impuesto", impuesto.value, tipo = KeyboardType.Number,
+                            validable = true,
+                            esValido = impuesto.value.matches("[0-9]+".toRegex()) || impuesto.value.matches("[0-9]+.[0-9]+".toRegex())
+                        ) {
                             impuesto.value = it
                         }
-                        InputDetalle("Modelo", modelo.value) {
+                        InputDetalle(
+                            "Modelo", modelo.value,
+                            validable = true,
+                            esValido = modelo.value.isNotEmpty()
+                        ) {
                             modelo.value = it
                         }
-                        InputDetalle("Marca", marca.value) {
+                        InputDetalle(
+                            "Marca", marca.value,
+                            validable = true,
+                            esValido = marca.value.isNotEmpty()
+                        ) {
                             marca.value = it
                         }
-                        InputDetalle("Cantidad", cantidad.value, tipo = KeyboardType.Number) {
+                        InputDetalle(
+                            "Cantidad", cantidad.value, tipo = KeyboardType.Number,
+                            validable = true,
+                            esValido = cantidad.value.matches("[0-9]+".toRegex()) && cantidad.value.isNotEmpty()
+                        ) {
                             cantidad.value = it
                         }
                     }
