@@ -54,7 +54,11 @@ fun DialogoForget(
                 fontSize = 24.sp
             )
             Spacer(modifier = Modifier.height(20.dp))
-            InputDetalle(label = "Email", valor = email.value) {
+            InputDetalle(
+                label = "Email", valor = email.value,
+                validable = true,
+                esValido = Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
+            ) {
                 email.value = it
             }
             Spacer(modifier = Modifier.height(20.dp))

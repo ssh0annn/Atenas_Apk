@@ -168,6 +168,9 @@ fun HistorialScreen(
                             fechaList[1].value = ""
                         }
                         Boton("Exportar") {
+                            Toast.makeText(context, "Espere un momento...", Toast.LENGTH_SHORT)
+                                .show()
+                            viewModel.onEvent(HistorialEvent.Exportar)
                             showSnackbarList[1].value = true
                         }
                     }

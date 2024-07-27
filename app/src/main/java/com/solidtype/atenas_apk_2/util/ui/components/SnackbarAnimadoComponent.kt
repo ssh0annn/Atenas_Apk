@@ -46,10 +46,9 @@ fun SnackbarAnimado(
                     if (uriPath != null) {
                         Row {
                             BotonBlanco("Compartir") {
-                                val fileUri =uriPath
                                 val shareIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_STREAM, fileUri)
+                                    putExtra(Intent.EXTRA_STREAM, uriPath)
                                     type =
                                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                 }
@@ -59,11 +58,10 @@ fun SnackbarAnimado(
                             }
                             Spacer(modifier = Modifier.width(10.dp))
                             BotonBlanco("Ver") {
-                                val fileUri = uriPath
                                 val openIntent: Intent = Intent().apply {
                                     action = Intent.ACTION_VIEW
                                     setDataAndType(
-                                        fileUri,
+                                        uriPath,
                                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                     )
                                     flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -86,7 +84,7 @@ fun SnackbarAnimado(
                 containerColor = AzulGris
             ) {
                 Text(
-                    text = if (uriPath != null) "El archivo se guardó en: ${uriPath}" else "Hubo un error al exportar",
+                    text = if (uriPath != null) "El archivo se guardó en: $uriPath" else "Hubo un error al exportar",
                     color = if (uriPath != null) VerdePalido else RojoPalido
                 )
             }

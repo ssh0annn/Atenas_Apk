@@ -4,6 +4,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +60,9 @@ import com.solidtype.atenas_apk_2.core.pantallas.Screens
 import com.solidtype.atenas_apk_2.ui.theme.AzulGris
 import com.solidtype.atenas_apk_2.ui.theme.Blanco
 import com.solidtype.atenas_apk_2.ui.theme.BlancoOpaco
+import com.solidtype.atenas_apk_2.ui.theme.RojoPalido
 import com.solidtype.atenas_apk_2.ui.theme.Transparente
+import com.solidtype.atenas_apk_2.ui.theme.VerdePalido
 import com.solidtype.atenas_apk_2.util.ui.components.Loading
 
 object TipoUserSingleton {
@@ -142,7 +145,18 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .width(500.dp)
                 .height(66.dp)
                 .padding(start = 34.dp, end = 34.dp, top = 8.dp, bottom = 8.dp)
-                .background(Blanco),
+                .background(Blanco)
+                .border(
+                    2.dp,
+                        if(email.value.isEmpty()) Transparente
+                        else
+                            if (
+                                Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
+                            ) VerdePalido
+                            else RojoPalido,
+                    RoundedCornerShape(20.dp)
+                )
+            ,
             shape = RoundedCornerShape(20),
             label = { Text(text = "Username") },
             textStyle = TextStyle(
@@ -172,7 +186,18 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .width(500.dp)
                 .height(66.dp)
                 .padding(start = 34.dp, end = 34.dp, top = 8.dp, bottom = 8.dp)
-                .background(Blanco),
+                .background(Blanco)
+                .border(
+                    2.dp,
+                    if(pass.value.isEmpty()) Transparente
+                    else
+                        if (
+                            pass.value.length >= 8
+                        ) VerdePalido
+                        else RojoPalido,
+                    RoundedCornerShape(20.dp)
+                )
+            ,
             shape = RoundedCornerShape(20),
             label = { Text(text = "Password") },
             textStyle = TextStyle(
@@ -215,7 +240,18 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                     .width(500.dp)
                     .height(66.dp)
                     .padding(start = 34.dp, end = 34.dp, top = 8.dp, bottom = 8.dp)
-                    .background(Blanco),
+                    .background(Blanco)
+                    .border(
+                        2.dp,
+                        if(licencia.value.isEmpty()) Transparente
+                        else
+                            if (
+                                licencia.value.isNotEmpty()
+                            ) VerdePalido
+                            else RojoPalido,
+                        RoundedCornerShape(20.dp)
+                    )
+                ,
                 shape = RoundedCornerShape(20),
                 label = { Text(text = "Licencia") },
                 textStyle = TextStyle(
@@ -292,7 +328,8 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
             enabled =
                     Patterns.EMAIL_ADDRESS.matcher(email.value).matches() &&
                     pass.value.length >= 8 &&
-                    !uiState.isLoading && (
+                    !uiState.isLoading &&
+                    (
                         uiState.licenciaGuardada ||
                         licencia.value.isNotEmpty()
                     ) // ~(~p ^ q) = p v ~q
