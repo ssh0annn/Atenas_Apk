@@ -1,6 +1,10 @@
 package com.solidtype.atenas_apk_2.core.pantallas
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -35,9 +39,15 @@ fun Navigation() {
     val navController = rememberNavController()
     NavigationSingleton.navController = navController
 
+    val time = 700
+
     NavHost(
         navController = navController,
-        startDestination = Screens.Splash.route
+        startDestination = Screens.Splash.route,
+        enterTransition = { fadeIn(animationSpec = tween(time)) + slideIntoContainer( AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(time)) },
+        exitTransition = { fadeOut(animationSpec = tween(time)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down, animationSpec = tween(time)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(time)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(time)) },
+        popExitTransition = { fadeOut(animationSpec = tween(time)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(time)) }
     ) {
         composable(route = Screens.Splash.route) {
             Splash(navController)
