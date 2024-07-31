@@ -149,7 +149,7 @@ fun ProveedorScreen(
                                 )
                                 mostrarDialogoG.value = false
                             }.confirmar(
-                                mensaje = "¿Estás seguro que deseas eliminar el proveedor '${provider.nombre}'?",
+                                mensaje = "¿Estás seguro que deseas restaurar el proveedor '${provider.nombre}'?",
                                 showDialog = { mostrarDialogoG.value = true },
                                 setMessage = { confirmarMensaje.value = it },
                                 setAction = { accionDeConfirmacion.value = it }

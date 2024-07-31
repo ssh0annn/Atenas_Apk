@@ -43,7 +43,7 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
             ClienteEvent.Switch -> {
                 switch = !switch
-                uiState.update { it.copy(switch = !switch)}
+                uiState.update { it.copy(switch = switch)}
             }
 
             ClienteEvent.LimpiarMensaje -> uiState.update { it.copy(mensaje = "") }
