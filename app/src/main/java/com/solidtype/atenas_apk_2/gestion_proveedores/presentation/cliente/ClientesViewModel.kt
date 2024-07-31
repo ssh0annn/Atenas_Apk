@@ -21,8 +21,6 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
     private var recentlyDelete: Personastodas.ClienteUI? = null
 
-    private var userJob: Job? = null
-
     private var switch :Boolean = uiState.value.switch
     init {
         getUsuarios()
@@ -43,7 +41,10 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
             is ClienteEvent.EditarClientes -> EditarUsuario(evento.clientes)
 
-            ClienteEvent.Switch -> uiState.update { it.copy(switch = !switch)}
+            ClienteEvent.Switch -> {
+                switch = !switch
+                uiState.update { it.copy(switch = !switch)}
+            }
 
             ClienteEvent.LimpiarMensaje -> uiState.update { it.copy(mensaje = "") }
         }
@@ -76,8 +77,7 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
     }
 
     private fun getUsuarios() {
-        userJob?.cancel()
-        userJob = casos.getClientes(!switch).onEach { users ->
+     casos.getClientes(!switch).onEach { users ->
          uiState.update { it.copy(clientes = users) }
 
         }.launchIn(viewModelScope)
@@ -85,8 +85,7 @@ class ClientesViewModel @Inject constructor(private val casos: CasosClientes) : 
 
     private fun buscarUsuarios(any: String) {
 
-        userJob?.cancel()
-        userJob = casos.buscarClientes(any, !switch).onEach { users ->
+      casos.buscarClientes(any, !switch).onEach { users ->
             uiState.update { it.copy(clientes = users) }
         }.launchIn(viewModelScope)
 
