@@ -32,7 +32,6 @@ class UsuariosViewmodel @Inject constructor(
         private set
 
     private var recentlyDelete: usuario? = null
-    private var userJob: Job? = null
     private var switch:Boolean = uiState.value.switch
     private val LICENCIA: String = "licencia"
     private val recuerdame = context.getSharedPreferences("recuerdame", Context.MODE_PRIVATE)
@@ -77,7 +76,10 @@ class UsuariosViewmodel @Inject constructor(
                     )
                 }
             }
-            UserEvent.Switch -> uiState.update { it.copy(switch = !switch) }
+            UserEvent.Switch -> {
+                switch = !switch
+                uiState.update { it.copy(switch = switch) }
+            }
             UserEvent.LimpiarMensaje -> uiState.update { it.copy(razones = "") }
         }
     }
@@ -157,15 +159,13 @@ class UsuariosViewmodel @Inject constructor(
     }
 
     private fun getUsuarios() {
-        userJob?.cancel()
-        userJob = casos.mostrarUsuarios(!switch).onEach { users ->
+        casos.mostrarUsuarios(!switch).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
 
         }.launchIn(viewModelScope)
     }
     private fun buscarUsuarios(any: String) {
-        userJob?.cancel()
-        userJob = casos.buscarUsuario(any, !switch).onEach { users ->
+        casos.buscarUsuario(any, !switch).onEach { users ->
             uiState.update { it.copy(usuarios = users) }
 
         }.launchIn(viewModelScope)

@@ -34,7 +34,7 @@ import com.solidtype.atenas_apk_2.historial_ventas.domain.model.actualizacion.ve
     categoria::class, detalle_venta::class, inventario::class, persona::class,
     roll_usuarios::class, servicio::class, ticket::class, tipo_venta::class,
     usuario::class, venta::class, administrador::class, Dispositivo::class
-], version = 31, exportSchema = false)
+], version = 32, exportSchema = false)
 
 @TypeConverters(Converter::class)
 abstract class ProductDataBase : RoomDatabase() {
