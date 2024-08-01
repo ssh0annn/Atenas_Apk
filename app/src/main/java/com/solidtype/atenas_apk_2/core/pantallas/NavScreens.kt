@@ -1,12 +1,10 @@
 package com.solidtype.atenas_apk_2.core.pantallas
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,22 +26,15 @@ import com.solidtype.atenas_apk_2.realizar_venta.presentation.VentaScreen
 import com.solidtype.atenas_apk_2.servicios.presentation.servicios.servicios
 import com.solidtype.atenas_apk_2.servicios.presentation.ticket.ticketScreen
 
-@SuppressLint("StaticFieldLeak")
-object NavigationSingleton {
-    var navController: NavController? = null
-}
-
 @Composable
 fun Navigation() {
-
     val navController = rememberNavController()
-    NavigationSingleton.navController = navController
-
     val time = 700
 
     NavHost(
         navController = navController,
         startDestination = Screens.Splash.route,
+        //Animación de transición entre pantallas
         enterTransition = { fadeIn(animationSpec = tween(time)) + slideIntoContainer( AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(time)) },
         exitTransition = { fadeOut(animationSpec = tween(time)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down, animationSpec = tween(time)) },
         popEnterTransition = { fadeIn(animationSpec = tween(time)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(time)) },
@@ -104,5 +95,4 @@ fun Navigation() {
             ticketScreen(navController)
         }
     }
-
 }

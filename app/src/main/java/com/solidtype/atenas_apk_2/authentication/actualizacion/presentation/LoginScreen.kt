@@ -86,7 +86,6 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
 
     val mostrarForget = rememberSaveable { mutableStateOf(false) }
 
-
     val noHoverInteractionSource = remember { MutableInteractionSource() }
 
     val icon = if (passwordVisible.value) painterResource(id = R.drawable.ic_visibility_false)
@@ -100,8 +99,18 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
     if (uiState.isAutenticated != null) {
         TipoUserSingleton.tipoUser = uiState.isAutenticated!!.tipoUser
         when (uiState.isAutenticated!!.tipoUser) {
-            TipoUser.ADMIN -> navController.navigate(Screens.PerfilAdmin.route)
-            TipoUser.TECNICO, TipoUser.VENDEDOR -> navController.navigate(Screens.Ventas.route)
+            TipoUser.ADMIN -> navController.navigate(Screens.PerfilAdmin.route){
+                popUpTo(Screens.Login.route){
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+            TipoUser.TECNICO, TipoUser.VENDEDOR -> navController.navigate(Screens.Ventas.route){
+                popUpTo(Screens.Login.route){
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
             else -> {}
         }
     }
@@ -148,12 +157,14 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .background(Blanco)
                 .border(
                     2.dp,
-                        if(email.value.isEmpty()) Transparente
-                        else
-                            if (
-                                Patterns.EMAIL_ADDRESS.matcher(email.value).matches()
-                            ) VerdePalido
-                            else RojoPalido,
+                    if (email.value.isEmpty()) Transparente
+                    else
+                        if (
+                            Patterns.EMAIL_ADDRESS
+                                .matcher(email.value)
+                                .matches()
+                        ) VerdePalido
+                        else RojoPalido,
                     RoundedCornerShape(20.dp)
                 )
             ,
@@ -189,7 +200,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                 .background(Blanco)
                 .border(
                     2.dp,
-                    if(pass.value.isEmpty()) Transparente
+                    if (pass.value.isEmpty()) Transparente
                     else
                         if (
                             pass.value.length >= 8
@@ -243,7 +254,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthViewmodel = hiltVie
                     .background(Blanco)
                     .border(
                         2.dp,
-                        if(licencia.value.isEmpty()) Transparente
+                        if (licencia.value.isEmpty()) Transparente
                         else
                             if (
                                 licencia.value.isNotEmpty()

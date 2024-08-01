@@ -247,8 +247,16 @@ fun MenuLateral(
                                 .clickable {
                                     {
                                         navController.navigate(Screens.Login.route) {
-                                            popUpTo(Screens.Login.route) {
-                                                inclusive = true
+                                            when(TipoUserSingleton.tipoUser){
+                                                TipoUser.ADMIN -> popUpTo(Screens.PerfilAdmin.route){
+                                                    inclusive = true
+                                                }
+                                                TipoUser.VENDEDOR, TipoUser.TECNICO -> popUpTo(Screens.Ventas.route){
+                                                    inclusive = true
+                                                }
+                                                else -> popUpTo(Screens.Login.route){
+                                                    inclusive = true
+                                                }
                                             }
                                             launchSingleTop = true
                                         }
